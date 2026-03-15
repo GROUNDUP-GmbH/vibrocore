@@ -22,15 +22,18 @@ layer around the tube — reducing friction dramatically and preserving soil str
 |-------------------------|------------------------------------|
 | Core tube               | Geoprobe DT325 (3.25″ OD, 48″)   |
 | Sampling depth          | 1.0 m (single rod)                |
-| Sonic head frequency    | 90 – 120 Hz (variable)            |
-| Axial dynamic force     | ~8 kN peak                         |
+| Sonic head              | 2× OLI MVE 400/6-HF (counter-rot.)|
+| Vibration frequency     | ~100 Hz at 6,000 rpm (VFD-tunable) |
+| Axial dynamic force     | ~8 kN peak (2× 4 kN)              |
+| Sonic power draw        | ~1.2 kW (2× 0.58 kW)              |
 | Hub drive               | NEMA 42 closed-loop stepper        |
-| Hub force (pull-out)    | ≥2.5 kN (1:1 chain) / ≥5 kN (2:1) |
-| Power                   | 48 V LiFePO4 or Instagrid ONE     |
+| Hub force (pull-out)    | ~14.3 kN available (10B-2 chain)   |
+| Power                   | Instagrid ONE max (230V AC, 2.1 kWh)|
 | Frame                   | mk 2004 aluminium profile 50×100   |
 | Machine height          | 1.50 – 1.70 m                      |
 | Mobility                | UTV-mounted with tilt mechanism    |
 | Positioning             | viDoc RTK + AR navigation          |
+| Energy per core         | ~0.029 kWh (~72 cores per charge)  |
 
 ---
 
@@ -47,10 +50,10 @@ layer around the tube — reducing friction dramatically and preserving soil str
 │  └────┬─────┘   └──────┬───────┘   └──────┬───────┘ │
 │       │                │                   │         │
 │       │         ┌──────┴───────┐   ┌──────┴───────┐ │
-│       │         │  1 Motor     │   │  NEMA 42     │ │
-│       │         │  2 Eccentric │   │  + Gearbox   │ │
-│       │         │  Shafts ⊥    │   │  + Chain     │ │
-│       │         │  to rod axis │   │  + Carriage  │ │
+│       │         │  2× OLI MVE │   │  NEMA 42     │ │
+│       │         │  400/6-HF   │   │  + Gearbox   │ │
+│       │         │  counter-   │   │  + Chain     │ │
+│       │         │  rotating   │   │  + Carriage  │ │
 │       │         └──────────────┘   └──────────────┘ │
 │       │                                              │
 │  ┌────┴──────────────────────────────────────────┐  │
@@ -75,73 +78,67 @@ layer around the tube — reducing friction dramatically and preserving soil str
 
 ---
 
-## Sonic Head — The Core Innovation
+## Sonic Head — 2× OLI MVE 400/6-HF
 
-The sonic head follows the principle described in Šporin & Vukelić (2017) and the
-Extrica/Wang et al. (2015) vibration head paper:
+The sonic head uses **two counter-rotating OLI MVE 400/6-HF industrial vibration motors**
+mounted on a common rigid vibrating plate (Schwingplatte). This follows the principle
+described in Šporin & Vukelić (2017) and OLI's own application guide for linear vibration:
 
-- **Two eccentric shafts perpendicular to the rod axis**
-- Counter-rotating via 1:1 synchronisation (timing belt or gears)
-- Horizontal force components cancel; vertical (axial) components add up
-- Driven by a single motor through a primary drive stage
-- Adjustable eccentric masses for tuning force amplitude
-- Center column / adapter shaft connects to the DT325 probe rod below
-
-```
-        SIDE VIEW (schematic)               FRONT VIEW (schematic)
-
-     ┌─── Motor ───┐                      ┌──────────────┐
-     │   (above)    │                      │   Bearing    │
-     └──────┬───────┘                      │   Block      │
-            │ timing belt                  ├──────────────┤
-    ┌───────┴────────┐                     │ ╔══════════╗ │
-    │  Shaft A  ←──→ │  Shaft B            │ ║ Eccentric║ │
-    │  (CW)    gears  │  (CCW)             │ ║  Mass    ║ │
-    │  ●───────────●  │                    │ ╚══════════╝ │
-    └───────┬────────┘                     ├──────────────┤
-            │ Center Column                │   Bearing    │
-            │ (Adapter Shaft)              │   Block      │
-            │                              └──────┬───────┘
-            │                                     │
-     ┌──────┴──────┐                        Center Column
-     │  DT325 Rod  │                              │
-     │  (82.55 mm) │                        DT325 Rod
-     │             │
-     └─────────────┘
-
-  Eccentric shaft axes are PERPENDICULAR to the rod axis.
-  This maximises axial amplitude along the drilling direction.
-```
-
-### Dimensioning (Starting Point)
-
-| Parameter                    | Value                    |
-|------------------------------|--------------------------|
-| Center column Ø              | 50 mm                    |
-| Eccentric shaft Ø            | 30 mm                    |
-| Shaft center-to-center       | 200 mm                   |
-| Eccentric disc OD            | 140 mm                   |
-| Eccentric disc width         | 20 – 30 mm              |
-| Eccentricity (e)             | 10 mm (adjustable)       |
-| Eccentric mass per shaft     | 1.0 kg (adjustable)      |
-| Bearing spacing per shaft    | 100 mm                   |
-| Bearing type                 | Cylindrical roller NJ    |
-| Target frequency             | 90 – 110 Hz              |
-| Peak axial force             | ~8 kN                    |
-| Head housing width           | ~280 – 340 mm            |
-| Head housing height          | ~160 mm                  |
-
-**Force calculation** (two counter-rotating eccentrics):
+- **Two OLI high-frequency vibration motors**, counter-rotating
+- Motor shafts **perpendicular to the rod axis** → pure axial force
+- Horizontal forces cancel; vertical (axial) forces add up to **~8 kN**
+- Self-synchronising via shared rigid mass (no timing belts needed)
+- VFD-controlled frequency for adaptive force tuning (0.9 – 9.7 kN range)
+- OLI internal adjustable eccentric weights for secondary tuning
 
 ```
-F_peak = 2 · m_e · e · ω²
+    FRONT VIEW (schematic)
 
-where  ω = 2π · f
-
-At f = 100 Hz, e = 10 mm, m_e = 1.0 kg:
-  ω ≈ 628 rad/s
-  F ≈ 2 × 1.0 × 0.01 × 628² ≈ 7,890 N ≈ 7.9 kN
+    ┌──────────────────────────────────┐   ISOLATION
+    │         CARRIAGE (slider)        │   PLATE
+    └──┬──────────────────────────┬────┘
+       │ rubber                   │ rubber
+       │ isolator                 │ isolator
+    ┌──┴──────────────────────────┴────┐
+    │                                   │
+    │  ┌──────────┐   ┌──────────┐    │   VIBRATING
+    │  │ OLI MVE  │   │ OLI MVE  │    │   PLATE
+    │  │ 400/6-HF │   │ 400/6-HF │    │   (Schwingplatte)
+    │  │  ↻ CW    │   │  CCW ↺   │    │
+    │  └──────────┘   └──────────┘    │
+    │                                   │
+    │          ┌───────────┐           │
+    │          │  CENTER   │           │
+    │          │  COLUMN   │           │
+    │          │   Ø 50    │           │
+    └──────────┼───────────┼───────────┘
+               │           │
+               └─────┬─────┘
+                     │
+              ┌──────┴──────┐
+              │  DT325 Rod  │
+              │  (82.55 mm) │
+              └─────────────┘
 ```
+
+### OLI MVE 400/6-HF Specs
+
+| Parameter              | Value                          |
+|------------------------|--------------------------------|
+| Centrifugal force      | 408 kgf (~4.0 kN) per motor   |
+| Combined axial force   | ~8.0 kN (counter-rotating pair)|
+| Operating speed        | 6,000 rpm (via VFD)            |
+| Weight                 | 7.2 kg per motor               |
+| Dimensions (L×W×H)    | 255 × 154 × 175 mm            |
+| Bolt pattern           | 90 × 125 mm, 4× M12           |
+| Current                | ~1.45 A at 230V 3-phase        |
+| Insulation             | Class H (VPI windings)         |
+
+### Why OLI Instead of Custom Eccentrics?
+
+No custom shafts, discs, timing belts, or external bearings needed.
+~60% less power draw. Proven industrial reliability. 1–2 weeks to assemble
+vs. 4–8 weeks for custom fabrication. **~1,000 € cheaper.**
 
 ---
 

@@ -3,28 +3,24 @@
 Preliminary BOM for Vibrocore V1 prototype.
 All prices are estimates; verify with suppliers before ordering.
 
-## 1. Sonic Head
+## 1. Sonic Head (V2: 2× OLI MVE 400/6-HF)
 
 | # | Component               | Spec                              | Qty | Est. €   | Supplier / Source          |
 |---|-------------------------|-----------------------------------|-----|----------|----------------------------|
-| 1 | Motor (async, 3ph)      | 3.0 kW, 2-pole, IEC 80, B14      |   1 |  350–500 | ABB / Siemens / WEG (EU)   |
-| 2 | VFD                     | 3.0 kW, 230V 1ph in, 3ph out     |   1 |  250–400 | Siemens V20 / ABB ACS150   |
-| 3 | Eccentric shaft         | 42CrMo4, Ø30×250 mm, keyed       |   2 |  120–200 | Custom machining (EU)      |
-| 4 | Eccentric disc (base)   | S355J2, Ø140×25 mm, balanced      |   2 |  100–160 | Custom machining (EU)      |
-| 5 | Weight segments          | S355J2, bolt-on, 50g each         |   8 |   40–80  | Custom machining (EU)      |
-| 6 | Bearing NJ 206 ECP      | Cylindrical roller, 30×62×16      |   4 |  100–160 | SKF / Schaeffler (EU)      |
-| 7 | Bearing housings        | Steel, machined split block        |   4 |  200–320 | Custom machining (EU)      |
-| 8 | Timing belt HTD 8M      | 8M-30, 688 mm length              |   2 |   30–50  | Gates / Optibelt (EU)      |
-| 9 | Timing pulley 36T       | HTD 8M, Al 7075, Ø92 mm          |   2 |   80–120 | Custom or Misumi (EU)      |
-|10 | Belt tensioner          | Spring-loaded idler                |   1 |   30–50  | Standard (EU)              |
-|11 | Head housing            | S355 welded steel, ~15 kg         |   1 |  400–700 | Custom fabrication (EU)    |
-|12 | Center column           | 42CrMo4, Ø50×300 mm              |   1 |   80–120 | Custom machining (EU)      |
-|13 | DT325 adapter           | Steel, thread to Geoprobe spec    |   1 |   60–100 | Custom machining (EU)      |
-|14 | Column bearings 6210    | Deep groove, 50×90×20             |   2 |   40–60  | SKF (EU)                   |
-|15 | Rubber isolators M12    | 70 Shore A, neoprene              |   4 |   20–40  | Schwingmetall / Paulstra   |
-|16 | Fasteners (head)        | M8–M12, 10.9 grade, various       |   1 |   30–50  | Würth / Bossard (EU)       |
+| 1 | OLI MVE 400/6-HF       | HF vibration motor, 7.2 kg, 4 kN |   2 |  600–900 | OLI Vibrators (IT) / dealer|
+| 2 | VFD                     | 1.5 kW, 230V 1ph in, 3ph out     |   1 |  180–300 | Siemens V20 / ABB ACS150   |
+| 3 | Vibrating plate         | S355J2, 420×300×20 mm + ribs      |   1 |  200–350 | Custom fabrication (EU)    |
+| 4 | Center column           | 42CrMo4, Ø50×200 mm + flange     |   1 |   80–120 | Custom machining (EU)      |
+| 5 | DT325 adapter           | Steel, thread to Geoprobe spec    |   1 |   60–100 | Custom machining (EU)      |
+| 6 | Rubber isolators M12    | 55–70 Shore A, cylindrical        |   4 |   30–60  | Schwingmetall / Paulstra   |
+| 7 | Motor cable (shielded)  | 3×1.5 mm², < 5 m                 |   2 |   15–30  | Lapp (DE)                  |
+| 8 | Fasteners (head)        | M12×40 (motors), M10 (column)    |   1 |   20–40  | Würth / Bossard (EU)       |
 
-**Sonic Head Subtotal: ~1,930–3,110 €**
+**Sonic Head Subtotal: ~1,185–1,900 €**
+
+*Note: V2 eliminates custom eccentric shafts, discs, timing belts, and external
+bearings — all handled internally by the OLI motors. Significant cost and
+complexity reduction vs. V1 custom design.*
 
 ## 2. Hub System
 
@@ -123,14 +119,14 @@ All prices are estimates; verify with suppliers before ordering.
 
 | Subsystem         | Low Est. (€) | High Est. (€) | Notes                         |
 |-------------------|-------------|---------------|-------------------------------|
-| Sonic Head        |       1,930 |         3,110 |                               |
+| Sonic Head (V2)   |       1,185 |         1,900 | 2× OLI MVE 400/6-HF          |
 | Hub System        |       1,535 |         2,490 |                               |
 | Frame & Mounting  |         540 |           910 |                               |
 | Power System      |         310 |         2,890 | Range: rental vs. purchase    |
 | Control & Electr. |         395 |           715 |                               |
 | Geoprobe DT325    |       1,250 |         2,100 | US import + shipping          |
 | Positioning       |         220 |         2,390 | Range: existing vs. new viDoc |
-| **TOTAL**         |   **6,180** |    **14,605** |                               |
+| **TOTAL**         |   **5,435** |    **13,395** |                               |
 
 ### Realistic V1 Prototype Budget
 
@@ -138,7 +134,7 @@ With Instagrid rental and existing viDoc:
 
 | Item              | Est. (€)    |
 |-------------------|-------------|
-| Sonic Head        |       2,500 |
+| Sonic Head (OLI)  |       1,500 |
 | Hub System        |       2,000 |
 | Frame             |         700 |
 | Power (rental)    |         400 |
@@ -146,7 +142,7 @@ With Instagrid rental and existing viDoc:
 | Geoprobe parts    |       1,700 |
 | GPS (head only)   |         300 |
 | Misc / contingency|         500 |
-| **TOTAL**         |   **8,650** |
+| **TOTAL**         |   **7,650** |
 
 ---
 
@@ -154,6 +150,7 @@ With Instagrid rental and existing viDoc:
 
 | Category          | Supplier                | Country | Website                      |
 |-------------------|-------------------------|---------|------------------------------|
+| Vibration motors  | OLI Vibrators           | IT      | olivibra.com                 |
 | Motors (async)    | ABB                     | CH/EU   | new.abb.com                  |
 | Motors (async)    | Siemens                 | DE      | siemens.com                  |
 | Motors (stepper)  | Nanotec                 | DE      | nanotec.com                  |

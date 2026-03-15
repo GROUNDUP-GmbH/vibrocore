@@ -1,6 +1,7 @@
-# Dimensioning Calculations
+# Dimensioning Calculations (V2: OLI MVE 400/6-HF)
 
-All calculations reference Šporin & Vukelić (2017) and Wang et al. (2015).
+All calculations reference Šporin & Vukelić (2017), Wang et al. (2015),
+and OLI MVE 400/6-HF rated data.
 
 ## 1. Target Parameters
 
@@ -10,332 +11,330 @@ All calculations reference Šporin & Vukelić (2017) and Wang et al. (2015).
 | Core tube OD               | D_t    | 82.55 mm (3.25″) | Geoprobe DT325                       |
 | Core tube length           | L_t    | 1,219 mm (48″)   | Geoprobe DT325 rod                   |
 | Core tube mass (per pair)  | m_t    | 35.4 kg           | Geoprobe PN 201446 (rod pair)        |
-| Operating frequency        | f      | 90 – 110 Hz       | Below rod resonance, soil optimum    |
-| Peak axial force           | F_peak | ~8 kN             | Sufficient for 1m in agricultural soil|
-| Eccentricity               | e      | 10 mm             | Adjustable 5–15 mm                   |
-| Eccentric mass per shaft   | m_e    | 1.0 kg            | Adjustable via bolt-on segments      |
+| Operating speed            | n      | 6,000 rpm         | OLI rated, via VFD                   |
+| Vibration frequency        | f      | 100 Hz            | = 6,000 rpm / 60                     |
+| Peak axial force (pair)    | F_peak | ~8.0 kN           | 2 × 408 kgf OLI rated               |
+| Vibration motors           | —      | 2× OLI MVE 400/6-HF | Counter-rotating pair             |
 
-## 2. Force Equations
+## 2. Force Analysis — OLI Dual Motor
 
-### 2.1 Centrifugal Force (Single Eccentric)
+### 2.1 Single Motor Centrifugal Force
 
-```
-F_single = m_e · e · ω²
-
-where  ω = 2π · f
-```
-
-### 2.2 Resultant Axial Force (Two Counter-Rotating Eccentrics)
-
-With two eccentrics in anti-phase, horizontal components cancel and vertical add:
+OLI MVE 400/6-HF rated: **408 kgf at 6,000 rpm**
 
 ```
-F_axial(t) = 2 · m_e · e · ω² · cos(ωt)
-
-F_peak = 2 · m_e · e · ω²
+F_single = 408 × 9.81 = 4,002 N ≈ 4.0 kN per motor
 ```
 
-### 2.3 Calculation Table
-
-| f [Hz] | ω [rad/s] | ω² [rad²/s²] | F_single [N] | F_peak (2×) [N] | F_peak [kN] |
-|--------|-----------|---------------|---------------|------------------|-------------|
-|     70 |     439.8 |       193,424 |         1,934 |            3,868 |         3.9 |
-|     80 |     502.7 |       252,672 |         2,527 |            5,054 |         5.1 |
-|     90 |     565.5 |       319,726 |         3,197 |            6,394 |         6.4 |
-|    100 |     628.3 |       394,784 |         3,948 |            7,896 |         7.9 |
-|    110 |     691.2 |       477,557 |         4,776 |            9,552 |         9.6 |
-|    120 |     753.9 |       568,363 |         5,684 |           11,368 |        11.4 |
-
-**Parameters:** m_e = 1.0 kg, e = 0.010 m
-
-### 2.4 Adjustable Eccentricity Effects
-
-With e = 5 mm (minimum):
-
-| f [Hz] | F_peak [kN] |
-|--------|-------------|
-|    100 |         3.9 |
-|    110 |         4.8 |
-
-With e = 15 mm (maximum):
-
-| f [Hz] | F_peak [kN] |
-|--------|-------------|
-|    100 |        11.8 |
-|    110 |        14.3 |
-
-**This 3:1 force range (e=5 to e=15) combined with VFD frequency control gives a
-total dynamic range of approximately 1:10 — from 3.9 kN (100 Hz, e=5) to 14.3 kN
-(110 Hz, e=15).**
-
-## 3. Eccentric Rotor Geometry
-
-### 3.1 Design Approach: Segmented Disc with Bolt-On Weights
+### 2.2 Counter-Rotating Pair — Resultant Axial Force
 
 ```
-     FRONT VIEW (one rotor disc)
+F_axial(t) = 2 × F_single × cos(ωt)
 
-          ┌──── Ø 140 mm ────┐
-         ╱                     ╲
-        │    ┌───────────┐      │
-        │    │  WEIGHT   │      │
-        │    │  SEGMENT  │      │
-        │    │  (bolt-on)│      │
-        │    └───────────┘      │
-        │         ┌──┐          │
-        │         │○ │ shaft    │
-        │         │30│ bore     │
-        │         └──┘          │
-        │                       │
-        │    BASE DISC          │
-         ╲   (machined steel)  ╱
-          └───────────────────┘
+F_peak = 2 × 4,002 = 8,004 N ≈ 8.0 kN
 
-     width: 25 mm
+Horizontal components cancel:
+  F_horizontal = F₀·sin(ωt) − F₀·sin(ωt) = 0  ✓
 ```
 
-### 3.2 Mass Budget
+### 2.3 Force vs. VFD Speed
 
-Target: m_e = 1.0 kg total eccentric mass at 10 mm eccentricity.
-
-**Option A — Full unbalance built into disc:**
-- Base disc: ~2.5 kg (Ø140 × 25 mm, steel, ρ = 7,850 kg/m³)
-- Material removed from one side to create 1.0 kg imbalance at e=10mm
-- Permanent imbalance — adjustment only by changing disc
-
-**Option B — Balanced base disc + bolt-on weights (PREFERRED):**
-- Base disc: ~2.5 kg (balanced, centered bore)
-- 2–4 bolt-on weight segments on one side
-- Each segment ~250 g, positioned at r = 40–60 mm from center
-- Adjustable: add/remove segments for different m_e values
-
-**Calculation for Option B segment positioning:**
+Centrifugal force scales with n² (speed squared):
 
 ```
-Required: m_e · e = 1.0 kg × 10 mm = 10 kg·mm
-
-If weight segments at r_w = 50 mm from shaft center:
-  m_weight_total = (m_e · e) / r_w = 10 / 50 = 0.2 kg = 200 g
-
-  → 4 bolt slots: 4 × 50 g segments = 200 g total
-  → Add/remove segments: 50g (e≈2.5mm) to 200g (e≈10mm)
-  → Or use heavier segments for e=15mm: 4 × 75g = 300g
-     300g × 50mm = 15 kg·mm → equivalent e = 15mm at m_e=1.0kg reference
+F(n) = F_rated × (n / n_rated)²
+F_combined(n) = 2 × F(n)
 ```
 
-### 3.3 Full Mass Calculation (Steel Disc)
+| VFD Speed [rpm] | Speed Ratio | F_single [kN] | F_combined [kN] | Application          |
+|-----------------|------------|----------------|------------------|----------------------|
+|          2,000  | 0.333      |          0.44  |             0.89 | Startup ramp         |
+|          3,000  | 0.500      |          1.00  |             2.00 | Very soft soil       |
+|          4,000  | 0.667      |          1.78  |             3.56 | Light loam           |
+|          5,000  | 0.833      |          2.78  |             5.56 | Medium clay          |
+|          6,000  | 1.000      |          4.00  |             8.00 | Heavy clay / compact |
+|          6,600  | 1.100      |          4.84  |             9.68 | Max (110% overdrive) |
+
+**VFD frequency control provides continuous 0.9 – 9.7 kN force range.**
+
+### 2.4 OLI Internal Eccentric Adjustment
+
+OLI MVE motors have adjustable eccentric weights (0–100% of rated force).
+Combined with VFD speed control:
+
+| Eccentric Setting | VFD at 6,000 rpm | VFD at 4,000 rpm |
+|-------------------|------------------|------------------|
+| 100% (max)        | 8.0 kN           | 3.6 kN           |
+| 75%               | 6.0 kN           | 2.7 kN           |
+| 50%               | 4.0 kN           | 1.8 kN           |
+| 25%               | 2.0 kN           | 0.9 kN           |
+
+**Total force range: 0.9 – 9.7 kN (~1:11 ratio) — covers all agricultural soils.**
+
+## 3. Vibrating Plate Dimensioning
+
+### 3.1 Geometry
+
+| Parameter              | Value              | Notes                           |
+|------------------------|--------------------|---------------------------------|
+| Length                  | 420 mm             | Two motors side by side          |
+| Width                  | 300 mm             | Motor depth + clearance          |
+| Thickness              | 20 mm              | S355J2 steel                     |
+| Ribs (longitudinal)    | 2 × (300×60×10 mm) | Underneath, welded               |
+| Column flange          | Ø 80 mm, 6× M10   | Center of plate, underneath      |
+
+### 3.2 Mass Calculation
 
 ```
-V_disc = π/4 × D² × w = π/4 × 0.14² × 0.025 = 3.848 × 10⁻⁴ m³
-m_disc = ρ × V = 7,850 × 3.848 × 10⁻⁴ = 3.02 kg
+Plate body:
+  V_plate = 0.420 × 0.300 × 0.020 = 2.52 × 10⁻³ m³
+  m_plate = 7,850 × 2.52 × 10⁻³ = 19.8 kg
 
-With center bore (Ø 30 mm shaft + keyway):
-V_bore = π/4 × 0.030² × 0.025 = 1.767 × 10⁻⁵ m³
-m_bore = 0.139 kg
+Ribs (2×):
+  V_rib = 2 × 0.300 × 0.060 × 0.010 = 3.6 × 10⁻⁴ m³
+  m_ribs = 7,850 × 3.6 × 10⁻⁴ = 2.8 kg
 
-Net disc mass ≈ 2.88 kg (balanced base disc)
+Total plate assembly: ~22.6 kg
 ```
 
-## 4. Bearing Selection
-
-### 4.1 Load Calculation
-
-Each shaft carries one eccentric generating:
+### 3.3 Total Vibrating Mass
 
 ```
-F_centrifugal = m_e · e · ω² = 1.0 × 0.010 × 628.3² = 3,948 N (at 100 Hz)
+Plate + ribs:         22.6 kg
+2× OLI motors:        14.4 kg
+Center column:          3.5 kg
+DT325 adapter:          1.0 kg
+Fasteners:              0.5 kg
+─────────────────────────────
+Total vibrating mass:  42.0 kg
 
-Distributed to 2 bearings per shaft:
-F_bearing = F_centrifugal / 2 ≈ 1,974 N per bearing
-
-Add rotor weight (disc + shaft):
-m_rotor ≈ 3.0 + 1.5 = 4.5 kg → 44 N (negligible vs. dynamic)
-
-Dynamic bearing load ≈ 2,000 N per bearing, rotating at 100 Hz = 6,000 rpm
+With DT325 rod (in soil): 42.0 + 35.4 + 1.5 = 78.9 kg
 ```
 
-### 4.2 Bearing Life (L10h)
+### 3.4 Plate Natural Frequency (Bending)
 
 ```
-Using NJ 206 ECP (SKF):
-  C_dyn = 43.6 kN
-  C_static = 36.5 kN
-  
-  p = 10/3 (roller bearing exponent)
+Simplified plate bending (1st mode, simply supported edges):
 
-  L10 = (C/P)^p = (43,600 / 2,000)^(10/3) = 21.8^3.33
+f₁ ≈ (π/2) × √(D / (ρ_eff × a⁴))
 
-  L10 = 21.8^3 × 21.8^0.33 ≈ 10,360 × 2.83 ≈ 29,319 million revolutions
+where:
+  D = E·h³/(12·(1−ν²)) = 210e9 × 0.020³ / (12 × 0.91) = 153,846 N·m
+  ρ_eff = total_mass / (L × W) = 42.0 / (0.420 × 0.300) = 333 kg/m²
+  a = 0.420 m (longer dimension)
 
-  At 6,000 rpm:
-  L10h = 29,319 × 10⁶ / (60 × 6,000) = 81,442 hours
+f₁ ≈ (π/2) × √(153,846 / (333 × 0.0311))
+   ≈ 1.57 × √(153,846 / 10.36)
+   ≈ 1.57 × √14,849
+   ≈ 1.57 × 121.9
+   ≈ 191 Hz
 
-  → Far exceeds requirements. NJ 205 could also work.
+With ribs (increased stiffness, FEA verification needed):
+Estimated f₁ ≈ 250–350 Hz
+
+Ratio to operating frequency: 250/100 = 2.5× minimum
+Target: > 3× → may need additional ribs or thicker plate (25 mm).
+FEA should verify and optimize.
 ```
 
-### 4.3 Selected Bearings
+## 4. Vibration Isolation
 
-| Position             | Type        | Designation    | Notes                    |
-|----------------------|-------------|----------------|--------------------------|
-| Eccentric shafts (4) | Cyl. roller | NJ 206 ECP     | 30×62×16 mm, SKF         |
-| Center column (2)    | Deep groove | 6210-2RS       | 50×90×20 mm              |
-| Hub drive shaft (2)  | Self-align  | UCP 206        | Pillow block, 30mm bore  |
-| Hub idle sprocket    | Deep groove | 6205-2RS       | 25×52×15 mm              |
-
-## 5. Timing Belt Synchronisation
-
-### 5.1 Belt Selection
+### 4.1 Isolator Requirements
 
 ```
-Operating parameters:
-  Speed: 6,000 rpm (at 100 Hz motor speed, if direct drive to shafts)
-  Power transmitted: ~1.5 kW per shaft
-  Center distance: 200 mm
+Total vibrating mass: m_vib = 42.0 kg
+Peak dynamic force:   F_peak = 8,000 N
+Number of isolators:  n = 4
 
-Belt type: HTD 8M (suitable for high-speed, high-torque)
-
-Pulley: 36 teeth, HTD 8M
-  Pitch diameter = 36 × 8 / π = 91.67 mm
-
-Belt length calculation:
-  L = 2C + π(d₁+d₂)/2 + (d₂-d₁)²/(4C)
-  
-  For identical pulleys (d₁ = d₂ = 91.67 mm):
-  L = 2 × 200 + π × 91.67 = 400 + 287.9 = 687.9 mm
-  
-  → Standard belt: 688 mm (86T) or 696 mm (87T)
+Static load per mount:   P_stat = m_vib × g / n = 42 × 9.81 / 4 = 103 N
+Dynamic load per mount:  P_dyn = F_peak / n = 8,000 / 4 = 2,000 N
 ```
 
-### 5.2 Belt Power Rating Check
+### 4.2 Isolator Natural Frequency
+
+For > 95% isolation at 100 Hz, the mount system natural frequency must be:
 
 ```
-HTD 8M-30 belt (30 mm wide) at 6,000 rpm on 36T pulley:
+f₀ < f_operating / 3 = 100 / 3 ≈ 33 Hz
 
-Power rating per tooth in mesh ≈ 0.35 kW/tooth (from Gates catalog)
-Teeth in mesh = 36/2 = 18 (half wrap)
-Available power = 18 × 0.35 = 6.3 kW >> 1.5 kW required ✓
+For > 99% isolation:
+f₀ < f_operating / √(100) ≈ 100 / 10 = 10 Hz
 
-30 mm width provides ample safety margin.
-20 mm width: ~4.2 kW → still sufficient.
+Target: f₀ = 8–12 Hz
+
+Required stiffness per mount:
+  k = (2π·f₀)² × m_vib / n = (2π × 10)² × 42 / 4
+  k = 3,948 × 10.5 = 41,450 N/m ≈ 41.5 kN/m per mount
+
+Static deflection at mount:
+  δ_stat = P_stat / k = 103 / 41,450 = 2.5 mm
 ```
 
-## 6. Motor Power & VFD Sizing
-
-### 6.1 Power Required at Eccentrics
+### 4.3 Transmissibility
 
 ```
-P_eccentric = F_peak² / (2 · m_system · ω)     [simplified from Eq. 11]
+At f = 100 Hz, f₀ = 10 Hz, undamped:
 
-More practical: P = T_friction × ω + P_acceleration
+T = 1 / |((f/f₀)² − 1)| = 1 / |(100)² − 1| = 1 / 9,999 ≈ 0.01%
 
-For continuous operation at 100 Hz with negligible acceleration:
-  Main losses: bearing friction + belt losses + windage
-  
-  Bearing friction power (4 bearings):
-    P_bearing = 4 × μ × F × d/2 × ω
-    μ ≈ 0.002 (roller bearing)
-    F ≈ 2,000 N, d/2 = 0.015 m (shaft radius)
-    ω = 628 rad/s
-    P_bearing = 4 × 0.002 × 2,000 × 0.015 × 628 ≈ 151 W
+With damping (ζ = 0.1 typical for rubber):
+T ≈ 1 / ((f/f₀)² − 1) ≈ 1.01%
 
-  Belt friction:
-    P_belt ≈ 5% of transmitted power ≈ 100–200 W
-
-  Windage (at 6,000 rpm with Ø140 discs):
-    P_windage ≈ 50–100 W (estimate)
-
-  Total friction losses ≈ 300–450 W
-
-  Soil coupling power (actual drilling work):
-    Depends heavily on soil type, depth, rod friction
-    Estimate: 500–2,000 W during active penetration
-
-  → Total motor power: 1.0–2.5 kW during drilling
-  → Motor rated power: 3.0 kW (provides startup headroom)
+Force transmitted to carriage per mount: 2,000 × 0.01 = 20 N
+Total transmitted to frame: 4 × 20 = 80 N (negligible)
 ```
 
-### 6.2 VFD Selection
+### 4.4 Selected Isolator
 
 | Parameter          | Value                              |
 |--------------------|------------------------------------|
-| Motor rating       | 3.0 kW                            |
-| Input voltage      | 230V 1-phase (from Instagrid)      |
-| Output             | 3-phase, 0–400 Hz                  |
-| Features needed    | V/f control, skip frequencies      |
-|                    | DC injection braking               |
-|                    | Analog frequency input (0–10V)     |
-|                    | RS485 Modbus (optional)            |
-| Brand candidates   | Siemens V20, ABB ACS150, Lenze i510|
-| Size               | Compact, IP20 minimum              |
+| Type               | Cylindrical rubber buffer, M12     |
+| Shore hardness     | 55–65 Shore A (soft)               |
+| Static stiffness   | ~40–50 kN/m                        |
+| Dynamic stiffness  | ~60–75 kN/m (×1.5 rubber factor)  |
+| Max dynamic load   | 3,000 N                            |
+| Natural frequency  | ~8–12 Hz (with 10.5 kg per mount)  |
+| Brand              | Schwingmetall, Paulstra, Trelleborg|
 
-## 7. Resonance & Skip Frequencies
+## 5. Bearing Analysis (Hub System — Unchanged)
 
-### 7.1 System Resonances to Avoid
+### 5.1 Hub Bearings (Pillow Blocks)
 
-| Component              | Est. Natural Freq. | Action              |
-|------------------------|--------------------|-----------------------|
-| Frame (mast bending)   | 10–25 Hz           | Below operating range |
-| Isolator mounts        | 15–25 Hz           | By design (isolation) |
-| Belt resonance         | 40–60 Hz           | Skip during ramp-up   |
-| Housing modes          | 200–500 Hz         | Above operating range |
-| Rod longitudinal       | ~2,090 Hz          | Far above range       |
+Hub drive shaft bearings — same as V1:
 
-### 7.2 VFD Skip Frequency Configuration
+| Position             | Type        | Designation    | Notes                    |
+|----------------------|-------------|----------------|--------------------------|
+| Hub drive shaft (2)  | Self-align  | UCP 206        | Pillow block, 30mm bore  |
+| Hub idle sprocket    | Deep groove | 6205-2RS       | 25×52×15 mm              |
 
-```
-Skip Frequency 1: 15–25 Hz (frame/isolator resonance)
-Skip Frequency 2: 45–55 Hz (estimated belt resonance)
-Skip Band Width: ±3 Hz around each center
+*Note: Sonic head bearings are now INTERNAL to OLI motors — no external
+bearing selection needed. OLI's heavy-duty bearings are rated for continuous
+high-frequency operation.*
 
-Ramp rate: 10 Hz/s (70 Hz → 100 Hz in 3 seconds)
-Ramp avoids lingering in skip bands.
-```
+## 6. Power & Energy Analysis
 
-## 8. Energy Consumption per Cycle
-
-### 8.1 DT325 Core Sampling Cycle
+### 6.1 Sonic Head Power (V2 — OLI)
 
 ```
-Phase 1 — Ramp up sonic (70 → 100 Hz):           3 s × 2.0 kW avg = 6 kJ
-Phase 2 — Penetration (1.0 m at 15 mm/s):        67 s × 2.5 kW    = 168 kJ
-Phase 3 — Sonic stop (DC brake):                  2 s × 0.5 kW     = 1 kJ
-Phase 4 — Extraction (1.0 m at 50 mm/s):         20 s × 0.3 kW    = 6 kJ
-Phase 5 — Return to top (0.5 m at 60 mm/s):       8 s × 0.2 kW    = 2 kJ
+Per motor:  ~0.58 kW (230V × 1.45A × cos φ ~0.85 × η ~0.93)
+Two motors: ~1.16 kW electrical input
 
-Total per cycle:                                  ~100 s, ~183 kJ ≈ 0.051 kWh
+VFD losses: ~5% → 1.22 kW from source
+
+Compare V1 (custom 3.0 kW motor):
+  V2 saves ~1.8 kW = 60% less power draw for equivalent force!
+  
+Reason: OLI motors drive eccentrics directly on the motor shaft —
+no belt losses, no external bearing friction, optimised mass/speed ratio.
+```
+
+### 6.2 VFD Sizing
+
+```
+Motor total: 2 × ~0.58 kW = 1.16 kW
+VFD rating: 1.5 kW (next standard size, 30% margin)
+
+At 230V input: 1.5 kW / 230V = 6.5 A max → standard socket OK
+Instagrid ONE max: 3.6 kW continuous → ~3× headroom for sonic ✓
+```
+
+### 6.3 Energy per Sampling Cycle (Updated)
+
+```
+Phase 1 — Ramp up sonic (0 → 6,000 rpm):      3 s × 1.0 kW avg =   3 kJ
+Phase 2 — Penetration (1.0 m at 15 mm/s):     67 s × 1.2 kW    =  80 kJ
+Phase 3 — Sonic stop (DC brake via VFD):        2 s × 0.3 kW    =   1 kJ
+Phase 4 — Extraction (1.0 m at 50 mm/s):      20 s × 0.3 kW    =   6 kJ
+Phase 5 — Return to top (0.5 m at 60 mm/s):    8 s × 0.2 kW    =   2 kJ
+
+Sonic subtotal:  ~86 kJ
 
 Hub power (all phases):
   Penetration: 48V × 4A = 192 W × 67s = 12.9 kJ
-  Extraction:  48V × 6A = 288 W × 20s = 5.8 kJ
-  Return:      48V × 2A = 96 W × 8s   = 0.8 kJ
-  Hub total: ~19.5 kJ
+  Extraction:  48V × 6A = 288 W × 20s =  5.8 kJ
+  Return:      48V × 2A =  96 W ×  8s =  0.8 kJ
+  Hub subtotal: ~19.5 kJ
 
-Grand total per cycle: ~183 + 20 = 203 kJ ≈ 0.056 kWh
+Grand total per cycle: 86 + 20 = 106 kJ ≈ 0.029 kWh
 ```
 
-### 8.2 Daily Energy Budget (100 cores)
+### 6.4 Daily Energy Budget (100 cores)
 
 ```
-100 cycles × 0.056 kWh = 5.6 kWh
+100 cycles × 0.029 kWh = 2.9 kWh
 
-Instagrid ONE max: 2.1 kWh → sufficient for ~37 cores per charge
-→ Need 3 charges or additional battery for 100 cores/day
+Instagrid ONE max: 2.1 kWh → sufficient for ~72 cores per charge
+→ With 2 charges: 144 cores/day — covers 100 cores easily ✓
 
-48V 50Ah LiFePO4 battery: 2.4 kWh → ~43 cores
-→ Combined system or larger battery recommended for high-volume days
+48V 50Ah LiFePO4 battery: 2.4 kWh → ~83 cores per charge
+
+V2 (OLI) uses ~48% less energy per cycle vs. V1 (custom 3 kW motor).
 ```
 
-## 9. Summary: Key Component Specifications
+## 7. Hub System Forces (Unchanged from V1)
+
+### 7.1 Available Force
+
+```
+NEMA 42 motor:        ~15 Nm
+Gearbox (PLPE120):    40:1, η = 90%
+Output torque:         15 × 40 × 0.90 = 540 Nm
+
+Sprocket (15T, 10B-2): R = 37.9 mm
+Chain force:           540 / 0.0379 = 14,250 N ≈ 14.3 kN
+```
+
+### 7.2 Required Forces
+
+| Operation            | Force Needed | Notes                              |
+|----------------------|-------------|------------------------------------|
+| Push-in (vibration ON) | 0.5–1.5 kN | Vibration does most of the work   |
+| Pull-out             | 2.0–4.0 kN  | Full friction, no vibration        |
+| Head weight hold     | ~0.4 kN     | Static (42 kg head assembly)       |
+
+Safety factor: 14.3 / 4.0 = **3.6×** ✓
+
+### 7.3 Hub Speed
+
+```
+Motor: 600 rpm → Output: 15 rpm → Chain speed: 59.5 mm/s ≈ 60 mm/s
+```
+
+## 8. Resonance & Skip Frequencies
+
+### 8.1 System Resonances
+
+| Component              | Est. Natural Freq. | Action              |
+|------------------------|--------------------|-----------------------|
+| Isolator mounts        | 8–12 Hz            | By design (isolation) |
+| Frame (mast bending)   | 15–25 Hz           | Below operating range |
+| Vibrating plate        | 250–350 Hz         | Above range (verify)  |
+| Rod longitudinal       | ~2,090 Hz          | Far above range       |
+
+### 8.2 VFD Skip Frequency Configuration
+
+```
+Skip Frequency 1: 8–15 Hz   (isolator resonance zone)
+Skip Frequency 2: 15–25 Hz  (frame resonance zone)
+Skip Band Width: ±3 Hz around each center
+
+Ramp rate: 50 Hz/s → pass through 0–25 Hz zone in 0.5 s
+Operating zone: 50–110 Hz (3,000–6,600 rpm)
+```
+
+*Note: No belt resonance to skip (V1 had belt resonance at 40–60 Hz).
+V2 eliminates this concern entirely.*
+
+## 9. Summary: Key Component Specifications (V2)
 
 | Component                   | Specification                      | Supplier Region |
 |-----------------------------|------------------------------------|-----------------|
-| Sonic motor                 | 3.0 kW, 2-pole, IEC 80 frame      | EU              |
-| VFD                         | 3.0 kW, 230V 1ph, V/f             | EU              |
-| Eccentric shafts (2×)       | 42CrMo4, Ø30×250 mm              | Custom/EU       |
-| Eccentric discs (2×)        | S355J2, Ø140×25 mm, machined      | Custom/EU       |
-| Shaft bearings (4×)         | SKF NJ 206 ECP                     | EU              |
-| Timing belt                 | HTD 8M-30, 688 mm                  | Gates/EU        |
-| Timing pulleys (2×)         | 36T HTD 8M, Ø92 mm, Al 7075       | Custom/EU       |
+| Sonic motors (2×)           | OLI MVE 400/6-HF, 7.2 kg each     | IT/EU           |
+| VFD                         | 1.5 kW, 230V 1ph, V/f, 0–400 Hz   | EU              |
+| Vibrating plate             | S355J2, 420×300×20 mm + ribs       | Custom/EU       |
+| Center column               | 42CrMo4, Ø50×200 mm               | Custom/EU       |
+| DT325 adapter               | Steel, custom threaded             | Custom/EU       |
+| Rubber isolators (4×)       | M12, 55–65 Shore A, f₀ ~10 Hz     | EU              |
 | Hub motor                   | NEMA 42 CL stepper, 20 Nm         | Nanotec/EU      |
 | Hub gearbox                 | Neugart PLPE120, 40:1              | DE              |
 | Hub chain                   | 10B-2 duplex roller                | EU              |
@@ -344,7 +343,6 @@ Instagrid ONE max: 2.1 kWh → sufficient for ~37 cores per charge
 | Brake                       | 24V power-off EM, 15 Nm           | EU              |
 | Frame profiles (2×)         | mk 2004, 50×100×1500 mm           | DE              |
 | Linear guides (2×)          | Hiwin HGR20, 1300 mm               | TW/EU           |
-| Rubber isolators (4×)       | M12, 70 Shore A, neoprene          | EU              |
 | PLC                         | CONTROLLINO MAXI / Arduino Opta    | AT/IT           |
 
 ---
