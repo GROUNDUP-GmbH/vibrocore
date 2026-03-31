@@ -93,13 +93,22 @@ complexity reduction vs. V1 custom design.*
 |58 | SE050 breakout board        | NXP OM-SE050ARD or compatible              |   1 |   20–40   | NXP / Mouser (EU)            |
 |59 | GPS antenna (drill head)    | u-blox ANN-MB, multi-band, SMA             |   1 |   50–80   | u-blox (CH)                  |
 |60 | GPS receiver                | u-blox ZED-F9P, RTK capable                |   1 |  150–250  | u-blox / Mouser (EU)         |
-|61 | Wiring harness              | CAGE CLAMP terminals, shielded cables      |   1 |   50–90   | Weidmüller / Phoenix (DE)    |
+|61 | Teltonika RUT241            | LTE Cat4 router, DIN-rail, −40..+75°C      |   1 |  100–160  | teltonika-networks.com (LT)  |
+|62 | SIM card (data-only)        | LTE 1 GB/month, AT or HU carrier           |   1 |   10–20   | Any carrier                  |
+|63 | DC step-down 24V→9V         | Power for RUT241 from 24V rail             |   1 |   10–20   | Traco / Mean Well (EU)       |
+|64 | Wiring harness              | CAGE CLAMP terminals, shielded cables      |   1 |   50–90   | Weidmüller / Phoenix (DE)    |
 
-**Control Subtotal: ~1,345–2,220 €**
+**Control Subtotal: ~1,475–2,610 €**
 
-> **Note:** CONTROLLINO MAXI / Arduino Opta removed — WAGO PFC200 XTR is the V1 production
-> controller. It eliminates the need for a separate Arduino prototype phase.
-> See `docs/design/CONTROL_SYSTEM.md` for full I/O mapping and Modbus configuration.
+> **Notes:**
+> - CONTROLLINO / Arduino Opta removed — WAGO PFC200 XTR is the V1 production controller.
+> - Teltonika RUT241: LTE for remote CODESYS debugging, OTA updates, MQTT to RDDL.
+> - **No external braking resistor required.** The 80 J fast-stop energy is dissipated
+>   as heat in the OLI motor windings via DC injection braking (P1232=100%).
+>   Temperature rise: 0.012 °C per stop — negligible at 7.2 kg motor thermal mass.
+>   V20 Vdc-max controller (P1240=1) prevents DC bus overvoltage during ramp.
+>   If bus overvoltage fault occurs in field: increase P1135 from 0.3s → 0.5s.
+>   See `docs/design/CONTROL_SYSTEM.md#braking-energy-analysis` for full calculation.
 
 ## 6. Geoprobe DT325 Components
 
@@ -183,6 +192,7 @@ complexity reduction vs. V1 custom design.*
 | Safety            | Pilz                    | DE      | pilz.com                     |
 | PLC               | WAGO                    | DE      | wago.com                     |
 | Secure element    | NXP (SE050)             | NL/EU   | nxp.com / mouser.com         |
+| LTE Router        | Teltonika Networks      | LT/EU   | teltonika-networks.com       |
 | Sensors           | ifm electronic          | DE      | ifm.com                      |
 | Connectors        | Weidmüller              | DE      | weidmueller.com              |
 | Connectors        | Phoenix Contact         | DE      | phoenixcontact.com           |

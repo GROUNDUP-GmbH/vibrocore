@@ -202,6 +202,101 @@ WAGO PFC200 (COM1 / onboard UART)
 
 ---
 
+## Mobile Connectivity — Teltonika RUT241
+
+For field use the WAGO PFC200 needs LTE connectivity for:
+- Remote CODESYS debugging (CODESYS Gateway over VPN)
+- OTA firmware updates (CODESYS Online Change)
+- MQTT data upload to RDDL/cloud (backup path if WiFi unavailable)
+
+**Selected router: Teltonika RUT241** (DIN-rail mountable, IP30, −40 °C to +75 °C, Cat4 LTE)
+
+```
+Instagrid ONE max
+      │ 230V AC
+      ▼
+  ┌──────────────┐
+  │ Teltonika    │  LTE Cat4 (SIM)
+  │ RUT241       │──────────────────► Internet / RDDL / Cloud
+  │ DIN-rail     │  WiFi AP (2.4 GHz)
+  └──────┬───────┘
+         │ Ethernet (LAN)
+         ▼
+  WAGO PFC200 XTR (ETH1)
+```
+
+**RUT241 configuration:**
+- WAN: SIM card (data-only SIM, e.g. Teltonika Mobile, 1 GB/month sufficient)
+- LAN: static IP 192.168.1.1 gateway, WAGO on 192.168.1.10
+- VPN: WireGuard tunnel to developer workstation for remote access
+- Firewall: only outbound MQTT (port 1883/8883) and WireGuard (UDP 51820) open
+
+**Power:** 9–30V DC input — powered from 24V rail via step-down, draws ~3W.
+
+Alternative for better cellular coverage: **Teltonika TRB140** (mPCIe form factor, fits
+inside the Rittal IP65 enclosure) or **RUT956** if dual-SIM redundancy is needed.
+
+---
+
+## Braking Energy Analysis — Why No External Resistor is Needed
+
+During OFF3 fast stop, the kinetic energy of the two OLI MVE 400/6-HF rotors
+must be dissipated. The question is whether an external braking resistor is needed.
+
+### Energy calculation
+
+```
+Per motor:
+  I (moment of inertia) ≈ m_eccentric × r² = 0.5 kg × (0.02 m)² = 0.0002 kg·m²
+  ω = 6000 RPM = 628 rad/s
+  E_kin = ½ × I × ω² = ½ × 0.0002 × 628² ≈ 39 J
+
+Both motors: E_total ≈ 80 J
+```
+
+### Dissipation path: DC injection braking (P1232 = 100%)
+
+After the 0.3s ramp-down (P1135), the V20 applies 100% rated current as DC to
+the stator. The energy is converted to heat **in the motor windings**:
+
+```
+Motor thermal mass: m = 7.2 kg, c ≈ 450 J/(kg·°C)
+ΔT per stop = E / (m × c) = 39 / (7200 × 0.45) = 0.012 °C per motor
+```
+
+At 100 stops/day: **1.2 °C cumulative temperature rise**. This is negligible
+relative to the motor's thermal rating and continuous self-cooling.
+
+### DC bus overvoltage risk during the ramp phase
+
+During the 0.3s ramp from 100 Hz to 0, the motor briefly regenerates energy
+back into the V20's DC bus. The V20 handles this via:
+
+| V20 Parameter | Value | Effect |
+|---------------|-------|--------|
+| P1240 | 1 (ON) | Vdc-max controller — auto-extends ramp if bus voltage rises |
+| P1135 | 0.3 s | OFF3 ramp time (0.3s is aggressive; increase to 0.5s if bus trips) |
+| P1232 | 100 % | DC braking current after ramp |
+| P1233 | 0.5 s | DC braking duration |
+
+**With P1240 = 1 active:** if the DC bus voltage approaches the trip threshold
+during the ramp, the V20 automatically extends the deceleration ramp. The motor
+still stops much faster than OFF1 (3s), but avoids a "DC link overvoltage" fault.
+
+### Decision: no external braking resistor in V1
+
+| Option | Cost | Complexity | Needed? |
+|--------|------|------------|---------|
+| DC injection braking (P1232=100%) | €0 | None | ✅ Default |
+| Increase P1135 to 0.5s if trips | €0 | None | If needed |
+| V20 external braking resistor module | ~€80 | Wiring | Only if P1240 doesn't help |
+
+**Recommendation for commissioning:** start with P1135 = 0.3s and P1240 = 1.
+If DC bus overvoltage trips occur during fast stops in the field, increase P1135
+to 0.5s. An external braking resistor is not expected to be necessary.
+
+---
+
 ## Development Environment
 
 ### CODESYS V3.5 (WAGO PFC200 target)
@@ -259,4 +354,6 @@ The WAGO PFC200 provides built-in remote access:
 | MQTT broker | Mosquitto | Pre-installed on PFC Linux |
 | Node-RED | HTTP | `http://192.168.1.1:1880` |
 
-For field use on mobile LTE: install a SIM-card router (e.g. GL.iNet GL-X3000) and create a WireGuard VPN tunnel — the WAGO PFC connects as a client, developer connects from anywhere.
+For field use on mobile LTE: the **Teltonika RUT241** provides the LTE uplink and
+WireGuard VPN — the WAGO PFC connects as LAN client, developer connects from anywhere.
+See the [Mobile Connectivity section](#mobile-connectivity--teltonika-rut241) above.
