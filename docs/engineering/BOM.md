@@ -77,19 +77,29 @@ complexity reduction vs. V1 custom design.*
 
 ## 5. Control & Electronics
 
-| # | Component               | Spec                              | Qty | Est. €   | Supplier / Source          |
-|---|-------------------------|-----------------------------------|-----|----------|----------------------------|
-|47 | PLC / Controller        | CONTROLLINO MAXI or Arduino Opta  |   1 |  150–250 | controllino.com / arduino  |
-|48 | Limit switches          | Inductive, M12, IP67              |   4 |   40–80  | ifm / Sick (DE)            |
-|49 | Emergency stop          | Category 3, with enclosure        |   1 |   30–50  | Eaton / Schneider (EU)     |
-|50 | Control panel enclosure | IP65, DIN rail compatible          |   1 |   40–80  | Rittal / Spelsberg (DE)    |
-|51 | WLAN module             | ESP32 or similar                   |   1 |   10–20  | Standard                   |
-|52 | Current sensors         | Hall-effect, for VFD + hub        |   2 |   20–40  | LEM / Allegro (EU)         |
-|53 | Accelerometer           | MEMS, ADXL345 or similar          |   1 |    5–15  | Analog Devices             |
-|54 | Wiring harness          | Connectors, terminals, DIN rail   |   1 |   40–80  | Weidmüller / Phoenix (DE)  |
-|55 | Safety relay            | Pilz PNOZ or equivalent           |   1 |   60–100 | Pilz (DE)                  |
+| # | Component                   | Spec                                        | Qty | Est. €    | Supplier / Source            |
+|---|-----------------------------|---------------------------------------------|-----|-----------|------------------------------|
+|47 | WAGO PFC200 XTR             | 750-8212, −40..+70°C, 5g vib, 2×ETH, RS-485 |   1 |  600–900  | wago.com (DE)                |
+|48 | WAGO 750-430 XTR            | 4× DI 24V DC, CAGE CLAMP                   |   1 |   60–90   | wago.com (DE)                |
+|49 | WAGO 750-530 XTR            | 4× DO 24V DC, 0.5A, CAGE CLAMP             |   1 |   60–90   | wago.com (DE)                |
+|50 | WAGO 750-637                | Incremental encoder interface               |   1 |  100–150  | wago.com (DE)                |
+|51 | WAGO 750-826                | RS-485 Modbus RTU serial interface          |   1 |   80–120  | wago.com (DE)                |
+|52 | WAGO 750-600                | End module                                  |   1 |   10–20   | wago.com (DE)                |
+|53 | Limit switches              | Inductive, M12, NC, IP67                   |   2 |   30–60   | ifm / Sick (DE)              |
+|54 | Emergency stop              | Mushroom NC, Category 3, IP65 enclosure    |   1 |   40–70   | Eaton / Schneider (EU)       |
+|55 | Safety relay                | Pilz PNOZ m B0 or equivalent               |   1 |   80–130  | Pilz (DE)                   |
+|56 | Control enclosure           | IP65, DIN rail, 200×150×80mm               |   1 |   40–80   | Rittal / Spelsberg (DE)      |
+|57 | RDDL Trust Wallet           | Xiao ESP32-C3 + NXP SE050 breakout         |   1 |   25–50   | Seeed Studio / Mouser (EU)   |
+|58 | SE050 breakout board        | NXP OM-SE050ARD or compatible              |   1 |   20–40   | NXP / Mouser (EU)            |
+|59 | GPS antenna (drill head)    | u-blox ANN-MB, multi-band, SMA             |   1 |   50–80   | u-blox (CH)                  |
+|60 | GPS receiver                | u-blox ZED-F9P, RTK capable                |   1 |  150–250  | u-blox / Mouser (EU)         |
+|61 | Wiring harness              | CAGE CLAMP terminals, shielded cables      |   1 |   50–90   | Weidmüller / Phoenix (DE)    |
 
-**Control Subtotal: ~395–715 €**
+**Control Subtotal: ~1,345–2,220 €**
+
+> **Note:** CONTROLLINO MAXI / Arduino Opta removed — WAGO PFC200 XTR is the V1 production
+> controller. It eliminates the need for a separate Arduino prototype phase.
+> See `docs/design/CONTROL_SYSTEM.md` for full I/O mapping and Modbus configuration.
 
 ## 6. Geoprobe DT325 Components
 
@@ -117,32 +127,31 @@ complexity reduction vs. V1 custom design.*
 
 ## Total Cost Summary
 
-| Subsystem         | Low Est. (€) | High Est. (€) | Notes                         |
-|-------------------|-------------|---------------|-------------------------------|
-| Sonic Head (V2)   |       1,185 |         1,900 | 2× OLI MVE 400/6-HF          |
-| Hub System        |       1,535 |         2,490 |                               |
-| Frame & Mounting  |         540 |           910 |                               |
-| Power System      |         310 |         2,890 | Range: rental vs. purchase    |
-| Control & Electr. |         395 |           715 |                               |
-| Geoprobe DT325    |       1,250 |         2,100 | US import + shipping          |
-| Positioning       |         220 |         2,390 | Range: existing vs. new viDoc |
-| **TOTAL**         |   **5,435** |    **13,395** |                               |
+| Subsystem             | Low Est. (€) | High Est. (€) | Notes                              |
+|-----------------------|-------------|---------------|------------------------------------|
+| Sonic Head (2× OLI)   |       1,185 |         1,900 | 2× OLI MVE 400/6-HF               |
+| Hub System            |       1,535 |         2,490 |                                    |
+| Frame & Mounting      |         540 |           910 |                                    |
+| Power System          |         310 |         2,890 | Range: Instagrid rental vs. buy    |
+| Control & Electr.     |       1,345 |         2,220 | WAGO PFC200 XTR + SE050 + GPS      |
+| Geoprobe DT325        |       1,250 |         2,100 | US import + shipping               |
+| Positioning           |         220 |         2,390 | Range: existing vs. new viDoc      |
+| **TOTAL**             |   **6,385** |    **14,900** |                                    |
 
-### Realistic V1 Prototype Budget
+### Realistic V1 Budget (Instagrid rental, existing viDoc)
 
-With Instagrid rental and existing viDoc:
-
-| Item              | Est. (€)    |
-|-------------------|-------------|
-| Sonic Head (OLI)  |       1,500 |
-| Hub System        |       2,000 |
-| Frame             |         700 |
-| Power (rental)    |         400 |
-| Controls          |         550 |
-| Geoprobe parts    |       1,700 |
-| GPS (head only)   |         300 |
-| Misc / contingency|         500 |
-| **TOTAL**         |   **7,650** |
+| Item                      | Est. (€) |
+|---------------------------|----------|
+| Sonic Head (2× OLI)       |    1,500 |
+| Hub System                |    2,000 |
+| Frame                     |      700 |
+| Power (Instagrid rental)  |      400 |
+| WAGO PFC200 XTR system    |    1,200 |
+| SE050 + ESP32-C3 wallet   |       80 |
+| Geoprobe DT325 parts      |    1,700 |
+| GPS head unit             |      300 |
+| Misc / contingency        |      600 |
+| **TOTAL**                 | **8,480** |
 
 ---
 
@@ -172,8 +181,8 @@ With Instagrid rental and existing viDoc:
 | Linear guides     | Hiwin                   | TW/DE   | hiwin.de                     |
 | Linear guides     | Bosch Rexroth           | DE      | boschrexroth.com             |
 | Safety            | Pilz                    | DE      | pilz.com                     |
-| PLC               | CONTROLLINO             | AT      | controllino.com              |
-| PLC               | Arduino (Opta)          | IT      | arduino.cc                   |
+| PLC               | WAGO                    | DE      | wago.com                     |
+| Secure element    | NXP (SE050)             | NL/EU   | nxp.com / mouser.com         |
 | Sensors           | ifm electronic          | DE      | ifm.com                      |
 | Connectors        | Weidmüller              | DE      | weidmueller.com              |
 | Connectors        | Phoenix Contact         | DE      | phoenixcontact.com           |
@@ -183,5 +192,5 @@ With Instagrid rental and existing viDoc:
 
 ---
 
-*Last updated: 2026-03-15*
+*Last updated: 2026-03-26*
 *Status: PRELIMINARY — verify all prices and availability before ordering*

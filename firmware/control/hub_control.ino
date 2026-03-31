@@ -1,4 +1,23 @@
 /**
+ * DEPRECATED — This file is no longer the active firmware.
+ *
+ * Replaced by: firmware/codesys/ (WAGO PFC200 XTR, CODESYS V3.5 / IEC 61131-3)
+ *
+ * Reason: Control system upgraded from Arduino/CONTROLLINO prototype to
+ * WAGO PFC200 XTR industrial controller for V1 production device.
+ * The WAGO system provides: ruggedized hardware (-40..+70°C, 5g vibration),
+ * industrial Modbus RTU for VFD + hub driver, CAGE CLAMP terminals,
+ * remote debugging, OTA updates, and built-in VPN/MQTT.
+ *
+ * See: docs/design/CONTROL_SYSTEM.md for the full system design.
+ * See: firmware/codesys/PRG_Main.st for the active control logic.
+ *
+ * Kept for reference only. Do not deploy.
+ *
+ * =========================================================================
+ * Original file below (reference only):
+ * =========================================================================
+ *
  * Vibrocore — Hub Motor Control (NEMA 42 + CL86T-V4.1)
  *
  * Controls the linear hub via step/dir interface.
