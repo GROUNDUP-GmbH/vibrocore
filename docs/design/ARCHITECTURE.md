@@ -39,9 +39,9 @@ core imaging. See `docs/engineering/BOM.md §8` for BOM and cost details.
 │  ╠═══════════════════════════════╪══════════════════════════════╣   │
 │  ║  8. CORE SCANNER (camera sled)                               ║   │
 │  ║  RPi 4 + HQ Camera 12MP + GT2 belt sled                     ║   │
-│  ║  DT325 half-shell → 1,200 frames → OpenCV stitch            ║   │
+│  ║  Intact sealed liner → 1,200 frames → OpenCV stitch         ║   │
 │  ║  L*a*b* color profile → horizon detection → JSON            ║   │
-│  ║  VM0042 evidence + soil science per core, auto via MQTT     ║   │
+│  ║  ⚠ Liner NEVER split — bulk density sample goes to lab      ║   │
 │  ╚══════════════════════════════════════════════════════════════╝   │
 │                                                                      │
 └──────────────────────────────────────────────────────────────────────┘
@@ -191,23 +191,27 @@ RPi 4 2GB (Core Scanner, autonomous)  [V1.1]
         │
         ├── MQTT subscribe: vibrocore/cycle/+ (receive cycle_id after drilling)
         │
+        │   ⚠ SAMPLE WORKFLOW: intact sealed liner → scanner cradle → lab
+        │   Liner is NEVER split. Bulk density sample goes to lab directly.
+        │
         ├── Stepper control (NEMA 17 + A4988 via GPIO)
-        │   Sled moves at 5 mm/s over stationary half-shell
+        │   Sled at 5 mm/s over intact polycarbonate liner in V-cradle
         │   Frame trigger every 200 steps ≈ 1 mm → ~1,200 frames / core
         │
-        ├── RPi HQ Camera (12.3 MP, 5000K CRI≥97 LED lighting)
-        │   Captures ~1,200 frames with 83% overlap → raw DNG + JPEG
+        ├── RPi HQ Camera (12.3 MP, 5000K CRI≥97 LED at 45°)
+        │   Photos through transparent liner → 1,200 frames, 85% overlap
+        │   Munsell tile at cradle start → liner color correction (ΔE < 2)
         │
-        ├── OpenCV stitching pipeline (linear mosaic, no rotation)
-        │   Output: ~82mm × 1200mm composite JPEG at ~0.05mm/pixel
+        ├── OpenCV linear mosaic stitching (1D, no feature matching)
+        │   Output: ~82mm × 1,200mm composite JPEG at ~0.05mm/pixel
         │
         ├── L*a*b* color analysis per 1mm depth slice
-        │   → Munsell-calibrated color profile
-        │   → Horizon boundary detection (ΔL*, Δa* threshold)
+        │   → Liner-corrected Munsell-calibrated color profile
+        │   → Horizon boundary detection (ΔL* > 8 or Δa* > 3)
         │
         └── MQTT publish:
-              vibrocore/core_scan/{cycle_id}     ← composite JPEG (base64)
-              vibrocore/core_color/{cycle_id}    ← JSON color + horizon profile
+              vibrocore/core_scan/{cycle_id}    ← composite JPEG
+              vibrocore/core_color/{cycle_id}   ← JSON color + horizons
 ```
 
 ## Detailed Design Documents
