@@ -86,6 +86,42 @@ VAR_GLOBAL
     // Register 21: Completed cycle counter (incremented per DT325 cycle)
     iStatus_CycleCount      : INT;     // %MW21
 
+    // ── V1.1 R/W Registers: Actuator HMI → PLC (offset 22..25) ──
+
+    // Register 22: Deploy lift command (1 = extend, 0 = stop)
+    xHMI_LiftExtend         : WORD;    // %MW22
+
+    // Register 23: Retract lift command (1 = retract, 0 = stop)
+    xHMI_LiftRetract        : WORD;    // %MW23
+
+    // Register 24: Tilt to vertical command (1 = go vertical, 0 = stop)
+    xHMI_TiltVertical       : WORD;    // %MW24
+
+    // Register 25: Tilt to fold command (1 = go transport, 0 = stop)
+    xHMI_TiltFold           : WORD;    // %MW25
+
+    // ── V1.1 R/O Registers: Actuator + Penetrometer (offset 26..33) ─
+
+    // Register 26: Deployment state
+    //   0 = UNKNOWN  1 = DEPLOYING  2 = DEPLOYED  3 = RETRACTING  4 = RETRACTED
+    eStatus_LiftState       : INT;     // %MW26
+
+    // Register 27: Tilt state
+    //   0 = UNKNOWN  1 = TILTING_VERT  2 = VERTICAL  3 = TILTING_FOLD  4 = FOLDED
+    eStatus_TiltState       : INT;     // %MW27
+
+    // Register 28: Current drill push force [N]  (INT, 0..5000)
+    iStatus_Force_N         : INT;     // %MW28
+
+    // Registers 29–30: Peak force this cycle [N]  (REAL, lo/hi)
+    rStatus_PeakForce_LO    : WORD;    // %MW29
+    rStatus_PeakForce_HI    : WORD;    // %MW30
+
+    // Registers 31–32: Core image available flag + cycle ID reference
+    // 0 = no image  1 = image published to MQTT (set by camera Pi via MQTT → CODESYS)
+    xStatus_CoreImageReady  : WORD;    // %MW31
+    iStatus_LastImageCycle  : INT;     // %MW32
+
 END_VAR
 
 
