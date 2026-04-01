@@ -297,66 +297,156 @@ Hub carriage plate
 
 ---
 
-### 8d. Core Camera System (Dark Chamber)
+### 8d. Core Scanner — Camera Sled with Image Stitching
 
-**Function:** Automatic, standardised photography of the 80mm diameter DT325 soil core
-(still inside the polycarbonate liner, ~1.2 m long) for:
-- Visual soil horizon identification (colour, texture, structure)
-- VM0042 evidence chain (sample quality documentation per cycle)
-- Long-term ML training dataset for automated soil texture classification
+**Function:** The DT325 polycarbonate liner is split lengthwise into two half-shells
+immediately after extraction. One half-shell is laid flat in the scanner cradle.
+A camera sled is driven at constant, encoder-controlled speed along the full 1.2m core
+length, capturing hundreds of overlapping frames under controlled LED lighting.
+The frames are automatically stitched into a single composite image.
 
-**Design:** Fully autonomous Raspberry Pi-based sub-system. The Vibrocore PLC/RevPi
-has **no wired I/O connection** to the camera system — communication is via MQTT only.
+**Dual purpose:**
+1. **Documentation** — VM0042-compliant visual record; chain-of-custody evidence per cycle
+2. **Soil science** — CIE L\*a\*b\* color analysis per millimetre of depth allows automatic
+   horizon identification, estimation of organic matter content (dark humus), iron
+   oxides (reddish B-horizons), gleying (grey/blue-green), and soil texture class.
+   This level of per-sample field characterisation is **not standard practice** in
+   conventional field sampling — it turns every DT325 core into a quantitative
+   pedological record.
+
+**Key design principle:** The camera does not need a macro lens or a stationary setup.
+Because the sled moves slowly and consistently, even a standard 35mm-equivalent lens
+at ~30 cm working distance captures the full 82.6mm core width with sub-mm resolution
+per stitched output. No fisheye distortion, no perspective error.
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│               DARK CHAMBER (Al extrusion box)            │
-│   120 mm × 120 mm × 1,250 mm  (2× 625 mm sections,     │
-│   joined at centre, matte black interior)                │
-│                                                          │
-│   ┌────────────────────────────────────────────────┐    │
-│   │     Core liner (Ø82mm × 1,200 mm) on V-cradle │    │
-│   └────────────────────────────────────────────────┘    │
-│         ↑ ↑ ↑                                            │
-│   LED strips (2×, warm white 3000K CRI≥95,              │
-│   facing down at 45°, on both long sides)                │
-│                                                          │
-│   Camera: RPi HQ 12.3 MP + 16mm lens                   │
-│   (centre-mounted, full-length top view)                 │
-│   OR: 2× RPi Camera (one per 625mm section)             │
-└──────────────┬───────────────────────────────────────────┘
-               │
-               │ Reed switch on lid (triggers capture when closed)
-               │
-┌──────────────▼───────────────────────────────────────────┐
-│  Raspberry Pi Zero 2W (Camera Controller)                │
-│  - Raspberry Pi OS Lite                                  │
-│  - picamera2 library → auto-capture on lid close        │
-│  - JPEG + DNG (RAW) saved to USB stick                  │
-│  - MQTT publish: vibrocore/core_image/{cycle_id}         │
-│  - Receives cycle_id from WAGO/RevPi via MQTT           │
-│  - GPS overlay from main controller MQTT topic          │
-│  - WiFi → Teltonika RUT241 LAN                          │
-└──────────────────────────────────────────────────────────┘
+Cross-section (looking along the core axis):
+                    ┌────────────────────────────────┐
+                    │  Light-tight cover (fold-down) │
+                    │  matte black interior          │
+    LED strip 45°   │  ┌──────────────────────────┐  │  LED strip 45°
+     ────►  ↘      │  │  Camera (RPi HQ + 35mm)  │  │   ↙  ◄────
+            ↘      │  │  slides on rail above    │  │  ↙
+             ↘     │  └──────────┬───────────────┘  │ ↙
+              ↘    │             │ (25-35 cm WD)     │↙
+               ↘   │  ┌──────────▼───────────────┐  │
+    even light →   │  │  Half-shell soil core    │  │ ← even light
+                   │  │  Ø82.6 mm, 1.2 m long   │  │
+                   │  │  on HDPE V-cradle        │  │
+                   │  └──────────────────────────┘  │
+                   └────────────────────────────────┘
+
+Side view (sled motion):
+
+  ┌─────────────────────────────────────────────────────────┐
+  │   mk 2004 Al-rail, 1,450 mm total (150mm overrun ea. end)│
+  │                                                         │
+  │   [START]─────────────[Camera Sled]────────────[END]   │
+  │     ↑              ← constant speed →             ↑    │
+  │  home switch                               end switch  │
+  │                                                         │
+  │   GT2 belt ────────────────────────────────────────    │
+  │   NEMA 17 stepper (rear) ──── idler pulley (front)     │
+  └─────────────────────────────────────────────────────────┘
+
+Frame capture logic:
+  Every 200 stepper steps (≈ 1mm sled travel) → trigger frame
+  → 1,200 frames total per 1.2m core
+  → with 35mm lens at 30cm WD: FOV ≈ 90mm W × 60mm H
+  → 60mm effective advance per frame → ~83% overlap
+  → stitched output resolution: ~0.05 mm/pixel (100 dpi soil science standard)
 ```
+
+**Image stitching and color analysis pipeline:**
+
+```python
+# Runs on RevPi Connect 4 (4 GB RAM, quad-core 1.5 GHz — ideal for OpenCV)
+# or on a dedicated Raspberry Pi 4 (2 GB)
+
+# Step 1: Stitch (1D linear, no rotation needed — just horizontal offset known)
+# opencv.Stitcher_create() OR simpler: since motion is 1D with known advance/frame,
+# direct mosaic assembly is faster and more reliable than feature-based stitching.
+
+# Step 2: Crop to core width (82.6mm), straighten if needed
+
+# Step 3: Color profile extraction
+# For each 1mm depth slice:
+#   - Convert RGB → CIE L*a*b* (device-independent, illuminant D50)
+#   - Extract median L*, a*, b* across the 82.6mm core width
+#   - Optionally compare to Munsell 10YR/2.5YR/5Y reference patches
+
+# Step 4: Horizon detection
+#   - Sliding window on L* + a*: sharp transitions → horizon boundary candidates
+#   - Rules: ΔL* > 8 or Δa* > 3 within 20mm window = potential horizon boundary
+
+# Output JSON (appended to cycle record):
+# {
+#   "core_scan_file": "cycle_042_core.jpg",
+#   "color_profile": [
+#     {"depth_mm": 0,   "L": 35.2, "a": 4.1, "b": 8.3, "horizon": "Ah"},
+#     {"depth_mm": 1,   "L": 34.8, "a": 4.0, "b": 8.1, "horizon": "Ah"},
+#     ...
+#     {"depth_mm": 380, "L": 52.1, "a": 7.8, "b": 14.2, "horizon": "B"},
+#     ...
+#   ],
+#   "horizons_detected": [
+#     {"boundary_mm": 380, "above": "Ah", "below": "B", "confidence": 0.91},
+#     {"boundary_mm": 820, "above": "B",  "below": "C", "confidence": 0.84}
+#   ],
+#   "munsell_calibrated": true,
+#   "scan_duration_s": 240
+# }
+```
+
+**Liner splitting:**
+After core extraction, the polycarbonate liner is split with a rotary cutter along two
+pre-scored lengthwise grooves (already standard for DT325 liners). One half goes into
+cold storage (archive); the other half is placed in the scanner cradle. Splitting and
+scanning take ~5 minutes per core and can be done in the field (under a folding shade
+tent if in direct sunlight).
+
+**Munsell calibration patch:**
+A Munsell 10YR 3/2, 10YR 5/4, and 10YR 7/4 reference tile is placed at one end of the
+cradle for every scan. The analysis script corrects L\*a\*b\* values to the known reference
+values, making results comparable across different lighting or camera conditions.
 
 | # | Component | Spec | Qty | Est. € | Supplier |
 |---|-----------|------|-----|--------|----------|
-|80 | Raspberry Pi Zero 2W | ARM Cortex-A53 quad, 512 MB, WiFi/BT, Camera connector | 1 | 18–25 | raspberrypi.com / Mouser (EU) |
-|81 | RPi HQ Camera Module | 12.3 MP IMX477, CSI connector | 1 | 50–65 | raspberrypi.com / Mouser (EU) |
-|82 | Lens 16mm | C-mount, for full-length top view | 1 | 30–60 | Arducam / Kowa (EU) |
-|83 | Dark chamber box | Aluminium extrusion 40×40, matte black anodised interior, hinged lid, V-cradle, 2× 625mm sections joinable | 1 | 80–150 | Custom (mk Technology profiles + sheet metal) |
-|84 | LED strip (warm white) | CRI ≥ 95, 3000K, 24V, 1.2m × 2, dimmable | 2 | 15–30 ea. | RS Components / Conrad (EU) |
-|85 | LED driver / dimmer | 24V → LED constant current, DIN rail | 1 | 20–40 | Mean Well LDD or Shenzhen equiv. |
-|86 | Reed switch (lid sensor) | SPDT, for RPi GPIO trigger | 1 | 3–8 | Conrad / Reichelt (EU) |
-|87 | USB stick (image storage) | 64 GB, USB-A, industrial grade | 1 | 15–30 | Transcend / Kingston Industrial |
-|88 | 5V PSU (camera system) | 24V → 5V/3A DC/DC for RPi Zero 2W, DIN rail | 1 | 15–25 | Traco / Mean Well (EU) |
+|80 | Raspberry Pi 4 (2 GB) | Quad-core Cortex-A72, 2 GB, USB 3, CSI, WiFi — OpenCV stitching host | 1 | 50–70 | raspberrypi.com / Mouser (EU) |
+|81 | RPi HQ Camera Module | 12.3 MP IMX477, CSI-2 connector, accurate color rendition | 1 | 50–65 | raspberrypi.com / Mouser (EU) |
+|82 | Lens 35mm equivalent | C-mount, ~8mm focal length for 30cm WD, low distortion, manual focus-lock | 1 | 25–60 | Arducam / Computar (EU) |
+|83 | NEMA 17 stepper motor | 48 mm, 45 N·cm, for sled drive | 1 | 12–20 | Stepperonline / Reichelt |
+|84 | A4988 stepper driver | 12V/24V, microstepping, DIN-rail or PCB, GPIO from RPi 4 | 1 | 5–15 | Pololu / Amazon (EU) |
+|85 | GT2 belt + pulleys | 6mm wide, 1,400mm belt loop, 16T + idler pulley | 1 | 10–20 | 3D printer suppliers (EU) |
+|86 | mk 2004 Al-rail | 40×40 mm, 1,450 mm, matte black anodised | 1 | 40–70 | mk Technology (DE) |
+|87 | Camera sled / carriage | mk profile connector + camera bracket + HiWin MGN12 miniature guide | 1 | 40–80 | Custom (mk + Hiwin parts) |
+|88 | HDPE V-cradle (half-shell) | Split for Ø82.6mm liner, matte black, 1,250mm, two-piece for transport | 1 | 30–60 | Custom CNC (HDPE bar stock) |
+|89 | LED strip (daylight) | CRI ≥ 97, 5000K, 24V, 1.25m × 2, dimmable, dual-sided 45° mounting | 2 | 20–40 ea. | Waveform Lighting / RS Components |
+|90 | LED driver | 24V → constant current, PWM dimmable, DIN rail | 1 | 20–40 | Mean Well LDD-1000H or equiv. |
+|91 | Light-tight cover | Aluminium sheet with brush seals along sled rail, hinged lid | 1 | 40–80 | Custom sheet metal (EU) |
+|92 | Munsell reference tile | 3× Munsell soil chips (10YR 3/2, 5/4, 7/4) in fixed holder | 1 | 20–40 | X-Rite / GretagMacbeth (EU) |
+|93 | Home / end switches | Inductive or reed, for sled positioning | 2 | 6–15 ea. | ifm / Conrad (EU) |
+|94 | 5V + 12V PSU | 24V → 5V/5A (RPi 4 + camera) + 12V/1A (stepper) | 1 | 20–35 | Traco / Mean Well (EU) |
+|95 | USB stick | 128 GB, industrial, USB 3.0 (raw frames + stitched output) | 1 | 20–35 | Transcend Industrial |
+|96 | Liner splitting tool | Rotary cutter with depth guide for 82.6mm liner OD | 1 | 30–60 | Custom / geotechnical supplier |
 
-**Core Camera Subtotal: ~246–433 €**
+**Core Scanner Subtotal: ~388–710 €**
 
-> **No PLC I/O module required.** Camera Pi is WiFi-connected to Teltonika RUT241.
-> Cycle ID is received via MQTT subscription: `vibrocore/cycle/+` → image is tagged with
-> cycle ID, GPS, timestamp. Published to: `vibrocore/core_image/{cycle_id}` (base64 JPEG).
+> **No PLC I/O module required.** RPi 4 controls stepper + camera autonomously.
+> MQTT subscription `vibrocore/cycle/+` provides cycle_id for file naming.
+> Outputs published to:
+> - `vibrocore/core_scan/{cycle_id}` — base64 JPEG composite (compressed)
+> - `vibrocore/core_color/{cycle_id}` — JSON color profile + horizon boundaries
+> - `vibrocore/core_scan/{cycle_id}/raw_url` — link to USB stick path for full-res DNG
+
+> **Color analysis significance:** Automated L\*a\*b\* profiling per millimetre of depth
+> enables objective, field-deployable soil horizon mapping at a level previously only
+> achievable in laboratory core scanners (e.g., Olympus ITRAX, Geotek MSCL).
+> Combined with the penetrogram (§8c force data), each DT325 cycle produces:
+> - Quantitative penetration resistance profile (kN vs. depth)
+> - Quantitative colour profile (L\*a\*b\* vs. depth)
+> - Automated horizon boundaries with confidence scores
+> - All signed via SE050 / RDDL for VM0042 chain of custody
 
 ---
 
@@ -402,11 +492,11 @@ New signals introduced by subsystems 8a–8c:
 | 8a Lift actuators | 330 | 600 |
 | 8b Tilt actuator | 210 | 370 |
 | 8c Penetrometer | 290 | 530 |
-| 8d Core Camera | 246 | 433 |
+| 8d Core Scanner (sled) | 388 | 710 |
 | 8e I/O (WAGO) | 160 | 250 |
 | 8e I/O (RevPi) | 40 | 70 |
-| **Total §8 (Option A)** | **1,236** | **2,183** |
-| **Total §8 (Option B)** | **1,116** | **2,003** |
+| **Total §8 (Option A)** | **1,378** | **2,460** |
+| **Total §8 (Option B)** | **1,258** | **2,280** |
 
 ---
 
@@ -422,10 +512,10 @@ New signals introduced by subsystems 8a–8c:
 | Positioning           |         220 |         2,390 | Range: existing vs. new viDoc      |
 | **TOTAL V1 (Opt. A)** |   **6,515** |    **15,290** | WAGO, no §8                        |
 | **TOTAL V1 (Opt. B)** |   **6,561** |    **15,110** | RevPi, no §8                       |
-| §8 Lift+Tilt+Pen.+Cam. (A) | 1,236 |       2,183 | WAGO I/O expansion included        |
-| §8 Lift+Tilt+Pen.+Cam. (B) | 1,116 |       2,003 | RevPi: fits existing DIO, cheaper  |
-| **TOTAL V1.1 (Opt. A)** | **7,751** |  **17,473** | Full field-ready (WAGO)            |
-| **TOTAL V1.1 (Opt. B)** | **7,677** |  **17,113** | Full field-ready (RevPi)           |
+| §8 Lift+Tilt+Pen.+Scanner (A) | 1,378 |     2,460 | WAGO I/O expansion + scanner       |
+| §8 Lift+Tilt+Pen.+Scanner (B) | 1,258 |     2,280 | RevPi: DIO headroom, cheaper       |
+| **TOTAL V1.1 (Opt. A)**  |   **7,893** |  **17,750** | Full field-ready (WAGO)            |
+| **TOTAL V1.1 (Opt. B)**  |   **7,819** |  **17,390** | Full field-ready (RevPi)           |
 
 ### Realistic V1 Budget (Instagrid rental, existing viDoc)
 
@@ -445,9 +535,9 @@ New signals introduced by subsystems 8a–8c:
 | HMI Software (Docker)       |       0 |              0 | |
 | Lift + Tilt actuators       |     — |            500 | §8a + §8b |
 | Penetrometer (load cell)    |     — |            400 | §8c |
-| Core camera system          |     — |            350 | §8d |
+| Core scanner (sled)         |     — |            550 | §8d: RPi4 + HQ cam + sled + OpenCV |
 | Misc / contingency          |     600 |            700 | |
-| **TOTAL Option A**          | **8,660** | **10,260** | |
+| **TOTAL Option A**          | **8,660** | **10,410** | |
 
 **Option B — RevPi Connect 4 (V1 prototype / cost-sensitive):**
 
@@ -466,9 +556,9 @@ New signals introduced by subsystems 8a–8c:
 | HMI Software (Docker)       |       0 |              0 | |
 | Lift + Tilt actuators       |     — |            500 | §8a + §8b |
 | Penetrometer (load cell)    |     — |            400 | §8c |
-| Core camera system          |     — |            350 | §8d |
+| Core scanner (sled)         |     — |            550 | §8d: sled + RPi4 + stitching |
 | Misc / contingency          |     600 |            700 | |
-| **TOTAL Option B**          | **8,130** | **9,530** | **~€730 less than Option A V1.1** |
+| **TOTAL Option B**          | **8,130** | **9,730** | **~€680 less than Option A V1.1** |
 
 ---
 
