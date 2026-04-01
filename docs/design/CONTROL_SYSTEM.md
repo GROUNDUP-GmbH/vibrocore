@@ -297,6 +297,42 @@ to 0.5s. An external braking resistor is not expected to be necessary.
 
 ---
 
+## Operator HMI — Docker Stack on PFC200 XTR
+
+The PFC200 XTR (Firmware ≥ 23) has Docker built-in.
+Two containers run alongside the CODESYS Runtime:
+
+```
+WAGO PFC200 XTR (192.168.1.10)
+├── CODESYS Runtime  → Modbus TCP Slave (port 502)
+└── Docker
+    ├── vibrocore-hmi   (Node-RED + Dashboard  → port 1880)
+    └── vibrocore-mqtt  (Mosquitto MQTT broker  → port 1883)
+```
+
+**Resource budget:** ~45 MB RAM + < 5% CPU idle — well within 512 MB / 1 GHz headroom.
+
+### Dashboard screens
+
+| Tab | Content |
+|-----|---------|
+| Betrieb | Cycle Start, Fault Reset, Jog Up/Down, depth/freq sliders, live gauges |
+| Status | State machine text (System / Hub / Sonic), safety reason, trend charts |
+| Protokoll | Per-cycle log table (depth, freq, GPS, signed flag) |
+
+Node-RED polls CODESYS every **500 ms** via Modbus TCP (FC3 read, registers 0–21).
+HMI write commands (buttons, sliders) use FC6/FC16 on the same registers.
+
+See `firmware/docker/` for the full stack and `firmware/docker/README.md` for setup.
+
+### Modbus TCP Slave configuration in CODESYS
+
+1. Device Tree → Add Device → `Modbus TCP Slave` (WagoAppModbusSlaveTcp)
+2. Port: 502, Unit ID: 1
+3. Map `%MW0..%MW21` per `firmware/codesys/GVL_MODBUS.st`
+
+---
+
 ## Development Environment
 
 ### CODESYS V3.5 (WAGO PFC200 target)
@@ -305,38 +341,36 @@ to 0.5s. An external braking resistor is not expected to be necessary.
 - WAGO Extension: **WAGO-I/O-PRO** or **CODESYS for WAGO** package
 - Required libraries:
   - `WagoAppModbusMasterRtu` ≥ 1.1.0.0
-  - `WagoAppModbusSlaveTcp` (optional, for HMI Modbus access)
-  - `WagoSysTimeRtc` (for timestamp in DataLogger)
+  - `WagoAppModbusSlaveTcp` (HMI Modbus TCP Slave interface)
+  - `WagoSysTimeRtc` (timestamp in DataLogger)
 - Target: WAGO PFC200 XTR (Arm Linux)
 - Programming: Structured Text (ST), IEC 61131-3
 
+**Note on CODESYS Go:** CODESYS Go is a browser-based IDE (edit + deploy), not an
+HMI app. It is used to write and deploy ST code to the PFC from any browser —
+useful when a Windows VM is not available. It is **not** the operator dashboard.
+
 ### Running on Mac (no Windows required)
 
-Option A — UTM virtual machine (recommended):
+Option A — UTM virtual machine (recommended for full IDE comfort):
 ```bash
 # Install UTM from https://mac.getutm.app
 # Create Windows 11 ARM VM (free via Azure Dev) or Windows 10 x86 via Rosetta
 # Install CODESYS V3.5 in the VM
-# Connect to WAGO PFC via WAGO USB-Service-Cable or Ethernet
+# Connect to WAGO PFC via WAGO USB-Service-Cable or Ethernet/VPN
 ```
 
-Option B — Python / Node-RED directly on PFC Linux:
-```bash
-# SSH into PFC200 (default: admin / wago)
-ssh admin@192.168.1.1
-
-# Install Node-RED
-npm install -g node-red
-
-# Use node-red-contrib-modbus for VFD/hub control
-# Use node-red-contrib-mqtt for cloud publishing
-# Vibrocore logic: firmware/python/ (future — see README)
+Option B — CODESYS Go (browser-based, no VM needed):
+```
+# Open: https://go.codesys.com
+# Target: WAGO PFC200 (IP: 192.168.1.10, port 1740)
+# Full ST editor + online debugging in any Chromium browser
 ```
 
 Option C — Cloud VM:
 - AWS EC2 t3.small (Windows Server) — ~$15/month
-- Install CODESYS V3.5, connect to WAGO via VPN (WAGO VPN client on PFC)
-- OTA updates via CODESYS Online Change or WAGO Web-Based-Management
+- Install CODESYS V3.5, connect to WAGO via WireGuard VPN
+- OTA updates via CODESYS Online Change
 
 ---
 

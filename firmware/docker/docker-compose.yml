@@ -1,0 +1,80 @@
+# Vibrocore V1 — Docker Compose
+# Target: WAGO PFC200 XTR (750-8212)
+#   CPU: 1 GHz ARM Cortex-A8 (armv7l)
+#   RAM: 512 MB  |  Flash: 4 GB
+#   OS:  Linux 3.18 (WAGO Firmware ≥ 23)
+#
+# Deploy:
+#   ssh admin@192.168.1.10
+#   cd /home/admin/vibrocore
+#   docker compose up -d
+#
+# Architecture note:
+#   CODESYS Runtime occupies one core (real-time tasks via PREEMPT_RT).
+#   Node-RED + Mosquitto share the remaining resources.
+#   Combined idle load: ~35-50 MB RAM, <5% CPU on PFC200 G2.
+
+version: "3.8"
+
+services:
+
+  # ─────────────────────────────────────────────────────────────────
+  # MOSQUITTO — local MQTT broker
+  #   - receives data from Node-RED and SE050 wallet (ESP32-C3 WiFi)
+  #   - bridges outbound MQTT to RDDL/cloud via WireGuard/LTE
+  # ─────────────────────────────────────────────────────────────────
+  mosquitto:
+    image: eclipse-mosquitto:2
+    platform: linux/arm/v7
+    container_name: vibrocore-mqtt
+    restart: unless-stopped
+    ports:
+      - "1883:1883"    # local MQTT (WAGO LAN)
+      - "9001:9001"    # WebSocket MQTT (Node-RED dashboard live data)
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+    networks:
+      - vibrocore
+
+  # ─────────────────────────────────────────────────────────────────
+  # NODE-RED — operator HMI dashboard
+  #   - polls CODESYS variables via Modbus TCP (WAGO Modbus Slave TCP)
+  #   - provides web dashboard on port 1880
+  #   - publishes cycle records to Mosquitto → RDDL
+  #
+  # Official WAGO image: armv7-compatible, includes
+  #   node-red-contrib-modbus, node-red-dashboard pre-installed.
+  # ─────────────────────────────────────────────────────────────────
+  nodered:
+    image: wagoautomation/node-red-iot:latest
+    platform: linux/arm/v7
+    container_name: vibrocore-hmi
+    restart: unless-stopped
+    depends_on:
+      - mosquitto
+    ports:
+      - "1880:1880"    # Node-RED editor + dashboard
+    environment:
+      - TZ=Europe/Vienna
+      - NODE_RED_ENABLE_PROJECTS=false
+      - NODE_OPTIONS=--max-old-space-size=128    # constrain heap on 512 MB PFC
+    volumes:
+      - nodered_data:/data
+      - ./nodered/flows.json:/data/flows.json:ro
+      - ./nodered/settings.js:/data/settings.js:ro
+    networks:
+      - vibrocore
+    extra_hosts:
+      # CODESYS Modbus TCP slave listens on the host (PFC200 IP)
+      - "wago-plc:192.168.1.10"
+
+volumes:
+  mosquitto_data:
+  mosquitto_log:
+  nodered_data:
+
+networks:
+  vibrocore:
+    driver: bridge

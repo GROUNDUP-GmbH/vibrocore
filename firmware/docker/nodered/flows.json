@@ -1,0 +1,619 @@
+[
+  {
+    "id": "tab_betrieb",
+    "type": "ui_tab",
+    "name": "Betrieb",
+    "icon": "dashboard",
+    "order": 1
+  },
+  {
+    "id": "tab_status",
+    "type": "ui_tab",
+    "name": "Status",
+    "icon": "assessment",
+    "order": 2
+  },
+  {
+    "id": "tab_log",
+    "type": "ui_tab",
+    "name": "Protokoll",
+    "icon": "list",
+    "order": 3
+  },
+
+  {
+    "id": "grp_control",
+    "type": "ui_group",
+    "name": "Steuerung",
+    "tab": "tab_betrieb",
+    "order": 1,
+    "disp": true,
+    "width": 6,
+    "collapse": false
+  },
+  {
+    "id": "grp_depth",
+    "type": "ui_group",
+    "name": "Tiefe & Position",
+    "tab": "tab_betrieb",
+    "order": 2,
+    "disp": true,
+    "width": 6,
+    "collapse": false
+  },
+  {
+    "id": "grp_state",
+    "type": "ui_group",
+    "name": "Maschinenstatus",
+    "tab": "tab_status",
+    "order": 1,
+    "disp": true,
+    "width": 12,
+    "collapse": false
+  },
+  {
+    "id": "grp_trend",
+    "type": "ui_group",
+    "name": "Verlauf",
+    "tab": "tab_status",
+    "order": 2,
+    "disp": true,
+    "width": 12,
+    "collapse": false
+  },
+  {
+    "id": "grp_log",
+    "type": "ui_group",
+    "name": "Proben-Protokoll",
+    "tab": "tab_log",
+    "order": 1,
+    "disp": true,
+    "width": 12,
+    "collapse": false
+  },
+
+  {
+    "id": "modbus_client",
+    "type": "modbus-client",
+    "name": "WAGO PFC200 Modbus TCP",
+    "clienttype": "tcp",
+    "bufferCommands": true,
+    "stateLogEnabled": false,
+    "tcpHost": "wago-plc",
+    "tcpPort": 502,
+    "tcpType": "DEFAULT",
+    "unitid": 1,
+    "commandDelay": 100,
+    "clientTimeout": 2000,
+    "reconnectOnTimeout": true,
+    "reconnectTimeout": 4000
+  },
+
+  {
+    "id": "poll_status",
+    "type": "modbus-read",
+    "name": "PLC Status lesen (500ms)",
+    "topic": "status",
+    "showStatusActivities": false,
+    "logIOActivities": false,
+    "showErrors": false,
+    "unitid": 1,
+    "dataType": "HoldingRegister",
+    "adr": 0,
+    "quantity": 22,
+    "rate": 500,
+    "rateUnit": "ms",
+    "delayOnStart": true,
+    "startDelayTime": 2,
+    "server": "modbus_client",
+    "useIOFile": false,
+    "useIOForPayload": false,
+    "emptyMsgOnFails": false,
+    "keepMsgProperties": false,
+    "wires": [["fn_parse_status"], ["fn_comm_error"]]
+  },
+
+  {
+    "id": "fn_parse_status",
+    "type": "function",
+    "name": "Register → Variablen",
+    "func": "// Modbus register map (holding registers, 0-based)\n// See firmware/codesys/GVL_MODBUS.st\n//\n// RW registers (HMI → PLC):\n//   0  eOperatingMode  (0=MANUAL, 1=DT325_AUTO)\n//   1  xHMI_CycleStart\n//   2  xHMI_JogDown\n//   3  xHMI_JogUp\n//   4  xHMI_SonicToggle\n//   5  xHMI_FaultReset\n//   6-7 rTargetDepth_mm (IEEE 754 REAL, low word first)\n//   8-9 rTargetFreq_Hz  (IEEE 754 REAL, low word first)\n//\n// RO registers (PLC → HMI):\n//  10  eSystemState\n//  11  eHubState\n//  12  eSonicState\n//  13-14 rPosition_mm  (REAL)\n//  15-16 rActualFreq_Hz (REAL)\n//  17-18 rActualCurrent_pct (REAL)\n//  19  eSafetyReason\n//  20  xSystemOK\n//  21  iCycleCount\n\nvar regs = msg.payload;\nif (!Array.isArray(regs) || regs.length < 22) { return null; }\n\nfunction regsToReal(lo, hi) {\n    var buf = Buffer.allocUnsafe(4);\n    buf.writeUInt16BE(hi, 0);\n    buf.writeUInt16BE(lo, 2);\n    return buf.readFloatBE(0);\n}\n\nvar SYS_STATE = ['IDLE','MANUAL','DT325_AUTO','FAULT','E-STOP'];\nvar HUB_STATE = ['IDLE','HOMING','DRILL_WAIT','DRILLING','STOP_SONIC','RETRACT','ESTOP_HOLD','FAULT'];\nvar SONIC_STATE = ['IDLE','STARTING','RUNNING','STOPPING','FAST_STOP','FAULT'];\nvar SAFETY_REASON = ['OK','ESTOP','LIMIT_UP','LIMIT_DOWN','HUB_ALARM','STONE_DETECTED','VFD_COMM'];\n\nvar d = {\n    mode:         regs[0],\n    systemState:  SYS_STATE[regs[10]]  || ('SYS_'+regs[10]),\n    hubState:     HUB_STATE[regs[11]]  || ('HUB_'+regs[11]),\n    sonicState:   SONIC_STATE[regs[12]] || ('SONIC_'+regs[12]),\n    position_mm:  regsToReal(regs[13], regs[14]),\n    freq_hz:      regsToReal(regs[15], regs[16]),\n    current_pct:  regsToReal(regs[17], regs[18]),\n    safetyReason: SAFETY_REASON[regs[19]] || ('SAFETY_'+regs[19]),\n    systemOK:     regs[20] !== 0,\n    cycleCount:   regs[21],\n    ts:           new Date().toLocaleTimeString('de-AT')\n};\n\n// Store for downstream nodes\nflow.set('plc', d);\n\nreturn { payload: d };",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "wires": [["split_outputs"]]
+  },
+
+  {
+    "id": "split_outputs",
+    "type": "function",
+    "name": "Ausgaben verteilen",
+    "func": "var d = msg.payload;\nreturn [\n    { payload: d.position_mm },\n    { payload: d.freq_hz },\n    { payload: d.current_pct },\n    { payload: (d.systemOK ? '✅ OK' : '❌ ' + d.safetyReason), color: d.systemOK ? 'green' : 'red' },\n    { payload: d.systemState + ' / ' + d.hubState + ' / ' + d.sonicState },\n    { payload: d.cycleCount },\n    { payload: d }\n];",
+    "outputs": 7,
+    "timeout": 0,
+    "noerr": 0,
+    "wires": [
+      ["gauge_depth"],
+      ["gauge_freq"],
+      ["gauge_current"],
+      ["text_safety"],
+      ["text_state"],
+      ["text_cycles"],
+      ["chart_freq_in","chart_current_in","fn_check_alarm"]
+    ]
+  },
+
+  {
+    "id": "fn_comm_error",
+    "type": "function",
+    "name": "Komm-Fehler",
+    "func": "node.status({fill:'red',shape:'ring',text:'PLC Verbindung verloren!'});\nflow.set('plc', null);\nreturn { payload: '⚠️ Keine Verbindung zur SPS' };",
+    "outputs": 1,
+    "wires": [["text_safety"]]
+  },
+
+  {
+    "id": "fn_check_alarm",
+    "type": "function",
+    "name": "Alarm-Check",
+    "func": "var d = msg.payload;\nif (!d.systemOK) {\n    var alarm = {\n        ts: new Date().toISOString(),\n        reason: d.safetyReason,\n        hub: d.hubState,\n        sonic: d.sonicState\n    };\n    node.warn('ALARM: ' + JSON.stringify(alarm));\n    return { payload: alarm, topic: 'vibrocore/alarm' };\n}\nreturn null;",
+    "outputs": 1,
+    "wires": [["mqtt_publish"]]
+  },
+
+  {
+    "id": "mqtt_publish",
+    "type": "mqtt out",
+    "name": "MQTT → Mosquitto",
+    "topic": "",
+    "qos": "1",
+    "retain": "false",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "mqtt_broker_local",
+    "wires": []
+  },
+
+  {
+    "id": "mqtt_broker_local",
+    "type": "mqtt-broker",
+    "name": "Lokaler Mosquitto",
+    "broker": "localhost",
+    "port": 1883,
+    "clientid": "nodered-hmi",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": "4",
+    "keepalive": 60,
+    "cleansession": true,
+    "autoUnsubscribe": true,
+    "birthTopic": "vibrocore/hmi/status",
+    "birthQos": "0",
+    "birthPayload": "online",
+    "birthRetain": "true",
+    "closeTopic": "vibrocore/hmi/status",
+    "closeQos": "0",
+    "closePayload": "offline",
+    "closeRetain": "true"
+  },
+
+  {
+    "id": "gauge_depth",
+    "type": "ui_gauge",
+    "name": "Tiefe",
+    "group": "grp_depth",
+    "order": 1,
+    "width": 6,
+    "height": 3,
+    "gtype": "donut",
+    "title": "Tiefe",
+    "label": "mm",
+    "format": "{{value | number:0}}",
+    "min": 0,
+    "max": 1300,
+    "segments": [
+      {"from": 0,    "color": "#4caf50"},
+      {"from": 1100, "color": "#ff9800"},
+      {"from": 1250, "color": "#f44336"}
+    ],
+    "wires": []
+  },
+
+  {
+    "id": "gauge_freq",
+    "type": "ui_gauge",
+    "name": "Frequenz",
+    "group": "grp_depth",
+    "order": 2,
+    "width": 3,
+    "height": 3,
+    "gtype": "gage",
+    "title": "Frequenz",
+    "label": "Hz",
+    "format": "{{value | number:1}}",
+    "min": 0,
+    "max": 110,
+    "segments": [
+      {"from": 0,   "color": "#2196f3"},
+      {"from": 80,  "color": "#4caf50"},
+      {"from": 100, "color": "#ff9800"}
+    ],
+    "wires": []
+  },
+
+  {
+    "id": "gauge_current",
+    "type": "ui_gauge",
+    "name": "Strom VFD",
+    "group": "grp_depth",
+    "order": 3,
+    "width": 3,
+    "height": 3,
+    "gtype": "gage",
+    "title": "Strom",
+    "label": "%",
+    "format": "{{value | number:0}}",
+    "min": 0,
+    "max": 200,
+    "segments": [
+      {"from": 0,   "color": "#4caf50"},
+      {"from": 110, "color": "#ff9800"},
+      {"from": 130, "color": "#f44336"}
+    ],
+    "wires": []
+  },
+
+  {
+    "id": "text_safety",
+    "type": "ui_text",
+    "name": "Safety Status",
+    "group": "grp_state",
+    "order": 1,
+    "width": 6,
+    "height": 1,
+    "title": "Safety",
+    "format": "{{msg.payload}}",
+    "layout": "row-spread",
+    "className": "",
+    "style": false,
+    "wires": []
+  },
+
+  {
+    "id": "text_state",
+    "type": "ui_text",
+    "name": "Maschinenzustand",
+    "group": "grp_state",
+    "order": 2,
+    "width": 6,
+    "height": 1,
+    "title": "Zustand",
+    "format": "{{msg.payload}}",
+    "layout": "row-spread",
+    "className": "",
+    "style": false,
+    "wires": []
+  },
+
+  {
+    "id": "text_cycles",
+    "type": "ui_text",
+    "name": "Probenanzahl",
+    "group": "grp_state",
+    "order": 3,
+    "width": 3,
+    "height": 1,
+    "title": "Proben heute",
+    "format": "{{msg.payload}}",
+    "layout": "row-spread",
+    "className": "",
+    "style": false,
+    "wires": []
+  },
+
+  {
+    "id": "chart_freq_in",
+    "type": "function",
+    "name": "Chart Freq formatieren",
+    "func": "return { payload: msg.payload.freq_hz, topic: 'Frequenz Hz' };",
+    "outputs": 1,
+    "wires": [["chart_trends"]]
+  },
+
+  {
+    "id": "chart_current_in",
+    "type": "function",
+    "name": "Chart Strom formatieren",
+    "func": "return { payload: msg.payload.current_pct, topic: 'Strom %' };",
+    "outputs": 1,
+    "wires": [["chart_trends"]]
+  },
+
+  {
+    "id": "chart_trends",
+    "type": "ui_chart",
+    "name": "Frequenz & Strom Verlauf",
+    "group": "grp_trend",
+    "order": 1,
+    "width": 12,
+    "height": 5,
+    "label": "Frequenz & Strom",
+    "chartType": "line",
+    "legend": true,
+    "xformat": "HH:mm:ss",
+    "interpolate": "linear",
+    "nodata": "Keine Daten",
+    "dot": false,
+    "ymin": 0,
+    "ymax": 200,
+    "removeOlder": 1,
+    "removeOlderPoints": "",
+    "removeOlderUnit": "3600",
+    "cutout": 0,
+    "useOneColor": false,
+    "useUTC": false,
+    "colors": ["#2196f3","#f44336","#4caf50","#ff9800","#9c27b0"],
+    "outputs": 1,
+    "wires": []
+  },
+
+  {
+    "id": "btn_cycle_start",
+    "type": "ui_button",
+    "name": "BOHRZYKLUS STARTEN",
+    "group": "grp_control",
+    "order": 1,
+    "width": 6,
+    "height": 2,
+    "passthru": false,
+    "label": "▶ BOHRZYKLUS STARTEN",
+    "tooltip": "Kompletten DT325 Bohrzyklus starten",
+    "color": "white",
+    "bgcolor": "#4caf50",
+    "className": "",
+    "icon": "",
+    "payload": "1",
+    "payloadType": "num",
+    "topic": "cycle_start",
+    "topicType": "str",
+    "wires": [["fn_write_cycle_start"]]
+  },
+
+  {
+    "id": "fn_write_cycle_start",
+    "type": "function",
+    "name": "CycleStart → PLC schreiben",
+    "func": "// Write xHMI_CycleStart = 1 (register 1)\n// The PLC will reset it after processing the rising edge\nreturn { payload: [1], topic: 'write', fc: 6, unitid: 1, address: 1 };",
+    "outputs": 1,
+    "wires": [["modbus_write"]]
+  },
+
+  {
+    "id": "btn_fault_reset",
+    "type": "ui_button",
+    "name": "Fehler quittieren",
+    "group": "grp_control",
+    "order": 2,
+    "width": 3,
+    "height": 1,
+    "passthru": false,
+    "label": "⚠ Fehler QUIT.",
+    "tooltip": "Alle Fehler quittieren (nur möglich wenn Ursache behoben)",
+    "color": "white",
+    "bgcolor": "#ff9800",
+    "className": "",
+    "icon": "",
+    "payload": "1",
+    "payloadType": "num",
+    "topic": "fault_reset",
+    "topicType": "str",
+    "wires": [["fn_write_fault_reset"]]
+  },
+
+  {
+    "id": "fn_write_fault_reset",
+    "type": "function",
+    "name": "FaultReset → PLC schreiben",
+    "func": "return { payload: [1], topic: 'write', fc: 6, unitid: 1, address: 5 };",
+    "outputs": 1,
+    "wires": [["modbus_write"]]
+  },
+
+  {
+    "id": "btn_jog_down",
+    "type": "ui_button",
+    "name": "Jog Runter",
+    "group": "grp_control",
+    "order": 3,
+    "width": 3,
+    "height": 1,
+    "passthru": false,
+    "label": "▼ JOG -",
+    "tooltip": "Schlitten manuell runterfahren (nur im MANUAL Mode)",
+    "color": "white",
+    "bgcolor": "#2196f3",
+    "payload": "1",
+    "payloadType": "num",
+    "wires": [["fn_write_jog_down"]]
+  },
+
+  {
+    "id": "fn_write_jog_down",
+    "type": "function",
+    "name": "JogDown → PLC",
+    "func": "return { payload: [1], fc: 6, unitid: 1, address: 2 };",
+    "outputs": 1,
+    "wires": [["modbus_write"]]
+  },
+
+  {
+    "id": "btn_jog_up",
+    "type": "ui_button",
+    "name": "Jog Hoch",
+    "group": "grp_control",
+    "order": 4,
+    "width": 3,
+    "height": 1,
+    "passthru": false,
+    "label": "▲ JOG +",
+    "tooltip": "Schlitten manuell hochfahren (nur im MANUAL Mode)",
+    "color": "white",
+    "bgcolor": "#2196f3",
+    "payload": "1",
+    "payloadType": "num",
+    "wires": [["fn_write_jog_up"]]
+  },
+
+  {
+    "id": "fn_write_jog_up",
+    "type": "function",
+    "name": "JogUp → PLC",
+    "func": "return { payload: [1], fc: 6, unitid: 1, address: 3 };",
+    "outputs": 1,
+    "wires": [["modbus_write"]]
+  },
+
+  {
+    "id": "slider_depth",
+    "type": "ui_slider",
+    "name": "Zieltiefe",
+    "group": "grp_control",
+    "order": 5,
+    "width": 6,
+    "height": 2,
+    "label": "Zieltiefe (mm)",
+    "tooltip": "Bohrziel: 300–1200 mm",
+    "color": "",
+    "min": 300,
+    "max": 1200,
+    "step": 50,
+    "passthru": false,
+    "outs": "end",
+    "topic": "target_depth",
+    "topicType": "str",
+    "className": "",
+    "wires": [["fn_write_target_depth"]]
+  },
+
+  {
+    "id": "fn_write_target_depth",
+    "type": "function",
+    "name": "Zieltiefe → PLC (REAL)",
+    "func": "// Write REAL (IEEE 754) to registers 6-7\n// WAGO CODESYS Modbus Slave maps REAL as [lo_word, hi_word]\nvar buf = Buffer.allocUnsafe(4);\nbuf.writeFloatBE(msg.payload, 0);\nvar hi = buf.readUInt16BE(0);\nvar lo = buf.readUInt16BE(2);\nreturn { payload: [lo, hi], fc: 16, unitid: 1, address: 6 };",
+    "outputs": 1,
+    "wires": [["modbus_write"]]
+  },
+
+  {
+    "id": "slider_freq",
+    "type": "ui_slider",
+    "name": "Zielfrequenz",
+    "group": "grp_control",
+    "order": 6,
+    "width": 6,
+    "height": 2,
+    "label": "Sonic Frequenz (Hz)",
+    "tooltip": "OLI MVE 400/6-HF: 90–110 Hz Betriebsbereich",
+    "color": "",
+    "min": 80,
+    "max": 110,
+    "step": 2,
+    "passthru": false,
+    "outs": "end",
+    "topic": "target_freq",
+    "topicType": "str",
+    "className": "",
+    "wires": [["fn_write_target_freq"]]
+  },
+
+  {
+    "id": "fn_write_target_freq",
+    "type": "function",
+    "name": "Zielfreq → PLC (REAL)",
+    "func": "var buf = Buffer.allocUnsafe(4);\nbuf.writeFloatBE(msg.payload, 0);\nvar hi = buf.readUInt16BE(0);\nvar lo = buf.readUInt16BE(2);\nreturn { payload: [lo, hi], fc: 16, unitid: 1, address: 8 };",
+    "outputs": 1,
+    "wires": [["modbus_write"]]
+  },
+
+  {
+    "id": "modbus_write",
+    "type": "modbus-write",
+    "name": "PLC schreiben",
+    "showStatusActivities": false,
+    "showErrors": false,
+    "unitid": 1,
+    "server": "modbus_client",
+    "emptyMsgOnFails": false,
+    "keepMsgProperties": false,
+    "wires": [[], []]
+  },
+
+  {
+    "id": "mqtt_cycle_sub",
+    "type": "mqtt in",
+    "name": "Proben MQTT empfangen",
+    "topic": "vibrocore/cycle/#",
+    "qos": "1",
+    "datatype": "json",
+    "broker": "mqtt_broker_local",
+    "nl": false,
+    "rap": false,
+    "rh": 0,
+    "inputs": 0,
+    "wires": [["fn_format_cycle_log"]]
+  },
+
+  {
+    "id": "fn_format_cycle_log",
+    "type": "function",
+    "name": "Proben-Eintrag formatieren",
+    "func": "var d = msg.payload;\nvar row = [\n    d.ts || new Date().toISOString(),\n    (d.depth_mm || 0).toFixed(0) + ' mm',\n    (d.freq_hz  || 0).toFixed(1) + ' Hz',\n    (d.lat  || 0).toFixed(6),\n    (d.lon  || 0).toFixed(6),\n    d.signed ? '✅' : '⏳'\n].join('  |  ');\nreturn { payload: row };",
+    "outputs": 1,
+    "wires": [["log_table"]]
+  },
+
+  {
+    "id": "log_table",
+    "type": "ui_text",
+    "name": "Proben Log",
+    "group": "grp_log",
+    "order": 1,
+    "width": 12,
+    "height": 8,
+    "title": "Probe",
+    "format": "{{msg.payload}}",
+    "layout": "row-left",
+    "className": "",
+    "style": false,
+    "wires": []
+  },
+
+  {
+    "id": "inject_init",
+    "type": "inject",
+    "name": "Init beim Start",
+    "props": [{"p": "payload"}],
+    "repeat": "",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 3,
+    "topic": "",
+    "payload": "{}",
+    "payloadType": "json",
+    "wires": [["fn_init"]]
+  },
+
+  {
+    "id": "fn_init",
+    "type": "function",
+    "name": "Standardwerte setzen",
+    "func": "// Send default target depth (1200 mm) and freq (100 Hz) to PLC on startup\nvar depthBuf = Buffer.allocUnsafe(4);\ndepthBuf.writeFloatBE(1200.0, 0);\nvar freqBuf = Buffer.allocUnsafe(4);\nfreqBuf.writeFloatBE(100.0, 0);\n\nnode.send([\n    { payload: [depthBuf.readUInt16BE(2), depthBuf.readUInt16BE(0)], fc: 16, unitid: 1, address: 6 },\n    null\n]);\nnode.send([\n    null,\n    { payload: [freqBuf.readUInt16BE(2), freqBuf.readUInt16BE(0)], fc: 16, unitid: 1, address: 8 }\n]);\nreturn null;",
+    "outputs": 2,
+    "wires": [["modbus_write"], ["modbus_write"]]
+  }
+]

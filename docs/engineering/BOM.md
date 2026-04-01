@@ -77,30 +77,44 @@ complexity reduction vs. V1 custom design.*
 
 ## 5. Control & Electronics
 
-| # | Component                   | Spec                                        | Qty | Est. €    | Supplier / Source            |
-|---|-----------------------------|---------------------------------------------|-----|-----------|------------------------------|
-|47 | WAGO PFC200 XTR             | 750-8212, −40..+70°C, 5g vib, 2×ETH, RS-485 |   1 |  600–900  | wago.com (DE)                |
-|48 | WAGO 750-430 XTR            | 4× DI 24V DC, CAGE CLAMP                   |   1 |   60–90   | wago.com (DE)                |
-|49 | WAGO 750-530 XTR            | 4× DO 24V DC, 0.5A, CAGE CLAMP             |   1 |   60–90   | wago.com (DE)                |
-|50 | WAGO 750-637                | Incremental encoder interface               |   1 |  100–150  | wago.com (DE)                |
-|51 | WAGO 750-826                | RS-485 Modbus RTU serial interface          |   1 |   80–120  | wago.com (DE)                |
-|52 | WAGO 750-600                | End module                                  |   1 |   10–20   | wago.com (DE)                |
-|53 | Limit switches              | Inductive, M12, NC, IP67                   |   2 |   30–60   | ifm / Sick (DE)              |
-|54 | Emergency stop              | Mushroom NC, Category 3, IP65 enclosure    |   1 |   40–70   | Eaton / Schneider (EU)       |
-|55 | Safety relay                | Pilz PNOZ m B0 or equivalent               |   1 |   80–130  | Pilz (DE)                   |
-|56 | Control enclosure           | IP65, DIN rail, 200×150×80mm               |   1 |   40–80   | Rittal / Spelsberg (DE)      |
-|57 | RDDL Trust Wallet           | Xiao ESP32-C3 + NXP SE050 breakout         |   1 |   25–50   | Seeed Studio / Mouser (EU)   |
-|58 | SE050 breakout board        | NXP OM-SE050ARD or compatible              |   1 |   20–40   | NXP / Mouser (EU)            |
-|59 | GPS antenna (drill head)    | u-blox ANN-MB, multi-band, SMA             |   1 |   50–80   | u-blox (CH)                  |
-|60 | GPS receiver                | u-blox ZED-F9P, RTK capable                |   1 |  150–250  | u-blox / Mouser (EU)         |
-|61 | Teltonika RUT241            | LTE Cat4 router, DIN-rail, −40..+75°C      |   1 |  100–160  | teltonika-networks.com (LT)  |
-|62 | SIM card (data-only)        | LTE 1 GB/month, AT or HU carrier           |   1 |   10–20   | Any carrier                  |
-|63 | DC step-down 24V→9V         | Power for RUT241 from 24V rail             |   1 |   10–20   | Traco / Mean Well (EU)       |
-|64 | Wiring harness              | CAGE CLAMP terminals, shielded cables      |   1 |   50–90   | Weidmüller / Phoenix (DE)    |
+| # | Component                   | Spec                                                      | Qty | Est. €    | Supplier / Source            |
+|---|-----------------------------|-----------------------------------------------------------|-----|-----------|------------------------------|
+|47 | WAGO PFC200 XTR             | 750-8212, 1 GHz Cortex-A8, 512 MB RAM, 4 GB Flash, −40..+70°C, 5g vib, 2×ETH, RS-485, Docker built-in (FW ≥ 23) | 1 | 600–900 | wago.com (DE) |
+|48 | WAGO 750-430 XTR            | 4× DI 24V DC, CAGE CLAMP                                 |   1 |   60–90   | wago.com (DE)                |
+|49 | WAGO 750-530 XTR            | 4× DO 24V DC, 0.5A, CAGE CLAMP                           |   1 |   60–90   | wago.com (DE)                |
+|50 | WAGO 750-637                | Incremental encoder interface                             |   1 |  100–150  | wago.com (DE)                |
+|51 | WAGO 750-826                | RS-485 Modbus RTU serial interface                        |   1 |   80–120  | wago.com (DE)                |
+|52 | WAGO 750-600                | End module                                                |   1 |   10–20   | wago.com (DE)                |
+|53 | Limit switches              | Inductive, M12, NC, IP67                                 |   2 |   30–60   | ifm / Sick (DE)              |
+|54 | Emergency stop              | Mushroom NC, Category 3, IP65 enclosure                  |   1 |   40–70   | Eaton / Schneider (EU)       |
+|55 | Safety relay                | Pilz PNOZ m B0 or equivalent                             |   1 |   80–130  | Pilz (DE)                   |
+|56 | Control enclosure           | IP65, DIN rail, 200×150×80mm                             |   1 |   40–80   | Rittal / Spelsberg (DE)      |
+|57 | RDDL Trust Wallet           | Xiao ESP32-C3 + NXP SE050 breakout                       |   1 |   25–50   | Seeed Studio / Mouser (EU)   |
+|58 | SE050 breakout board        | NXP OM-SE050ARD or compatible                            |   1 |   20–40   | NXP / Mouser (EU)            |
+|59 | GPS antenna (drill head)    | u-blox ANN-MB, multi-band, SMA                           |   1 |   50–80   | u-blox (CH)                  |
+|60 | GPS receiver                | u-blox ZED-F9P, RTK capable                              |   1 |  150–250  | u-blox / Mouser (EU)         |
+|61 | Teltonika RUT241            | LTE Cat4 router, DIN-rail, −40..+75°C                    |   1 |  100–160  | teltonika-networks.com (LT)  |
+|62 | SIM card (data-only)        | LTE 1 GB/month, AT or HU carrier                         |   1 |   10–20   | Any carrier                  |
+|63 | DC step-down 24V→9V         | Power for RUT241 from 24V rail                           |   1 |   10–20   | Traco / Mean Well (EU)       |
+|64 | Wiring harness              | CAGE CLAMP terminals, shielded cables                    |   1 |   50–90   | Weidmüller / Phoenix (DE)    |
 
-**Control Subtotal: ~1,475–2,610 €**
+**Software (no additional cost — runs on PFC200 Docker):**
+
+| Component | License | Notes |
+|-----------|---------|-------|
+| Node-RED (wagoautomation/node-red-iot) | Apache 2.0 | Official WAGO ARM image, includes dashboard + Modbus |
+| Mosquitto MQTT Broker | EPL 2.0 | Eclipse; Docker Hub official ARM image |
+| CODESYS V3.5 Runtime | Included with WAGO PFC | Licensed per hardware |
+| CODESYS Go | Free tier (500h/year) | Browser-based IDE, no Windows needed |
+
+**Control Subtotal: ~1,475–2,610 € (hardware only; software €0)**
 
 > **Notes:**
+> - WAGO PFC200 XTR specs confirmed: **1 GHz ARM Cortex-A8, 512 MB RAM, 4 GB Flash** (G2 generation).
+>   Docker is built-in from Firmware 23 — no extra hardware required for HMI.
+> - Operator HMI: Node-RED Dashboard in Docker on PFC200 (port 1880). Combined idle load:
+>   ~45 MB RAM, < 5% CPU. Full register map: `firmware/codesys/GVL_MODBUS.st`.
+>   Setup guide: `firmware/docker/README.md`.
 > - CONTROLLINO / Arduino Opta removed — WAGO PFC200 XTR is the V1 production controller.
 > - Teltonika RUT241: LTE for remote CODESYS debugging, OTA updates, MQTT to RDDL.
 > - **No external braking resistor required.** The 80 J fast-stop energy is dissipated
@@ -142,25 +156,27 @@ complexity reduction vs. V1 custom design.*
 | Hub System            |       1,535 |         2,490 |                                    |
 | Frame & Mounting      |         540 |           910 |                                    |
 | Power System          |         310 |         2,890 | Range: Instagrid rental vs. buy    |
-| Control & Electr.     |       1,345 |         2,220 | WAGO PFC200 XTR + SE050 + GPS      |
+| Control & Electr.     |       1,475 |         2,610 | WAGO PFC200 XTR + SE050 + GPS + RUT241 |
 | Geoprobe DT325        |       1,250 |         2,100 | US import + shipping               |
 | Positioning           |         220 |         2,390 | Range: existing vs. new viDoc      |
-| **TOTAL**             |   **6,385** |    **14,900** |                                    |
+| **TOTAL**             |   **6,515** |    **15,290** |                                    |
 
 ### Realistic V1 Budget (Instagrid rental, existing viDoc)
 
-| Item                      | Est. (€) |
-|---------------------------|----------|
-| Sonic Head (2× OLI)       |    1,500 |
-| Hub System                |    2,000 |
-| Frame                     |      700 |
-| Power (Instagrid rental)  |      400 |
-| WAGO PFC200 XTR system    |    1,200 |
-| SE050 + ESP32-C3 wallet   |       80 |
-| Geoprobe DT325 parts      |    1,700 |
-| GPS head unit             |      300 |
-| Misc / contingency        |      600 |
-| **TOTAL**                 | **8,480** |
+| Item                      | Est. (€) | Notes |
+|---------------------------|----------|-------|
+| Sonic Head (2× OLI)       |    1,500 | 2× OLI MVE 400/6-HF + VFD |
+| Hub System                |    2,000 | NEMA 42 + Neugart + chain |
+| Frame                     |      700 | Al profiles + steel plates |
+| Power (Instagrid rental)  |      400 | ~4 weeks field season |
+| WAGO PFC200 XTR system    |    1,200 | PLC + 4× I/O modules |
+| SE050 + ESP32-C3 wallet   |       80 | RDDL Trust Wallet |
+| Teltonika RUT241 + SIM    |      180 | LTE field connectivity |
+| Geoprobe DT325 parts      |    1,700 | Rods, shoes, liners |
+| GPS head unit             |      300 | u-blox ZED-F9P + antenna |
+| **HMI Software (Docker)** |    **0** | Node-RED + Mosquitto, free |
+| Misc / contingency        |      600 | Cables, enclosure, fasteners |
+| **TOTAL**                 | **8,660** | |
 
 ---
 
@@ -199,6 +215,11 @@ complexity reduction vs. V1 custom design.*
 | Fasteners         | Würth                   | DE      | wuerth.de                    |
 | Power supplies    | Mean Well               | TW/EU   | meanwell.com                 |
 | Cables            | Lapp                    | DE      | lappkabel.de                 |
+
+---
+
+| Node-RED (HMI)    | WAGO (wagoautomation) | DE/INT  | hub.docker.com/r/wagoautomation |
+| MQTT Broker       | Eclipse Mosquitto     | INT     | mosquitto.org                |
 
 ---
 
