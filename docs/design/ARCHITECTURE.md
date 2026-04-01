@@ -37,9 +37,11 @@ core imaging. See `docs/engineering/BOM.md §8` for BOM and cost details.
 │  ║  1× Tilt actuator (90° fold)  │  Force-displacement curve    ║   │
 │  ║  PLC-controlled, 4 DI + 4 DO  │  via RS-485 ADC (Slave 3)   ║   │
 │  ╠═══════════════════════════════╪══════════════════════════════╣   │
-│  ║  8. CORE CAMERA (dark chamber)                               ║   │
-│  ║  RPi Zero 2W + HQ Camera 12MP + LED box                     ║   │
-│  ║  Auto-photo on tray insertion → MQTT → cloud                ║   │
+│  ║  8. CORE SCANNER (camera sled)                               ║   │
+│  ║  RPi 4 + HQ Camera 12MP + GT2 belt sled                     ║   │
+│  ║  DT325 half-shell → 1,200 frames → OpenCV stitch            ║   │
+│  ║  L*a*b* color profile → horizon detection → JSON            ║   │
+│  ║  VM0042 evidence + soil science per core, auto via MQTT     ║   │
 │  ╚══════════════════════════════════════════════════════════════╝   │
 │                                                                      │
 └──────────────────────────────────────────────────────────────────────┘
@@ -184,10 +186,28 @@ WAGO / RevPi (CODESYS / Python)
               ├── vibrocore/core_image/{id}← RPi Zero 2W camera JPEG  [V1.1]
               └── vibrocore/hmi/status     ← HMI online/offline
 
-RPi Zero 2W (Core Camera, autonomous)  [V1.1]
+RPi 4 2GB (Core Scanner, autonomous)  [V1.1]
         │  WiFi → Teltonika RUT241
-        └── MQTT subscribe: vibrocore/cycle/+  (get cycle_id)
-            MQTT publish:   vibrocore/core_image/{cycle_id}
+        │
+        ├── MQTT subscribe: vibrocore/cycle/+ (receive cycle_id after drilling)
+        │
+        ├── Stepper control (NEMA 17 + A4988 via GPIO)
+        │   Sled moves at 5 mm/s over stationary half-shell
+        │   Frame trigger every 200 steps ≈ 1 mm → ~1,200 frames / core
+        │
+        ├── RPi HQ Camera (12.3 MP, 5000K CRI≥97 LED lighting)
+        │   Captures ~1,200 frames with 83% overlap → raw DNG + JPEG
+        │
+        ├── OpenCV stitching pipeline (linear mosaic, no rotation)
+        │   Output: ~82mm × 1200mm composite JPEG at ~0.05mm/pixel
+        │
+        ├── L*a*b* color analysis per 1mm depth slice
+        │   → Munsell-calibrated color profile
+        │   → Horizon boundary detection (ΔL*, Δa* threshold)
+        │
+        └── MQTT publish:
+              vibrocore/core_scan/{cycle_id}     ← composite JPEG (base64)
+              vibrocore/core_color/{cycle_id}    ← JSON color + horizon profile
 ```
 
 ## Detailed Design Documents
