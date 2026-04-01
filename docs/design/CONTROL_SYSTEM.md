@@ -88,12 +88,68 @@ The Vibrocore V1 control system is built around the **WAGO PFC200 XTR (750-8212)
 | Stop bits    | 1                |
 | Termination  | 120 Ω (enable on last device in chain) |
 
-**Bus topology:**
+**Bus topology (V1.1 — with penetrometer ADC):**
 
 ```
-WAGO 750-826 ──── cable ──── Siemens V20 (addr 1) ──── cable ──── Nanotec C5-E (addr 2)
-                                                                    [120Ω termination here]
+WAGO 750-826 ── Siemens V20 (addr 1) ── Nanotec C5-E (addr 2) ── Force ADC (addr 3)
+                                                                   [120Ω term. here]
 ```
+
+---
+
+## V1.1 I/O Expansion: Lift, Tilt, Penetrometer
+
+When subsystems §8a–8c from the BOM are added, the following I/O slots are required.
+
+### WAGO V1.1 — Additional Slots
+
+#### Slot 6 — 750-430 XTR (2nd): 4× Digital Input (Actuators)
+
+| Channel | Signal | Wiring | Description |
+|---------|--------|--------|-------------|
+| DI 0 | `xLiftDeployedLimit` | NC | Lift actuators fully deployed (drilling position) |
+| DI 1 | `xLiftRetractedLimit` | NC | Lift actuators fully retracted (transport position) |
+| DI 2 | `xTiltVerticalLimit` | NC | Mast in vertical/drilling position |
+| DI 3 | `xTiltFoldedLimit` | NC | Mast folded to horizontal/transport position |
+
+#### Slot 7 — 750-530 XTR (2nd): 4× Digital Output (Actuators)
+
+| Channel | Signal | Active | Description |
+|---------|--------|--------|-------------|
+| DO 0 | `xLiftExtend` | HIGH | Extend lift actuators (deploy device down) |
+| DO 1 | `xLiftRetract` | HIGH | Retract lift actuators (raise device) |
+| DO 2 | `xTiltVertical` | HIGH | Drive tilt actuator to vertical/drilling position |
+| DO 3 | `xTiltFold` | HIGH | Drive tilt actuator to fold/transport position |
+
+> **Wiring note:** `xLiftExtend` and `xLiftRetract` must never be TRUE simultaneously
+> (mutual interlock in CODESYS). Same applies to `xTiltVertical` / `xTiltFold`.
+> Both pairs drive an H-bridge relay module (one per actuator group).
+
+#### Slot 8 (existing 750-600 moves here): End module
+
+#### Penetrometer — RS-485 Slave 3 (no new WAGO slot needed)
+
+The force ADC (Datexel DAT8017-A or equivalent) connects to the existing RS-485 bus
+as Slave address 3. Holding Register 0 = force in raw counts (0–65535 → 0–5 kN).
+
+```
+rForce_raw := ModbusRead(uSlaveAddr := 3, uRegAddr := 0);
+rForce_N   := REAL_TO_INT(rForce_raw) / 13.107;  // 0..65535 → 0..5000 N
+```
+
+---
+
+### RevPi V1.1 — No Additional I/O Modules Required
+
+The RevPi DIO module has 14 DI and 14 DO. After base system and V1.1 additions:
+
+| Signals | Base (V1) | +V1.1 | Total used | DIO capacity |
+|---------|-----------|--------|------------|--------------|
+| DI (digital in) | 6 (4 limits + 2 encoder) | +4 (actuator limits) | **10** | 14 ✓ |
+| DO (digital out) | 4 | +4 (actuator control) | **8** | 14 ✓ |
+
+RevPi only needs the **PSU upgrade** (SDR-120-24) for actuator current.
+The penetrometer ADC connects as RS-485 Slave 3 on the built-in RS-485 port.
 
 ---
 

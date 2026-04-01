@@ -185,9 +185,230 @@ Recommended for V1 prototype / cost-sensitive builds.*
 
 **Positioning Subtotal: ~2,220–2,390 € (or ~220–390 € if viDoc existing)**
 
+## 8. Deployment, Penetrometry & Core Imaging
+
+*Optional subsystems for V1.1 / field-ready version.
+Can be added incrementally without hardware changes to the base controller I/O.*
+
 ---
 
-## Total Cost Summary
+### 8a. Lift Actuator System (~40 cm deployment travel)
+
+**Function:** Raises/lowers the entire drill mast ~400 mm between transport position
+(mast raised, clears ground obstacles) and drilling position (mast deployed, weight
+resting on stabiliser feet). Two parallel actuators ensure stable, torsion-free deployment.
+
+**Design:** 2× electric linear actuator (one per frame side) + shared H-bridge relay direction control.
+Each actuator has integrated mechanical end stops. CODESYS reads the 4 limit switches and
+controls extend/retract via 2 DO channels (shared for both actuators in parallel).
+
+| # | Component | Spec | Qty | Est. € | Supplier |
+|---|-----------|------|-----|--------|----------|
+|70 | Electric linear actuator (lift) | 24V DC, 400mm stroke, ≥1.5 kN push/pull, ≥8 mm/s, IP65, with integrated limit switch, DIN-rail PSU-powered | 2 | 150–280 ea. | Thomson PA, Ewellix CASM, Linak LA23 or equiv. |
+|71 | H-bridge relay module | 24V coil, 10A contacts, DIN-rail, direction control | 1 | 20–40 | Phoenix Contact / Finder |
+|72 | Limit switch wiring | 4-core cable, 2× NC sensors per actuator → 2 DI signals (deployed + retracted) | 1 | 10–20 | Lapp |
+
+**Lift Subtotal: ~330–600 €**
+
+> **I/O impact:** +2 DI (xLiftDeployedLimit, xLiftRetractedLimit) + 2 DO (xLiftExtend, xLiftRetract).
+> WAGO: requires 2nd 750-430 XTR and 2nd 750-530 XTR (see §5 I/O expansion below).
+> RevPi: fits within existing RevPi DIO headroom (10/14 DI, 6/14 DO used after this addition).
+
+---
+
+### 8b. Tilt Actuator (0°–90° mast fold)
+
+**Function:** Folds the drill mast from vertical (drilling) to horizontal (road transport),
+and back. The pivot is at the base of the mast. In vertical position, the tilt actuator
+is locked by motor-hold and a mechanical detent pin.
+
+**Design:** Single electric linear actuator on a pivot bracket, 600 mm from mast pivot.
+Stroke needed for 90°: ≈ 600 mm × sin(45°) × 2 ≈ 200 mm stroke is sufficient for
+a carefully positioned pivot-to-attachment geometry. Verify with final mechanical design.
+
+| # | Component | Spec | Qty | Est. € | Supplier |
+|---|-----------|------|-----|--------|----------|
+|73 | Electric linear actuator (tilt) | 24V DC, 200mm stroke, ≥2 kN, IP65, integrated limit switch, ≤10 mm/s (slow for safety) | 1 | 150–250 | Thomson PA, Linak LA36 or equiv. |
+|74 | Pivot bracket | Welded steel, Ø30 pin, self-aligning | 1 | 40–80 | Custom (EU) |
+|75 | Detent pin + spring | Positive lock in vertical position | 1 | 20–40 | Standard (EU) |
+
+**Tilt Subtotal: ~210–370 €**
+
+> **I/O impact:** +2 DI (xTiltVerticalLimit, xTiltFoldedLimit) + 2 DO (xTiltVertical, xTiltFold).
+> Total new I/O for lift + tilt: 4 DI + 4 DO.
+> WAGO: 1× additional 750-430 XTR + 1× additional 750-530 XTR handles all 4+4.
+> RevPi: still within single DIO module capacity (10/14 DI, 8/14 DO).
+
+> **PSU upgrade required:** Lift + Tilt actuators simultaneously draw up to 4× 2A = 8A @ 24V
+> (unlikely all running at once, but spec for peak). Upgrade 24V PSU from
+> Mean Well DDR-60D-24 (60W/2.5A) → **Mean Well SDR-120-24 (120W/5A)** (~€40–70). See §4.
+
+---
+
+### 8c. Integrated Penetrometer (Force-Displacement Measurement)
+
+**Function:** Measures drilling resistance (push force) as a function of depth throughout
+the entire penetration cycle. Combined with the existing position encoder this produces
+a **drilling penetrogram** (force vs. depth curve) — functionally equivalent to a
+lightweight Cone Penetration Test (CPT) at the sample point.
+
+**Design:** S-type load cell mounted in-line between the hub carriage adapter plate and the
+Geoprobe DT325 drive cap. Output: 4–20 mA via signal conditioner → RS-485 Modbus RTU
+converter (Slave address 3 on the existing bus). No additional PLC I/O module needed.
+
+```
+Hub carriage plate
+        │
+   ┌────┴────┐
+   │ S-type  │  0–5 kN
+   │ Load    │  ±0.1% accuracy
+   │ Cell    │
+   └────┬────┘
+        │  mV/V bridge output
+   ┌────▼────────────┐
+   │ 4-20mA          │  (loop-powered, 24V from rail)
+   │ Transmitter     │
+   └────┬────────────┘
+        │  4–20 mA current loop
+   ┌────▼─────────────────────────┐
+   │ Modbus RTU ADC Converter     │  RS-485 Slave addr 3
+   │ (e.g. Datexel DAT8017-A,    │  Register 0: force [N]
+   │  Weidmüller ACT20X, or      │  Updates at 50 ms
+   │  equivalent 1-ch 4-20mA    │
+   │  → RS-485 Modbus module)    │
+   └────┬─────────────────────────┘
+        │  RS-485 (existing Modbus RTU bus)
+        ▼
+   WAGO 750-826 / RevPi RS-485 (Slave 3, after Slave 2 Nanotec C5-E)
+```
+
+| # | Component | Spec | Qty | Est. € | Supplier |
+|---|-----------|------|-----|--------|----------|
+|76 | Load cell (S-type) | 0–5 kN, ≤0.1% non-linearity, IP67, thread M12 or Ø 22 mm inline, stainless | 1 | 100–200 | HBK S9M, Burster 8417, Bosche S2 or equiv. |
+|77 | 4-20mA transmitter | Matches load cell bridge (mV/V), loop-powered 24V DC, DIN rail | 1 | 50–100 | Weidmüller ACT20C, HBK AD105E or equiv. |
+|78 | Modbus RTU ADC | 1-ch 4-20mA → RS-485 Modbus RTU, 16-bit, Slave addr configurable | 1 | 80–130 | Datexel DAT8017-A, Procon RS-485 ADC or equiv. |
+|79 | Inline adapter | CNC-machined insert for carriage-to-DT325 load path, M12 thread × 2 | 1 | 60–100 | Custom (EU) |
+
+**Penetrometer Subtotal: ~290–530 €**
+
+> **No new PLC I/O module required** — uses existing RS-485 bus (Slave 3).
+> `FB_DataLogger` reads Object Register 0 from Slave 3 and includes force array in JSON payload.
+> Output data: `"force_n": [...]` array sampled at 50ms intervals → penetrogram per cycle.
+
+---
+
+### 8d. Core Camera System (Dark Chamber)
+
+**Function:** Automatic, standardised photography of the 80mm diameter DT325 soil core
+(still inside the polycarbonate liner, ~1.2 m long) for:
+- Visual soil horizon identification (colour, texture, structure)
+- VM0042 evidence chain (sample quality documentation per cycle)
+- Long-term ML training dataset for automated soil texture classification
+
+**Design:** Fully autonomous Raspberry Pi-based sub-system. The Vibrocore PLC/RevPi
+has **no wired I/O connection** to the camera system — communication is via MQTT only.
+
+```
+┌──────────────────────────────────────────────────────────┐
+│               DARK CHAMBER (Al extrusion box)            │
+│   120 mm × 120 mm × 1,250 mm  (2× 625 mm sections,     │
+│   joined at centre, matte black interior)                │
+│                                                          │
+│   ┌────────────────────────────────────────────────┐    │
+│   │     Core liner (Ø82mm × 1,200 mm) on V-cradle │    │
+│   └────────────────────────────────────────────────┘    │
+│         ↑ ↑ ↑                                            │
+│   LED strips (2×, warm white 3000K CRI≥95,              │
+│   facing down at 45°, on both long sides)                │
+│                                                          │
+│   Camera: RPi HQ 12.3 MP + 16mm lens                   │
+│   (centre-mounted, full-length top view)                 │
+│   OR: 2× RPi Camera (one per 625mm section)             │
+└──────────────┬───────────────────────────────────────────┘
+               │
+               │ Reed switch on lid (triggers capture when closed)
+               │
+┌──────────────▼───────────────────────────────────────────┐
+│  Raspberry Pi Zero 2W (Camera Controller)                │
+│  - Raspberry Pi OS Lite                                  │
+│  - picamera2 library → auto-capture on lid close        │
+│  - JPEG + DNG (RAW) saved to USB stick                  │
+│  - MQTT publish: vibrocore/core_image/{cycle_id}         │
+│  - Receives cycle_id from WAGO/RevPi via MQTT           │
+│  - GPS overlay from main controller MQTT topic          │
+│  - WiFi → Teltonika RUT241 LAN                          │
+└──────────────────────────────────────────────────────────┘
+```
+
+| # | Component | Spec | Qty | Est. € | Supplier |
+|---|-----------|------|-----|--------|----------|
+|80 | Raspberry Pi Zero 2W | ARM Cortex-A53 quad, 512 MB, WiFi/BT, Camera connector | 1 | 18–25 | raspberrypi.com / Mouser (EU) |
+|81 | RPi HQ Camera Module | 12.3 MP IMX477, CSI connector | 1 | 50–65 | raspberrypi.com / Mouser (EU) |
+|82 | Lens 16mm | C-mount, for full-length top view | 1 | 30–60 | Arducam / Kowa (EU) |
+|83 | Dark chamber box | Aluminium extrusion 40×40, matte black anodised interior, hinged lid, V-cradle, 2× 625mm sections joinable | 1 | 80–150 | Custom (mk Technology profiles + sheet metal) |
+|84 | LED strip (warm white) | CRI ≥ 95, 3000K, 24V, 1.2m × 2, dimmable | 2 | 15–30 ea. | RS Components / Conrad (EU) |
+|85 | LED driver / dimmer | 24V → LED constant current, DIN rail | 1 | 20–40 | Mean Well LDD or Shenzhen equiv. |
+|86 | Reed switch (lid sensor) | SPDT, for RPi GPIO trigger | 1 | 3–8 | Conrad / Reichelt (EU) |
+|87 | USB stick (image storage) | 64 GB, USB-A, industrial grade | 1 | 15–30 | Transcend / Kingston Industrial |
+|88 | 5V PSU (camera system) | 24V → 5V/3A DC/DC for RPi Zero 2W, DIN rail | 1 | 15–25 | Traco / Mean Well (EU) |
+
+**Core Camera Subtotal: ~246–433 €**
+
+> **No PLC I/O module required.** Camera Pi is WiFi-connected to Teltonika RUT241.
+> Cycle ID is received via MQTT subscription: `vibrocore/cycle/+` → image is tagged with
+> cycle ID, GPS, timestamp. Published to: `vibrocore/core_image/{cycle_id}` (base64 JPEG).
+
+---
+
+### 8e. I/O Expansion — Controller Impact Summary
+
+New signals introduced by subsystems 8a–8c:
+
+| Signal | Direction | Source | Count |
+|--------|-----------|--------|-------|
+| xLiftExtend | DO | PLC → Lift relay | 1 |
+| xLiftRetract | DO | PLC → Lift relay | 1 |
+| xLiftDeployedLimit | DI | Limit switch → PLC | 1 |
+| xLiftRetractedLimit | DI | Limit switch → PLC | 1 |
+| xTiltVertical | DO | PLC → Tilt relay | 1 |
+| xTiltFold | DO | PLC → Tilt relay | 1 |
+| xTiltVerticalLimit | DI | Limit switch → PLC | 1 |
+| xTiltFoldedLimit | DI | Limit switch → PLC | 1 |
+| rForce_N (via Modbus) | RS-485 | Load cell ADC Slave 3 | — |
+| Core image (via MQTT) | MQTT | RPi Zero 2W | — |
+| **Total new hard-wired** | | | **4 DI + 4 DO** |
+
+**WAGO Option A — additional modules required:**
+
+| Module | Function | Est. € |
+|--------|----------|--------|
+| WAGO 750-430 XTR (2nd) | 4× DI for lift + tilt limits | 60–90 |
+| WAGO 750-530 XTR (2nd) | 4× DO for lift + tilt control | 60–90 |
+| Mean Well SDR-120-24 | 24V/5A PSU upgrade (replaces DDR-60D-24) | 40–70 |
+| **Additional cost Option A** | | **€160–250** |
+
+**RevPi Option B — additional modules required:**
+
+| Module | Function | Est. € |
+|--------|----------|--------|
+| RevPi DIO (existing) | 4 new DI + 4 new DO fit in remaining headroom (14 per direction) | 0 |
+| Mean Well SDR-120-24 | 24V/5A PSU upgrade (same as Option A) | 40–70 |
+| **Additional cost Option B** | | **€40–70** |
+
+**Total Section 8 (Lift + Tilt + Penetrometer + Core Camera):**
+
+| Sub-section | Low (€) | High (€) |
+|-------------|---------|---------|
+| 8a Lift actuators | 330 | 600 |
+| 8b Tilt actuator | 210 | 370 |
+| 8c Penetrometer | 290 | 530 |
+| 8d Core Camera | 246 | 433 |
+| 8e I/O (WAGO) | 160 | 250 |
+| 8e I/O (RevPi) | 40 | 70 |
+| **Total §8 (Option A)** | **1,236** | **2,183** |
+| **Total §8 (Option B)** | **1,116** | **2,003** |
+
+---
 
 | Subsystem             | Low Est. (€) | High Est. (€) | Notes                              |
 |-----------------------|-------------|---------------|------------------------------------|
@@ -199,45 +420,55 @@ Recommended for V1 prototype / cost-sensitive builds.*
 | Control & Electr. (B) |       1,521 |         2,430 | RevPi Connect 4 + DIO + SE050 + GPS + RUT241 |
 | Geoprobe DT325        |       1,250 |         2,100 | US import + shipping               |
 | Positioning           |         220 |         2,390 | Range: existing vs. new viDoc      |
-| **TOTAL (Option A)**  |   **6,515** |    **15,290** | WAGO controller                    |
-| **TOTAL (Option B)**  |   **6,561** |    **15,110** | RevPi controller (~€300 less)      |
+| **TOTAL V1 (Opt. A)** |   **6,515** |    **15,290** | WAGO, no §8                        |
+| **TOTAL V1 (Opt. B)** |   **6,561** |    **15,110** | RevPi, no §8                       |
+| §8 Lift+Tilt+Pen.+Cam. (A) | 1,236 |       2,183 | WAGO I/O expansion included        |
+| §8 Lift+Tilt+Pen.+Cam. (B) | 1,116 |       2,003 | RevPi: fits existing DIO, cheaper  |
+| **TOTAL V1.1 (Opt. A)** | **7,751** |  **17,473** | Full field-ready (WAGO)            |
+| **TOTAL V1.1 (Opt. B)** | **7,677** |  **17,113** | Full field-ready (RevPi)           |
 
 ### Realistic V1 Budget (Instagrid rental, existing viDoc)
 
 **Option A — WAGO PFC200 XTR (production recommended):**
 
-| Item                      | Est. (€) | Notes |
-|---------------------------|----------|-------|
-| Sonic Head (2× OLI)       |    1,500 | 2× OLI MVE 400/6-HF + VFD |
-| Hub System                |    2,000 | NEMA 42 + Neugart + chain |
-| Frame                     |      700 | Al profiles + steel plates |
-| Power (Instagrid rental)  |      400 | ~4 weeks field season |
-| WAGO PFC200 XTR system    |    1,200 | PLC + 4× I/O modules |
-| SE050 + ESP32-C3 wallet   |       80 | RDDL Trust Wallet |
-| Teltonika RUT241 + SIM    |      180 | LTE field connectivity |
-| Geoprobe DT325 parts      |    1,700 | Rods, shoes, liners |
-| GPS head unit             |      300 | u-blox ZED-F9P + antenna |
-| **HMI Software (Docker)** |    **0** | Node-RED + Mosquitto, free |
-| Misc / contingency        |      600 | Cables, enclosure, fasteners |
-| **TOTAL Option A**        | **8,660** | |
+| Item                        | V1 (€)  | V1.1 + §8 (€) | Notes |
+|-----------------------------|---------|----------------|-------|
+| Sonic Head (2× OLI)         |   1,500 |          1,500 | |
+| Hub System                  |   2,000 |          2,000 | |
+| Frame                       |     700 |            700 | |
+| Power (Instagrid rental)    |     400 |            450 | SDR-120-24 PSU upgrade +€50 in V1.1 |
+| WAGO PFC200 XTR system      |   1,200 |          1,400 | +2nd DI + DO module in V1.1 |
+| SE050 + ESP32-C3 wallet     |      80 |             80 | |
+| Teltonika RUT241 + SIM      |     180 |            180 | |
+| Geoprobe DT325 parts        |   1,700 |          1,700 | |
+| GPS head unit               |     300 |            300 | |
+| HMI Software (Docker)       |       0 |              0 | |
+| Lift + Tilt actuators       |     — |            500 | §8a + §8b |
+| Penetrometer (load cell)    |     — |            400 | §8c |
+| Core camera system          |     — |            350 | §8d |
+| Misc / contingency          |     600 |            700 | |
+| **TOTAL Option A**          | **8,660** | **10,260** | |
 
 **Option B — RevPi Connect 4 (V1 prototype / cost-sensitive):**
 
-| Item                        | Est. (€) | Notes |
-|-----------------------------|----------|-------|
-| Sonic Head (2× OLI)         |    1,500 | identical |
-| Hub System                  |    2,000 | identical |
-| Frame                       |      700 | identical |
-| Power (Instagrid rental)    |      400 | identical |
-| RevPi Connect 4 (4 GB)      |      470 | CM4, RS-485 built-in, Docker-native |
-| RevPi DIO module            |      200 | replaces 3 WAGO I/O modules |
-| SE050 + ESP32-C3 wallet     |       80 | identical |
-| Teltonika RUT241 + SIM      |      180 | identical |
-| Geoprobe DT325 parts        |    1,700 | identical |
-| GPS head unit               |      300 | identical |
-| **HMI Software (Docker)**   |    **0** | same Docker stack, `platform: linux/arm/v8` |
-| Misc / contingency          |      600 | identical |
-| **TOTAL Option B**          | **8,130** | **~€530 less than Option A** |
+| Item                        | V1 (€)  | V1.1 + §8 (€) | Notes |
+|-----------------------------|---------|----------------|-------|
+| Sonic Head (2× OLI)         |   1,500 |          1,500 | |
+| Hub System                  |   2,000 |          2,000 | |
+| Frame                       |     700 |            700 | |
+| Power (Instagrid rental)    |     400 |            450 | SDR-120-24 PSU upgrade +€50 |
+| RevPi Connect 4 (4 GB)      |     470 |            470 | |
+| RevPi DIO module            |     200 |            200 | absorbs all new DI/DO with headroom |
+| SE050 + ESP32-C3 wallet     |      80 |             80 | |
+| Teltonika RUT241 + SIM      |     180 |            180 | |
+| Geoprobe DT325 parts        |    1,700 |          1,700 | |
+| GPS head unit               |     300 |            300 | |
+| HMI Software (Docker)       |       0 |              0 | |
+| Lift + Tilt actuators       |     — |            500 | §8a + §8b |
+| Penetrometer (load cell)    |     — |            400 | §8c |
+| Core camera system          |     — |            350 | §8d |
+| Misc / contingency          |     600 |            700 | |
+| **TOTAL Option B**          | **8,130** | **9,530** | **~€730 less than Option A V1.1** |
 
 ---
 
