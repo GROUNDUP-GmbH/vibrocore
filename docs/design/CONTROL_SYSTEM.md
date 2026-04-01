@@ -380,14 +380,114 @@ The WAGO PFC200 provides built-in remote access:
 
 | Feature | Method | URL / Config |
 |---------|--------|--------------|
-| Web UI | HTTP | `http://192.168.1.1` |
-| SSH | OpenSSH | `ssh admin@192.168.1.1` |
+| Web UI | HTTP | `http://192.168.1.10` |
+| SSH | OpenSSH | `ssh admin@192.168.1.10` |
 | VPN | OpenVPN / WireGuard | Configure in WBM |
 | CODESYS Online | TCP/IP | Port 1740 (CODESYS Gateway) |
 | OTA firmware | CODESYS Online Change | No service stop required |
-| MQTT broker | Mosquitto | Pre-installed on PFC Linux |
-| Node-RED | HTTP | `http://192.168.1.1:1880` |
+| MQTT broker | Mosquitto | Docker container (port 1883) |
+| Node-RED | HTTP | `http://192.168.1.10:1880` |
 
 For field use on mobile LTE: the **Teltonika RUT241** provides the LTE uplink and
 WireGuard VPN — the WAGO PFC connects as LAN client, developer connects from anywhere.
 See the [Mobile Connectivity section](#mobile-connectivity--teltonika-rut241) above.
+
+---
+
+## Controller Comparison: WAGO PFC200 XTR vs. Revolution Pi Connect 4
+
+Two viable controller options exist for Vibrocore V1. The WAGO is the primary
+recommendation for production; the RevPi Connect 4 is a lower-cost alternative
+well-suited for prototyping or cost-sensitive builds.
+
+### Hardware comparison
+
+| Feature | WAGO PFC200 XTR (750-8212) | RevPi Connect 4 |
+|---------|---------------------------|-----------------|
+| CPU | 1 GHz ARM Cortex-A8 (single) | 1.5 GHz Quad-Core Cortex-A72 |
+| RAM | 512 MB DDR3 | 2 / 4 / 8 GB LPDDR4 |
+| Flash | 4 GB eMMC | 8 / 32 GB eMMC |
+| **Temp range** | **−40 °C … +70 °C** | −25 °C … +55 °C |
+| **Vibration** | **5g (EN 60068-2-6)** | EN 61131-2 (less explicit) |
+| RS-485 | Via 750-826 module | **Built-in** (4-pin screw) |
+| Ethernet | 2× 10/100 | 2× Gigabit |
+| Docker | FW ≥ 23 (built-in) | **Native** (full Raspberry Pi OS) |
+| CODESYS | Dedicated Runtime (licensed w/ HW) | Soft PLC on PREEMPT_RT Linux |
+| Real-time | Dedicated CODESYS RTOS | PREEMPT_RT kernel patch |
+| Terminals | CAGE CLAMP (vibration-proof) | Screw terminals |
+| TPM 2.0 | No | Yes |
+| Origin | Made in Germany (WAGO) | Made in Germany (KUNBUS) |
+| License fees | Runtime included with hardware | **None** (open source Linux) |
+
+### I/O module comparison
+
+| I/O function | WAGO (Option A) | RevPi (Option B) |
+|-------------|-----------------|------------------|
+| 4× DI 24V | 750-430 XTR (€60–90) | **RevPi DIO** covers all → |
+| 4× DO 24V | 750-530 XTR (€60–90) | **RevPi DIO** covers all → |
+| Encoder (quadrature) | 750-637 (€100–150) | **RevPi DIO** (built-in counter/encoder mode) |
+| RS-485 Modbus RTU | 750-826 (€80–120) | **Built into Connect 4 base** |
+| End module | 750-600 (€10–20) | Not required |
+| **I/O total** | **€310–470** (4 modules) | **€196** (1× RevPi DIO) |
+
+The RevPi DIO (€196) replaces four WAGO modules in one unit because its 14 DI
+channels are individually configurable as digital input, counter, or **quadrature
+encoder** — sufficient for the 1000 ppr chain encoder at max ~10 kHz count rate.
+
+### Controller cost summary
+
+| Item | WAGO Option A | RevPi Option B |
+|------|--------------|----------------|
+| Base controller | €600–900 | ~€450 (Connect 4 4 GB + RAM surcharge) |
+| I/O modules | €310–470 | €196 (1× DIO) |
+| **Controller subtotal** | **€910–1,370** | **~€646** |
+| Savings vs. WAGO | — | **~€270–720** |
+
+### Decision guidance
+
+Use **WAGO PFC200 XTR** when:
+- Ambient temperature may drop below −25 °C (e.g., Eastern European winter storage)
+- Maximum vibration resistance is required (drilling in rocky, high-vibration terrain)
+- Dedicated CODESYS Runtime timing guarantees are needed
+- Long-term industrial support contracts are required
+
+Use **RevPi Connect 4** when:
+- Cost is a primary constraint (saves ~€300–500 on controller alone)
+- More RAM/CPU for edge computing or data logging is beneficial
+- The control enclosure can be kept above −25 °C (standard field conditions)
+- Full Linux flexibility (Python, Node-RED, Docker) without any Windows dependency
+- V1 prototype / proof-of-concept phase
+
+> **Temperature note:** Hungarian/Austrian field conditions rarely drop below −25 °C
+> during active drilling season (March–November). However, equipment stored outdoors
+> overnight in January can reach −20 °C. If the enclosure is insulated or heated
+> (self-adhesive heater strip, €15), the RevPi remains in spec. The WAGO's −40 °C
+> rating provides comfort margin without any mitigation.
+
+### RevPi-specific software notes
+
+The RevPi ships with **Raspberry Pi OS** (Debian-based). No Windows toolchain
+is needed at any stage:
+
+```bash
+# Node-RED (native, no Docker needed — but Docker works too):
+ssh user@192.168.1.10
+sudo apt install nodered
+node-red-start
+
+# CODESYS Soft PLC for RevPi (download from CODESYS Store):
+# Target package: "CODESYS Control for Raspberry Pi SL"
+# Programming: same ST code as WAGO, same IEC 61131-3
+
+# Python automation alternative (no CODESYS license needed):
+pip install pymodbus asyncio
+# → full Vibrocore logic in Python on RevPi Linux
+```
+
+The Docker Compose stack in `firmware/docker/` runs identically on RevPi (also arm/v8).
+Change the platform tag in `docker-compose.yml`:
+
+```yaml
+platform: linux/arm/v8   # RevPi Connect 4 (CM4 = armv8)
+# platform: linux/arm/v7  # WAGO PFC200 XTR (Cortex-A8 = armv7)
+```
