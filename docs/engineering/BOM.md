@@ -107,14 +107,53 @@ complexity reduction vs. V1 custom design.*
 | CODESYS V3.5 Runtime | Included with WAGO PFC | Licensed per hardware |
 | CODESYS Go | Free tier (500h/year) | Browser-based IDE, no Windows needed |
 
-**Control Subtotal: ~1,475–2,610 € (hardware only; software €0)**
+**Control Subtotal Option A (WAGO): ~1,475–2,610 € (hardware only; software €0)**
 
-> **Notes:**
-> - WAGO PFC200 XTR specs confirmed: **1 GHz ARM Cortex-A8, 512 MB RAM, 4 GB Flash** (G2 generation).
->   Docker is built-in from Firmware 23 — no extra hardware required for HMI.
-> - Operator HMI: Node-RED Dashboard in Docker on PFC200 (port 1880). Combined idle load:
->   ~45 MB RAM, < 5% CPU. Full register map: `firmware/codesys/GVL_MODBUS.st`.
->   Setup guide: `firmware/docker/README.md`.
+---
+
+### 5b. Control & Electronics — Option B: Revolution Pi Connect 4
+
+*Alternative to WAGO PFC200 XTR — lower cost, more RAM/CPU, full Linux.
+Recommended for V1 prototype / cost-sensitive builds.*
+
+| # | Component | Spec | Qty | Est. € | Supplier |
+|---|-----------|------|-----|--------|----------|
+|47b| RevPi Connect 4 | CM4 Quad-Core A72 1.5 GHz, 4 GB RAM, 32 GB eMMC, 2× GbE, RS-485 built-in, Docker-native, −25..+55 °C, DIN rail | 1 | 450–520 | [revolutionpi.com](https://revolutionpi.com/shop/en/revpi-connect4) (DE) |
+|48b| RevPi DIO module | 14× DI 24V + 14× DO 24V; DI configurable as quadrature encoder/counter — replaces WAGO 750-430 + 750-530 + 750-637 in one unit | 1 | 196–220 | revolutionpi.com (DE) |
+|49b| *(RS-485 built-in)* | Modbus RTU to Siemens V20 + Nanotec C5-E — no separate module needed | — | 0 | — |
+|50b–64b| Remaining items identical to Option A (limit switches, E-Stop, safety relay, enclosure, SE050/ESP32-C3, GPS, Teltonika RUT241, wiring) | | | ~875–1,690 | same as §5 |
+
+**Software (RevPi — zero additional cost, full open source):**
+
+| Component | Notes |
+|-----------|-------|
+| Raspberry Pi OS (Debian) | Pre-installed, full Linux, no license fees |
+| Node-RED (official Docker image) | `platform: linux/arm/v8` in docker-compose.yml |
+| Mosquitto | Same Docker stack as Option A |
+| CODESYS SL for Raspberry Pi | Soft PLC from CODESYS Store (runtime license required) |
+| Python / pymodbus | Full alternative to CODESYS — no Windows ever |
+
+**Control Subtotal Option B (RevPi): ~1,521–2,430 € (hardware only; software €0)**
+
+> **Option B savings vs. Option A: ~€300–600 less for the controller sub-system**
+> (RevPi base €646 vs. WAGO system €910–1,370)
+
+> **Key tradeoffs:**
+> - Temperature: RevPi −25 °C vs. WAGO −40 °C. For EU field use (March–November) this
+>   is acceptable; add enclosure heater strip (~€15) for cold-storage overnight.
+> - Vibration: WAGO is explicitly 5g rated. The drill enclosure isolates the controller
+>   from drilling vibrations via rubber mounts — in practice both are adequate.
+> - CODESYS real-time: RevPi uses PREEMPT_RT Linux (soft PLC). For Vibrocore's
+>   500ms Modbus polling cycles this is more than sufficient.
+> - Encoder: RevPi DIO quadrature encoder mode handles 10 kHz count rate comfortably
+>   (1000ppr × 10 mm/s = ~6.7 kHz max at drilling speed).
+> - I/O advantage: 1 RevPi DIO replaces 3 WAGO modules — simpler wiring.
+>
+> See `docs/design/CONTROL_SYSTEM.md#controller-comparison` for full analysis.
+
+> **Notes (Option A — WAGO):**
+> - WAGO PFC200 XTR specs: **1 GHz ARM Cortex-A8, 512 MB RAM, 4 GB Flash** (G2).
+>   Docker built-in from Firmware 23. Setup guide: `firmware/docker/README.md`.
 > - CONTROLLINO / Arduino Opta removed — WAGO PFC200 XTR is the V1 production controller.
 > - Teltonika RUT241: LTE for remote CODESYS debugging, OTA updates, MQTT to RDDL.
 > - **No external braking resistor required.** The 80 J fast-stop energy is dissipated
@@ -156,12 +195,16 @@ complexity reduction vs. V1 custom design.*
 | Hub System            |       1,535 |         2,490 |                                    |
 | Frame & Mounting      |         540 |           910 |                                    |
 | Power System          |         310 |         2,890 | Range: Instagrid rental vs. buy    |
-| Control & Electr.     |       1,475 |         2,610 | WAGO PFC200 XTR + SE050 + GPS + RUT241 |
+| Control & Electr. (A) |       1,475 |         2,610 | WAGO PFC200 XTR + SE050 + GPS + RUT241 |
+| Control & Electr. (B) |       1,521 |         2,430 | RevPi Connect 4 + DIO + SE050 + GPS + RUT241 |
 | Geoprobe DT325        |       1,250 |         2,100 | US import + shipping               |
 | Positioning           |         220 |         2,390 | Range: existing vs. new viDoc      |
-| **TOTAL**             |   **6,515** |    **15,290** |                                    |
+| **TOTAL (Option A)**  |   **6,515** |    **15,290** | WAGO controller                    |
+| **TOTAL (Option B)**  |   **6,561** |    **15,110** | RevPi controller (~€300 less)      |
 
 ### Realistic V1 Budget (Instagrid rental, existing viDoc)
+
+**Option A — WAGO PFC200 XTR (production recommended):**
 
 | Item                      | Est. (€) | Notes |
 |---------------------------|----------|-------|
@@ -176,7 +219,25 @@ complexity reduction vs. V1 custom design.*
 | GPS head unit             |      300 | u-blox ZED-F9P + antenna |
 | **HMI Software (Docker)** |    **0** | Node-RED + Mosquitto, free |
 | Misc / contingency        |      600 | Cables, enclosure, fasteners |
-| **TOTAL**                 | **8,660** | |
+| **TOTAL Option A**        | **8,660** | |
+
+**Option B — RevPi Connect 4 (V1 prototype / cost-sensitive):**
+
+| Item                        | Est. (€) | Notes |
+|-----------------------------|----------|-------|
+| Sonic Head (2× OLI)         |    1,500 | identical |
+| Hub System                  |    2,000 | identical |
+| Frame                       |      700 | identical |
+| Power (Instagrid rental)    |      400 | identical |
+| RevPi Connect 4 (4 GB)      |      470 | CM4, RS-485 built-in, Docker-native |
+| RevPi DIO module            |      200 | replaces 3 WAGO I/O modules |
+| SE050 + ESP32-C3 wallet     |       80 | identical |
+| Teltonika RUT241 + SIM      |      180 | identical |
+| Geoprobe DT325 parts        |    1,700 | identical |
+| GPS head unit               |      300 | identical |
+| **HMI Software (Docker)**   |    **0** | same Docker stack, `platform: linux/arm/v8` |
+| Misc / contingency          |      600 | identical |
+| **TOTAL Option B**          | **8,130** | **~€530 less than Option A** |
 
 ---
 

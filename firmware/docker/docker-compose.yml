@@ -1,8 +1,14 @@
 # Vibrocore V1 — Docker Compose
-# Target: WAGO PFC200 XTR (750-8212)
+# Target: WAGO PFC200 XTR (750-8212)        ← Option A (recommended)
 #   CPU: 1 GHz ARM Cortex-A8 (armv7l)
 #   RAM: 512 MB  |  Flash: 4 GB
 #   OS:  Linux 3.18 (WAGO Firmware ≥ 23)
+#
+# OR: Revolution Pi Connect 4               ← Option B (prototype / cost)
+#   CPU: 1.5 GHz Quad-Core Cortex-A72 (armv8l / arm64)
+#   RAM: 4 GB  |  Flash: 32 GB
+#   OS:  Raspberry Pi OS (Debian)
+#   → Change platform below: linux/arm/v7 → linux/arm/v8
 #
 # Deploy:
 #   ssh admin@192.168.1.10
@@ -25,7 +31,7 @@ services:
   # ─────────────────────────────────────────────────────────────────
   mosquitto:
     image: eclipse-mosquitto:2
-    platform: linux/arm/v7
+    platform: linux/arm/v7    # WAGO PFC200 XTR; change to linux/arm/v8 for RevPi Connect 4
     container_name: vibrocore-mqtt
     restart: unless-stopped
     ports:
@@ -48,8 +54,10 @@ services:
   #   node-red-contrib-modbus, node-red-dashboard pre-installed.
   # ─────────────────────────────────────────────────────────────────
   nodered:
+    # WAGO: wagoautomation/node-red-iot:latest (arm/v7, includes Modbus + dashboard)
+    # RevPi: nodered/node-red:latest          (arm/v8 — install node-red-contrib-modbus + node-red-dashboard separately)
     image: wagoautomation/node-red-iot:latest
-    platform: linux/arm/v7
+    platform: linux/arm/v7    # change to linux/arm/v8 + image above for RevPi Connect 4
     container_name: vibrocore-hmi
     restart: unless-stopped
     depends_on:
