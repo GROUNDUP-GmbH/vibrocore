@@ -297,156 +297,158 @@ Hub carriage plate
 
 ---
 
-### 8d. Core Scanner — Camera Sled with Image Stitching
+### 8d. Core Scanner — Camera Sled Through Intact Liner
 
-**Function:** The DT325 polycarbonate liner is split lengthwise into two half-shells
-immediately after extraction. One half-shell is laid flat in the scanner cradle.
-A camera sled is driven at constant, encoder-controlled speed along the full 1.2m core
-length, capturing hundreds of overlapping frames under controlled LED lighting.
-The frames are automatically stitched into a single composite image.
+**⚠ Critical design constraint:** Vibrocore extracts **soil bulk density samples**.
+The intact core (soil + polycarbonate liner, both ends capped) goes **directly to the
+lab** for wet weight → oven drying → dry weight → bulk density calculation.
+**The liner is never split. Nothing is archived on site. The sample is the product.**
+
+The scanner therefore works with the **sealed, intact polycarbonate liner** lying in
+a V-cradle. The camera photographs through the transparent liner wall. The scan takes
+~4 minutes and adds zero risk to sample integrity — the liner never leaves the cradle
+until it is capped, labelled, and handed to the courier box.
+
+**Why scanning through the liner works:**
+The DT325 polycarbonate liner is optically clear enough for soil color documentation.
+The main artifacts — mild plastic haze, slight color shift toward blue-green — are
+systematic and fully correctable with the Munsell calibration reference placed at one
+end of every scan. Horizon boundaries (sharp ΔL\* transitions) are clearly visible
+through the liner, which is all that is needed for pedological interpretation.
+For absolute color accuracy, the calibration tile brings L\*a\*b\* values to within
+ΔE ≈ 2–3 of open-air reference values — well within the uncertainty of field soil
+color classification.
 
 **Dual purpose:**
-1. **Documentation** — VM0042-compliant visual record; chain-of-custody evidence per cycle
-2. **Soil science** — CIE L\*a\*b\* color analysis per millimetre of depth allows automatic
-   horizon identification, estimation of organic matter content (dark humus), iron
-   oxides (reddish B-horizons), gleying (grey/blue-green), and soil texture class.
-   This level of per-sample field characterisation is **not standard practice** in
-   conventional field sampling — it turns every DT325 core into a quantitative
-   pedological record.
-
-**Key design principle:** The camera does not need a macro lens or a stationary setup.
-Because the sled moves slowly and consistently, even a standard 35mm-equivalent lens
-at ~30 cm working distance captures the full 82.6mm core width with sub-mm resolution
-per stitched output. No fisheye distortion, no perspective error.
+1. **Documentation** — VM0042-compliant visual record per cycle, before sample leaves site
+2. **Soil science** — CIE L\*a\*b\* color profile per millimetre enables automatic horizon
+   detection, organic matter estimation (dark Ah), Fe-oxide horizons (reddish B),
+   gleying (grey/blue-green), texture class inference. This is done with every sample
+   as a matter of course — no separate field protocol needed.
 
 ```
-Cross-section (looking along the core axis):
-                    ┌────────────────────────────────┐
-                    │  Light-tight cover (fold-down) │
-                    │  matte black interior          │
-    LED strip 45°   │  ┌──────────────────────────┐  │  LED strip 45°
-     ────►  ↘      │  │  Camera (RPi HQ + 35mm)  │  │   ↙  ◄────
-            ↘      │  │  slides on rail above    │  │  ↙
-             ↘     │  └──────────┬───────────────┘  │ ↙
-              ↘    │             │ (25-35 cm WD)     │↙
-               ↘   │  ┌──────────▼───────────────┐  │
-    even light →   │  │  Half-shell soil core    │  │ ← even light
-                   │  │  Ø82.6 mm, 1.2 m long   │  │
-                   │  │  on HDPE V-cradle        │  │
-                   │  └──────────────────────────┘  │
-                   └────────────────────────────────┘
+Cross-section (camera looks down through the top of the intact liner):
 
-Side view (sled motion):
+                    ┌─────────────────────────────────┐
+                    │  Light-tight cover (fold-down)  │
+                    │  matte black interior           │
+    LED 45° ↘      │  ┌───────────────────────────┐   │  ↙ LED 45°
+              ↘    │  │  Camera (RPi HQ + 8mm)    │   │ ↙
+               ↘   │  │  slides on rail above     │   │↙
+                ↘  │  └──────────┬────────────────┘   │
+    even light →  │             │ 25–30 cm WD         │ ← even light
+                   │  ┌──────────▼────────────────┐   │
+                   │  │  Polycarbonate liner       │   │
+                   │  │  Ø82.6mm OD, intact+sealed│   │
+                   │  │  Soil visible through wall │   │
+                   │  │  in HDPE V-cradle          │   │
+                   │  └───────────────────────────┘   │
+                   └─────────────────────────────────┘
 
-  ┌─────────────────────────────────────────────────────────┐
-  │   mk 2004 Al-rail, 1,450 mm total (150mm overrun ea. end)│
-  │                                                         │
-  │   [START]─────────────[Camera Sled]────────────[END]   │
-  │     ↑              ← constant speed →             ↑    │
-  │  home switch                               end switch  │
-  │                                                         │
-  │   GT2 belt ────────────────────────────────────────    │
-  │   NEMA 17 stepper (rear) ──── idler pulley (front)     │
-  └─────────────────────────────────────────────────────────┘
+Side view (sled motion along the 1.2m liner length):
 
-Frame capture logic:
-  Every 200 stepper steps (≈ 1mm sled travel) → trigger frame
-  → 1,200 frames total per 1.2m core
-  → with 35mm lens at 30cm WD: FOV ≈ 90mm W × 60mm H
-  → 60mm effective advance per frame → ~83% overlap
-  → stitched output resolution: ~0.05 mm/pixel (100 dpi soil science standard)
+  ┌──────────────────────────────────────────────────────────┐
+  │  mk 2004 Al-rail, 1,450 mm (150mm overrun each end)     │
+  │                                                          │
+  │  [HOME]──────────────[Camera Sled]──────────────[END]   │
+  │    ↑               ← 5 mm/s constant →             ↑   │
+  │  inductive                                    inductive  │
+  │  switch                                        switch   │
+  │                                                          │
+  │  GT2 belt ────────────────────────────────────────────  │
+  │  NEMA 17 (rear end) ──── idler pulley (front end)       │
+  │                                                          │
+  │  [  Munsell tile  ][  intact liner, 1,200mm  ][  cap  ] │
+  └──────────────────────────────────────────────────────────┘
+
+Frame capture:
+  1 frame per 200 stepper steps ≈ every 1 mm of sled travel
+  → 1,200 frames / 1.2m core
+  → 8mm C-mount lens at 28cm WD: FOV ≈ 95mm W × 70mm H
+  → 70mm advance / frame → ~85% overlap
+  → stitched output: ~0.05 mm/pixel across full 1.2m core
+  → scan duration: ~240 seconds (4 min) at 5 mm/s
 ```
 
-**Image stitching and color analysis pipeline:**
+**Processing pipeline (runs on RPi 4 autonomously):**
 
 ```python
-# Runs on RevPi Connect 4 (4 GB RAM, quad-core 1.5 GHz — ideal for OpenCV)
-# or on a dedicated Raspberry Pi 4 (2 GB)
+# Runs on RPi 4 (2 GB) — triggered by MQTT cycle event
 
-# Step 1: Stitch (1D linear, no rotation needed — just horizontal offset known)
-# opencv.Stitcher_create() OR simpler: since motion is 1D with known advance/frame,
-# direct mosaic assembly is faster and more reliable than feature-based stitching.
+# 1. Linear mosaic assembly (no feature matching needed — motion is 1D, advance known)
+#    Direct column-wise stacking with known step advance → fast, no drift
 
-# Step 2: Crop to core width (82.6mm), straighten if needed
+# 2. Liner correction
+#    - Crop to liner width (82.6mm) using fixed calibration mask
+#    - Correct for polycarbonate color shift using Munsell reference at frame 0:
+#      measured_lab vs. known_lab → per-channel affine correction applied to all frames
 
-# Step 3: Color profile extraction
-# For each 1mm depth slice:
-#   - Convert RGB → CIE L*a*b* (device-independent, illuminant D50)
-#   - Extract median L*, a*, b* across the 82.6mm core width
-#   - Optionally compare to Munsell 10YR/2.5YR/5Y reference patches
+# 3. L*a*b* color profile
+#    For each 1mm depth slice: median L*, a*, b* across the 82.6mm core width
 
-# Step 4: Horizon detection
-#   - Sliding window on L* + a*: sharp transitions → horizon boundary candidates
-#   - Rules: ΔL* > 8 or Δa* > 3 within 20mm window = potential horizon boundary
+# 4. Horizon detection
+#    Sliding window (20mm): ΔL* > 8 or Δa* > 3 → horizon boundary candidate
+#    Confidence from transition sharpness and repeatability across 3 adjacent slices
 
-# Output JSON (appended to cycle record):
+# Output JSON appended to cycle record:
 # {
-#   "core_scan_file": "cycle_042_core.jpg",
+#   "core_scan_file": "cycle_042.jpg",
+#   "liner_correction_applied": true,
+#   "munsell_dE_before": 4.2,
+#   "munsell_dE_after": 1.8,
 #   "color_profile": [
-#     {"depth_mm": 0,   "L": 35.2, "a": 4.1, "b": 8.3, "horizon": "Ah"},
-#     {"depth_mm": 1,   "L": 34.8, "a": 4.0, "b": 8.1, "horizon": "Ah"},
+#     {"depth_mm": 0,   "L": 34.1, "a": 3.8, "b": 7.9},
 #     ...
-#     {"depth_mm": 380, "L": 52.1, "a": 7.8, "b": 14.2, "horizon": "B"},
+#     {"depth_mm": 380, "L": 51.8, "a": 7.5, "b": 13.9},
 #     ...
 #   ],
 #   "horizons_detected": [
-#     {"boundary_mm": 380, "above": "Ah", "below": "B", "confidence": 0.91},
-#     {"boundary_mm": 820, "above": "B",  "below": "C", "confidence": 0.84}
-#   ],
-#   "munsell_calibrated": true,
-#   "scan_duration_s": 240
+#     {"boundary_mm": 380, "above": "Ah", "below": "B", "confidence": 0.91}
+#   ]
 # }
 ```
 
-**Liner splitting:**
-After core extraction, the polycarbonate liner is split with a rotary cutter along two
-pre-scored lengthwise grooves (already standard for DT325 liners). One half goes into
-cold storage (archive); the other half is placed in the scanner cradle. Splitting and
-scanning take ~5 minutes per core and can be done in the field (under a folding shade
-tent if in direct sunlight).
-
-**Munsell calibration patch:**
-A Munsell 10YR 3/2, 10YR 5/4, and 10YR 7/4 reference tile is placed at one end of the
-cradle for every scan. The analysis script corrects L\*a\*b\* values to the known reference
-values, making results comparable across different lighting or camera conditions.
+**Field workflow (per DT325 cycle, ~10 min total):**
+```
+1. Sonic drilling complete → hub retracted → core barrel removed
+2. Liner extracted, ends capped immediately (2 min)
+3. Liner weighed (wet weight, field scale)
+4. Liner placed in scanner cradle
+5. Scan starts automatically (triggered by RPi home switch release)
+   → 4 min scan, 1,200 frames, stitching + color analysis run in background
+6. Liner labelled (sample ID, GPS, depth, wet weight sticker)
+7. Liner packed into insulated courier box → lab
+8. Scan result published to MQTT before next drill cycle starts
+```
 
 | # | Component | Spec | Qty | Est. € | Supplier |
 |---|-----------|------|-----|--------|----------|
-|80 | Raspberry Pi 4 (2 GB) | Quad-core Cortex-A72, 2 GB, USB 3, CSI, WiFi — OpenCV stitching host | 1 | 50–70 | raspberrypi.com / Mouser (EU) |
-|81 | RPi HQ Camera Module | 12.3 MP IMX477, CSI-2 connector, accurate color rendition | 1 | 50–65 | raspberrypi.com / Mouser (EU) |
-|82 | Lens 35mm equivalent | C-mount, ~8mm focal length for 30cm WD, low distortion, manual focus-lock | 1 | 25–60 | Arducam / Computar (EU) |
-|83 | NEMA 17 stepper motor | 48 mm, 45 N·cm, for sled drive | 1 | 12–20 | Stepperonline / Reichelt |
-|84 | A4988 stepper driver | 12V/24V, microstepping, DIN-rail or PCB, GPIO from RPi 4 | 1 | 5–15 | Pololu / Amazon (EU) |
-|85 | GT2 belt + pulleys | 6mm wide, 1,400mm belt loop, 16T + idler pulley | 1 | 10–20 | 3D printer suppliers (EU) |
-|86 | mk 2004 Al-rail | 40×40 mm, 1,450 mm, matte black anodised | 1 | 40–70 | mk Technology (DE) |
-|87 | Camera sled / carriage | mk profile connector + camera bracket + HiWin MGN12 miniature guide | 1 | 40–80 | Custom (mk + Hiwin parts) |
-|88 | HDPE V-cradle (half-shell) | Split for Ø82.6mm liner, matte black, 1,250mm, two-piece for transport | 1 | 30–60 | Custom CNC (HDPE bar stock) |
-|89 | LED strip (daylight) | CRI ≥ 97, 5000K, 24V, 1.25m × 2, dimmable, dual-sided 45° mounting | 2 | 20–40 ea. | Waveform Lighting / RS Components |
-|90 | LED driver | 24V → constant current, PWM dimmable, DIN rail | 1 | 20–40 | Mean Well LDD-1000H or equiv. |
-|91 | Light-tight cover | Aluminium sheet with brush seals along sled rail, hinged lid | 1 | 40–80 | Custom sheet metal (EU) |
-|92 | Munsell reference tile | 3× Munsell soil chips (10YR 3/2, 5/4, 7/4) in fixed holder | 1 | 20–40 | X-Rite / GretagMacbeth (EU) |
-|93 | Home / end switches | Inductive or reed, for sled positioning | 2 | 6–15 ea. | ifm / Conrad (EU) |
-|94 | 5V + 12V PSU | 24V → 5V/5A (RPi 4 + camera) + 12V/1A (stepper) | 1 | 20–35 | Traco / Mean Well (EU) |
-|95 | USB stick | 128 GB, industrial, USB 3.0 (raw frames + stitched output) | 1 | 20–35 | Transcend Industrial |
-|96 | Liner splitting tool | Rotary cutter with depth guide for 82.6mm liner OD | 1 | 30–60 | Custom / geotechnical supplier |
+|80 | Raspberry Pi 4 (2 GB) | Quad-core Cortex-A72, 2 GB RAM, USB 3, CSI, WiFi — OpenCV host | 1 | 50–70 | raspberrypi.com / Mouser (EU) |
+|81 | RPi HQ Camera (IMX477) | 12.3 MP, CSI-2, accurate color rendition across PC liner | 1 | 50–65 | raspberrypi.com / Mouser (EU) |
+|82 | C-mount lens 8mm | Low distortion, manual focus-lock, suited for 28cm WD / 95mm FOV | 1 | 25–50 | Arducam / Computar (EU) |
+|83 | NEMA 17 stepper | 48mm, 45 N·cm, sled drive | 1 | 12–20 | Stepperonline / Reichelt |
+|84 | A4988 stepper driver | 12–24V, microstepping, controlled from RPi GPIO | 1 | 5–15 | Pololu / Amazon (EU) |
+|85 | GT2 belt + pulleys | 6mm wide, 1,400mm loop, 16T pulley + idler | 1 | 10–20 | 3D printer suppliers (EU) |
+|86 | mk 2004 Al-rail | 40×40mm profile, 1,450mm, matte black | 1 | 40–70 | mk Technology (DE) |
+|87 | Camera sled carriage | mk connector + bracket + MGN12 miniature guide rail | 1 | 40–80 | Custom (mk + Hiwin) |
+|88 | HDPE V-cradle | Ø82.6mm round cradle, matte black, 1,300mm, splits for transport | 1 | 25–50 | Custom CNC (HDPE) |
+|89 | LED strip (daylight) | CRI ≥ 97, 5000K, 24V, 1.25m × 2, 45° angled mounts | 2 | 20–40 ea. | Waveform Lighting / RS Components |
+|90 | LED driver | 24V → constant current, PWM dimmable | 1 | 20–40 | Mean Well LDD-1000H |
+|91 | Light-tight cover | Al sheet + brush seals along sled rail, fold-down lid | 1 | 40–80 | Custom sheet metal (EU) |
+|92 | Munsell reference tile | 3× chips (10YR 3/2, 5/4, 7/4) in fixed end-of-cradle holder | 1 | 20–40 | X-Rite / GretagMacbeth (EU) |
+|93 | Home / end switches | Inductive, M8, for sled homing | 2 | 6–15 ea. | ifm / Conrad (EU) |
+|94 | 5V + 12V PSU | 24V → 5V/5A (RPi + camera) + 12V/1A (stepper), DIN rail | 1 | 20–35 | Traco / Mean Well (EU) |
+|95 | USB stick | 128 GB, USB 3.0, industrial (raw frames + stitched output) | 1 | 20–35 | Transcend Industrial |
 
-**Core Scanner Subtotal: ~388–710 €**
+**Core Scanner Subtotal: ~363–650 €**
 
-> **No PLC I/O module required.** RPi 4 controls stepper + camera autonomously.
-> MQTT subscription `vibrocore/cycle/+` provides cycle_id for file naming.
-> Outputs published to:
-> - `vibrocore/core_scan/{cycle_id}` — base64 JPEG composite (compressed)
-> - `vibrocore/core_color/{cycle_id}` — JSON color profile + horizon boundaries
-> - `vibrocore/core_scan/{cycle_id}/raw_url` — link to USB stick path for full-res DNG
-
-> **Color analysis significance:** Automated L\*a\*b\* profiling per millimetre of depth
-> enables objective, field-deployable soil horizon mapping at a level previously only
-> achievable in laboratory core scanners (e.g., Olympus ITRAX, Geotek MSCL).
-> Combined with the penetrogram (§8c force data), each DT325 cycle produces:
-> - Quantitative penetration resistance profile (kN vs. depth)
-> - Quantitative colour profile (L\*a\*b\* vs. depth)
-> - Automated horizon boundaries with confidence scores
-> - All signed via SE050 / RDDL for VM0042 chain of custody
+> **No liner splitting. No on-site storage. Sample integrity is absolute.**
+> The scan adds ~4 minutes to the field workflow and zero risk to the sample.
+> After scanning, the capped, labelled liner goes directly into the courier box for the lab.
+>
+> **Lab measures:** wet weight (field) + dry weight (105°C oven) + liner volume → bulk density.
+> **Scanner measures:** color profile + horizon boundaries → pedological characterisation.
+> These are orthogonal — the same sample delivers both without any conflict.
 
 ---
 
