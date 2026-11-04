@@ -258,6 +258,21 @@ class FakeOdoo:
             row = self.rows[model][int(item)]
             if row.get("engineering_state") not in (None, "draft"):
                 raise RuntimeError(f"write refused on {model} {item} in state {row.get('engineering_state')}")
+            if model == "product.product" and "linkeddocuments" in vals:
+                for command in vals["linkeddocuments"]:
+                    if command[0] == 4:
+                        document_id = int(command[1])
+                        exists = any(
+                            int(rel.get("component_id") or 0) == int(item)
+                            and int(rel.get("document_id") or 0) == document_id
+                            for rel in self.rows["plm.component.document.rel"].values()
+                        )
+                        if not exists:
+                            self._create(
+                                "plm.component.document.rel",
+                                {"component_id": int(item), "document_id": document_id},
+                            )
+                vals = {key: value for key, value in vals.items() if key != "linkeddocuments"}
             row.update(vals)
         return True
 

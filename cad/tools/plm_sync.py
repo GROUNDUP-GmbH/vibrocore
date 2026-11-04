@@ -603,12 +603,15 @@ class PlmSync:
         if self.dry_run:
             self.report.add("create", "plm.component.document.rel", key, "")
             return
-        created = self._execute(
-            "plm.component.document.rel",
-            "create",
-            [{"component_id": product_id, "document_id": document_id}],
+        # OdooPLM 19 overrides create() on this relation model in a way that
+        # JSON-RPC cannot call. product.product.linkeddocuments is the supported
+        # path and createFromIds() uses the same Many2many write.
+        self._execute(
+            "product.product",
+            "write",
+            [[product_id], {"linkeddocuments": [(4, document_id, False)]}],
         )
-        self.report.add("create", "plm.component.document.rel", key, f"id={_one_id(created)}")
+        self.report.add("create", "plm.component.document.rel", key, f"doc_id={document_id}")
 
     def _sync_bom(self, number: str) -> None:
         part = self.bom.part(number)
