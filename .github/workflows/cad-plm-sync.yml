@@ -30,13 +30,15 @@ jobs:
           ODOO_USER: ${{ secrets.ODOO_USER }}
           ODOO_API_KEY: ${{ secrets.ODOO_API_KEY }}
           ODOO_PASSWORD: ${{ secrets.ODOO_PASSWORD }}
+          APPLY: ${{ inputs.apply }}
+          PART: ${{ inputs.part }}
         run: |
           set -eu
           args=(plm-sync)
-          if [ "${{ inputs.apply }}" = "true" ]; then
+          if [ "$APPLY" = "true" ]; then
             args+=(--apply)
           fi
-          if [ -n "${{ inputs.part }}" ]; then
-            args+=(--part "${{ inputs.part }}")
+          if [ -n "$PART" ]; then
+            args+=(--part "$PART")
           fi
           python -m cad.tools.cli "${args[@]}"

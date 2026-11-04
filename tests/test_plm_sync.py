@@ -82,6 +82,15 @@ def test_apply_without_env_writes_nothing(monkeypatch, capsys):
     assert SECRET not in err
 
 
+def test_unreachable_server_is_a_plm_error():
+    config = PlmConfig(
+        "http://127.0.0.1:1", "db", "user", "pw", "pw", "ODOO_PASSWORD", "ODOO_PASSWORD"
+    )
+    client = PlmClient(config, timeout=2)
+    with pytest.raises(PlmError, match="Could not reach http://127.0.0.1:1"):
+        client.isalive()
+
+
 def test_upload_speaks_the_odooplm_routes(server):
     fake, url = server
     report = _apply(url, part="VC-SH-1301")

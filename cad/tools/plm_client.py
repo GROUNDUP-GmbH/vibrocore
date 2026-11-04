@@ -269,6 +269,8 @@ class PlmClient:
                 return response.status, response.read(), dict(response.headers.items())
         except urllib.error.HTTPError as exc:
             return exc.code, exc.read(), dict(exc.headers.items())
+        except urllib.error.URLError as exc:
+            raise PlmError(f"Could not reach {self.config.url}: {exc.reason}") from exc
 
 
 def _has_session_cookie(jar: CookieJar) -> bool:
