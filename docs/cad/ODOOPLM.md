@@ -1,6 +1,8 @@
 # OdooPLM checklist for the Vibrocore database
 
-This is the Odoo-side work. The git repository does not talk to Odoo. Field
+This is the Odoo-side work. Git stays the source of the BOM. `plm-sync`
+pushes that source into a database through the open `plm` HTTP API
+(section 6). Field
 names below were read from [OmniaGit/odooplm](https://github.com/OmniaGit/odooplm)
 branch `19.0`, commit `b9db89248c206fd61bd38191d7a5289c58ce8a54`
 (merge of PR 121, 2026-11-02). Module versions in that tree:
@@ -106,6 +108,10 @@ are `engineering_state = draft`, so they stay writable.
 UoM external id used everywhere: `uom.product_uom_unit`. Confirm it still
 resolves on this database before importing the BOMs.
 
+The same records can be created without the CSV importer. Section 6 is that
+path. Use one of the two on a given database, not both, or you will maintain
+the same engineering codes twice.
+
 `VC-ASM-0000` is the machine. `VC-KIT-6000` and `VC-KIT-7000` are not lines of
 that BOM. In the manufacturing fallback they are `phantom` kits.
 
@@ -164,29 +170,107 @@ preview. It needs the CadQuery/OCP stack from `aaa_requirements.txt` (the PyPI
 extra is not the same build). Optional. The git STEP files are already the
 artefacts to store.
 
-## 6. FreeCAD connector — test, do not depend on it
+## 6. Push the git BOM with plm-sync
 
-The server modules are open source. The desktop CAD client is not. Upstream
-documents it as a proprietary application distributed from
-<https://sourceforge.net/projects/openerpplm/>, talking to
-`/plm_document_upload/` and XML-RPC. The client table lists FreeCAD. That
-support is not something this repository relies on, and it is not confirmed
-finished. The client is a Windows desktop program.
+There is no Windows workstation in this workflow, and the proprietary desktop
+connector is not used. The server module `plm` already exposes the routes that
+connector would call. `python -m cad.tools.cli plm-sync` speaks those routes
+directly. The behaviour below was read from `plm/controllers/main.py` at
+commit `b9db89248c206fd61bd38191d7a5289c58ce8a54`, and from Odoo
+`odoo/service/common.py`, `odoo/http.py` and `res.users._check_credentials`
+at `a81f10aaedb8eed773c32a6e0a1bd6d975f9ee72`.
 
-When someone has a Windows workstation and a spare database:
+| Call | What it does |
+|---|---|
+| `GET /plm_document_upload/isalive` | Health check. Body is the text `True`. No session. |
+| `POST /plm_document_upload/login` | Form fields `login`, `password`, `db`. `auth="none"`. Starts a session. HTTP 200 has an empty body, a `session_id` cookie and `X-CSRF-TOKEN`. The upload routes set `csrf=False`, so the token is not sent back. A `db` that is not the request's database becomes HTTP 500. |
+| `POST /jsonrpc` `common.authenticate` | `db`, login, secret, `{}`. Returns the uid. This call is non-interactive, so an API key works. |
+| `POST /jsonrpc` `object.execute_kw` | Creates and updates `product.product`, `ir.attachment` (`is_plm` true), `plm.component.document.rel`, `mrp.bom` (`type` `ebom`) and `mrp.bom.line` (`itemnum`, `itemlbl`). |
+| `POST /plm_document_upload/upload` | Multipart `mod_file`, `filename`, `doc_id`. `doc_id` is JSON, so `123` is the integer 123. Writes `datas` and `name` on that PLM document. 400 if the id is missing or `is_plm` is false. |
+| `POST /plm_document_upload/upload_pdf` | Multipart `file_stream` and `doc_id`. Writes `printout`. |
 
-1. Install the client from SourceForge. Record the exact version.
-2. Point it at the Odoo 19 database (HTTPS on 443 if a proxy is in front; the
-   client's XML-RPC layer does not follow a redirect from port 80).
-3. Try to open `VC-SH-1301`, check it out, save a trivial FreeCAD change, and
-   check it back in.
-4. See whether a BOM comes back and whether it matches `mrp.bom` type `ebom`.
-5. Write down what failed. Do not block modelling on the result.
+The upload routes do not create the document. The command creates the
+`ir.attachment` first (`is_plm` true, engineering code and revision, state
+`draft`), then posts the bytes. `hostname` and `hostpws` are left empty, so
+`setupCadOpen` does not record a CAD session.
 
-Our path until that test passes: edit `cad/bom/vibrocore.bom.yaml`, run
-`python -m cad.tools.cli export`, review the diff, import or update the CSVs.
-`cad/freecad/make_plate.py` is a local `freecadcmd` script for the plate blank.
-It does not log into Odoo.
+`/plm_document_upload/login` calls `Session.authenticate` with
+`interactive=True`. Odoo accepts an API key only when the check is not
+interactive. Set `ODOO_PASSWORD` for the file upload. `ODOO_API_KEY` is used
+for the JSON-RPC calls when it is set, and the password is still sent to the
+login route. With only a password, both calls use it.
+
+Nothing in the command calls `action_confirm`, `action_release`, `new_version`
+or the normal-BOM copy. `engineering_state` is set to `draft` on create and is
+not written again. A product, document or BOM whose state is no longer draft
+is reported as `skip-locked` and left as it is, including its files. Run it
+again after a YAML change: the same code and revision are updated, not
+inserted a second time. An engineering BOM line that is no longer in the YAML
+is removed. A second engineering BOM for the same product is not created.
+
+The command does not install modules and it does not edit
+`file_exte_type_rel_3D`. Until section 2 is done, a stored `VC-SH-1301.step`
+keeps `document_type` `other`. Leave `plm_auto_internalref` uninstalled, or
+accept that the command sets `auto_default_code` false when that field exists
+so `default_code` stays the part number.
+
+On a test database, after sections 1 and 2:
+
+```bash
+pip install -r requirements-cad.txt
+export ODOO_URL=http://localhost:8069
+export ODOO_DB=odooplm
+export ODOO_USER=admin
+export ODOO_PASSWORD=admin
+# optional, used for JSON-RPC when set:
+# export ODOO_API_KEY=
+
+python -m cad.tools.cli plm-sync
+python -m cad.tools.cli plm-sync --part VC-SH-1301
+python -m cad.tools.cli plm-sync --apply
+python -m cad.tools.cli plm-sync --apply --part VC-SH-1301
+```
+
+Without `ODOO_URL`, `ODOO_DB`, `ODOO_USER` and a secret, the first two
+commands print a local plan and do not open a connection. With those variables
+set, a command that has no `--apply` logs in over JSON-RPC, reads what is
+already there, and still does not write. `--apply` writes. Copy
+`.env.example` to `.env` if you want the variables next to the tree. `.env` is
+gitignored. Do not put passwords in the command line, in the workflow file, or
+in a commit.
+
+Check afterwards, still on the test database:
+
+1. `VC-SH-1301` is one `product.product`, engineering revision index 0, letter
+   A, state draft. A second `--apply` does not add another.
+2. One `ir.attachment` for that code and revision, `is_plm` set. `datas` is
+   the STEP (it starts as a STEP file) and `printout` is the drawing PDF.
+3. `plm.component.document.rel` links that product to that document.
+4. `VC-ASM-1000` has one `mrp.bom` with `type` `ebom`. Line `itemnum` matches
+   the drawing balloons. There is no `normal` BOM yet, because nothing was
+   released and the cron has nothing to copy.
+5. Open the linked document in the `plm_web_3d` viewer (section 5). The plate
+   is 420 × 300 × 20 mm. If the viewer lists it as `other`, section 2 was
+   skipped.
+
+`cad/freecad/plm_upload_macro.py` is the same command from FreeCAD 1.x,
+including macOS. It exports the active solid to STEP, a TechDraw page to PDF
+when the document has one, and calls `plm-sync --part`. It stays a dry run
+until `APPLY` in the macro or `VIBROCORE_PLM_APPLY=1`. The part number has to
+be in the document name or the solid's label (`VC-SH-1301`). It uses
+`VIBROCORE_PYTHON` or `python3` on `PATH`, because FreeCAD's own interpreter
+does not have this repository's dependencies. `cad/freecad/make_plate.py` is
+still the local plate script and does not log in.
+
+A GitHub Actions workflow, `.github/workflows/cad-plm-sync.yml`, runs only
+when someone starts it by hand (`workflow_dispatch`). The apply input defaults
+to false. It reads `ODOO_URL`, `ODOO_DB`, `ODOO_USER`, `ODOO_API_KEY` and
+`ODOO_PASSWORD` from repository secrets. A normal push does not call Odoo.
+
+`tests/test_plm_sync_integration.py` is skipped unless
+`ODOO_PLM_INTEGRATION=1`. It is not started by CI. Point it at a disposable
+database if you want the real server in the loop. The mocked tests in
+`tests/test_plm_sync.py` are the ones CI runs.
 
 ## 7. Decisions still owed by engineering
 

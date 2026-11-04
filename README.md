@@ -270,6 +270,7 @@ questions are generated into [`cad/OPEN_POINTS.md`](cad/OPEN_POINTS.md).
 ```bash
 pip install -r tests/requirements.txt -r requirements-cad.txt
 python -m cad.tools.cli validate
+python -m cad.tools.cli plm-sync
 ```
 
 ## References

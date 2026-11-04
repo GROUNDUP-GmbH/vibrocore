@@ -12,3 +12,5 @@ Generated from `cad/bom/vibrocore.bom.yaml`. Do not edit the CSVs by hand.
 external id to the STEP and PDF in this repository.
 
 Import order, field names and the revision workflow: `docs/cad/ODOOPLM.md`.
+`python -m cad.tools.cli plm-sync` writes the same engineering records through
+the OdooPLM HTTP API instead of the CSV importer.

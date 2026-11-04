@@ -11,14 +11,14 @@ manufacturing internal reference.
 | Part numbers, revisions, quantities, estimates | `cad/bom/vibrocore.bom.yaml` | Diffable, reviewed in git, no CAD licence |
 | Solids and STEP | [build123d](https://github.com/gumyr/build123d) 0.13 on OpenCascade | Headless, pinned, runs in CI. A part is modelled only when the design docs already give its dimensions |
 | Drawings | SVG (A3) and a text PDF from `cad/tools/drawings.py` | ISO 7200 title block, ISO 5457 sheet, ISO 128 first-angle note. No GUI |
-| Interactive mechanical CAD | FreeCAD 1.0 or newer, Part / Assembly / TechDraw | What a designer opens. `cad/freecad/make_plate.py` rebuilds the plate blank. Not required for CI |
+| Interactive mechanical CAD | FreeCAD 1.0 or newer, Part / Assembly / TechDraw | What a designer opens. `cad/freecad/make_plate.py` rebuilds the plate blank. `cad/freecad/plm_upload_macro.py` exports the active part and calls `plm-sync`. Not required for CI |
 | Wiring notes | KiCad 8 schematic `cad/kicad/vibrocore-control/` | Text-native. There is no PCB yet |
 | Product data | Odoo 19 with [OdooPLM](https://github.com/OmniaGit/odooplm) 19.0 | Engineering BOM, documents, revisions. Plain `mrp.bom` CSVs are the fallback |
 
 FreeCAD's own Assembly and TechDraw workbenches are the right place for a released
 drawing once the missing dimensions exist. They are not the CI path: a headless
-TechDraw PDF still depends on a build with a GUI, and the OdooPLM FreeCAD
-connector is a separate proprietary program. See `docs/cad/ODOOPLM.md`.
+TechDraw PDF still depends on a build with a GUI. The upload into OdooPLM is
+`plm-sync` (see `docs/cad/ODOOPLM.md`), including the FreeCAD macro that calls it.
 
 Code-CAD such as CadQuery would sit on the same OpenCascade kernel as build123d.
 build123d 0.13 is the one pinned here because its STEP reader and writer are what
@@ -41,8 +41,12 @@ pip install -r tests/requirements.txt -r requirements-cad.txt
 python -m cad.tools.cli validate
 python -m cad.tools.cli export
 python -m cad.tools.cli check
+python -m cad.tools.cli plm-sync
 python -m pytest tests -q
 ```
+
+`plm-sync` without `--apply` prints the OdooPLM plan and does not log in.
+The write-up of that command is in `docs/cad/ODOOPLM.md`.
 
 `export` rewrites the CSVs, STEP, PDF, SVG, `cad/export/geometry.json` and
 `cad/OPEN_POINTS.md`. Commit those files with the YAML change. `check` fails if
