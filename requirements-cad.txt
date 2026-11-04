@@ -1,0 +1,4 @@
+# CAD/BOM tooling. PyYAML is the only hard dependency of the validator.
+# build123d (OpenCascade) is required for STEP export and the geometry tests.
+pyyaml>=6.0
+build123d==0.13.0

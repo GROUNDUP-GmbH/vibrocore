@@ -1,0 +1,4 @@
+id,name,description
+vibrocore.material_cr42mo4,42CrMo4,Center-column steel named in SONIC_HEAD.md and DIMENSIONING.md.
+vibrocore.material_s355,S355,Structural steel named for the frame end plates. Grade suffix is not given.
+vibrocore.material_s355j2,S355J2,Structural steel used for the vibrating plate in DIMENSIONING.md.

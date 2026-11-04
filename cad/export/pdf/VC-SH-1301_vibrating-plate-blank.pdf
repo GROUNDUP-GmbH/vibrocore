@@ -1,0 +1,65 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 1 /Kids [3 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 744 >>
+stream
+BT
+/F1 11 Tf
+36 800 Td
+16 TL
+(VC-SH-1301 Vibrating plate blank) Tj
+T*
+(Fidelity: partial) Tj
+T*
+(Source: docs/engineering/DIMENSIONING.md#3.1) Tj
+T*
+(Box 420 x 300 x 20 mm) Tj
+T*
+(TODO: 4x M12 isolator coordinates.) Tj
+T*
+(TODO: Two times 4x M12 motor holes. Pitch is 90 x 125 mm, location on the plate is not fixed.) Tj
+T*
+(TODO: Edge preparation, surface finish and whether the plate is 20 mm finished or stock.) Tj
+T*
+(Owner: Ground UP GmbH) Tj
+T*
+(Document status: preliminary) Tj
+T*
+(Identification: VC-SH-1301) Tj
+T*
+(Revision index/letter: 0 / A) Tj
+T*
+(Date: 2026-11-04) Tj
+T*
+(Units: mm. Projection: first angle \(ISO 128\).) Tj
+T*
+(General tolerances: TODO.) Tj
+T*
+(ISO 7200 title-block fields. Not released for manufacture.) Tj
+T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000248 00000 n 
+0000001043 00000 n 
+trailer << /Size 6 /Root 1 0 R >>
+startxref
+1113
+%%EOF

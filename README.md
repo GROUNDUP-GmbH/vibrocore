@@ -228,6 +228,7 @@ vs. 4–8 weeks for custom fabrication. **~1,000 € cheaper.**
 vibrocore/
 ├── README.md                    # This file
 ├── LICENSE                      # CERN-OHL-S-2.0
+├── cad/                         # BOM source, STEP/PDF, OdooPLM import (see docs/cad/)
 ├── docs/
 │   ├── design/
 │   │   ├── ARCHITECTURE.md      # System architecture
@@ -253,6 +254,23 @@ vibrocore/
 ```
 
 ---
+
+## CAD, drawings and Odoo
+
+Mechanical data lives in [`cad/bom/vibrocore.bom.yaml`](cad/bom/vibrocore.bom.yaml).
+Part numbers are the Odoo internal reference and the OdooPLM engineering code.
+CI checks the BOM and regenerates STEP, PDF and the Odoo 19 import files
+([`docs/cad/CAD_SETUP.md`](docs/cad/CAD_SETUP.md)).
+
+OdooPLM (engineering BOM, documents, revisions) is the intended product database.
+Plain manufacturing BOMs are generated beside it. The Odoo-side install and
+import list is [`docs/cad/ODOOPLM.md`](docs/cad/ODOOPLM.md). Open modelling
+questions are generated into [`cad/OPEN_POINTS.md`](cad/OPEN_POINTS.md).
+
+```bash
+pip install -r tests/requirements.txt -r requirements-cad.txt
+python -m cad.tools.cli validate
+```
 
 ## References
 

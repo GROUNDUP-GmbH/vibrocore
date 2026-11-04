@@ -1,0 +1,10 @@
+id,name,parent_id/id
+vibrocore.categ_root,Vibrocore,product.product_category_all
+vibrocore.categ_assemblies,Assemblies,vibrocore.categ_root
+vibrocore.categ_control,Control,vibrocore.categ_root
+vibrocore.categ_frame,Frame,vibrocore.categ_root
+vibrocore.categ_hub,Hub,vibrocore.categ_root
+vibrocore.categ_positioning,Positioning,vibrocore.categ_root
+vibrocore.categ_power,Power,vibrocore.categ_root
+vibrocore.categ_sampling,Sampling,vibrocore.categ_root
+vibrocore.categ_sonic_head,Sonic Head,vibrocore.categ_root

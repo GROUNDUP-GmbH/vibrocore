@@ -1,0 +1,20 @@
+name: CAD and BOM
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  cad-bom:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test and CAD dependencies
+        run: pip install -r tests/requirements.txt -r requirements-cad.txt
+      - name: Firmware state-machine tests and CAD export checks
+        run: python -m pytest tests -q
+      - name: Regenerated STEP, PDF and Odoo files match git
+        run: python -m cad.tools.cli check

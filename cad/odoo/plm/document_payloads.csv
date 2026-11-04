@@ -1,0 +1,17 @@
+engineering_code,engineering_revision,attachment_external_id,odoo_datas_file,odoo_printout_file,svg_file,fidelity
+VC-ASM-0000,0,vibrocore.doc_vc_asm_0000,cad/export/pdf/VC-ASM-0000_vibrocore-v1.pdf,cad/export/pdf/VC-ASM-0000_vibrocore-v1.pdf,cad/drawings/VC-ASM-0000_vibrocore-v1.svg,schematic
+VC-ASM-1000,0,vibrocore.doc_vc_asm_1000,cad/export/pdf/VC-ASM-1000_sonic-head-assembly.pdf,cad/export/pdf/VC-ASM-1000_sonic-head-assembly.pdf,cad/drawings/VC-ASM-1000_sonic-head-assembly.svg,schematic
+VC-ASM-2000,0,vibrocore.doc_vc_asm_2000,cad/export/pdf/VC-ASM-2000_hub-system-assembly.pdf,cad/export/pdf/VC-ASM-2000_hub-system-assembly.pdf,cad/drawings/VC-ASM-2000_hub-system-assembly.svg,schematic
+VC-ASM-3000,0,vibrocore.doc_vc_asm_3000,cad/export/pdf/VC-ASM-3000_frame-assembly.pdf,cad/export/pdf/VC-ASM-3000_frame-assembly.pdf,cad/drawings/VC-ASM-3000_frame-assembly.svg,schematic
+VC-ASM-4000,0,vibrocore.doc_vc_asm_4000,cad/export/pdf/VC-ASM-4000_power-system-assembly.pdf,cad/export/pdf/VC-ASM-4000_power-system-assembly.pdf,cad/drawings/VC-ASM-4000_power-system-assembly.svg,schematic
+VC-ASM-5000,0,vibrocore.doc_vc_asm_5000,cad/export/pdf/VC-ASM-5000_control-system-assembly.pdf,cad/export/pdf/VC-ASM-5000_control-system-assembly.pdf,cad/drawings/VC-ASM-5000_control-system-assembly.svg,schematic
+VC-FR-4100,0,vibrocore.doc_vc_fr_4100,cad/export/step/VC-FR-4100.step,cad/export/pdf/VC-FR-4100_aluminium-profile-50x100x1500.pdf,cad/drawings/VC-FR-4100_aluminium-profile-50x100x1500.svg,envelope
+VC-FR-4300,0,vibrocore.doc_vc_fr_4300,cad/export/step/VC-FR-4300.step,cad/export/pdf/VC-FR-4300_bottom-steel-plate.pdf,cad/drawings/VC-FR-4300_bottom-steel-plate.svg,partial
+VC-FR-4400,0,vibrocore.doc_vc_fr_4400,cad/export/step/VC-FR-4400.step,cad/export/pdf/VC-FR-4400_top-steel-plate.pdf,cad/drawings/VC-FR-4400_top-steel-plate.svg,partial
+VC-KIT-6000,0,vibrocore.doc_vc_kit_6000,cad/export/pdf/VC-KIT-6000_dt325-sampling-kit.pdf,cad/export/pdf/VC-KIT-6000_dt325-sampling-kit.pdf,cad/drawings/VC-KIT-6000_dt325-sampling-kit.svg,schematic
+VC-KIT-7000,0,vibrocore.doc_vc_kit_7000,cad/export/pdf/VC-KIT-7000_positioning-kit.pdf,cad/export/pdf/VC-KIT-7000_positioning-kit.pdf,cad/drawings/VC-KIT-7000_positioning-kit.svg,schematic
+VC-SH-1100,0,vibrocore.doc_vc_sh_1100,cad/export/step/VC-SH-1100.step,cad/export/pdf/VC-SH-1100_oli-mve-400-6-hf.pdf,cad/drawings/VC-SH-1100_oli-mve-400-6-hf.svg,envelope
+VC-SH-1300,0,vibrocore.doc_vc_sh_1300,cad/export/pdf/VC-SH-1300_vibrating-plate-weldment.pdf,cad/export/pdf/VC-SH-1300_vibrating-plate-weldment.pdf,cad/drawings/VC-SH-1300_vibrating-plate-weldment.svg,schematic
+VC-SH-1301,0,vibrocore.doc_vc_sh_1301,cad/export/step/VC-SH-1301.step,cad/export/pdf/VC-SH-1301_vibrating-plate-blank.pdf,cad/drawings/VC-SH-1301_vibrating-plate-blank.svg,partial
+VC-SH-1302,0,vibrocore.doc_vc_sh_1302,cad/export/step/VC-SH-1302.step,cad/export/pdf/VC-SH-1302_stiffener-rib.pdf,cad/drawings/VC-SH-1302_stiffener-rib.svg,solid
+VC-SH-1400,0,vibrocore.doc_vc_sh_1400,cad/export/step/VC-SH-1400.step,cad/export/pdf/VC-SH-1400_center-column.pdf,cad/drawings/VC-SH-1400_center-column.svg,partial

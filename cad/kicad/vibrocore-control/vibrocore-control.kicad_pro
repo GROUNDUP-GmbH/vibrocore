@@ -1,0 +1,19 @@
+{
+  "board": {
+    "design_settings": {
+      "defaults": {},
+      "meta": { "version": 2 }
+    }
+  },
+  "meta": {
+    "filename": "vibrocore-control.kicad_pro",
+    "version": 1
+  },
+  "net_settings": {},
+  "schematic": {
+    "legacy_lib_dir": "",
+    "legacy_lib_list": []
+  },
+  "sheets": [],
+  "text_variables": {}
+}

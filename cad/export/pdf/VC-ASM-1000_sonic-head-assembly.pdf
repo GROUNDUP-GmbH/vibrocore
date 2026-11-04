@@ -1,0 +1,69 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 1 /Kids [3 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 874 >>
+stream
+BT
+/F1 11 Tf
+36 800 Td
+16 TL
+(VC-ASM-1000 Sonic head assembly  assembly, preliminary) Tj
+T*
+(1  VC-SH-1100  rev A  qty 2  OLI MVE 400/6-HF) Tj
+T*
+(2  VC-SH-1200  rev A  qty 1  Frequency inverter 1.5 kW) Tj
+T*
+(3  VC-SH-1300  rev A  qty 1  Vibrating plate weldment) Tj
+T*
+(4  VC-SH-1400  rev A  qty 1  Center column) Tj
+T*
+(5  VC-SH-1500  rev A  qty 1  DT325 adapter) Tj
+T*
+(6  VC-SH-1600  rev A  qty 4  Rubber isolator M12) Tj
+T*
+(7  VC-SH-1700  rev A  qty 2  Motor cable shielded) Tj
+T*
+(8  VC-SH-1800  rev A  qty 1  Fastener kit, sonic head) Tj
+T*
+(Owner: Ground UP GmbH) Tj
+T*
+(Document status: preliminary) Tj
+T*
+(Identification: VC-ASM-1000) Tj
+T*
+(Revision index/letter: 0 / A) Tj
+T*
+(Date: 2026-11-04) Tj
+T*
+(Units: mm. Projection: first angle \(ISO 128\).) Tj
+T*
+(General tolerances: TODO.) Tj
+T*
+(ISO 7200 title-block fields. Not released for manufacture.) Tj
+T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000248 00000 n 
+0000001173 00000 n 
+trailer << /Size 6 /Root 1 0 R >>
+startxref
+1243
+%%EOF

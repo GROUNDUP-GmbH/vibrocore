@@ -1,0 +1,12 @@
+id,name,is_company,supplier_rank,website,country_id/id,comment
+vibrocore.partner_custom_eu,Custom fabrication (EU),1,1,,,"Placeholder partner, not a vendor master record. Replace before purchasing."
+vibrocore.partner_geoprobe,Geoprobe Systems,1,1,https://geoprobe.com,base.us,
+vibrocore.partner_instagrid,instagrid,1,1,https://instagrid.co,base.de,Purchase price is on the product. Rental is a separate commercial decision.
+vibrocore.partner_lapp,Lapp,1,1,https://www.lappkabel.de,base.de,
+vibrocore.partner_mk,mk Technology Group,1,1,https://www.mk-group.com,base.de,
+vibrocore.partner_neugart,Neugart,1,1,https://www.neugart.com,base.de,
+vibrocore.partner_oli,OLI Vibrators,1,1,https://www.olivibra.com,base.it,Manufacturer. Confirm the EU dealer before ordering.
+vibrocore.partner_pix4d,Pix4D,1,1,https://www.pix4d.com,base.ch,viDoc supplier named in BOM.md. The instrument may already be owned.
+vibrocore.partner_teltonika,Teltonika Networks,1,1,https://teltonika-networks.com,base.lt,
+vibrocore.partner_ublox,u-blox,1,1,https://www.u-blox.com,base.ch,
+vibrocore.partner_wago,WAGO,1,1,https://www.wago.com,base.de,

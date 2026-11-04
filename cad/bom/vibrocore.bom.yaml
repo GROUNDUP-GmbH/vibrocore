@@ -1,0 +1,1274 @@
+# SPDX-License-Identifier: CERN-OHL-S-2.0
+# Vibrocore V1 engineering BOM. Single source for part numbers, revisions,
+# quantities and the estimates copied from docs/engineering/BOM.md (2026-03-26).
+# Estimates are unit costs. A published line total is unit cost times BOM qty.
+# Unknown dimensions are omitted; they are listed under unknowns, not invented.
+schema_version: 1
+
+meta:
+  owner: Ground UP GmbH
+  currency: EUR
+  length_unit: mm
+  mass_unit: kg
+  steel_density_kg_m3: 7850
+  cad_baseline_date: "2026-11-04"
+  source_bom: docs/engineering/BOM.md
+  source_bom_date: "2026-03-26"
+  drawing_standard: "ISO 7200 title block, ISO 5457 A3, ISO 128 first angle"
+  odooplm_repository: https://github.com/OmniaGit/odooplm
+  odooplm_branch: "19.0"
+  odooplm_commit: b9db89248c206fd61bd38191d7a5289c58ce8a54
+  odooplm_module_version: "plm 19.0.1.0.50, plm_engineering 19.0.1.0.1, plm_automate_normal_bom 19.0.1.0.0"
+  engineering_state: draft
+  internal_reference: "default_code equals engineering_code. Do not enable plm_auto_internalref before import."
+
+materials:
+  - id: s355j2
+    name: S355J2
+    description: Structural steel used for the vibrating plate in DIMENSIONING.md.
+  - id: s355
+    name: S355
+    description: Structural steel named for the frame end plates. Grade suffix is not given.
+  - id: cr42mo4
+    name: 42CrMo4
+    description: Center-column steel named in SONIC_HEAD.md and DIMENSIONING.md.
+
+suppliers:
+  - id: oli
+    name: OLI Vibrators
+    country_xml: base.it
+    website: https://www.olivibra.com
+    comment: Manufacturer. Confirm the EU dealer before ordering.
+  - id: neugart
+    name: Neugart
+    country_xml: base.de
+    website: https://www.neugart.com
+  - id: mk
+    name: mk Technology Group
+    country_xml: base.de
+    website: https://www.mk-group.com
+  - id: wago
+    name: WAGO
+    country_xml: base.de
+    website: https://www.wago.com
+  - id: teltonika
+    name: Teltonika Networks
+    country_xml: base.lt
+    website: https://teltonika-networks.com
+  - id: geoprobe
+    name: Geoprobe Systems
+    country_xml: base.us
+    website: https://geoprobe.com
+  - id: pix4d
+    name: Pix4D
+    country_xml: base.ch
+    website: https://www.pix4d.com
+    comment: viDoc supplier named in BOM.md. The instrument may already be owned.
+  - id: instagrid
+    name: instagrid
+    country_xml: base.de
+    website: https://instagrid.co
+    comment: Purchase price is on the product. Rental is a separate commercial decision.
+  - id: lapp
+    name: Lapp
+    country_xml: base.de
+    website: https://www.lappkabel.de
+  - id: ublox
+    name: u-blox
+    country_xml: base.ch
+    website: https://www.u-blox.com
+  - id: custom_eu
+    name: Custom fabrication (EU)
+    comment: Placeholder partner, not a vendor master record. Replace before purchasing.
+
+data_issues:
+  - id: legacy-row-numbers
+    summary: BOM.md skips rows 9-16 and reuses rows 56-63 in Control, Geoprobe and Positioning. legacy_ref is section.row.
+  - id: control-subtotal-mismatch
+    summary: Control line estimates sum to EUR 1515-2420. BOM.md prints 1475-2610 in the section and 1345-2220 in the summary. Line estimates are kept.
+  - id: positioning-gps-duplicate
+    summary: Section 7 items 61-62 repeat the GPS antenna and ZED-F9P of section 5 items 59-60. One of each is kept on the control BOM. The positioning kit is viDoc plus the WLAN bridge. The published positioning subtotal is EUR 200-350 higher, which matches that duplicate pair.
+  - id: power-psu-conflict
+    summary: BOM.md specifies 48 V / 10 A. CONTROL_SYSTEM.md draws Mean Well SDR-75-48 at 1.6 A. The part follows the BOM text and does not take the diagram order code.
+  - id: dc-converter-candidate
+    summary: CONTROL_SYSTEM.md names Mean Well DDR-60D-24. BOM.md does not. It stays a note, not a manufacturer PN.
+  - id: plc-name-in-dimensioning
+    summary: DIMENSIONING.md section 9 still says CONTROLLINO or Arduino Opta. The later BOM and CONTROL_SYSTEM.md specify the WAGO PFC200 XTR.
+  - id: instagrid-rental
+    summary: The power rollup uses the EUR 2500 purchase price. BOM.md's low scenario is a rental and is not a stock component.
+  - id: fastener-kits
+    summary: Fasteners stay as the single kit lines from BOM.md. The 8x M12x40 and 6x M10 mentions in SONIC_HEAD.md are not exploded.
+
+parts:
+  - part_number: VC-ASM-0000
+    name: Vibrocore V1
+    revision_index: 0
+    revision_letter: A
+    supply: assemble
+    subsystem: machine
+    category: Assemblies
+    spec: "Compact electric sonic vibro-corer for DT325 core tubes. Saleable machine, engineering revision 0."
+    legacy_ref: product
+    sale_ok: true
+    unknowns:
+      - "Machine height is published as a range, 1.50-1.70 m, not a single value."
+      - "UTV mount and tilt-lock dimensions are not specified."
+    notes: "Kits VC-KIT-6000 and VC-KIT-7000 are separate products, not lines of this manufacturing BOM."
+
+  - part_number: VC-ASM-1000
+    name: Sonic head assembly
+    revision_index: 0
+    revision_letter: A
+    supply: assemble
+    subsystem: sonic_head
+    category: Assemblies
+    spec: "Counter-rotating pair of OLI MVE 400/6-HF motors on a rigid vibrating plate."
+    legacy_ref: "1"
+    unknowns:
+      - "Motor centre distance is only a minimum of 170 mm. It is not a frozen pitch, so the motors are not placed in the 3D model."
+      - "Isolator coordinates are not given."
+
+  - part_number: VC-ASM-2000
+    name: Hub system assembly
+    revision_index: 0
+    revision_letter: A
+    supply: assemble
+    subsystem: hub
+    category: Assemblies
+    spec: "NEMA 42, Neugart PLPE120-040 and 10B-2 chain lift for the sonic-head carriage."
+    legacy_ref: "2"
+    unknowns:
+      - "Carriage plate length and width are not given, only the 10 mm thickness."
+      - "Drive-shaft length is not given. Diameter is published as a range, 25-30 mm."
+
+  - part_number: VC-ASM-3000
+    name: Frame assembly
+    revision_index: 0
+    revision_letter: A
+    supply: assemble
+    subsystem: frame
+    category: Assemblies
+    spec: "mk 2004 mast, steel end plates, linear-guide side and UTV interface."
+    legacy_ref: "3"
+    unknowns:
+      - "Profile connector types are not identified beyond mk standard corners or T-slot nuts."
+      - "Tilt mechanism, gas strut and stabiliser feet have no selected order codes."
+
+  - part_number: VC-ASM-4000
+    name: Power system assembly
+    revision_index: 0
+    revision_letter: A
+    supply: assemble
+    subsystem: power
+    category: Assemblies
+    spec: "Phase-1 power path from Instagrid ONE max to the VFD and the 48 V hub supply."
+    legacy_ref: "4"
+
+  - part_number: VC-ASM-5000
+    name: Control system assembly
+    revision_index: 0
+    revision_letter: A
+    supply: assemble
+    subsystem: control
+    category: Assemblies
+    spec: "WAGO PFC200 XTR rack, safety circuit, GPS head unit and Teltonika RUT241."
+    legacy_ref: "5"
+
+  - part_number: VC-KIT-6000
+    name: DT325 sampling kit
+    revision_index: 0
+    revision_letter: A
+    supply: kit
+    subsystem: sampling
+    category: Sampling
+    spec: "Geoprobe DT325 rods, cutting shoes, drive cap and liners. Field kit, not part of the machine BOM."
+    legacy_ref: "6"
+    sale_ok: true
+
+  - part_number: VC-KIT-7000
+    name: Positioning kit
+    revision_index: 0
+    revision_letter: A
+    supply: kit
+    subsystem: positioning
+    category: Positioning
+    spec: "viDoc RTK Light and the WLAN bridge. The drill-head GPS is on the control assembly."
+    legacy_ref: "7"
+    sale_ok: true
+    notes: "BOM.md section 7 also lists a second GPS antenna and receiver. Those rows duplicate section 5 and are not repeated here."
+
+  - part_number: VC-SH-1100
+    name: OLI MVE 400/6-HF
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: sonic_head
+    category: Sonic Head
+    spec: "High-frequency vibration motor, 408 kgf, 7.2 kg, 255 x 154 x 175 mm, bolt pattern 90 x 125 mm, 4x M12."
+    legacy_ref: "1.1"
+    manufacturer_pn: MVE 400/6-HF
+    supplier_id: oli
+    estimate_eur_low: 300
+    estimate_eur_high: 450
+    mass_kg: 7.2
+    mass_note: "Nameplate mass, SONIC_HEAD.md."
+    geometry:
+      kind: box
+      length_mm: 255
+      width_mm: 154
+      height_mm: 175
+      fidelity: envelope
+      source: docs/design/SONIC_HEAD.md#2.2
+    unknowns:
+      - "Which motor axis is the 90 mm bolt pitch, and which is the 125 mm pitch, is not stated."
+      - "The solid is the published envelope, not a manufacturer model."
+
+  - part_number: VC-SH-1200
+    name: Frequency inverter 1.5 kW
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: sonic_head
+    category: Sonic Head
+    spec: "1.5 kW, 230 V single-phase in, three-phase out, V/f, output to 400 Hz."
+    legacy_ref: "1.2"
+    estimate_eur_low: 180
+    estimate_eur_high: 300
+    notes: "Candidates named in the docs: Siemens SINAMICS V20, ABB ACS150. No order code is selected. Mounted in the control enclosure, kept on the sonic-head BOM because BOM.md lists it there."
+    unknowns:
+      - "Enclosure size, braking behaviour beyond the V20 parameter notes, and the final order code."
+
+  - part_number: VC-SH-1300
+    name: Vibrating plate weldment
+    revision_index: 0
+    revision_letter: A
+    supply: assemble
+    subsystem: sonic_head
+    category: Sonic Head
+    spec: "S355J2 plate 420 x 300 x 20 mm with two longitudinal ribs 300 x 60 x 10 mm."
+    legacy_ref: "1.3"
+    estimate_eur_low: 200
+    estimate_eur_high: 350
+    supplier_id: custom_eu
+    material: S355J2
+    plm_material: s355j2
+    unknowns:
+      - "Rib spacing and weld details are not specified, so the ribs are separate blanks and are not positioned on the plate."
+
+  - part_number: VC-SH-1301
+    name: Vibrating plate blank
+    revision_index: 0
+    revision_letter: A
+    supply: subcontract
+    subsystem: sonic_head
+    category: Sonic Head
+    spec: "S355J2 blank 420 x 300 x 20 mm. Motor holes and isolator holes are not in this blank."
+    legacy_ref: "1.3a"
+    cost_included_in: VC-SH-1300
+    supplier_id: custom_eu
+    material: S355J2
+    plm_material: s355j2
+    mass_kg: 19.782
+    mass_note: "7850 kg/m3 times 0.420 x 0.300 x 0.020 m. DIMENSIONING.md prints about 19.8 kg for the plate body."
+    geometry:
+      kind: box
+      length_mm: 420
+      width_mm: 300
+      height_mm: 20
+      fidelity: partial
+      source: docs/engineering/DIMENSIONING.md#3.1
+    unknowns:
+      - "4x M12 isolator coordinates."
+      - "Two times 4x M12 motor holes. Pitch is 90 x 125 mm, location on the plate is not fixed."
+      - "Edge preparation, surface finish and whether the plate is 20 mm finished or stock."
+
+  - part_number: VC-SH-1302
+    name: Stiffener rib
+    revision_index: 0
+    revision_letter: A
+    supply: subcontract
+    subsystem: sonic_head
+    category: Sonic Head
+    spec: "Longitudinal rib blank 300 x 60 x 10 mm, two per plate."
+    legacy_ref: "1.3b"
+    cost_included_in: VC-SH-1300
+    supplier_id: custom_eu
+    material: S355J2
+    plm_material: s355j2
+    mass_kg: 1.413
+    mass_note: "7850 kg/m3 times 0.300 x 0.060 x 0.010 m. Two ribs are the about 2.8 kg in DIMENSIONING.md."
+    geometry:
+      kind: box
+      length_mm: 300
+      width_mm: 10
+      height_mm: 60
+      fidelity: solid
+      source: docs/engineering/DIMENSIONING.md#3.1
+    unknowns:
+      - "Weld position on the plate."
+
+  - part_number: VC-SH-1400
+    name: Center column
+    revision_index: 0
+    revision_letter: A
+    supply: subcontract
+    subsystem: sonic_head
+    category: Sonic Head
+    spec: "42CrMo4 shaft, diameter 50 mm, length 200 mm, plus a flange that is not fully dimensioned."
+    legacy_ref: "1.4"
+    estimate_eur_low: 80
+    estimate_eur_high: 120
+    supplier_id: custom_eu
+    material: 42CrMo4
+    plm_material: cr42mo4
+    mass_kg: 3.5
+    mass_note: "Mass budget in DIMENSIONING.md, including the flange. The solid is the shaft only."
+    geometry:
+      kind: cylinder
+      diameter_mm: 50
+      length_mm: 200
+      fidelity: partial
+      source: docs/design/SONIC_HEAD.md#8
+    unknowns:
+      - "Flange thickness, bolt-circle diameter and whether the 6x M10 holes are tapped or through."
+      - "Flange diameter 80 mm is published, but it is not modelled until the thickness is known."
+
+  - part_number: VC-SH-1500
+    name: DT325 adapter
+    revision_index: 0
+    revision_letter: A
+    supply: subcontract
+    subsystem: sonic_head
+    category: Sonic Head
+    spec: "Steel adapter, thread to the Geoprobe DT325 drive interface."
+    legacy_ref: "1.5"
+    estimate_eur_low: 60
+    estimate_eur_high: 100
+    supplier_id: custom_eu
+    unknowns:
+      - "Thread designation, engagement length and wrench flats. Do not model until the Geoprobe interface is confirmed."
+
+  - part_number: VC-SH-1600
+    name: Rubber isolator M12
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: sonic_head
+    category: Sonic Head
+    spec: "Cylindrical rubber buffer, M12, 55-70 Shore A, static stiffness about 40-50 kN/m."
+    legacy_ref: "1.6"
+    estimate_eur_low: 7.5
+    estimate_eur_high: 15
+    notes: "Candidates: Schwingmetall, Paulstra, Trelleborg. No catalogue number selected."
+    unknowns:
+      - "Catalogue number, free height and stud length."
+
+  - part_number: VC-SH-1700
+    name: Motor cable shielded
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: sonic_head
+    category: Sonic Head
+    spec: "Shielded motor cable 3x 1.5 mm2, length under 5 m, one per motor."
+    legacy_ref: "1.7"
+    supplier_id: lapp
+    estimate_eur_low: 7.5
+    estimate_eur_high: 15
+    unknowns:
+      - "Exact length and gland sizes."
+
+  - part_number: VC-SH-1800
+    name: Fastener kit, sonic head
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: sonic_head
+    category: Sonic Head
+    spec: "M12x40 for the motors and M10 for the column flange, plus washers. Purchased as one kit."
+    legacy_ref: "1.8"
+    estimate_eur_low: 20
+    estimate_eur_high: 40
+    notes: "SONIC_HEAD.md mass budget mentions 8x M12x40. The flange is 6x M10. The kit is not exploded."
+
+  - part_number: VC-HB-2100
+    name: NEMA 42 closed-loop stepper
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: hub
+    category: Hub
+    spec: "NEMA 42, closed loop, about 20 Nm, 6 A, incremental encoder, 19 mm keyed shaft."
+    legacy_ref: "2.17"
+    estimate_eur_low: 250
+    estimate_eur_high: 400
+    notes: "Candidates: Nanotec, Leadshine. Mass is published as about 6-8 kg, so no single mass is stored."
+    unknowns:
+      - "Exact catalogue number, body length and mass."
+
+  - part_number: VC-HB-2200
+    name: Planetary gearbox PLPE120-040
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: hub
+    category: Hub
+    spec: "Neugart PLPE120, ratio 40:1, output shaft 32 mm with keyway."
+    legacy_ref: "2.18"
+    manufacturer_pn: PLPE120-040
+    supplier_id: neugart
+    estimate_eur_low: 600
+    estimate_eur_high: 900
+    unknowns:
+      - "Input flange code for the selected NEMA 42 motor."
+
+  - part_number: VC-HB-2300
+    name: Closed-loop stepper driver
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: hub
+    category: Hub
+    spec: "Leadshine CL86T-V4.1 or Nanotec C5-E. Modbus / CiA 402 to the PFC200."
+    legacy_ref: "2.19"
+    estimate_eur_low: 80
+    estimate_eur_high: 150
+    notes: "CONTROL_SYSTEM.md draws the Nanotec C5-E. BOM.md leaves both candidates. Installed in the control enclosure."
+    unknowns:
+      - "Final driver, and therefore the connector and the encoder interface."
+
+  - part_number: VC-HB-2400
+    name: Elastomer coupling
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: hub
+    category: Hub
+    spec: "R+W EKH or KTR ROTEX 28, torque only, between gearbox and drive shaft."
+    legacy_ref: "2.20"
+    estimate_eur_low: 60
+    estimate_eur_high: 100
+    unknowns:
+      - "Bore pair. Gearbox output is 32 mm; the drive shaft is not frozen."
+
+  - part_number: VC-HB-2500
+    name: Hub drive shaft
+    revision_index: 0
+    revision_letter: A
+    supply: subcontract
+    subsystem: hub
+    category: Hub
+    spec: "Keyed shaft, diameter 25-30 mm, separately bearing-mounted."
+    legacy_ref: "2.21"
+    estimate_eur_low: 30
+    estimate_eur_high: 50
+    supplier_id: custom_eu
+    unknowns:
+      - "Diameter inside the 25-30 mm range, length, key size and sprocket seat."
+
+  - part_number: VC-HB-2600
+    name: Pillow block UCP 206
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: hub
+    category: Hub
+    spec: "Self-aligning pillow block, 30 mm bore. Two on the drive shaft."
+    legacy_ref: "2.22"
+    estimate_eur_low: 15
+    estimate_eur_high: 25
+    notes: "SKF or Schaeffler. Bore is 30 mm, which only matches the top of the shaft range."
+    unknowns:
+      - "Confirm 30 mm bore against the final shaft diameter. HUB_SYSTEM.md also mentions UCP 205/206."
+
+  - part_number: VC-HB-2700
+    name: Duplex chain 10B-2
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: hub
+    category: Hub
+    spec: "10B-2 duplex roller chain, 3.2 m, pre-greased. Pitch 15.875 mm."
+    legacy_ref: "2.23"
+    estimate_eur_low: 30
+    estimate_eur_high: 50
+    notes: "iwis or Wippermann."
+
+  - part_number: VC-HB-2800
+    name: Sprocket 10B-2 15T drive
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: hub
+    category: Hub
+    spec: "10B-2, 15 teeth, taper-lock, drive sprocket."
+    legacy_ref: "2.24"
+    estimate_eur_low: 25
+    estimate_eur_high: 40
+    notes: "z24.de or ETKF. Pitch radius used in the force calculation is 37.9 mm."
+
+  - part_number: VC-HB-2810
+    name: Sprocket 10B-2 15T idle
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: hub
+    category: Hub
+    spec: "10B-2, 15 teeth, bearing-mounted idle sprocket."
+    legacy_ref: "2.25"
+    estimate_eur_low: 30
+    estimate_eur_high: 50
+
+  - part_number: VC-HB-2900
+    name: Chain tensioner
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: hub
+    category: Hub
+    spec: "Spring or adjustable tensioner for the 10B-2 loop."
+    legacy_ref: "2.26"
+    estimate_eur_low: 20
+    estimate_eur_high: 40
+    unknowns:
+      - "Selected model."
+
+  - part_number: VC-HB-3000
+    name: Power-off brake 24 V
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: hub
+    category: Hub
+    spec: "Spring-applied electromagnetic brake, 24 V, holding torque above 15 Nm, between motor and gearbox."
+    legacy_ref: "2.27"
+    estimate_eur_low: 100
+    estimate_eur_high: 180
+    notes: "Kendrion or Mayr."
+    unknowns:
+      - "Catalogue number and the matching shaft bore."
+
+  - part_number: VC-HB-3100
+    name: Linear guide rail HGR20
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: hub
+    category: Hub
+    spec: "Profiled rail, size 20, length 1300 mm. Two rails."
+    legacy_ref: "2.28"
+    estimate_eur_low: 50
+    estimate_eur_high: 90
+    notes: "Hiwin or Bosch Rexroth. HGR20 is the Hiwin designation used in BOM.md."
+
+  - part_number: VC-HB-3110
+    name: Linear carriage HGH20
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: hub
+    category: Hub
+    spec: "Ball-type carriage for the size-20 rail. Four carriages."
+    legacy_ref: "2.29"
+    estimate_eur_low: 20
+    estimate_eur_high: 35
+
+  - part_number: VC-HB-3200
+    name: Carriage plate
+    revision_index: 0
+    revision_letter: A
+    supply: subcontract
+    subsystem: hub
+    category: Hub
+    spec: "Machined steel plate, 10 mm thick, four carriages, chain pin, four M12 isolators."
+    legacy_ref: "2.30"
+    estimate_eur_low: 80
+    estimate_eur_high: 120
+    supplier_id: custom_eu
+    unknowns:
+      - "Length, width, hole pattern and chain-pin position. Thickness alone is not enough to model a blank."
+
+  - part_number: VC-HB-3300
+    name: Fastener kit, hub
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: hub
+    category: Hub
+    spec: "M6 to M12 fasteners for the hub assembly, one kit."
+    legacy_ref: "2.31"
+    estimate_eur_low: 20
+    estimate_eur_high: 40
+
+  - part_number: VC-FR-4100
+    name: Aluminium profile 50x100x1500
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: frame
+    category: Frame
+    spec: "mk 2004 profile, 50 x 100 mm, length 1500 mm. Two profiles."
+    legacy_ref: "3.32"
+    supplier_id: mk
+    estimate_eur_low: 60
+    estimate_eur_high: 90
+    geometry:
+      kind: box
+      length_mm: 50
+      width_mm: 100
+      height_mm: 1500
+      fidelity: envelope
+      source: docs/engineering/BOM.md#3
+    unknowns:
+      - "mk 2004 slot geometry is not in the repository. The solid is the outer envelope only and is not a machining model."
+      - "Alloy and the exact mk order code."
+
+  - part_number: VC-FR-4200
+    name: Profile connector
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: frame
+    category: Frame
+    spec: "mk standard corner or T-slot connector. Eight pieces."
+    legacy_ref: "3.33"
+    supplier_id: mk
+    estimate_eur_low: 5
+    estimate_eur_high: 10
+    unknowns:
+      - "Which mk connector."
+
+  - part_number: VC-FR-4300
+    name: Bottom steel plate
+    revision_index: 0
+    revision_letter: A
+    supply: subcontract
+    subsystem: frame
+    category: Frame
+    spec: "S355 blank 400 x 300 x 15 mm. Rod guide, motor mount and profile seats are not yet located."
+    legacy_ref: "3.34"
+    estimate_eur_low: 80
+    estimate_eur_high: 120
+    supplier_id: custom_eu
+    material: S355
+    plm_material: s355
+    mass_kg: 14.130
+    mass_note: "Calculated from the blank at 7850 kg/m3. Holes will reduce it."
+    geometry:
+      kind: box
+      length_mm: 400
+      width_mm: 300
+      height_mm: 15
+      fidelity: partial
+      source: docs/engineering/BOM.md#3
+    unknowns:
+      - "Rod-guide bore position, NEMA 42 mount, profile feet and UTV holes."
+
+  - part_number: VC-FR-4400
+    name: Top steel plate
+    revision_index: 0
+    revision_letter: A
+    supply: subcontract
+    subsystem: frame
+    category: Frame
+    spec: "S355 blank 300 x 200 x 12 mm."
+    legacy_ref: "3.35"
+    estimate_eur_low: 50
+    estimate_eur_high: 80
+    supplier_id: custom_eu
+    material: S355
+    plm_material: s355
+    mass_kg: 5.652
+    mass_note: "Calculated from the blank at 7850 kg/m3."
+    geometry:
+      kind: box
+      length_mm: 300
+      width_mm: 200
+      height_mm: 12
+      fidelity: partial
+      source: docs/engineering/BOM.md#3
+    unknowns:
+      - "Idle-sprocket mount and profile bolt pattern."
+
+  - part_number: VC-FR-4500
+    name: Rod guide bushing
+    revision_index: 0
+    revision_letter: A
+    supply: subcontract
+    subsystem: frame
+    category: Frame
+    spec: "Bronze or PTFE bushing, 83 mm bore, for the 82.55 mm DT325 rod."
+    legacy_ref: "3.36"
+    estimate_eur_low: 20
+    estimate_eur_high: 40
+    supplier_id: custom_eu
+    unknowns:
+      - "Length, flange and housing diameter."
+
+  - part_number: VC-FR-4600
+    name: UTV mounting bracket
+    revision_index: 0
+    revision_letter: A
+    supply: subcontract
+    subsystem: frame
+    category: Frame
+    spec: "Steel bracket, welded or bolted. Four pieces."
+    legacy_ref: "3.37"
+    estimate_eur_low: 15
+    estimate_eur_high: 25
+    supplier_id: custom_eu
+    unknowns:
+      - "UTV interface dimensions."
+
+  - part_number: VC-FR-4700
+    name: Tilt mechanism
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: frame
+    category: Frame
+    spec: "Hinge, gas strut and lock for transport."
+    legacy_ref: "3.38"
+    estimate_eur_low: 100
+    estimate_eur_high: 180
+    unknowns:
+      - "Strut force, hinge pin and lock."
+
+  - part_number: VC-FR-4800
+    name: Stabiliser foot
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: frame
+    category: Frame
+    spec: "Adjustable screw jack. Four feet."
+    legacy_ref: "3.39"
+    estimate_eur_low: 10
+    estimate_eur_high: 20
+    unknowns:
+      - "Selected jack and the pad size."
+
+  - part_number: VC-FR-4900
+    name: Fastener kit, frame
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: frame
+    category: Frame
+    spec: "M8 to M16 fasteners for the frame, one kit."
+    legacy_ref: "3.40"
+    estimate_eur_low: 30
+    estimate_eur_high: 50
+
+  - part_number: VC-PW-5100
+    name: Instagrid ONE max
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: power
+    category: Power
+    spec: "Portable battery inverter, 230 V AC, 3.6 kW continuous, 2.1 kWh."
+    legacy_ref: "4.41"
+    supplier_id: instagrid
+    estimate_eur_low: 2500
+    estimate_eur_high: 2500
+    notes: "BOM.md also allows rental at about EUR 95 per week. That rental is not this product."
+
+  - part_number: VC-PW-5200
+    name: DIN-rail supply 48 V 10 A
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: power
+    category: Power
+    spec: "230 V AC to 48 V DC, 10 A, DIN rail, for the hub drive."
+    legacy_ref: "4.42"
+    estimate_eur_low: 80
+    estimate_eur_high: 140
+    notes: "CONTROL_SYSTEM.md shows Mean Well SDR-75-48, which is 1.6 A, not 10 A. Do not order SDR-75-48 against this line until the conflict is closed."
+
+  - part_number: VC-PW-5300
+    name: DC converter 48 V to 24 V
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: power
+    category: Power
+    spec: "48 V to 24 V for the brake and the relays."
+    legacy_ref: "4.43"
+    estimate_eur_low: 20
+    estimate_eur_high: 40
+    notes: "CONTROL_SYSTEM.md names Mean Well DDR-60D-24 (24 V / 2.5 A) as a candidate only."
+
+  - part_number: VC-PW-5400
+    name: DC converter 48 V to 12 V and 5 V
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: power
+    category: Power
+    spec: "Logic supply for the PLC side and sensors. BOM.md groups 12 V and 5 V on one line."
+    legacy_ref: "4.44"
+    estimate_eur_low: 15
+    estimate_eur_high: 30
+    unknowns:
+      - "Whether this is one dual-output converter or two parts."
+
+  - part_number: VC-PW-5500
+    name: Power distribution kit
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: power
+    category: Power
+    spec: "DIN-rail distribution, fuses and contactors."
+    legacy_ref: "4.45"
+    estimate_eur_low: 60
+    estimate_eur_high: 100
+    notes: "Schneider or Eaton. Not exploded."
+
+  - part_number: VC-PW-5600
+    name: Power cable set
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: power
+    category: Power
+    spec: "Silicone and shielded power cables, 2.5-6 mm2."
+    legacy_ref: "4.46"
+    supplier_id: lapp
+    estimate_eur_low: 40
+    estimate_eur_high: 80
+
+  - part_number: VC-CT-6100
+    name: WAGO PFC200 XTR
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: control
+    category: Control
+    spec: "Controller 750-8212, -40 to +70 C, 5 g vibration, two Ethernet ports, RS-485."
+    legacy_ref: "5.47"
+    manufacturer_pn: "750-8212"
+    supplier_id: wago
+    estimate_eur_low: 600
+    estimate_eur_high: 900
+
+  - part_number: VC-CT-6110
+    name: WAGO 750-430 XTR
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: control
+    category: Control
+    spec: "4 digital inputs, 24 V DC, CAGE CLAMP."
+    legacy_ref: "5.48"
+    manufacturer_pn: "750-430"
+    supplier_id: wago
+    estimate_eur_low: 60
+    estimate_eur_high: 90
+
+  - part_number: VC-CT-6120
+    name: WAGO 750-530 XTR
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: control
+    category: Control
+    spec: "4 digital outputs, 24 V DC, 0.5 A, CAGE CLAMP."
+    legacy_ref: "5.49"
+    manufacturer_pn: "750-530"
+    supplier_id: wago
+    estimate_eur_low: 60
+    estimate_eur_high: 90
+
+  - part_number: VC-CT-6130
+    name: WAGO 750-637
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: control
+    category: Control
+    spec: "Incremental encoder interface."
+    legacy_ref: "5.50"
+    manufacturer_pn: "750-637"
+    supplier_id: wago
+    estimate_eur_low: 100
+    estimate_eur_high: 150
+
+  - part_number: VC-CT-6140
+    name: WAGO 750-826
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: control
+    category: Control
+    spec: "RS-485 serial interface for Modbus RTU."
+    legacy_ref: "5.51"
+    manufacturer_pn: "750-826"
+    supplier_id: wago
+    estimate_eur_low: 80
+    estimate_eur_high: 120
+
+  - part_number: VC-CT-6150
+    name: WAGO 750-600
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: control
+    category: Control
+    spec: "End module."
+    legacy_ref: "5.52"
+    manufacturer_pn: "750-600"
+    supplier_id: wago
+    estimate_eur_low: 10
+    estimate_eur_high: 20
+
+  - part_number: VC-CT-6200
+    name: Inductive limit switch
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: control
+    category: Control
+    spec: "M12 inductive limit switch, NC, IP67. Upper and lower carriage."
+    legacy_ref: "5.53"
+    estimate_eur_low: 15
+    estimate_eur_high: 30
+    notes: "ifm or SICK."
+
+  - part_number: VC-CT-6210
+    name: Emergency stop
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: control
+    category: Control
+    spec: "Mushroom NC, Category 3, in an IP65 enclosure."
+    legacy_ref: "5.54"
+    estimate_eur_low: 40
+    estimate_eur_high: 70
+    notes: "Eaton or Schneider."
+
+  - part_number: VC-CT-6220
+    name: Safety relay
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: control
+    category: Control
+    spec: "Pilz PNOZ m B0 or equivalent."
+    legacy_ref: "5.55"
+    estimate_eur_low: 80
+    estimate_eur_high: 130
+    notes: "PNOZ m B0 is a candidate, not a frozen order."
+
+  - part_number: VC-CT-6300
+    name: Control enclosure
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: control
+    category: Control
+    spec: "IP65 enclosure with DIN rail, 200 x 150 x 80 mm."
+    legacy_ref: "5.56"
+    estimate_eur_low: 40
+    estimate_eur_high: 80
+    notes: "Rittal or Spelsberg. The 200 x 150 x 80 mm size is unlikely to hold the PFC200 rack, the VFD and the driver together."
+    unknowns:
+      - "Confirm the enclosure actually fits the WAGO rack and the VFD. Do not treat 200 x 150 x 80 mm as a checked layout."
+
+  - part_number: VC-CT-6400
+    name: RDDL trust wallet
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: control
+    category: Control
+    spec: "Xiao ESP32-C3 with an NXP SE050 breakout for the signing path."
+    legacy_ref: "5.57"
+    estimate_eur_low: 25
+    estimate_eur_high: 50
+    notes: "Seeed Studio or Mouser."
+
+  - part_number: VC-CT-6410
+    name: SE050 breakout
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: control
+    category: Control
+    spec: "NXP OM-SE050ARD or a compatible SE050 breakout."
+    legacy_ref: "5.58"
+    manufacturer_pn: OM-SE050ARD
+    estimate_eur_low: 20
+    estimate_eur_high: 40
+    notes: "Listed both inside the wallet line and as its own board. Confirm this is not a double purchase."
+
+  - part_number: VC-CT-6500
+    name: GPS antenna u-blox ANN-MB
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: control
+    category: Control
+    spec: "Multi-band GNSS antenna, SMA, mounted on the drill head."
+    legacy_ref: "5.59"
+    manufacturer_pn: ANN-MB
+    supplier_id: ublox
+    estimate_eur_low: 50
+    estimate_eur_high: 80
+    notes: "Same function as BOM.md section 7 item 61. Not duplicated on the positioning kit."
+
+  - part_number: VC-CT-6510
+    name: GPS receiver u-blox ZED-F9P
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: control
+    category: Control
+    spec: "RTK-capable GNSS receiver for the drill-head antenna."
+    legacy_ref: "5.60"
+    manufacturer_pn: ZED-F9P
+    supplier_id: ublox
+    estimate_eur_low: 150
+    estimate_eur_high: 250
+    notes: "Same function as BOM.md section 7 item 62. Not duplicated on the positioning kit."
+
+  - part_number: VC-CT-6600
+    name: Teltonika RUT241
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: control
+    category: Control
+    spec: "LTE Cat 4 router, DIN rail, -40 to +75 C."
+    legacy_ref: "5.61"
+    manufacturer_pn: RUT241
+    supplier_id: teltonika
+    estimate_eur_low: 100
+    estimate_eur_high: 160
+
+  - part_number: VC-CT-6610
+    name: LTE SIM data plan
+    revision_index: 0
+    revision_letter: A
+    supply: service
+    subsystem: control
+    category: Control
+    spec: "Data-only SIM, about 1 GB per month, AT or HU carrier."
+    legacy_ref: "5.62"
+    estimate_eur_low: 10
+    estimate_eur_high: 20
+    notes: "Service product, not stock."
+
+  - part_number: VC-CT-6620
+    name: DC converter 24 V to 9 V
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: control
+    category: Control
+    spec: "Step-down for the RUT241 from the 24 V rail. RUT241 accepts 9-30 V, so this may be unnecessary."
+    legacy_ref: "5.63"
+    estimate_eur_low: 10
+    estimate_eur_high: 20
+    unknowns:
+      - "Confirm the router is not powered directly from 24 V."
+
+  - part_number: VC-CT-6700
+    name: Wiring harness
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: control
+    category: Control
+    spec: "CAGE CLAMP terminals and shielded signal cables."
+    legacy_ref: "5.64"
+    estimate_eur_low: 50
+    estimate_eur_high: 90
+    notes: "Weidmueller or Phoenix Contact."
+
+  - part_number: VC-GP-7100
+    name: DT325 probe rod pair
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: sampling
+    category: Sampling
+    spec: "Geoprobe probe rod 3.25 inch by 48 inch. The unit of purchase is a pair, 35.4 kg."
+    legacy_ref: "6.56"
+    manufacturer_pn: "201446"
+    supplier_id: geoprobe
+    estimate_eur_low: 400
+    estimate_eur_high: 600
+    mass_kg: 35.4
+    mass_note: "Published mass of one pair, Geoprobe PN 201446."
+
+  - part_number: VC-GP-7200
+    name: DT325 cutting shoe
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: sampling
+    category: Sampling
+    spec: "DT325 cutting shoe."
+    legacy_ref: "6.57"
+    manufacturer_pn: "205449"
+    supplier_id: geoprobe
+    estimate_eur_low: 50
+    estimate_eur_high: 100
+    mass_kg: 1.5
+    mass_note: "SONIC_HEAD.md mass budget, one shoe."
+
+  - part_number: VC-GP-7300
+    name: Drive cap GH60
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: sampling
+    category: Sampling
+    spec: "Geoprobe GH60 drive cap."
+    legacy_ref: "6.58"
+    manufacturer_pn: "201275"
+    supplier_id: geoprobe
+    estimate_eur_low: 100
+    estimate_eur_high: 200
+
+  - part_number: VC-GP-7400
+    name: Core liner 3.25 inch
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: sampling
+    category: Sampling
+    spec: "Polycarbonate liner, 3.25 inch. Consumable."
+    legacy_ref: "6.59"
+    supplier_id: geoprobe
+    estimate_eur_low: 3
+    estimate_eur_high: 6
+
+  - part_number: VC-PS-8100
+    name: viDoc RTK Light
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: positioning
+    category: Positioning
+    spec: "RTK rover with AR navigation. May already be owned."
+    legacy_ref: "7.60"
+    supplier_id: pix4d
+    estimate_eur_low: 2000
+    estimate_eur_high: 2000
+    notes: "BOM.md marks this as an existing instrument in the realistic budget."
+
+  - part_number: VC-PS-8200
+    name: WLAN bridge
+    revision_index: 0
+    revision_letter: A
+    supply: purchase
+    subsystem: positioning
+    category: Positioning
+    spec: "Bridge from the head GPS path to the tablet. BOM.md names an ESP32 module."
+    legacy_ref: "7.63"
+    estimate_eur_low: 20
+    estimate_eur_high: 40
+    notes: "Possibly the same radio as the ESP32-C3 wallet. Not merged until someone checks the architecture."
+
+boms:
+  - part_number: VC-ASM-0000
+    mrp_type: normal
+    lines:
+      - {part_number: VC-ASM-1000, qty: 1}
+      - {part_number: VC-ASM-2000, qty: 1}
+      - {part_number: VC-ASM-3000, qty: 1}
+      - {part_number: VC-ASM-4000, qty: 1}
+      - {part_number: VC-ASM-5000, qty: 1}
+  - part_number: VC-ASM-1000
+    mrp_type: normal
+    lines:
+      - {part_number: VC-SH-1100, qty: 2}
+      - {part_number: VC-SH-1200, qty: 1}
+      - {part_number: VC-SH-1300, qty: 1}
+      - {part_number: VC-SH-1400, qty: 1}
+      - {part_number: VC-SH-1500, qty: 1}
+      - {part_number: VC-SH-1600, qty: 4}
+      - {part_number: VC-SH-1700, qty: 2}
+      - {part_number: VC-SH-1800, qty: 1}
+  - part_number: VC-SH-1300
+    mrp_type: normal
+    lines:
+      - {part_number: VC-SH-1301, qty: 1}
+      - {part_number: VC-SH-1302, qty: 2}
+  - part_number: VC-ASM-2000
+    mrp_type: normal
+    lines:
+      - {part_number: VC-HB-2100, qty: 1}
+      - {part_number: VC-HB-2200, qty: 1}
+      - {part_number: VC-HB-2300, qty: 1}
+      - {part_number: VC-HB-2400, qty: 1}
+      - {part_number: VC-HB-2500, qty: 1}
+      - {part_number: VC-HB-2600, qty: 2}
+      - {part_number: VC-HB-2700, qty: 1}
+      - {part_number: VC-HB-2800, qty: 1}
+      - {part_number: VC-HB-2810, qty: 1}
+      - {part_number: VC-HB-2900, qty: 1}
+      - {part_number: VC-HB-3000, qty: 1}
+      - {part_number: VC-HB-3100, qty: 2}
+      - {part_number: VC-HB-3110, qty: 4}
+      - {part_number: VC-HB-3200, qty: 1}
+      - {part_number: VC-HB-3300, qty: 1}
+  - part_number: VC-ASM-3000
+    mrp_type: normal
+    lines:
+      - {part_number: VC-FR-4100, qty: 2}
+      - {part_number: VC-FR-4200, qty: 8}
+      - {part_number: VC-FR-4300, qty: 1}
+      - {part_number: VC-FR-4400, qty: 1}
+      - {part_number: VC-FR-4500, qty: 1}
+      - {part_number: VC-FR-4600, qty: 4}
+      - {part_number: VC-FR-4700, qty: 1}
+      - {part_number: VC-FR-4800, qty: 4}
+      - {part_number: VC-FR-4900, qty: 1}
+  - part_number: VC-ASM-4000
+    mrp_type: normal
+    lines:
+      - {part_number: VC-PW-5100, qty: 1}
+      - {part_number: VC-PW-5200, qty: 1}
+      - {part_number: VC-PW-5300, qty: 1}
+      - {part_number: VC-PW-5400, qty: 1}
+      - {part_number: VC-PW-5500, qty: 1}
+      - {part_number: VC-PW-5600, qty: 1}
+  - part_number: VC-ASM-5000
+    mrp_type: normal
+    lines:
+      - {part_number: VC-CT-6100, qty: 1}
+      - {part_number: VC-CT-6110, qty: 1}
+      - {part_number: VC-CT-6120, qty: 1}
+      - {part_number: VC-CT-6130, qty: 1}
+      - {part_number: VC-CT-6140, qty: 1}
+      - {part_number: VC-CT-6150, qty: 1}
+      - {part_number: VC-CT-6200, qty: 2}
+      - {part_number: VC-CT-6210, qty: 1}
+      - {part_number: VC-CT-6220, qty: 1}
+      - {part_number: VC-CT-6300, qty: 1}
+      - {part_number: VC-CT-6400, qty: 1}
+      - {part_number: VC-CT-6410, qty: 1}
+      - {part_number: VC-CT-6500, qty: 1}
+      - {part_number: VC-CT-6510, qty: 1}
+      - {part_number: VC-CT-6600, qty: 1}
+      - {part_number: VC-CT-6610, qty: 1}
+      - {part_number: VC-CT-6620, qty: 1}
+      - {part_number: VC-CT-6700, qty: 1}
+  - part_number: VC-KIT-6000
+    mrp_type: phantom
+    lines:
+      - {part_number: VC-GP-7100, qty: 2}
+      - {part_number: VC-GP-7200, qty: 4}
+      - {part_number: VC-GP-7300, qty: 1}
+      - {part_number: VC-GP-7400, qty: 50}
+  - part_number: VC-KIT-7000
+    mrp_type: phantom
+    lines:
+      - {part_number: VC-PS-8100, qty: 1}
+      - {part_number: VC-PS-8200, qty: 1}

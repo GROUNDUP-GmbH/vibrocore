@@ -1,0 +1,10 @@
+id,product_tmpl_id/default_code,product_id/id,product_qty,product_uom_id/id,type,code
+vibrocore.bom_ebom_vc_asm_0000,VC-ASM-0000,vibrocore.product_vc_asm_0000,1.0,uom.product_uom_unit,ebom,VC-ASM-0000
+vibrocore.bom_ebom_vc_asm_1000,VC-ASM-1000,vibrocore.product_vc_asm_1000,1.0,uom.product_uom_unit,ebom,VC-ASM-1000
+vibrocore.bom_ebom_vc_asm_2000,VC-ASM-2000,vibrocore.product_vc_asm_2000,1.0,uom.product_uom_unit,ebom,VC-ASM-2000
+vibrocore.bom_ebom_vc_asm_3000,VC-ASM-3000,vibrocore.product_vc_asm_3000,1.0,uom.product_uom_unit,ebom,VC-ASM-3000
+vibrocore.bom_ebom_vc_asm_4000,VC-ASM-4000,vibrocore.product_vc_asm_4000,1.0,uom.product_uom_unit,ebom,VC-ASM-4000
+vibrocore.bom_ebom_vc_asm_5000,VC-ASM-5000,vibrocore.product_vc_asm_5000,1.0,uom.product_uom_unit,ebom,VC-ASM-5000
+vibrocore.bom_ebom_vc_kit_6000,VC-KIT-6000,vibrocore.product_vc_kit_6000,1.0,uom.product_uom_unit,ebom,VC-KIT-6000
+vibrocore.bom_ebom_vc_kit_7000,VC-KIT-7000,vibrocore.product_vc_kit_7000,1.0,uom.product_uom_unit,ebom,VC-KIT-7000
+vibrocore.bom_ebom_vc_sh_1300,VC-SH-1300,vibrocore.product_vc_sh_1300,1.0,uom.product_uom_unit,ebom,VC-SH-1300

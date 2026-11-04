@@ -1,0 +1,89 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 1 /Kids [3 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 1415 >>
+stream
+BT
+/F1 11 Tf
+36 800 Td
+16 TL
+(VC-ASM-5000 Control system assembly  assembly, preliminary) Tj
+T*
+(1  VC-CT-6100  rev A  qty 1  WAGO PFC200 XTR) Tj
+T*
+(2  VC-CT-6110  rev A  qty 1  WAGO 750-430 XTR) Tj
+T*
+(3  VC-CT-6120  rev A  qty 1  WAGO 750-530 XTR) Tj
+T*
+(4  VC-CT-6130  rev A  qty 1  WAGO 750-637) Tj
+T*
+(5  VC-CT-6140  rev A  qty 1  WAGO 750-826) Tj
+T*
+(6  VC-CT-6150  rev A  qty 1  WAGO 750-600) Tj
+T*
+(7  VC-CT-6200  rev A  qty 2  Inductive limit switch) Tj
+T*
+(8  VC-CT-6210  rev A  qty 1  Emergency stop) Tj
+T*
+(9  VC-CT-6220  rev A  qty 1  Safety relay) Tj
+T*
+(10  VC-CT-6300  rev A  qty 1  Control enclosure) Tj
+T*
+(11  VC-CT-6400  rev A  qty 1  RDDL trust wallet) Tj
+T*
+(12  VC-CT-6410  rev A  qty 1  SE050 breakout) Tj
+T*
+(13  VC-CT-6500  rev A  qty 1  GPS antenna u-blox ANN-MB) Tj
+T*
+(14  VC-CT-6510  rev A  qty 1  GPS receiver u-blox ZED-F9P) Tj
+T*
+(15  VC-CT-6600  rev A  qty 1  Teltonika RUT241) Tj
+T*
+(16  VC-CT-6610  rev A  qty 1  LTE SIM data plan) Tj
+T*
+(17  VC-CT-6620  rev A  qty 1  DC converter 24 V to 9 V) Tj
+T*
+(18  VC-CT-6700  rev A  qty 1  Wiring harness) Tj
+T*
+(Owner: Ground UP GmbH) Tj
+T*
+(Document status: preliminary) Tj
+T*
+(Identification: VC-ASM-5000) Tj
+T*
+(Revision index/letter: 0 / A) Tj
+T*
+(Date: 2026-11-04) Tj
+T*
+(Units: mm. Projection: first angle \(ISO 128\).) Tj
+T*
+(General tolerances: TODO.) Tj
+T*
+(ISO 7200 title-block fields. Not released for manufacture.) Tj
+T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000248 00000 n 
+0000001715 00000 n 
+trailer << /Size 6 /Root 1 0 R >>
+startxref
+1785
+%%EOF

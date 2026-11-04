@@ -8,5 +8,10 @@ test output formatting.
 import sys
 import os
 
-# Make sim module importable from any working directory
-sys.path.insert(0, os.path.dirname(__file__))
+# Make sim module importable from any working directory, and the cad package
+# importable from the repository root.
+_TESTS = os.path.dirname(__file__)
+_ROOT = os.path.dirname(_TESTS)
+sys.path.insert(0, _TESTS)
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
