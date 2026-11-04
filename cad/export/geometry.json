@@ -1,0 +1,119 @@
+[
+  {
+    "bbox_mm": {
+      "x": 255.0,
+      "y": 154.0,
+      "z": 175.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "envelope",
+    "kind": "box",
+    "part_number": "VC-SH-1100",
+    "source": "docs/design/SONIC_HEAD.md#2.2",
+    "step": "cad/export/step/VC-SH-1100.step",
+    "unknowns": [
+      "Which motor axis is the 90 mm bolt pitch, and which is the 125 mm pitch, is not stated.",
+      "The solid is the published envelope, not a manufacturer model."
+    ]
+  },
+  {
+    "bbox_mm": {
+      "x": 420.0,
+      "y": 300.0,
+      "z": 20.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "partial",
+    "kind": "box",
+    "part_number": "VC-SH-1301",
+    "source": "docs/engineering/DIMENSIONING.md#3.1",
+    "step": "cad/export/step/VC-SH-1301.step",
+    "unknowns": [
+      "4x M12 isolator coordinates.",
+      "Two times 4x M12 motor holes. Pitch is 90 x 125 mm, location on the plate is not fixed.",
+      "Edge preparation, surface finish and whether the plate is 20 mm finished or stock."
+    ]
+  },
+  {
+    "bbox_mm": {
+      "x": 300.0,
+      "y": 10.0,
+      "z": 60.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "solid",
+    "kind": "box",
+    "part_number": "VC-SH-1302",
+    "source": "docs/engineering/DIMENSIONING.md#3.1",
+    "step": "cad/export/step/VC-SH-1302.step",
+    "unknowns": [
+      "Weld position on the plate."
+    ]
+  },
+  {
+    "bbox_mm": {
+      "x": 50.0,
+      "y": 50.0,
+      "z": 200.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "partial",
+    "kind": "cylinder",
+    "part_number": "VC-SH-1400",
+    "source": "docs/design/SONIC_HEAD.md#8",
+    "step": "cad/export/step/VC-SH-1400.step",
+    "unknowns": [
+      "Flange thickness, bolt-circle diameter and whether the 6x M10 holes are tapped or through.",
+      "Flange diameter 80 mm is published, but it is not modelled until the thickness is known."
+    ]
+  },
+  {
+    "bbox_mm": {
+      "x": 50.0,
+      "y": 100.0,
+      "z": 1500.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "envelope",
+    "kind": "box",
+    "part_number": "VC-FR-4100",
+    "source": "docs/engineering/BOM.md#3",
+    "step": "cad/export/step/VC-FR-4100.step",
+    "unknowns": [
+      "mk 2004 slot geometry is not in the repository. The solid is the outer envelope only and is not a machining model.",
+      "Alloy and the exact mk order code."
+    ]
+  },
+  {
+    "bbox_mm": {
+      "x": 400.0,
+      "y": 300.0,
+      "z": 15.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "partial",
+    "kind": "box",
+    "part_number": "VC-FR-4300",
+    "source": "docs/engineering/BOM.md#3",
+    "step": "cad/export/step/VC-FR-4300.step",
+    "unknowns": [
+      "Rod-guide bore position, NEMA 42 mount, profile feet and UTV holes."
+    ]
+  },
+  {
+    "bbox_mm": {
+      "x": 300.0,
+      "y": 200.0,
+      "z": 12.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "partial",
+    "kind": "box",
+    "part_number": "VC-FR-4400",
+    "source": "docs/engineering/BOM.md#3",
+    "step": "cad/export/step/VC-FR-4400.step",
+    "unknowns": [
+      "Idle-sprocket mount and profile bolt pattern."
+    ]
+  }
+]

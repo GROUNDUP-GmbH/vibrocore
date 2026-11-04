@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="420mm" height="297mm" viewBox="0 0 420.0 297.0">
+<title>VC-ASM-2000 Hub system assembly</title>
+<rect width="100%" height="100%" fill="#fff"/>
+<rect x="10" y="10" width="400" height="277" fill="none" stroke="#111" stroke-width="0.6"/>
+<rect x="14" y="14" width="392" height="269" fill="none" stroke="#111" stroke-width="0.25"/>
+<rect x="262" y="248" width="144" height="35" fill="none" stroke="#111" stroke-width="0.4"/>
+<text x="18" y="22" font-size="3.2" font-family="sans-serif">ISO 7200 title block · ISO 5457 A3 · not released for manufacture</text>
+<text x="20" y="36" font-size="4" font-family="sans-serif" font-weight="700">Parts list (same item numbers as the OdooPLM EBOM itemnum)</text>
+<text x="20" y="42" font-size="2.8" font-family="sans-serif">Item  Part number   Rev  Qty  Name</text>
+<text x="20" y="47" font-size="2.8" font-family="sans-serif">1      VC-HB-2100     A    1    NEMA 42 closed-loop stepper</text>
+<text x="20" y="51.2" font-size="2.8" font-family="sans-serif">2      VC-HB-2200     A    1    Planetary gearbox PLPE120-040</text>
+<text x="20" y="55.400000000000006" font-size="2.8" font-family="sans-serif">3      VC-HB-2300     A    1    Closed-loop stepper driver</text>
+<text x="20" y="59.60000000000001" font-size="2.8" font-family="sans-serif">4      VC-HB-2400     A    1    Elastomer coupling</text>
+<text x="20" y="63.80000000000001" font-size="2.8" font-family="sans-serif">5      VC-HB-2500     A    1    Hub drive shaft</text>
+<text x="20" y="68.00000000000001" font-size="2.8" font-family="sans-serif">6      VC-HB-2600     A    2    Pillow block UCP 206</text>
+<text x="20" y="72.20000000000002" font-size="2.8" font-family="sans-serif">7      VC-HB-2700     A    1    Duplex chain 10B-2</text>
+<text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-HB-2800     A    1    Sprocket 10B-2 15T drive</text>
+<text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-HB-2810     A    1    Sprocket 10B-2 15T idle</text>
+<text x="20" y="84.80000000000003" font-size="2.8" font-family="sans-serif">10     VC-HB-2900     A    1    Chain tensioner</text>
+<text x="20" y="89.00000000000003" font-size="2.8" font-family="sans-serif">11     VC-HB-3000     A    1    Power-off brake 24 V</text>
+<text x="20" y="93.20000000000003" font-size="2.8" font-family="sans-serif">12     VC-HB-3100     A    2    Linear guide rail HGR20</text>
+<text x="20" y="97.40000000000003" font-size="2.8" font-family="sans-serif">13     VC-HB-3110     A    4    Linear carriage HGH20</text>
+<text x="20" y="101.60000000000004" font-size="2.8" font-family="sans-serif">14     VC-HB-3200     A    1    Carriage plate</text>
+<text x="20" y="105.80000000000004" font-size="2.8" font-family="sans-serif">15     VC-HB-3300     A    1    Fastener kit, hub</text>
+<text x="20" y="244" font-size="3" font-family="sans-serif">Schematic only. Component positions that are not dimensioned in the design documents are not drawn.</text>
+<text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
+<text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>
+<text x="268" y="278.2" font-size="2.4" font-family="sans-serif">Document title</text>
+<text x="332" y="278.2" font-size="2.6" font-family="sans-serif" font-weight="700">Hub system assembly</text>
+<text x="268" y="282.4" font-size="2.4" font-family="sans-serif">Document type</text>
+<text x="332" y="282.4" font-size="2.6" font-family="sans-serif" font-weight="700">assembly drawing</text>
+<text x="268" y="286.59999999999997" font-size="2.4" font-family="sans-serif">Document status</text>
+<text x="332" y="286.59999999999997" font-size="2.6" font-family="sans-serif" font-weight="700">preliminary</text>
+<text x="268" y="290.79999999999995" font-size="2.4" font-family="sans-serif">Identification number</text>
+<text x="332" y="290.79999999999995" font-size="2.6" font-family="sans-serif" font-weight="700">VC-ASM-2000</text>
+<text x="268" y="294.99999999999994" font-size="2.4" font-family="sans-serif">Revision index / letter</text>
+<text x="332" y="294.99999999999994" font-size="2.6" font-family="sans-serif" font-weight="700">0 / A</text>
+<text x="268" y="299.19999999999993" font-size="2.4" font-family="sans-serif">Creator</text>
+<text x="332" y="299.19999999999993" font-size="2.6" font-family="sans-serif" font-weight="700">vibrocore cad export</text>
+<text x="268" y="303.3999999999999" font-size="2.4" font-family="sans-serif">Created</text>
+<text x="332" y="303.3999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">2026-11-04</text>
+<text x="268" y="307.5999999999999" font-size="2.4" font-family="sans-serif">Units</text>
+<text x="332" y="307.5999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">mm</text>
+<text x="268" y="311.7999999999999" font-size="2.4" font-family="sans-serif">Projection</text>
+<text x="332" y="311.7999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">first angle (ISO 128)</text>
+<text x="268" y="315.9999999999999" font-size="2.4" font-family="sans-serif">Sheet</text>
+<text x="332" y="315.9999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">1 / 1</text>
+</svg>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="420mm" height="297mm" viewBox="0 0 420.0 297.0">
+<title>VC-SH-1100 OLI MVE 400/6-HF</title>
+<rect width="100%" height="100%" fill="#fff"/>
+<rect x="10" y="10" width="400" height="277" fill="none" stroke="#111" stroke-width="0.6"/>
+<rect x="14" y="14" width="392" height="269" fill="none" stroke="#111" stroke-width="0.25"/>
+<rect x="262" y="248" width="144" height="35" fill="none" stroke="#111" stroke-width="0.4"/>
+<text x="18" y="22" font-size="3.2" font-family="sans-serif">ISO 7200 title block · ISO 5457 A3 · not released for manufacture</text>
+<text x="20" y="118" font-size="3.2" font-family="sans-serif">Top view (X–Y), scale fitted</text>
+<rect x="30" y="130" width="90.00" height="54.35" fill="none" stroke="#111" stroke-width="0.5"/>
+<text x="30" y="188.4" font-size="3.4" font-family="sans-serif">255 mm</text>
+<text x="124.0" y="157.2" font-size="3.4" font-family="sans-serif">154 mm</text>
+<text x="200" y="118" font-size="3.2" font-family="sans-serif">Front view (X–Z), first angle</text>
+<rect x="210" y="140" width="90.00" height="61.76" fill="none" stroke="#111" stroke-width="0.5"/>
+<text x="210" y="207.8" font-size="3.4" font-family="sans-serif">175 mm thick</text>
+<text x="20" y="40" font-size="3" font-family="sans-serif">Fidelity: envelope. Source: docs/design/SONIC_HEAD.md#2.2.</text>
+<text x="20" y="44.5" font-size="3" font-family="sans-serif">Mass: 7.2 kg. Nameplate mass, SONIC_HEAD.md.</text>
+<text x="20" y="49.0" font-size="3" font-family="sans-serif">TODO: Which motor axis is the 90 mm bolt pitch, and which is the 125 mm pitch, is not stated.</text>
+<text x="20" y="53.5" font-size="3" font-family="sans-serif">TODO: The solid is the published envelope, not a manufacturer model.</text>
+<text x="20" y="58.0" font-size="3" font-family="sans-serif">General tolerances: TODO. No tolerance class is specified in the design documents.</text>
+<text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
+<text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>
+<text x="268" y="278.2" font-size="2.4" font-family="sans-serif">Document title</text>
+<text x="332" y="278.2" font-size="2.6" font-family="sans-serif" font-weight="700">OLI MVE 400/6-HF</text>
+<text x="268" y="282.4" font-size="2.4" font-family="sans-serif">Document type</text>
+<text x="332" y="282.4" font-size="2.6" font-family="sans-serif" font-weight="700">part drawing</text>
+<text x="268" y="286.59999999999997" font-size="2.4" font-family="sans-serif">Document status</text>
+<text x="332" y="286.59999999999997" font-size="2.6" font-family="sans-serif" font-weight="700">preliminary</text>
+<text x="268" y="290.79999999999995" font-size="2.4" font-family="sans-serif">Identification number</text>
+<text x="332" y="290.79999999999995" font-size="2.6" font-family="sans-serif" font-weight="700">VC-SH-1100</text>
+<text x="268" y="294.99999999999994" font-size="2.4" font-family="sans-serif">Revision index / letter</text>
+<text x="332" y="294.99999999999994" font-size="2.6" font-family="sans-serif" font-weight="700">0 / A</text>
+<text x="268" y="299.19999999999993" font-size="2.4" font-family="sans-serif">Creator</text>
+<text x="332" y="299.19999999999993" font-size="2.6" font-family="sans-serif" font-weight="700">vibrocore cad export</text>
+<text x="268" y="303.3999999999999" font-size="2.4" font-family="sans-serif">Created</text>
+<text x="332" y="303.3999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">2026-11-04</text>
+<text x="268" y="307.5999999999999" font-size="2.4" font-family="sans-serif">Units</text>
+<text x="332" y="307.5999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">mm</text>
+<text x="268" y="311.7999999999999" font-size="2.4" font-family="sans-serif">Projection</text>
+<text x="332" y="311.7999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">first angle (ISO 128)</text>
+<text x="268" y="315.9999999999999" font-size="2.4" font-family="sans-serif">Sheet</text>
+<text x="332" y="315.9999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">1 / 1</text>
+</svg>

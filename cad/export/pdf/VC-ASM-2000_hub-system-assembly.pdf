@@ -1,0 +1,83 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 1 /Kids [3 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 1302 >>
+stream
+BT
+/F1 11 Tf
+36 800 Td
+16 TL
+(VC-ASM-2000 Hub system assembly  assembly, preliminary) Tj
+T*
+(1  VC-HB-2100  rev A  qty 1  NEMA 42 closed-loop stepper) Tj
+T*
+(2  VC-HB-2200  rev A  qty 1  Planetary gearbox PLPE120-040) Tj
+T*
+(3  VC-HB-2300  rev A  qty 1  Closed-loop stepper driver) Tj
+T*
+(4  VC-HB-2400  rev A  qty 1  Elastomer coupling) Tj
+T*
+(5  VC-HB-2500  rev A  qty 1  Hub drive shaft) Tj
+T*
+(6  VC-HB-2600  rev A  qty 2  Pillow block UCP 206) Tj
+T*
+(7  VC-HB-2700  rev A  qty 1  Duplex chain 10B-2) Tj
+T*
+(8  VC-HB-2800  rev A  qty 1  Sprocket 10B-2 15T drive) Tj
+T*
+(9  VC-HB-2810  rev A  qty 1  Sprocket 10B-2 15T idle) Tj
+T*
+(10  VC-HB-2900  rev A  qty 1  Chain tensioner) Tj
+T*
+(11  VC-HB-3000  rev A  qty 1  Power-off brake 24 V) Tj
+T*
+(12  VC-HB-3100  rev A  qty 2  Linear guide rail HGR20) Tj
+T*
+(13  VC-HB-3110  rev A  qty 4  Linear carriage HGH20) Tj
+T*
+(14  VC-HB-3200  rev A  qty 1  Carriage plate) Tj
+T*
+(15  VC-HB-3300  rev A  qty 1  Fastener kit, hub) Tj
+T*
+(Owner: Ground UP GmbH) Tj
+T*
+(Document status: preliminary) Tj
+T*
+(Identification: VC-ASM-2000) Tj
+T*
+(Revision index/letter: 0 / A) Tj
+T*
+(Date: 2026-11-04) Tj
+T*
+(Units: mm. Projection: first angle \(ISO 128\).) Tj
+T*
+(General tolerances: TODO.) Tj
+T*
+(ISO 7200 title-block fields. Not released for manufacture.) Tj
+T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000248 00000 n 
+0000001602 00000 n 
+trailer << /Size 6 /Root 1 0 R >>
+startxref
+1672
+%%EOF

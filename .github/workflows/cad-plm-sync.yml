@@ -1,0 +1,44 @@
+name: OdooPLM sync
+
+# Manual only. A push does not talk to Odoo.
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: Write draft records. Leave false for a dry run.
+        type: boolean
+        default: false
+      part:
+        description: Optional part number, for example VC-SH-1301
+        required: false
+        default: ""
+
+jobs:
+  plm-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install CAD dependencies
+        run: pip install -r requirements-cad.txt
+      - name: Sync the BOM into OdooPLM
+        env:
+          ODOO_URL: ${{ secrets.ODOO_URL }}
+          ODOO_DB: ${{ secrets.ODOO_DB }}
+          ODOO_USER: ${{ secrets.ODOO_USER }}
+          ODOO_API_KEY: ${{ secrets.ODOO_API_KEY }}
+          ODOO_PASSWORD: ${{ secrets.ODOO_PASSWORD }}
+          APPLY: ${{ inputs.apply }}
+          PART: ${{ inputs.part }}
+        run: |
+          set -eu
+          args=(plm-sync)
+          if [ "$APPLY" = "true" ]; then
+            args+=(--apply)
+          fi
+          if [ -n "$PART" ]; then
+            args+=(--part "$PART")
+          fi
+          python -m cad.tools.cli "${args[@]}"

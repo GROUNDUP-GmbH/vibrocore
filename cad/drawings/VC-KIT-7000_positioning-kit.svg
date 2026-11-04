@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="420mm" height="297mm" viewBox="0 0 420.0 297.0">
+<title>VC-KIT-7000 Positioning kit</title>
+<rect width="100%" height="100%" fill="#fff"/>
+<rect x="10" y="10" width="400" height="277" fill="none" stroke="#111" stroke-width="0.6"/>
+<rect x="14" y="14" width="392" height="269" fill="none" stroke="#111" stroke-width="0.25"/>
+<rect x="262" y="248" width="144" height="35" fill="none" stroke="#111" stroke-width="0.4"/>
+<text x="18" y="22" font-size="3.2" font-family="sans-serif">ISO 7200 title block · ISO 5457 A3 · not released for manufacture</text>
+<text x="20" y="36" font-size="4" font-family="sans-serif" font-weight="700">Parts list (same item numbers as the OdooPLM EBOM itemnum)</text>
+<text x="20" y="42" font-size="2.8" font-family="sans-serif">Item  Part number   Rev  Qty  Name</text>
+<text x="20" y="47" font-size="2.8" font-family="sans-serif">1      VC-PS-8100     A    1    viDoc RTK Light</text>
+<text x="20" y="51.2" font-size="2.8" font-family="sans-serif">2      VC-PS-8200     A    1    WLAN bridge</text>
+<text x="20" y="244" font-size="3" font-family="sans-serif">Schematic only. Component positions that are not dimensioned in the design documents are not drawn.</text>
+<text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
+<text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>
+<text x="268" y="278.2" font-size="2.4" font-family="sans-serif">Document title</text>
+<text x="332" y="278.2" font-size="2.6" font-family="sans-serif" font-weight="700">Positioning kit</text>
+<text x="268" y="282.4" font-size="2.4" font-family="sans-serif">Document type</text>
+<text x="332" y="282.4" font-size="2.6" font-family="sans-serif" font-weight="700">assembly drawing</text>
+<text x="268" y="286.59999999999997" font-size="2.4" font-family="sans-serif">Document status</text>
+<text x="332" y="286.59999999999997" font-size="2.6" font-family="sans-serif" font-weight="700">preliminary</text>
+<text x="268" y="290.79999999999995" font-size="2.4" font-family="sans-serif">Identification number</text>
+<text x="332" y="290.79999999999995" font-size="2.6" font-family="sans-serif" font-weight="700">VC-KIT-7000</text>
+<text x="268" y="294.99999999999994" font-size="2.4" font-family="sans-serif">Revision index / letter</text>
+<text x="332" y="294.99999999999994" font-size="2.6" font-family="sans-serif" font-weight="700">0 / A</text>
+<text x="268" y="299.19999999999993" font-size="2.4" font-family="sans-serif">Creator</text>
+<text x="332" y="299.19999999999993" font-size="2.6" font-family="sans-serif" font-weight="700">vibrocore cad export</text>
+<text x="268" y="303.3999999999999" font-size="2.4" font-family="sans-serif">Created</text>
+<text x="332" y="303.3999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">2026-11-04</text>
+<text x="268" y="307.5999999999999" font-size="2.4" font-family="sans-serif">Units</text>
+<text x="332" y="307.5999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">mm</text>
+<text x="268" y="311.7999999999999" font-size="2.4" font-family="sans-serif">Projection</text>
+<text x="332" y="311.7999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">first angle (ISO 128)</text>
+<text x="268" y="315.9999999999999" font-size="2.4" font-family="sans-serif">Sheet</text>
+<text x="332" y="315.9999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">1 / 1</text>
+</svg>

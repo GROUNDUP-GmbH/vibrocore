@@ -1,0 +1,71 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 1 /Kids [3 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 917 >>
+stream
+BT
+/F1 11 Tf
+36 800 Td
+16 TL
+(VC-ASM-3000 Frame assembly  assembly, preliminary) Tj
+T*
+(1  VC-FR-4100  rev A  qty 2  Aluminium profile 50x100x1500) Tj
+T*
+(2  VC-FR-4200  rev A  qty 8  Profile connector) Tj
+T*
+(3  VC-FR-4300  rev A  qty 1  Bottom steel plate) Tj
+T*
+(4  VC-FR-4400  rev A  qty 1  Top steel plate) Tj
+T*
+(5  VC-FR-4500  rev A  qty 1  Rod guide bushing) Tj
+T*
+(6  VC-FR-4600  rev A  qty 4  UTV mounting bracket) Tj
+T*
+(7  VC-FR-4700  rev A  qty 1  Tilt mechanism) Tj
+T*
+(8  VC-FR-4800  rev A  qty 4  Stabiliser foot) Tj
+T*
+(9  VC-FR-4900  rev A  qty 1  Fastener kit, frame) Tj
+T*
+(Owner: Ground UP GmbH) Tj
+T*
+(Document status: preliminary) Tj
+T*
+(Identification: VC-ASM-3000) Tj
+T*
+(Revision index/letter: 0 / A) Tj
+T*
+(Date: 2026-11-04) Tj
+T*
+(Units: mm. Projection: first angle \(ISO 128\).) Tj
+T*
+(General tolerances: TODO.) Tj
+T*
+(ISO 7200 title-block fields. Not released for manufacture.) Tj
+T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000248 00000 n 
+0000001216 00000 n 
+trailer << /Size 6 /Root 1 0 R >>
+startxref
+1286
+%%EOF

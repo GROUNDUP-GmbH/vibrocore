@@ -1,0 +1,63 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 1 /Kids [3 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 679 >>
+stream
+BT
+/F1 11 Tf
+36 800 Td
+16 TL
+(VC-FR-4100 Aluminium profile 50x100x1500) Tj
+T*
+(Fidelity: envelope) Tj
+T*
+(Source: docs/engineering/BOM.md#3) Tj
+T*
+(Box 50 x 100 x 1500 mm) Tj
+T*
+(TODO: mk 2004 slot geometry is not in the repository. The solid is the outer envelope only and is not a machining model.) Tj
+T*
+(TODO: Alloy and the exact mk order code.) Tj
+T*
+(Owner: Ground UP GmbH) Tj
+T*
+(Document status: preliminary) Tj
+T*
+(Identification: VC-FR-4100) Tj
+T*
+(Revision index/letter: 0 / A) Tj
+T*
+(Date: 2026-11-04) Tj
+T*
+(Units: mm. Projection: first angle \(ISO 128\).) Tj
+T*
+(General tolerances: TODO.) Tj
+T*
+(ISO 7200 title-block fields. Not released for manufacture.) Tj
+T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000248 00000 n 
+0000000978 00000 n 
+trailer << /Size 6 /Root 1 0 R >>
+startxref
+1048
+%%EOF
