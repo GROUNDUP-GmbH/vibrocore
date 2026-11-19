@@ -133,8 +133,9 @@ data_issues:
 - id: core-scanner-subtotal-mismatch
   summary: Closed 2026-11-19. The scanner subtotal is the VC-ASM-8400 rollup, EUR 429-780.
 - id: sampling-concept-2026-11-19
-  summary: The machine drives the 3.25 in casing. It does not use the DT325 inner string or a polycarbonate
-    liner. Lab sample tubes and push-on caps are not BOM lines. The split carrier is a draft study model.
+  summary: The sampling string is the 3.25 in outer casing and cutting shoe 205449. Open tubes sit in
+    the split carrier. O-ring 201325 stays, because it seals casing joints. Drive head 201385 and
+    retainer 208472 are obsolete and are not on a BOM.
 - id: mast-height-deficit
   summary: The 1500 mm profile is unchanged. The study layout in docs/engineering/MAST-LAYOUT.md and
     cad/export/layout/mast-stack.svg computes the deficit for one 1219.2 mm casing plus the head, the
@@ -973,8 +974,11 @@ parts:
   supplier_id: geoprobe_eu
   estimate_eur_low: 24.75
   estimate_eur_high: 24.75
-  notes: Offer 26100096, 2026-03-03, EUR 24.75 net for 25 rings, freight excluded. The casing joints
-    still need these rings. The inner-string parts do not.
+  notes: 'Offer 26100096, 2026-03-03, EUR 24.75 net for 25 rings, freight excluded. Geoprobe names this
+    part "O-Ring (3.25 in. Probe Rod)", quantity 25
+    (https://geoprobe.com/tooling/dt325-soil-sampling-system/mn201325). The rings seal the joints
+    between 3.25 in casing sections. They stay on VC-KIT-6000. The liner-retainer O-ring is a
+    different part (600428) and is not used.'
 - part_number: VC-GP-7200
   name: Cutting shoe 3.25 in
   revision_index: 0
@@ -1021,6 +1025,42 @@ parts:
   notes: Obsolete. Do not buy liners. Sample tubes and push-on caps are lab consumables and are not BOM
     lines. The split carrier VC-SP-7620 and VC-SP-7621 holds the open tubes. The old EUR 3-6 estimate
     is withdrawn.
+- part_number: VC-GP-7310
+  name: DT325 drive head
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: sampling
+  category: Sampling
+  spec: Geoprobe DT325 drive head, part 201385, with a 1.25 in pin. The pin fits the centre rod, not
+    the 3.25 in casing. The sonic head connects to the casing through VC-SH-1500.
+  legacy_ref: '6.110'
+  manufacturer_pn: '201385'
+  supplier_id: geoprobe_eu
+  estimate_eur_low: 171.34
+  estimate_eur_high: 171.34
+  lifecycle: obsolete
+  notes: 'Obsolete. Offer 26100096, 2026-03-03, EUR 171.34 net, freight excluded. The price is history
+    only and is not in any rollup. Geoprobe lists "DT325 Drive Head, 1.25 in. Pin"
+    (https://geoprobe.com/tooling/dt37-soil-sampling-system/mn201385). Do not buy it.'
+- part_number: VC-GP-7410
+  name: DT325 liner retainer HD
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: sampling
+  category: Sampling
+  spec: Geoprobe DT325 retainer HD, part 208472. It holds a liner in the inner string. This machine
+    does not use a liner. The half-shells hold the open tubes.
+  legacy_ref: '6.111'
+  manufacturer_pn: '208472'
+  supplier_id: geoprobe_eu
+  estimate_eur_low: 161.93
+  estimate_eur_high: 161.93
+  lifecycle: obsolete
+  notes: 'Obsolete. Offer 26100096, 2026-03-03, EUR 161.93 net, freight excluded. The price is history
+    only and is not in any rollup. Geoprobe lists "DT325 Retainer HD" and notes "No O-ring"
+    (https://geoprobe.com/tooling/dt325-soil-sampling-system/mn208472). Do not buy it.'
 - part_number: VC-HB-2100
   name: NEMA 42 closed-loop stepper
   revision_index: 0
@@ -1275,12 +1315,12 @@ parts:
   supply: kit
   subsystem: sampling
   category: Sampling
-  spec: Casing rods, cutting shoes, joint O-rings and one draft split carrier. Field kit, not part of
-    the machine BOM. Sample tubes and push-on caps are lab consumables and are not lines of this kit.
+  spec: The sampling string is the 3.25 in outer casing and the cutting shoe. Open lab tubes sit inside
+    on the draft split carrier. O-rings seal the casing joints. Field kit, not part of the machine BOM.
   legacy_ref: '6'
-  notes: 'Drive head 201385 (offer EUR 171.34) is not on this kit. Its pull rating is not in the
-    repository. Liner retainer 208472 (offer EUR 161.93) is not on this kit. The half-shells hold the
-    open tubes. The GH60 cap is obsolete. See docs/engineering/SAMPLING.md.'
+  notes: 'Kit lines are VC-GP-7100, VC-GP-7150, VC-GP-7200, VC-SP-7620, VC-SP-7621 and VC-SP-7630.
+    Sample tubes and push-on caps are lab consumables. VC-GP-7300, VC-GP-7310, VC-GP-7400 and
+    VC-GP-7410 are obsolete history and are not kit lines. See docs/engineering/SAMPLING.md.'
   sale_ok: true
 - part_number: VC-KIT-7000
   name: Positioning kit
@@ -1747,7 +1787,7 @@ parts:
   - Flange thickness, bolt-circle diameter and whether the 6x M10 holes are tapped or through.
   - Flange diameter 80 mm is published, but it is not modelled until the thickness is known.
 - part_number: VC-SH-1500
-  name: DT325 adapter
+  name: Casing adapter
   revision_index: 0
   revision_letter: A
   supply: subcontract

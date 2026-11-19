@@ -189,7 +189,7 @@ At any instant t:
 | Combined motor mass           | 14.4 kg (2 × 7.2)  |                                 |
 | Total vibrating mass          | ~37 kg              | Plate + motors + column + adapt.|
 | Center column OD              | 50 mm               | 42CrMo4, flanged to plate       |
-| DT325 adapter                 | Custom, threaded    | Connects column to Geoprobe rod |
+| Casing adapter                | Custom, threaded    | Connects column to the 3.25 in casing |
 
 ## 4. Force & Frequency Analysis
 
@@ -526,7 +526,7 @@ Cable sizing for 2 × 1.45 A = 2.9 A total:
 - [ ] Confirm exact VFD frequency needed for 6,000 rpm (pole count verification)
 - [ ] Vibrating plate FEA (natural frequencies, stress under cyclic 8 kN)
 - [ ] Optimal plate rib pattern for maximum stiffness vs. weight
-- [ ] DT325 adapter thread specification (verify with Geoprobe)
+- [ ] Casing adapter thread specification (verify with Geoprobe)
 - [ ] Field test: optimal VFD frequency ramp for different soil types
 - [ ] Temperature monitoring: motor surface temp during extended operation
 - [ ] Eccentric weight adjustment procedure (OLI manual)

@@ -172,8 +172,11 @@ Arithmetic: Option A rollup EUR 1,565–2,460, minus the WAGO rack EUR 1,030–1
 
 ## 6. Casing and split carrier
 
-The machine drives the 3.25 in casing. It does not use the DT325 inner string.
-Sample tubes and push-on caps are lab consumables. They are not lines in this table.
+The sampling string is the 3.25 in outer casing and the cutting shoe at the bottom.
+Open lab tubes sit inside the casing.
+The split carrier holds those tubes.
+Sample tubes and push-on caps are lab consumables.
+They are not lines in this table.
 See `docs/engineering/SAMPLING.md`.
 
 | # | Component               | Spec                              | Qty | Est. €   | Supplier / Source          |
@@ -183,9 +186,12 @@ See `docs/engineering/SAMPLING.md`.
 |58 | Drive cap GH60          | PN 201275. Obsolete. Not on the kit. | 0 | 586.47 | History only. Do not buy. |
 |59 | Core liner              | Withdrawn. Do not buy.            |   0 | unknown  | Not used                   |
 
-O-rings, half-shells and the other new lines are in section 9.
-The kit rollup is EUR 2,007.85. That sum is two rods, four shoes and one O-ring pack.
+The kit lines are two outer rods, one O-ring pack, four cutting shoes and the two half-shells with their fasteners.
+The O-ring pack stays. It seals the 3.25 in casing joints.
+The kit rollup is EUR 2,007.85.
+That sum is two rods, four shoes and one O-ring pack.
 The half-shells have no price yet.
+Drive head 201385 and retainer HD 208472 are obsolete history. They are not kit lines.
 
 ## 7. Positioning System
 
@@ -501,7 +507,9 @@ Do not invent an order code.
 | 105 | Split carrier half A | Draft. Holds open tubes. Tube OD and length TBD. | 1 | unknown | Custom (EU) |
 | 106 | Split carrier half B | Draft mirror of half A. | 1 | unknown | Custom (EU) |
 | 107 | Split carrier fasteners | Clamp the two halves. Size TBD. | 1 | unknown | TBD |
-| 108 | Probe rod O-ring pack | PN 201325, 25 rings. | 1 | 24.75 | Offer 26100096 |
+| 108 | Probe rod O-ring pack | PN 201325, 25 rings. Seals the 3.25 in casing joints. | 1 | 24.75 | Offer 26100096 |
+| 110 | DT325 drive head | PN 201385, 1.25 in pin. Obsolete. Not on the kit. | 0 | 171.34 | History only |
+| 111 | DT325 liner retainer HD | PN 208472. Obsolete. Not on the kit. | 0 | 161.93 | History only |
 | 109 | Load-cell overload bypass | Closes before 5 kN. Must carry 9499 N. | 1 | unknown | Custom (EU) |
 
 ## Supplier Directory (EU Priority)

@@ -16,7 +16,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `gas-spring-vs-electric-tilt`: BOM.md §3 #38 gas-spring tilt (VC-FR-4700) conflicts with §8b electric tilt (#73-75). V1.1 firmware drives the electric tilt. VC-FR-4700 is obsolete/alternative and is not on the live frame BOM.
 - `option-b-savings-v1-vs-v11`: Realistic budget is a rounded scenario, not the YAML rollup. Option B is EUR 530 less than Option A for V1 (8968-8438) and EUR 680 less for V1.1 (10718-10038).
 - `core-scanner-subtotal-mismatch`: Closed 2026-11-19. The scanner subtotal is the VC-ASM-8400 rollup, EUR 429-780.
-- `sampling-concept-2026-11-19`: The machine drives the 3.25 in casing. It does not use the DT325 inner string or a polycarbonate liner. Lab sample tubes and push-on caps are not BOM lines. The split carrier is a draft study model.
+- `sampling-concept-2026-11-19`: The sampling string is the 3.25 in outer casing and cutting shoe 205449. Open tubes sit in the split carrier. O-ring 201325 stays, because it seals casing joints. Drive head 201385 and retainer 208472 are obsolete and are not on a BOM.
 - `mast-height-deficit`: The 1500 mm profile is unchanged. The study layout in docs/engineering/MAST-LAYOUT.md and cad/export/layout/mast-stack.svg computes the deficit for one 1219.2 mm casing plus the head, the shoe and the adapter. Shoe length, adapter length, carriage height and ground clearance are TBD.
 - `se050-double-count`: Closed 2026-11-19. VC-CT-6410 is obsolete. The SE050 breakout is inside VC-CT-6400 and is not a second purchase.
 - `rut241-9v-converter`: Closed 2026-11-19. VC-CT-6620 is obsolete. The RUT241 input is 9-30 V DC. The router runs from the 24 V rail.
@@ -100,7 +100,9 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-GP-7150` Probe rod O-ring pack: no solid. Dimensions were not complete enough to model.
 - `VC-GP-7200` Cutting shoe 3.25 in: no solid. Dimensions were not complete enough to model.
 - `VC-GP-7300` Drive cap GH60: no solid. Dimensions were not complete enough to model.
+- `VC-GP-7310` DT325 drive head: no solid. Dimensions were not complete enough to model.
 - `VC-GP-7400` Core liner 3.25 inch: no solid. Dimensions were not complete enough to model.
+- `VC-GP-7410` DT325 liner retainer HD: no solid. Dimensions were not complete enough to model.
 - `VC-HB-2100` NEMA 42 closed-loop stepper: Exact catalogue number, body length and mass.
 - `VC-HB-2200` Planetary gearbox PLPE120-040: Input flange code for the selected NEMA 42 motor.
 - `VC-HB-2300` Closed-loop stepper driver: Final driver, and therefore the connector and the encoder interface.
@@ -167,7 +169,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-SH-1302` Stiffener rib: Weld position on the plate.
 - `VC-SH-1400` Center column: Flange thickness, bolt-circle diameter and whether the 6x M10 holes are tapped or through.
 - `VC-SH-1400` Center column: Flange diameter 80 mm is published, but it is not modelled until the thickness is known.
-- `VC-SH-1500` DT325 adapter: Thread designation, engagement length and wrench flats. Do not model until the Geoprobe interface is confirmed.
+- `VC-SH-1500` Casing adapter: Thread designation, engagement length and wrench flats. Do not model until the Geoprobe interface is confirmed.
 - `VC-SH-1600` Rubber isolator M12: Catalogue number, free height and stud length.
 - `VC-SH-1700` Motor cable shielded: Exact length and gland sizes.
 - `VC-SH-1800` Fastener kit, sonic head: no solid. Dimensions were not complete enough to model.

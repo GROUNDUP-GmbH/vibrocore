@@ -45,9 +45,9 @@
    - Probe rod 3.25 in x 48 in (PN 201446) — one rod, 17.7 kg, EUR 389.99
    - Inside diameter used for the carrier: 2.625 in = 66.675 mm (decision 2026-11-19)
    - Cutting shoe (PN 205449) — EUR 300.78, outside diameter 3.45 in = 87.63 mm
-   - O-rings (PN 201325, pack of 25) — EUR 24.75
-   - Drive head (PN 201385) — EUR 171.34, not on the BOM
-   - Liner retainer HD (PN 208472) — EUR 161.93, not on the BOM
+   - O-rings (PN 201325, pack of 25) — EUR 24.75. Geoprobe name: O-Ring (3.25 in. Probe Rod). On the kit.
+   - Drive head (PN 201385) — EUR 171.34. Geoprobe name: DT325 Drive Head, 1.25 in pin. Obsolete. Not on a BOM.
+   - Liner retainer HD (PN 208472) — EUR 161.93. Geoprobe name: DT325 Retainer HD. Obsolete. Not on a BOM.
    - Drive cap GH60 (PN 201275) — EUR 586.47, obsolete, not on the kit
 
 ## Related Open-Source Projects

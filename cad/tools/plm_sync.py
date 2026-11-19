@@ -2,11 +2,12 @@
 
 The YAML file stays the source. A second run updates the same engineering
 code and revision instead of inserting another one. A file is uploaded only
-when the attachment has no bytes or the stored checksum differs. Float fields
-use the decimal precision from fields_get. engineering_state is written only
-as "draft" on create. action_confirm, action_release and new_version are not
-called, and a record that is no longer draft is left alone, including its
-file bytes and its engineering BOM.
+when the attachment record is missing, the stored field has no bytes, or the
+stored checksum or bytes differ. Float fields use the decimal precision from
+fields_get. engineering_state is written only as "draft" on create.
+action_confirm, action_release and new_version are not called, and a record
+that is no longer draft is left alone, including its file bytes and its
+engineering BOM.
 """
 
 from __future__ import annotations
@@ -25,9 +26,14 @@ from cad.tools.plm_client import PlmClient, PlmError
 
 DRAFT = "draft"
 ADR_REVISION = 0
-# Reading a remote binary is cheap under this size. Larger printouts are not
-# downloaded when their source datas is unchanged and they have no checksum.
-CHEAP_BYTES = 1024 * 1024
+# OdooPLM 19.0 leaves checksum False and file_size 0 while the bytes still
+# sit in datas (store_fname / db_datas) or in the printout Binary. Those
+# files are a few MB. Do not download a larger one just to compare it.
+CONTENT_LIMIT = 16 * 1024 * 1024
+# One read() stays inside this many raw bytes and this many records.
+READ_BUDGET = 16 * 1024 * 1024
+READ_BATCH_COUNT = 4
+PROBE_BATCH = 40
 _EMPTY_SHA1 = hashlib.sha1(b"").hexdigest()
 M2O_FIELDS = {
     "product_tmpl_id",
@@ -131,6 +137,26 @@ def _sha1(content: bytes) -> str:
     return hashlib.sha1(content).hexdigest()
 
 
+def _file_digest(path: Path) -> tuple[str, int]:
+    """SHA1 and length of a local file. The file is not kept in memory."""
+    digest = hashlib.sha1()
+    size = 0
+    with path.open("rb") as handle:
+        while True:
+            chunk = handle.read(1024 * 1024)
+            if not chunk:
+                break
+            digest.update(chunk)
+            size += len(chunk)
+    return digest.hexdigest(), size
+
+
+def _int_size(value) -> int | None:
+    if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+        return None
+    return value
+
+
 def _normalize_checksum(value) -> str | None:
     if not isinstance(value, str):
         return None
@@ -140,25 +166,62 @@ def _normalize_checksum(value) -> str | None:
     return None
 
 
-def _checksum_decision(local: bytes, checksum, file_size) -> str | None:
-    """Return new, changed, unchanged, or None when the checksum cannot decide.
+def _checksum_decision(local_sha1: str, local_size: int, checksum, file_size) -> str | None:
+    """Return new, changed, unchanged, or None when the bytes must be read.
 
     `checksum` is the SHA1 of the stored bytes. `file_size` is their length.
-    A missing checksum and a size of 0 mean the attachment has no datas.
+    None means the checksum is missing. OdooPLM 19.0 leaves it False and
+    leaves file_size at 0 while `datas` or `printout` still holds the file.
+    A checksum of the empty file means there is no stored content.
+    A file_size of 0 does not, when a real checksum is present.
     """
     stored = _normalize_checksum(checksum)
-    size = file_size if isinstance(file_size, int) and not isinstance(file_size, bool) else None
-    local_sum = _sha1(local)
-    if stored is not None:
-        size_ok = size is None or size == len(local)
-        if stored == local_sum and size_ok:
-            return "unchanged"
-        if size == 0 or stored == _EMPTY_SHA1:
-            return "new" if local else "unchanged"
+    size = _int_size(file_size)
+    if stored is None:
+        return None
+    if stored == _EMPTY_SHA1:
+        return "new" if local_size else "unchanged"
+    if size == 0:
+        return "unchanged" if stored == local_sha1 else "changed"
+    if stored == local_sha1 and (size is None or size == local_size):
+        return "unchanged"
+    return "changed"
+
+
+def _chunks(items: list, count: int):
+    step = max(1, int(count))
+    for start in range(0, len(items), step):
+        yield items[start : start + step]
+
+
+def _groups_by_budget(items: list[tuple[int, int]], budget: int, count: int):
+    """Group (id, size) pairs so one read stays within budget and count."""
+    group: list[int] = []
+    total = 0
+    for record_id, size in items:
+        size = max(0, int(size))
+        if group and (len(group) >= count or total + size > budget):
+            yield group
+            group = []
+            total = 0
+        group.append(record_id)
+        total += size
+    if group:
+        yield group
+
+
+def _bytes_reason(remote_sha1: str | None, local_sha1: str, local_size: int) -> str:
+    if not remote_sha1:
+        return "new" if local_size else "unchanged"
+    return "unchanged" if remote_sha1 == local_sha1 else "changed"
+
+
+def _oversized_reason(datas_reason: str) -> str:
+    if datas_reason == "unchanged":
+        return "unchanged"
+    if datas_reason == "changed":
         return "changed"
-    if size in (None, 0):
-        return "new" if local else "unchanged"
-    return None
+    return "new"
 
 
 def _decode_binary(value) -> bytes:
@@ -225,6 +288,13 @@ class PlmSync:
         self._products: dict[str, dict] = {}
         self._adrs: list[AdrDocument] = []
         self._field_info: dict[str, dict] = {}
+        self._attachments_ready = False
+        self._attachment_index: dict[tuple, list[dict]] = {}
+        self._printout_rows: dict[int, list[dict]] = {}
+        # SHA1 of a remote field, or None when the field has no bytes.
+        # The base64 payload is hashed and dropped.
+        self._remote_sha1: dict[tuple[int, str], str | None] = {}
+        self._too_big: set[tuple[int, str]] = set()
 
     def run(self) -> SyncReport:
         self._adrs = self._selected_adrs()
@@ -244,6 +314,7 @@ class PlmSync:
             self._sync_product(part)
         for part in self._product_parts():
             self._sync_supplier(part)
+        self._prefetch_attachment_binaries()
         for part, payload in self._document_payloads():
             self._sync_document(part, payload)
         for adr in self._adrs:
@@ -398,34 +469,232 @@ class PlmSync:
                 fields.append(name)
         return fields
 
-    def _datas_reason(self, current: dict | None, local: bytes) -> str:
+    def _use_field(self, name: str) -> bool:
+        known = self._model_fields("ir.attachment")
+        return (not known) or (name in known)
+
+    def _column_checksum(self, row: dict):
+        if not self._use_field("checksum"):
+            return None
+        return row.get("checksum")
+
+    def _column_size(self, row: dict) -> int | None:
+        if not self._use_field("file_size"):
+            return None
+        return _int_size(row.get("file_size"))
+
+    def _metadata_decision(self, row: dict, local_sha1: str, local_size: int) -> str | None:
+        return _checksum_decision(
+            local_sha1,
+            local_size,
+            self._column_checksum(row),
+            self._column_size(row),
+        )
+
+    def _datas_reason(self, current: dict | None, local_sha1: str, local_size: int) -> str:
         if not current or not current.get("id"):
             return "new"
-        known = self._model_fields("ir.attachment")
-        use_checksum = (not known) or ("checksum" in known)
-        use_size = (not known) or ("file_size" in known)
-        decision = _checksum_decision(
-            local,
-            current.get("checksum") if use_checksum else None,
-            current.get("file_size") if use_size else None,
-        )
+        decision = self._metadata_decision(current, local_sha1, local_size)
         if decision:
             return decision
-        file_size = current.get("file_size") if use_size else None
-        if isinstance(file_size, int) and 0 < file_size <= CHEAP_BYTES:
-            remote = self._read_binary(int(current["id"]), "datas")
-            if not remote:
-                return "new"
-            return "unchanged" if _sha1(remote) == _sha1(local) else "changed"
-        return "changed"
+        size = self._column_size(current)
+        if size is not None and size > CONTENT_LIMIT:
+            return "changed"
+        return self._content_reason(int(current["id"]), "datas", local_sha1, local_size, "changed")
+
+    def _attachment_jobs(self) -> list[tuple[str, int, bool]]:
+        jobs = []
+        for part, payload in self._document_payloads():
+            if not payload.get("odoo_datas_file"):
+                continue
+            jobs.append(
+                (part.engineering_code, part.revision_index, bool(payload.get("odoo_printout_file")))
+            )
+        for adr in self._adrs:
+            jobs.append((adr.code, ADR_REVISION, False))
+        return jobs
+
+    def _prefetch_attachment_binaries(self) -> None:
+        """Read datas and printout for documents whose checksum cannot decide.
+
+        OdooPLM stores the document bytes on ir.attachment.datas (computed from
+        store_fname or db_datas) and the PDF on ir.attachment.printout. Both
+        are base64 on XML-RPC read(), as the logged-in user. The printout HTTP
+        route renders a report, so this path does not call it.
+        """
+        jobs = self._attachment_jobs()
+        self._attachment_index = {}
+        self._printout_rows = {}
+        self._attachments_ready = True
+        if not jobs:
+            return
+        codes = sorted({code for code, _revision, _has_pdf in jobs})
+        fields = list(
+            dict.fromkeys(self._document_read_fields() + ["engineering_code", "engineering_revision"])
+        )
+        rows = self._execute(
+            "ir.attachment",
+            "search_read",
+            [[("engineering_code", "in", codes)]],
+            {"fields": fields},
+        ) or []
+        for row in rows:
+            key = (row.get("engineering_code"), row.get("engineering_revision"))
+            self._attachment_index.setdefault(key, []).append(row)
+        datas_ids = []
+        printout_ids = []
+        doc_ids = []
+        for code, revision, has_pdf in jobs:
+            found = self._attachment_index.get((code, revision), [])
+            if len(found) != 1:
+                continue
+            row = found[0]
+            record_id = int(row["id"])
+            if (row.get("engineering_state") or DRAFT) != DRAFT:
+                continue
+            if _normalize_checksum(self._column_checksum(row)) is None:
+                size = self._column_size(row)
+                if size is not None and size > CONTENT_LIMIT:
+                    self._too_big.add((record_id, "datas"))
+                else:
+                    datas_ids.append(record_id)
+            if not has_pdf:
+                continue
+            doc_ids.append(record_id)
+        self._prefetch_field(datas_ids, "datas")
+        if not doc_ids:
+            return
+        storage_fields = ["id", "res_id"]
+        for name in ("checksum", "file_size"):
+            if self._use_field(name):
+                storage_fields.append(name)
+        storage = self._execute(
+            "ir.attachment",
+            "search_read",
+            [[
+                ("res_model", "=", "ir.attachment"),
+                ("res_field", "=", "printout"),
+                ("res_id", "in", doc_ids),
+            ]],
+            {"fields": storage_fields},
+        ) or []
+        for row in storage:
+            self._printout_rows.setdefault(int(row["res_id"]), []).append(row)
+        for doc_id in doc_ids:
+            stored = self._printout_rows.get(doc_id, [])
+            if any(_normalize_checksum(self._column_checksum(row)) for row in stored):
+                continue
+            sizes = [self._column_size(row) for row in stored]
+            sizes = [size for size in sizes if size is not None]
+            if sizes and max(sizes) > CONTENT_LIMIT:
+                self._too_big.add((doc_id, "printout"))
+                continue
+            printout_ids.append(doc_id)
+        self._prefetch_field(printout_ids, "printout")
+
+    def _prefetch_field(self, ids: list[int], field_name: str) -> None:
+        pending = []
+        seen = set()
+        for record_id in ids:
+            record_id = int(record_id)
+            key = (record_id, field_name)
+            if record_id in seen or key in self._remote_sha1 or key in self._too_big:
+                continue
+            seen.add(record_id)
+            pending.append(record_id)
+        small: list[tuple[int, int]] = []
+        for chunk in _chunks(pending, PROBE_BATCH):
+            rows = self._execute(
+                "ir.attachment",
+                "read",
+                [chunk],
+                {"fields": ["id", field_name], "context": {"bin_size": True}},
+            ) or []
+            got = set()
+            for row in rows:
+                record_id = int(row["id"])
+                got.add(record_id)
+                sized = self._note_probe(record_id, field_name, row.get(field_name, False))
+                if sized is not None:
+                    small.append(sized)
+            for record_id in chunk:
+                if record_id not in got:
+                    self._remote_sha1[(record_id, field_name)] = None
+        for chunk in _groups_by_budget(small, READ_BUDGET, READ_BATCH_COUNT):
+            rows = self._execute(
+                "ir.attachment",
+                "read",
+                [chunk],
+                {"fields": ["id", field_name]},
+            ) or []
+            got = set()
+            for row in rows:
+                record_id = int(row["id"])
+                got.add(record_id)
+                self._note_bytes(record_id, field_name, _decode_binary(row.get(field_name)))
+            for record_id in chunk:
+                if record_id not in got:
+                    self._remote_sha1[(record_id, field_name)] = None
+
+    def _note_probe(self, record_id: int, field_name: str, value) -> tuple[int, int] | None:
+        """Remember a bin_size probe. Return (id, size) when the bytes are still needed."""
+        key = (int(record_id), field_name)
+        if value in (False, None, ""):
+            self._remote_sha1[key] = None
+            return None
+        if isinstance(value, (bytes, bytearray)):
+            self._note_bytes(record_id, field_name, bytes(value))
+            return None
+        if isinstance(value, str):
+            size = _parse_human_size(value)
+            if size is None:
+                self._note_bytes(record_id, field_name, _decode_binary(value))
+                return None
+            if size == 0:
+                self._remote_sha1[key] = None
+                return None
+            if size > CONTENT_LIMIT:
+                self._too_big.add(key)
+                return None
+            return (int(record_id), size)
+        self._too_big.add(key)
+        return None
+
+    def _note_bytes(self, record_id: int, field_name: str, raw: bytes) -> None:
+        """Hash bytes already in memory, then drop them."""
+        key = (int(record_id), field_name)
+        self._too_big.discard(key)
+        self._remote_sha1[key] = _sha1(raw) if raw else None
+
+    def _content_reason(
+        self,
+        record_id: int,
+        field_name: str,
+        local_sha1: str,
+        local_size: int,
+        fallback: str,
+    ) -> str:
+        key = (int(record_id), field_name)
+        if key in self._remote_sha1:
+            return _bytes_reason(self._remote_sha1[key], local_sha1, local_size)
+        if key in self._too_big:
+            return fallback
+        value = self._probe_binary(record_id, field_name)
+        sized = self._note_probe(record_id, field_name, value)
+        if sized is not None:
+            self._note_bytes(record_id, field_name, self._read_binary(record_id, field_name))
+        if key in self._remote_sha1:
+            return _bytes_reason(self._remote_sha1[key], local_sha1, local_size)
+        return fallback
 
     def _printout_storage(self, document_id: int) -> list[dict]:
         if not document_id:
             return []
-        fields = ["id"]
-        known = self._model_fields("ir.attachment")
+        if self._attachments_ready:
+            return list(self._printout_rows.get(int(document_id), []))
+        fields = ["id", "res_id"]
         for name in ("checksum", "file_size"):
-            if not known or name in known:
+            if self._use_field(name):
                 fields.append(name)
         found = self._execute(
             "ir.attachment",
@@ -439,81 +708,54 @@ class PlmSync:
         )
         return list(found or [])
 
-    def _printout_reason(self, document_id: int, local: bytes, datas_reason: str) -> str:
+    def _printout_reason(self, document_id: int, local_sha1: str, local_size: int, datas_reason: str) -> str:
         if not document_id:
             return "new"
         rows = self._printout_storage(document_id)
         if rows:
-            return self._reason_from_storage(rows, local, datas_reason, document_id)
-        return self._printout_from_field(document_id, local, datas_reason)
+            return self._reason_from_storage(rows, local_sha1, local_size, datas_reason, document_id)
+        return self._content_reason(
+            document_id, "printout", local_sha1, local_size, _oversized_reason(datas_reason)
+        )
 
-    def _reason_from_storage(self, rows: list[dict], local: bytes, datas_reason: str, document_id: int) -> str:
+    def _reason_from_storage(
+        self,
+        rows: list[dict],
+        local_sha1: str,
+        local_size: int,
+        datas_reason: str,
+        document_id: int,
+    ) -> str:
         decisions = []
         for row in rows:
-            decision = _checksum_decision(local, row.get("checksum"), row.get("file_size"))
+            decision = _checksum_decision(
+                local_sha1,
+                local_size,
+                self._column_checksum(row),
+                self._column_size(row),
+            )
             if decision == "unchanged":
                 return "unchanged"
             if decision:
                 decisions.append(decision)
         if "changed" in decisions:
             return "changed"
-        if decisions and "new" not in decisions:
-            return decisions[0]
-        sizes = [
-            row.get("file_size")
-            for row in rows
-            if isinstance(row.get("file_size"), int) and not isinstance(row.get("file_size"), bool)
-        ]
-        if sizes and max(sizes) == 0 and not decisions:
+        if "new" in decisions:
             return "new"
-        if any(0 < size <= CHEAP_BYTES for size in sizes):
-            return self._compare_printout_bytes(document_id, local)
-        if decisions:
-            # Checksum said the stored printout is empty, or it differs.
-            return "new" if "new" in decisions and "changed" not in decisions else "changed"
-        if datas_reason == "unchanged":
-            return "unchanged"
-        return "changed" if datas_reason == "changed" else "new"
-
-    def _printout_from_field(self, document_id: int, local: bytes, datas_reason: str) -> str:
-        value = self._probe_binary(document_id, "printout")
-        if value in (False, None, ""):
-            return "new"
-        if isinstance(value, (bytes, bytearray)):
-            remote = bytes(value)
-            if not remote:
-                return "new"
-            return "unchanged" if _sha1(remote) == _sha1(local) else "changed"
-        if isinstance(value, str):
-            size = _parse_human_size(value)
-            if size is not None:
-                if size == 0:
-                    return "new"
-                if size <= CHEAP_BYTES:
-                    return self._compare_printout_bytes(document_id, local)
-                if datas_reason == "unchanged":
-                    return "unchanged"
-                return "changed" if datas_reason == "changed" else "new"
-            remote = _decode_binary(value)
-            if not remote:
-                return "new"
-            return "unchanged" if _sha1(remote) == _sha1(local) else "changed"
-        if datas_reason == "unchanged":
-            return "unchanged"
-        return "changed" if datas_reason == "changed" else "new"
-
-    def _compare_printout_bytes(self, document_id: int, local: bytes) -> str:
-        remote = self._read_binary(document_id, "printout")
-        if not remote:
-            return "new"
-        return "unchanged" if _sha1(remote) == _sha1(local) else "changed"
+        sizes = [self._column_size(row) for row in rows]
+        sizes = [size for size in sizes if size is not None]
+        fallback = _oversized_reason(datas_reason)
+        if sizes and max(sizes) > CONTENT_LIMIT:
+            return fallback
+        # file_size 0 is not an empty PDF. Read ir.attachment.printout.
+        return self._content_reason(document_id, "printout", local_sha1, local_size, fallback)
 
     def _probe_binary(self, record_id: int, field_name: str):
         rows = self._execute(
             "ir.attachment",
             "read",
-            [[record_id]],
-            {"fields": [field_name], "context": {"bin_size": True}},
+            [[int(record_id)]],
+            {"fields": ["id", field_name], "context": {"bin_size": True}},
         )
         if not rows:
             return False
@@ -523,8 +765,8 @@ class PlmSync:
         rows = self._execute(
             "ir.attachment",
             "read",
-            [[record_id]],
-            {"fields": [field_name]},
+            [[int(record_id)]],
+            {"fields": ["id", field_name]},
         )
         if not rows:
             return b""
@@ -551,10 +793,12 @@ class PlmSync:
             return "unchanged"
         if current is None or not document_id:
             reason = "new"
-            content = b"" if self.dry_run or not document_id else path.read_bytes()
         else:
+            local_sha1, local_size = _file_digest(path)
+            reason = self._datas_reason(current, local_sha1, local_size)
+        content = b""
+        if reason in {"new", "changed"} and not self.dry_run and document_id:
             content = path.read_bytes()
-            reason = self._datas_reason(current, content)
         self._send_upload("/plm_document_upload/upload", document_id, key, filename, content, reason)
         return reason
 
@@ -572,8 +816,11 @@ class PlmSync:
         if not document_id:
             self._send_upload("/plm_document_upload/upload_pdf", 0, key, filename, b"", "new")
             return
-        content = path.read_bytes()
-        reason = self._printout_reason(document_id, content, datas_reason)
+        local_sha1, local_size = _file_digest(path)
+        reason = self._printout_reason(document_id, local_sha1, local_size, datas_reason)
+        content = b""
+        if reason in {"new", "changed"} and not self.dry_run:
+            content = path.read_bytes()
         self._send_upload("/plm_document_upload/upload_pdf", document_id, key, filename, content, reason)
 
     def _xml(self, xml_id: str) -> int | None:
@@ -720,6 +967,13 @@ class PlmSync:
         return vals
 
     def _find_part_record(self, model: str, part: Part, fields: list[str]) -> dict | None:
+        if model == "ir.attachment" and self._attachments_ready:
+            found = self._attachment_index.get((part.engineering_code, part.revision_index), [])
+            if len(found) > 1:
+                raise PlmError(
+                    f"{model} {part.part_number} rev {part.revision_index} exists more than once."
+                )
+            return found[0] if found else None
         found = self._execute(
             model,
             "search_read",
@@ -976,6 +1230,11 @@ class PlmSync:
         self.report.add("create", "plm.component.document.rel", key, f"doc_id={document_id}")
 
     def _find_adr_record(self, adr: AdrDocument, fields: list[str]) -> dict | None:
+        if self._attachments_ready:
+            found = self._attachment_index.get((adr.code, ADR_REVISION), [])
+            if len(found) > 1:
+                raise PlmError(f"ir.attachment {adr.code} rev {ADR_REVISION} exists more than once.")
+            return found[0] if found else None
         found = self._execute(
             "ir.attachment",
             "search_read",

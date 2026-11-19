@@ -13,6 +13,31 @@ from cad.tools.pull_force import (
 )
 
 
+def test_sampling_string_is_the_outer_casing_only():
+    bom = load_bom()
+    children = {line.part_number for line in bom.children("VC-KIT-6000")}
+    assert children == {
+        "VC-GP-7100",
+        "VC-GP-7150",
+        "VC-GP-7200",
+        "VC-SP-7620",
+        "VC-SP-7621",
+        "VC-SP-7630",
+    }
+    rings = bom.part("VC-GP-7150")
+    assert rings.manufacturer_pn == "201325"
+    assert rings.lifecycle == "active"
+    drive_head = bom.part("VC-GP-7310")
+    retainer = bom.part("VC-GP-7410")
+    assert drive_head.manufacturer_pn == "201385"
+    assert retainer.manufacturer_pn == "208472"
+    for part in (bom.part("VC-GP-7300"), bom.part("VC-GP-7400"), drive_head, retainer):
+        assert part.lifecycle == "obsolete"
+        assert part.part_number not in children
+        for assembly in bom.assemblies.values():
+            assert part.part_number not in {line.part_number for line in assembly.lines}
+
+
 def test_casing_rod_is_one_rod_and_the_gh60_cap_is_off_the_kit():
     bom = load_bom()
     rod = bom.part("VC-GP-7100")

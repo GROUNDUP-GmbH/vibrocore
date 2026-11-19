@@ -25,12 +25,21 @@ bytes onto an ir.attachment that already has is_plm set:
 - POST /plm_document_upload/upload
     auth="user". Multipart fields mod_file (the bytes), filename, and
     doc_id. doc_id is json.loads'd, so the text "123" becomes the integer
-    123. Writes ir.attachment.datas and name. 400 when the id is missing or
+    123. The id is the ir.attachment id, not the engineering code. The
+    route writes ir.attachment.datas and name from base64.b64encode of
+    mod_file.stream.read(). The success body is exactly "Upload succeeded".
+    An empty file part still gets that body. 400 when the id is missing or
     is not a PLM document. hostname and hostpws are left empty on purpose:
     setupCadOpen records a CAD session only when both are set.
 - POST /plm_document_upload/upload_pdf
     auth="user". Multipart fields file_stream and doc_id (same JSON rule).
-    Writes ir.attachment.printout.
+    Writes ir.attachment.printout. The success body is "Upload succeeded".
+
+A session without a user is auth="user" failure. Odoo answers HTTP 303 to
+/web/login. This client does not follow that redirect. HTTP 200 alone is
+not a stored file. After the POST the client reads the field. When the
+bytes are missing it writes the same field over JSON-RPC (base64 text) and
+reads it again. An empty read is an error. The upload is not a success.
 
 Products, the document row, the component link and the engineering BOM are
 not on those routes. They go through JSON-RPC /jsonrpc, service "object",
@@ -41,6 +50,8 @@ so either the account password or an RPC API key is accepted there.
 
 from __future__ import annotations
 
+import base64
+import binascii
 import json
 import uuid
 import urllib.error
@@ -68,6 +79,13 @@ REFUSED_METHODS = frozenset(
 
 class PlmError(RuntimeError):
     pass
+
+
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    """Return the 3xx. A login redirect is not an upload success."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
 
 
 @dataclass(frozen=True)
@@ -125,7 +143,10 @@ class PlmClient:
         self.uid: int | None = None
         self.csrf_token: str | None = None
         self._jar = CookieJar()
-        self._opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self._jar))
+        self._opener = urllib.request.build_opener(
+            urllib.request.HTTPCookieProcessor(self._jar),
+            _NoRedirect(),
+        )
         self._rpc_id = 0
 
     def isalive(self) -> None:
@@ -203,22 +224,56 @@ class PlmClient:
         return self._jsonrpc("object", "execute_kw", payload_args)
 
     def upload_datas(self, document_id: int, filename: str, content: bytes) -> None:
-        """POST /plm_document_upload/upload. doc_id is a JSON integer."""
-        self._upload(
+        """POST /plm_document_upload/upload, then prove datas has the bytes.
+
+        doc_id is the ir.attachment id as a JSON integer, not the engineering
+        code. The route field for the bytes is mod_file.
+        """
+        status, body = self._post_upload(
             "/plm_document_upload/upload",
             fields={"doc_id": str(int(document_id)), "filename": filename},
             files={"mod_file": (filename, content, "application/octet-stream")},
         )
+        encoded = base64.b64encode(content).decode("ascii")
+        self._require_stored(
+            document_id,
+            "datas",
+            content,
+            {"datas": encoded, "name": filename},
+            "/plm_document_upload/upload",
+            status,
+            body,
+            filename,
+        )
 
     def upload_printout(self, document_id: int, filename: str, content: bytes) -> None:
-        """POST /plm_document_upload/upload_pdf. Writes ir.attachment.printout."""
-        self._upload(
+        """POST /plm_document_upload/upload_pdf, then prove printout has the bytes.
+
+        The route field for the PDF is file_stream. doc_id is the attachment id.
+        """
+        status, body = self._post_upload(
             "/plm_document_upload/upload_pdf",
             fields={"doc_id": str(int(document_id))},
             files={"file_stream": (filename, content, "application/pdf")},
         )
+        encoded = base64.b64encode(content).decode("ascii")
+        self._require_stored(
+            document_id,
+            "printout",
+            content,
+            {"printout": encoded},
+            "/plm_document_upload/upload_pdf",
+            status,
+            body,
+            filename,
+        )
 
-    def _upload(self, path: str, fields: dict[str, str], files: dict[str, tuple[str, bytes, str]]) -> None:
+    def _post_upload(
+        self,
+        path: str,
+        fields: dict[str, str],
+        files: dict[str, tuple[str, bytes, str]],
+    ) -> tuple[int, bytes]:
         if not _has_session_cookie(self._jar):
             raise PlmError(f"{path} needs the session from /plm_document_upload/login.")
         body, content_type = _encode_multipart(fields, files)
@@ -228,8 +283,51 @@ class PlmClient:
             data=body,
             headers={"Content-Type": content_type},
         )
-        if status != 200:
-            raise PlmError(f"POST {path} returned {status}: {response[:300]!r}")
+        return status, response
+
+    def _require_stored(
+        self,
+        document_id: int,
+        field_name: str,
+        content: bytes,
+        write_vals: dict,
+        path: str,
+        status: int,
+        body: bytes,
+        filename: str,
+    ) -> None:
+        """Count the upload only when read() returns these bytes.
+
+        The route's HTTP 200 is not that proof. When the read is empty, write
+        the field over JSON-RPC the way Odoo stores a binary (base64 text) and
+        read once more.
+        """
+        if not content:
+            raise PlmError(
+                f"{filename} is empty. ir.attachment {int(document_id)} {field_name} was not written."
+            )
+        if self._field_matches(document_id, field_name, content):
+            return
+        self.execute("ir.attachment", "write", [[int(document_id)], write_vals])
+        if self._field_matches(document_id, field_name, content):
+            return
+        snippet = body[:200]
+        raise PlmError(
+            f"Upload of {filename} did not store {field_name} on ir.attachment {int(document_id)}. "
+            f"POST {path} returned {status}: {snippet!r}. "
+            f"read() of {field_name} is still empty. The upload was not counted as success."
+        )
+
+    def _field_matches(self, document_id: int, field_name: str, content: bytes) -> bool:
+        rows = self.execute(
+            "ir.attachment",
+            "read",
+            [[int(document_id)]],
+            {"fields": ["id", field_name], "context": {"bin_size": False}},
+        )
+        if not rows:
+            return False
+        return _decode_stored(rows[0].get(field_name)) == content
 
     def _jsonrpc(self, service: str, method: str, args: list):
         self._rpc_id += 1
@@ -275,6 +373,23 @@ class PlmClient:
 
 def _has_session_cookie(jar: CookieJar) -> bool:
     return any(cookie.name == "session_id" and cookie.value for cookie in jar)
+
+
+def _decode_stored(value) -> bytes:
+    """Bytes from an ir.attachment binary read. Empty when the field is unset."""
+    if not value or isinstance(value, bool):
+        return b""
+    if isinstance(value, bytes):
+        try:
+            return base64.b64decode(value, validate=True)
+        except (binascii.Error, ValueError):
+            return bytes(value)
+    if isinstance(value, str):
+        try:
+            return base64.b64decode(value, validate=True)
+        except (binascii.Error, ValueError):
+            return b""
+    return b""
 
 
 def _encode_multipart(fields: dict[str, str], files: dict[str, tuple[str, bytes, str]]) -> tuple[bytes, str]:
