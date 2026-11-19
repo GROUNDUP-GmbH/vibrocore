@@ -100,12 +100,24 @@ VAR_GLOBAL CONSTANT
     (* Max wait time for Sonic head to confirm stop before fault *)
     tSONIC_STOP_TIMEOUT     : TIME := T#5S;
 
+    (* Jog hold-to-run watchdog — HMI must refresh heartbeat within this window *)
+    tJOG_HEARTBEAT_TIMEOUT  : TIME := T#300MS;
+
+    (* =========================================================
+       Penetrometer Modbus (Force ADC — Slave 3)
+       ========================================================= *)
+
+    iPENETRO_SLAVE_ADDR     : INT  := 3;
+    iPENETRO_REG_FORCE      : INT  := 0;      (* holding register: raw force counts *)
+    tPENETRO_POLL           : TIME := T#50MS;
+    tPENETRO_TIMEOUT        : TIME := T#500MS;
+
     (* =========================================================
        Data / Identity
        ========================================================= *)
 
     sMACHINE_ID             : STRING[20] := 'VIBROCORE-001';
-    sHARDWARE_VERSION       : STRING[10] := 'V1.0';
-    sFIRMWARE_VERSION       : STRING[10] := '1.0.0';
+    sHARDWARE_VERSION       : STRING[10] := 'V1.1';
+    sFIRMWARE_VERSION       : STRING[10] := '1.1.0';
 
 END_VAR

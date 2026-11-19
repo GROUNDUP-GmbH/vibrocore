@@ -36,7 +36,7 @@ VAR_INPUT
     (* Auto cycle start *)
     xCmdCycleStart          : BOOL;
 
-    (* Fault reset *)
+    (* Fault reset — rising edge required after E-stop circuit is healthy *)
     xCmdReset               : BOOL;
 END_VAR
 
@@ -71,6 +71,10 @@ VAR
     (* 32-bit encoder position from Modbus *)
     lActualPos          : LINT;
     iPosPrev            : INT;
+
+    (* E-stop reset: arm only after safe state clears; then need fresh rising edge *)
+    xEStopCleared       : BOOL;
+    rTrigReset          : R_TRIG;
 END_VAR
 
 (* ---- Position calculation (encoder → mm) ---- *)
@@ -80,7 +84,8 @@ lActualPos   := SHL(LINT#0 + INT_TO_LINT(awReadRegs[2]), 16)
 rPosition_mm := LINT_TO_REAL(lActualPos) / GVL_PARAMS.rENCODER_PULSES_PER_MM;
 
 (* ---- Derived position flags ---- *)
-xAtHome   := NOT GVL_IO.xLimitUp_NC;   (* NC: FALSE = triggered = home *)
+(* NC contact: TRUE = healthy, FALSE = limit reached or wire break *)
+xAtHome   := NOT GVL_IO.xLimitUp;   (* FALSE on NC input = at upper limit = home *)
 xAtTarget := (rPosition_mm >= rTargetDepth_mm - GVL_PARAMS.rPOS_TOLERANCE_MM)
           AND (rPosition_mm <= rTargetDepth_mm + GVL_PARAMS.rPOS_TOLERANCE_MM);
 
@@ -91,6 +96,7 @@ IF xSafeState AND eState <> 6 AND eState <> 7 THEN
     xBrakeRelease_out   := FALSE;   (* brake engages *)
     xHubEnable_out      := FALSE;
     xNeedSonicStop      := TRUE;
+    xEStopCleared       := FALSE;   (* require healthy circuit + fresh reset edge *)
     eState              := 6;
 END_IF;
 
@@ -110,13 +116,14 @@ CASE eState OF
 
         IF xCmdCycleStart AND xEnable AND NOT xSafeState THEN
             eState := 1;   (* Home first, then drill *)
-        ELSIF xCmdJogDown AND xEnable AND NOT GVL_IO.xLimitDown AND NOT xSafeState THEN
+        (* NC: TRUE = healthy (not at limit) — required to continue jog *)
+        ELSIF xCmdJogDown AND xEnable AND GVL_IO.xLimitDown AND NOT xSafeState THEN
             xBrakeRelease_out  := TRUE;
             xHubEnable_out     := TRUE;
             wHubCtrlWord       := GVL_PARAMS.wHUB_CW_ENABLE;
             iSpeedSetpoint_rpm := REAL_TO_INT(GVL_PARAMS.rSPEED_MANUAL_MMS
                                               * GVL_PARAMS.rENCODER_PULSES_PER_MM / 1000.0 * 60.0);
-        ELSIF xCmdJogUp AND xEnable AND NOT GVL_IO.xLimitUp AND NOT xSafeState THEN
+        ELSIF xCmdJogUp AND xEnable AND GVL_IO.xLimitUp AND NOT xSafeState THEN
             xBrakeRelease_out  := TRUE;
             xHubEnable_out     := TRUE;
             wHubCtrlWord       := GVL_PARAMS.wHUB_CW_ENABLE;
@@ -166,8 +173,8 @@ CASE eState OF
         iSpeedSetpoint_rpm := REAL_TO_INT(GVL_PARAMS.rSPEED_PENETRATE_MMS
                                           * GVL_PARAMS.rENCODER_PULSES_PER_MM / 1000.0 * 60.0);
 
-        (* Stop drilling on target OR stone *)
-        IF xAtTarget OR xStoneDetected OR GVL_IO.xLimitDown THEN
+        (* Stop drilling on target OR stone OR lower NC limit open *)
+        IF xAtTarget OR xStoneDetected OR NOT GVL_IO.xLimitDown THEN
             (* Engage brake, request sonic fast-stop *)
             wHubCtrlWord       := GVL_PARAMS.wHUB_CW_QUICKSTOP;
             iSpeedSetpoint_rpm := 0;
@@ -228,7 +235,8 @@ CASE eState OF
         END_IF;
 
     (* ============================================================ *)
-    6: (* ESTOP_HOLD — hold until E-Stop released and reset *)
+    6: (* ESTOP_HOLD — hold until E-Stop healthy, then fresh reset edge *)
+    (* Never auto-reset. Reset held during E-stop does not count. *)
     (* ============================================================ *)
         wHubCtrlWord       := GVL_PARAMS.wHUB_CW_QUICKSTOP;
         iSpeedSetpoint_rpm := 0;
@@ -236,8 +244,16 @@ CASE eState OF
         xHubEnable_out     := FALSE;
         xNeedSonicStop     := TRUE;
 
-        IF NOT xSafeState AND xCmdReset THEN
+        IF xSafeState THEN
+            xEStopCleared := FALSE;
+        ELSE
+            xEStopCleared := TRUE;
+        END_IF;
+
+        rTrigReset(CLK := xCmdReset);
+        IF xEStopCleared AND rTrigReset.Q THEN
             xNeedSonicStop := FALSE;
+            xEStopCleared  := FALSE;
             eState := 1;   (* Re-home after E-Stop *)
         END_IF;
 

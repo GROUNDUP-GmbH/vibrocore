@@ -88,12 +88,68 @@ The Vibrocore V1 control system is built around the **WAGO PFC200 XTR (750-8212)
 | Stop bits    | 1                |
 | Termination  | 120 Ω (enable on last device in chain) |
 
-**Bus topology:**
+**Bus topology (V1.1 — with penetrometer ADC):**
 
 ```
-WAGO 750-826 ──── cable ──── Siemens V20 (addr 1) ──── cable ──── Nanotec C5-E (addr 2)
-                                                                    [120Ω termination here]
+WAGO 750-826 ── Siemens V20 (addr 1) ── Nanotec C5-E (addr 2) ── Force ADC (addr 3)
+                                                                   [120Ω term. here]
 ```
+
+---
+
+## V1.1 I/O Expansion: Lift, Tilt, Penetrometer
+
+When subsystems §8a–8c from the BOM are added, the following I/O slots are required.
+
+### WAGO V1.1 — Additional Slots
+
+#### Slot 6 — 750-430 XTR (2nd): 4× Digital Input (Actuators)
+
+| Channel | Signal | Wiring | Description |
+|---------|--------|--------|-------------|
+| DI 0 | `xLiftDeployedLimit` | NC | Lift actuators fully deployed (drilling position) |
+| DI 1 | `xLiftRetractedLimit` | NC | Lift actuators fully retracted (transport position) |
+| DI 2 | `xTiltVerticalLimit` | NC | Mast in vertical/drilling position |
+| DI 3 | `xTiltFoldedLimit` | NC | Mast folded to horizontal/transport position |
+
+#### Slot 7 — 750-530 XTR (2nd): 4× Digital Output (Actuators)
+
+| Channel | Signal | Active | Description |
+|---------|--------|--------|-------------|
+| DO 0 | `xLiftExtend` | HIGH | Extend lift actuators (deploy device down) |
+| DO 1 | `xLiftRetract` | HIGH | Retract lift actuators (raise device) |
+| DO 2 | `xTiltVertical` | HIGH | Drive tilt actuator to vertical/drilling position |
+| DO 3 | `xTiltFold` | HIGH | Drive tilt actuator to fold/transport position |
+
+> **Wiring note:** `xLiftExtend` and `xLiftRetract` must never be TRUE simultaneously
+> (mutual interlock in CODESYS). Same applies to `xTiltVertical` / `xTiltFold`.
+> Both pairs drive an H-bridge relay module (one per actuator group).
+
+#### Slot 8 (existing 750-600 moves here): End module
+
+#### Penetrometer — RS-485 Slave 3 (no new WAGO slot needed)
+
+The force ADC (Datexel DAT8017-A or equivalent) connects to the existing RS-485 bus
+as Slave address 3. Holding Register 0 = force in raw counts (0–65535 → 0–5 kN).
+
+```
+rForce_raw := ModbusRead(uSlaveAddr := 3, uRegAddr := 0);
+rForce_N   := REAL_TO_INT(rForce_raw) / 13.107;  // 0..65535 → 0..5000 N
+```
+
+---
+
+### RevPi V1.1 — No Additional I/O Modules Required
+
+The RevPi DIO module has 14 DI and 14 DO. After base system and V1.1 additions:
+
+| Signals | Base (V1) | +V1.1 | Total used | DIO capacity |
+|---------|-----------|--------|------------|--------------|
+| DI (digital in) | 6 (4 limits + 2 encoder) | +4 (actuator limits) | **10** | 14 ✓ |
+| DO (digital out) | 4 | +4 (actuator control) | **8** | 14 ✓ |
+
+RevPi only needs the **PSU upgrade** (SDR-120-24) for actuator current.
+The penetrometer ADC connects as RS-485 Slave 3 on the built-in RS-485 port.
 
 ---
 
@@ -297,6 +353,42 @@ to 0.5s. An external braking resistor is not expected to be necessary.
 
 ---
 
+## Operator HMI — Docker Stack on PFC200 XTR
+
+The PFC200 XTR (Firmware ≥ 23) has Docker built-in.
+Two containers run alongside the CODESYS Runtime:
+
+```
+WAGO PFC200 XTR (192.168.1.10)
+├── CODESYS Runtime  → Modbus TCP Slave (port 502)
+└── Docker
+    ├── vibrocore-hmi   (Node-RED + Dashboard  → port 1880)
+    └── vibrocore-mqtt  (Mosquitto MQTT broker  → port 1883)
+```
+
+**Resource budget:** ~45 MB RAM + < 5% CPU idle — well within 512 MB / 1 GHz headroom.
+
+### Dashboard screens
+
+| Tab | Content |
+|-----|---------|
+| Betrieb | Cycle Start, Fault Reset, Jog Up/Down, depth/freq sliders, live gauges |
+| Status | State machine text (System / Hub / Sonic), safety reason, trend charts |
+| Protokoll | Per-cycle log table (depth, freq, GPS, signed flag) |
+
+Node-RED polls CODESYS every **500 ms** via Modbus TCP (FC3 read, registers 0–21).
+HMI write commands (buttons, sliders) use FC6/FC16 on the same registers.
+
+See `firmware/docker/` for the full stack and `firmware/docker/README.md` for setup.
+
+### Modbus TCP Slave configuration in CODESYS
+
+1. Device Tree → Add Device → `Modbus TCP Slave` (WagoAppModbusSlaveTcp)
+2. Port: 502, Unit ID: 1
+3. Map `%MW0..%MW21` per `firmware/codesys/GVL_MODBUS.st`
+
+---
+
 ## Development Environment
 
 ### CODESYS V3.5 (WAGO PFC200 target)
@@ -305,38 +397,36 @@ to 0.5s. An external braking resistor is not expected to be necessary.
 - WAGO Extension: **WAGO-I/O-PRO** or **CODESYS for WAGO** package
 - Required libraries:
   - `WagoAppModbusMasterRtu` ≥ 1.1.0.0
-  - `WagoAppModbusSlaveTcp` (optional, for HMI Modbus access)
-  - `WagoSysTimeRtc` (for timestamp in DataLogger)
+  - `WagoAppModbusSlaveTcp` (HMI Modbus TCP Slave interface)
+  - `WagoSysTimeRtc` (timestamp in DataLogger)
 - Target: WAGO PFC200 XTR (Arm Linux)
 - Programming: Structured Text (ST), IEC 61131-3
 
+**Note on CODESYS Go:** CODESYS Go is a browser-based IDE (edit + deploy), not an
+HMI app. It is used to write and deploy ST code to the PFC from any browser —
+useful when a Windows VM is not available. It is **not** the operator dashboard.
+
 ### Running on Mac (no Windows required)
 
-Option A — UTM virtual machine (recommended):
+Option A — UTM virtual machine (recommended for full IDE comfort):
 ```bash
 # Install UTM from https://mac.getutm.app
 # Create Windows 11 ARM VM (free via Azure Dev) or Windows 10 x86 via Rosetta
 # Install CODESYS V3.5 in the VM
-# Connect to WAGO PFC via WAGO USB-Service-Cable or Ethernet
+# Connect to WAGO PFC via WAGO USB-Service-Cable or Ethernet/VPN
 ```
 
-Option B — Python / Node-RED directly on PFC Linux:
-```bash
-# SSH into PFC200 (default: admin / wago)
-ssh admin@192.168.1.1
-
-# Install Node-RED
-npm install -g node-red
-
-# Use node-red-contrib-modbus for VFD/hub control
-# Use node-red-contrib-mqtt for cloud publishing
-# Vibrocore logic: firmware/python/ (future — see README)
+Option B — CODESYS Go (browser-based, no VM needed):
+```
+# Open: https://go.codesys.com
+# Target: WAGO PFC200 (IP: 192.168.1.10, port 1740)
+# Full ST editor + online debugging in any Chromium browser
 ```
 
 Option C — Cloud VM:
 - AWS EC2 t3.small (Windows Server) — ~$15/month
-- Install CODESYS V3.5, connect to WAGO via VPN (WAGO VPN client on PFC)
-- OTA updates via CODESYS Online Change or WAGO Web-Based-Management
+- Install CODESYS V3.5, connect to WAGO via WireGuard VPN
+- OTA updates via CODESYS Online Change
 
 ---
 
@@ -346,14 +436,114 @@ The WAGO PFC200 provides built-in remote access:
 
 | Feature | Method | URL / Config |
 |---------|--------|--------------|
-| Web UI | HTTP | `http://192.168.1.1` |
-| SSH | OpenSSH | `ssh admin@192.168.1.1` |
+| Web UI | HTTP | `http://192.168.1.10` |
+| SSH | OpenSSH | `ssh admin@192.168.1.10` |
 | VPN | OpenVPN / WireGuard | Configure in WBM |
 | CODESYS Online | TCP/IP | Port 1740 (CODESYS Gateway) |
 | OTA firmware | CODESYS Online Change | No service stop required |
-| MQTT broker | Mosquitto | Pre-installed on PFC Linux |
-| Node-RED | HTTP | `http://192.168.1.1:1880` |
+| MQTT broker | Mosquitto | Docker container (port 1883) |
+| Node-RED | HTTP | `http://192.168.1.10:1880` |
 
 For field use on mobile LTE: the **Teltonika RUT241** provides the LTE uplink and
 WireGuard VPN — the WAGO PFC connects as LAN client, developer connects from anywhere.
 See the [Mobile Connectivity section](#mobile-connectivity--teltonika-rut241) above.
+
+---
+
+## Controller Comparison: WAGO PFC200 XTR vs. Revolution Pi Connect 4
+
+Two viable controller options exist for Vibrocore V1. The WAGO is the primary
+recommendation for production; the RevPi Connect 4 is a lower-cost alternative
+well-suited for prototyping or cost-sensitive builds.
+
+### Hardware comparison
+
+| Feature | WAGO PFC200 XTR (750-8212) | RevPi Connect 4 |
+|---------|---------------------------|-----------------|
+| CPU | 1 GHz ARM Cortex-A8 (single) | 1.5 GHz Quad-Core Cortex-A72 |
+| RAM | 512 MB DDR3 | 2 / 4 / 8 GB LPDDR4 |
+| Flash | 4 GB eMMC | 8 / 32 GB eMMC |
+| **Temp range** | **−40 °C … +70 °C** | −25 °C … +55 °C |
+| **Vibration** | **5g (EN 60068-2-6)** | EN 61131-2 (less explicit) |
+| RS-485 | Via 750-826 module | **Built-in** (4-pin screw) |
+| Ethernet | 2× 10/100 | 2× Gigabit |
+| Docker | FW ≥ 23 (built-in) | **Native** (full Raspberry Pi OS) |
+| CODESYS | Dedicated Runtime (licensed w/ HW) | Soft PLC on PREEMPT_RT Linux |
+| Real-time | Dedicated CODESYS RTOS | PREEMPT_RT kernel patch |
+| Terminals | CAGE CLAMP (vibration-proof) | Screw terminals |
+| TPM 2.0 | No | Yes |
+| Origin | Made in Germany (WAGO) | Made in Germany (KUNBUS) |
+| License fees | Runtime included with hardware | **None** (open source Linux) |
+
+### I/O module comparison
+
+| I/O function | WAGO (Option A) | RevPi (Option B) |
+|-------------|-----------------|------------------|
+| 4× DI 24V | 750-430 XTR (€60–90) | **RevPi DIO** covers all → |
+| 4× DO 24V | 750-530 XTR (€60–90) | **RevPi DIO** covers all → |
+| Encoder (quadrature) | 750-637 (€100–150) | **RevPi DIO** (built-in counter/encoder mode) |
+| RS-485 Modbus RTU | 750-826 (€80–120) | **Built into Connect 4 base** |
+| End module | 750-600 (€10–20) | Not required |
+| **I/O total** | **€310–470** (4 modules) | **€196** (1× RevPi DIO) |
+
+The RevPi DIO (€196) replaces four WAGO modules in one unit because its 14 DI
+channels are individually configurable as digital input, counter, or **quadrature
+encoder** — sufficient for the 1000 ppr chain encoder at max ~10 kHz count rate.
+
+### Controller cost summary
+
+| Item | WAGO Option A | RevPi Option B |
+|------|--------------|----------------|
+| Base controller | €600–900 | ~€450 (Connect 4 4 GB + RAM surcharge) |
+| I/O modules | €310–470 | €196 (1× DIO) |
+| **Controller subtotal** | **€910–1,370** | **~€646** |
+| Savings vs. WAGO | — | **~€270–720** |
+
+### Decision guidance
+
+Use **WAGO PFC200 XTR** when:
+- Ambient temperature may drop below −25 °C (e.g., Eastern European winter storage)
+- Maximum vibration resistance is required (drilling in rocky, high-vibration terrain)
+- Dedicated CODESYS Runtime timing guarantees are needed
+- Long-term industrial support contracts are required
+
+Use **RevPi Connect 4** when:
+- Cost is a primary constraint (saves ~€300–500 on controller alone)
+- More RAM/CPU for edge computing or data logging is beneficial
+- The control enclosure can be kept above −25 °C (standard field conditions)
+- Full Linux flexibility (Python, Node-RED, Docker) without any Windows dependency
+- V1 prototype / proof-of-concept phase
+
+> **Temperature note:** Hungarian/Austrian field conditions rarely drop below −25 °C
+> during active drilling season (March–November). However, equipment stored outdoors
+> overnight in January can reach −20 °C. If the enclosure is insulated or heated
+> (self-adhesive heater strip, €15), the RevPi remains in spec. The WAGO's −40 °C
+> rating provides comfort margin without any mitigation.
+
+### RevPi-specific software notes
+
+The RevPi ships with **Raspberry Pi OS** (Debian-based). No Windows toolchain
+is needed at any stage:
+
+```bash
+# Node-RED (native, no Docker needed — but Docker works too):
+ssh user@192.168.1.10
+sudo apt install nodered
+node-red-start
+
+# CODESYS Soft PLC for RevPi (download from CODESYS Store):
+# Target package: "CODESYS Control for Raspberry Pi SL"
+# Programming: same ST code as WAGO, same IEC 61131-3
+
+# Python automation alternative (no CODESYS license needed):
+pip install pymodbus asyncio
+# → full Vibrocore logic in Python on RevPi Linux
+```
+
+The Docker Compose stack in `firmware/docker/` runs identically on RevPi (also arm/v8).
+Change the platform tag in `docker-compose.yml`:
+
+```yaml
+platform: linux/arm/v8   # RevPi Connect 4 (CM4 = armv8)
+# platform: linux/arm/v7  # WAGO PFC200 XTR (Cortex-A8 = armv7)
+```

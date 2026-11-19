@@ -1,0 +1,12 @@
+# EXAMPLE Mosquitto ACL — copy to ./mosquitto/acl on the device.
+# Adjust usernames to match passwd. No real credentials belong in git.
+
+user vibrocore
+topic readwrite vibrocore/#
+topic read $SYS/#
+
+# Optional read-only dashboard user (create with mosquitto_passwd -b):
+# user hmi_ro
+# topic read vibrocore/status/#
+# topic read vibrocore/cycle/#
+# topic read vibrocore/alarm

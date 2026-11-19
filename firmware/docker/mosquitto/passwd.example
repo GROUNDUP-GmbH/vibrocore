@@ -1,0 +1,10 @@
+# EXAMPLE ONLY — do not use in production.
+# Generate a real password file on the controller (never commit it):
+#
+#   docker run --rm -v "$PWD:/mosquitto/config" eclipse-mosquitto:2 \
+#     mosquitto_passwd -c -b /mosquitto/config/passwd vibrocore 'CHANGE_ME'
+#
+# Format (one user per line, hash created by mosquitto_passwd):
+#   vibrocore:$7$...
+#
+# Place the result as ./mosquitto/passwd next to mosquitto.conf.
