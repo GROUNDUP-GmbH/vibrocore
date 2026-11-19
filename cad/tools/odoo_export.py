@@ -65,6 +65,12 @@ def _flag(value: bool) -> str:
 
 def _description(part: Part) -> str:
     chunks = [part.spec, f"Legacy ref docs/engineering/BOM.md {part.legacy_ref}."]
+    if part.lifecycle != "active":
+        chunks.append(f"Lifecycle: {part.lifecycle}.")
+        if part.superseded_by:
+            chunks.append(f"Superseded by {part.superseded_by}.")
+        if part.replaces:
+            chunks.append(f"Replaces {part.replaces}.")
     if part.estimate_eur_low is not None:
         chunks.append(
             "Preliminary unit estimate "

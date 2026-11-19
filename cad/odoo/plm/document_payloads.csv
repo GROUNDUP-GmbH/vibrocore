@@ -1,10 +1,15 @@
 engineering_code,engineering_revision,attachment_external_id,odoo_datas_file,odoo_printout_file,svg_file,fidelity
-VC-ASM-0000,0,vibrocore.doc_vc_asm_0000,cad/export/pdf/VC-ASM-0000_vibrocore-v1.pdf,cad/export/pdf/VC-ASM-0000_vibrocore-v1.pdf,cad/drawings/VC-ASM-0000_vibrocore-v1.svg,schematic
+VC-ASM-0000,0,vibrocore.doc_vc_asm_0000,cad/export/pdf/VC-ASM-0000_vibrocore-v1-1.pdf,cad/export/pdf/VC-ASM-0000_vibrocore-v1-1.pdf,cad/drawings/VC-ASM-0000_vibrocore-v1-1.svg,schematic
 VC-ASM-1000,0,vibrocore.doc_vc_asm_1000,cad/export/pdf/VC-ASM-1000_sonic-head-assembly.pdf,cad/export/pdf/VC-ASM-1000_sonic-head-assembly.pdf,cad/drawings/VC-ASM-1000_sonic-head-assembly.svg,schematic
 VC-ASM-2000,0,vibrocore.doc_vc_asm_2000,cad/export/pdf/VC-ASM-2000_hub-system-assembly.pdf,cad/export/pdf/VC-ASM-2000_hub-system-assembly.pdf,cad/drawings/VC-ASM-2000_hub-system-assembly.svg,schematic
 VC-ASM-3000,0,vibrocore.doc_vc_asm_3000,cad/export/pdf/VC-ASM-3000_frame-assembly.pdf,cad/export/pdf/VC-ASM-3000_frame-assembly.pdf,cad/drawings/VC-ASM-3000_frame-assembly.svg,schematic
 VC-ASM-4000,0,vibrocore.doc_vc_asm_4000,cad/export/pdf/VC-ASM-4000_power-system-assembly.pdf,cad/export/pdf/VC-ASM-4000_power-system-assembly.pdf,cad/drawings/VC-ASM-4000_power-system-assembly.svg,schematic
 VC-ASM-5000,0,vibrocore.doc_vc_asm_5000,cad/export/pdf/VC-ASM-5000_control-system-assembly.pdf,cad/export/pdf/VC-ASM-5000_control-system-assembly.pdf,cad/drawings/VC-ASM-5000_control-system-assembly.svg,schematic
+VC-ASM-8000,0,vibrocore.doc_vc_asm_8000,cad/export/pdf/VC-ASM-8000_field-subsystems-assembly.pdf,cad/export/pdf/VC-ASM-8000_field-subsystems-assembly.pdf,cad/drawings/VC-ASM-8000_field-subsystems-assembly.svg,schematic
+VC-ASM-8100,0,vibrocore.doc_vc_asm_8100,cad/export/pdf/VC-ASM-8100_lift-actuator-assembly.pdf,cad/export/pdf/VC-ASM-8100_lift-actuator-assembly.pdf,cad/drawings/VC-ASM-8100_lift-actuator-assembly.svg,schematic
+VC-ASM-8200,0,vibrocore.doc_vc_asm_8200,cad/export/pdf/VC-ASM-8200_tilt-actuator-assembly.pdf,cad/export/pdf/VC-ASM-8200_tilt-actuator-assembly.pdf,cad/drawings/VC-ASM-8200_tilt-actuator-assembly.svg,schematic
+VC-ASM-8300,0,vibrocore.doc_vc_asm_8300,cad/export/pdf/VC-ASM-8300_penetrometer-assembly.pdf,cad/export/pdf/VC-ASM-8300_penetrometer-assembly.pdf,cad/drawings/VC-ASM-8300_penetrometer-assembly.svg,schematic
+VC-ASM-8400,0,vibrocore.doc_vc_asm_8400,cad/export/pdf/VC-ASM-8400_core-scanner-assembly.pdf,cad/export/pdf/VC-ASM-8400_core-scanner-assembly.pdf,cad/drawings/VC-ASM-8400_core-scanner-assembly.svg,schematic
 VC-FR-4100,0,vibrocore.doc_vc_fr_4100,cad/export/step/VC-FR-4100.step,cad/export/pdf/VC-FR-4100_aluminium-profile-50x100x1500.pdf,cad/drawings/VC-FR-4100_aluminium-profile-50x100x1500.svg,envelope
 VC-FR-4300,0,vibrocore.doc_vc_fr_4300,cad/export/step/VC-FR-4300.step,cad/export/pdf/VC-FR-4300_bottom-steel-plate.pdf,cad/drawings/VC-FR-4300_bottom-steel-plate.svg,partial
 VC-FR-4400,0,vibrocore.doc_vc_fr_4400,cad/export/step/VC-FR-4400.step,cad/export/pdf/VC-FR-4400_top-steel-plate.pdf,cad/drawings/VC-FR-4400_top-steel-plate.svg,partial

@@ -14,9 +14,8 @@
 <text x="20" y="59.60000000000001" font-size="2.8" font-family="sans-serif">4      VC-FR-4400     A    1    Top steel plate</text>
 <text x="20" y="63.80000000000001" font-size="2.8" font-family="sans-serif">5      VC-FR-4500     A    1    Rod guide bushing</text>
 <text x="20" y="68.00000000000001" font-size="2.8" font-family="sans-serif">6      VC-FR-4600     A    4    UTV mounting bracket</text>
-<text x="20" y="72.20000000000002" font-size="2.8" font-family="sans-serif">7      VC-FR-4700     A    1    Tilt mechanism</text>
-<text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-FR-4800     A    4    Stabiliser foot</text>
-<text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-FR-4900     A    1    Fastener kit, frame</text>
+<text x="20" y="72.20000000000002" font-size="2.8" font-family="sans-serif">7      VC-FR-4800     A    4    Stabiliser foot</text>
+<text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-FR-4900     A    1    Fastener kit, frame</text>
 <text x="20" y="244" font-size="3" font-family="sans-serif">Schematic only. Component positions that are not dimensioned in the design documents are not drawn.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>
@@ -33,7 +32,7 @@
 <text x="268" y="299.19999999999993" font-size="2.4" font-family="sans-serif">Creator</text>
 <text x="332" y="299.19999999999993" font-size="2.6" font-family="sans-serif" font-weight="700">vibrocore cad export</text>
 <text x="268" y="303.3999999999999" font-size="2.4" font-family="sans-serif">Created</text>
-<text x="332" y="303.3999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">2026-11-04</text>
+<text x="332" y="303.3999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">2026-11-19</text>
 <text x="268" y="307.5999999999999" font-size="2.4" font-family="sans-serif">Units</text>
 <text x="332" y="307.5999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">mm</text>
 <text x="268" y="311.7999999999999" font-size="2.4" font-family="sans-serif">Projection</text>

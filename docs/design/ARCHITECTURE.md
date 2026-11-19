@@ -183,7 +183,7 @@ WAGO / RevPi (CODESYS / Python)
               │
               ├── vibrocore/cycle/{id}     ← FB_DataLogger payload + force array
               ├── vibrocore/alarm          ← Safety fault events
-              ├── vibrocore/core_image/{id}← RPi Zero 2W camera JPEG  [V1.1]
+              ├── vibrocore/core_image/{id}← Raspberry Pi 4 camera JPEG  [V1.1]
               └── vibrocore/hmi/status     ← HMI online/offline
 
 RPi 4 2GB (Core Scanner, autonomous)  [V1.1]

@@ -21,16 +21,20 @@ def test_bom_rollups_match_published_lines():
     expected = {
         "VC-ASM-1000": (1185, 1900),
         "VC-ASM-2000": (1535, 2490),
-        "VC-ASM-3000": (540, 910),
-        "VC-ASM-4000": (2715, 2890),
-        "VC-ASM-5000": (1515, 2420),
+        # V1.1 frame excludes obsolete gas-spring tilt VC-FR-4700.
+        "VC-ASM-3000": (440, 730),
+        # V1.1 power uses SDR-120-24 (40-70) instead of DDR-60D-24 (20-40).
+        "VC-ASM-4000": (2735, 2920),
+        # V1.1 control has qty 2 of 750-430 and 750-530.
+        "VC-ASM-5000": (1635, 2600),
+        "VC-ASM-8000": (1259, 2300),
         "VC-KIT-6000": (1250, 2100),
         "VC-KIT-7000": (2020, 2040),
     }
     for number, (low, high) in expected.items():
         assert bom.rollup(number, "low") == low
         assert bom.rollup(number, "high") == high
-    assert bom.rollup("VC-ASM-0000", "low") == 1185 + 1535 + 540 + 2715 + 1515
+    assert bom.rollup("VC-ASM-0000", "low") == 1185 + 1535 + 440 + 2735 + 1635 + 1259
 
 
 def test_revision_letters_follow_odooplm_index():
@@ -134,7 +138,7 @@ def test_plate_drawing_and_step_use_documented_size():
     column = bom.part("VC-SH-1400")
     assert read_step_bbox_mm(step_path(column)) == (50.0, 50.0, 200.0)
     header = step_path(plate).read_text(encoding="utf-8")
-    assert "FILE_NAME('VC-SH-1301','2026-11-04T00:00:00'" in header
+    assert "FILE_NAME('VC-SH-1301','2026-11-19T00:00:00'" in header
 
 
 def test_exports_are_regenerable():

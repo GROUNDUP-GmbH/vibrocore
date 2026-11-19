@@ -17,9 +17,11 @@ import yaml
 ROOT = Path(__file__).resolve().parents[2]
 BOM_PATH = ROOT / "cad" / "bom" / "vibrocore.bom.yaml"
 
-PART_NUMBER_RE = re.compile(r"^VC-(ASM|KIT|SH|HB|FR|PW|CT|GP|PS)-\d{4}$")
+PART_NUMBER_RE = re.compile(r"^VC-(ASM|KIT|SH|HB|FR|PW|CT|GP|PS|LT|PN|CS)-\d{4}$")
 SUPPLIES = {"purchase", "subcontract", "assemble", "kit", "service"}
 FIDELITY = {"solid", "partial", "envelope"}
+# Parts stay in the YAML for history. Only "active" lines belong on a live BOM.
+LIFECYCLES = {"active", "obsolete", "superseded", "alternative"}
 # RevisionBaseMixin.get_revision_letter uses UPPERCASE_LETTERS[index] for
 # index 0..25. Index 0 is the module default and maps to "A".
 REVISION_LETTERS = [chr(i) for i in range(ord("A"), ord("Z") + 1)]
@@ -54,6 +56,9 @@ class Part:
     unknowns: list[str]
     notes: str
     sale_ok: bool
+    lifecycle: str
+    superseded_by: str | None
+    replaces: str | None
 
     @property
     def engineering_code(self) -> str:
@@ -67,6 +72,10 @@ class Part:
     @property
     def has_bom(self) -> bool:
         return self.supply in {"assemble", "kit"}
+
+    @property
+    def is_active(self) -> bool:
+        return self.lifecycle == "active"
 
 
 @dataclass
@@ -247,6 +256,15 @@ def load_bom(path: Path | None = None) -> BillOfMaterials:
         included = raw.get("cost_included_in")
         if included and (low is not None or high is not None):
             fail(f"{number}: cost_included_in cannot carry its own estimate")
+        lifecycle = str(raw.get("lifecycle") or "active")
+        if lifecycle not in LIFECYCLES:
+            fail(f"{number}: lifecycle {lifecycle} is not one of {sorted(LIFECYCLES)}")
+        superseded_by = raw.get("superseded_by")
+        replaces = raw.get("replaces")
+        if lifecycle == "superseded" and not superseded_by:
+            fail(f"{number}: superseded parts must set superseded_by")
+        if superseded_by and lifecycle not in {"superseded", "obsolete"}:
+            fail(f"{number}: superseded_by is only valid for superseded or obsolete parts")
         try:
             parts[number] = Part(
                 raw=raw,
@@ -272,6 +290,9 @@ def load_bom(path: Path | None = None) -> BillOfMaterials:
                 unknowns=list(raw.get("unknowns") or []),
                 notes=str(raw.get("notes") or ""),
                 sale_ok=bool(raw.get("sale_ok", False)),
+                lifecycle=lifecycle,
+                superseded_by=superseded_by,
+                replaces=replaces,
             )
         except BomError as exc:
             fail(str(exc))
@@ -319,6 +340,21 @@ def load_bom(path: Path | None = None) -> BillOfMaterials:
             fail(f"{number}: assemblies use mrp_type normal in the standard manufacturing fallback")
         if part.cost_included_in and part.cost_included_in not in parts:
             fail(f"{number}: cost_included_in {part.cost_included_in} does not exist")
+        if part.superseded_by and part.superseded_by not in parts:
+            fail(f"{number}: superseded_by {part.superseded_by} does not exist")
+        if part.replaces and part.replaces not in parts:
+            fail(f"{number}: replaces {part.replaces} does not exist")
+        if not part.is_active and has:
+            fail(f"{number}: lifecycle {part.lifecycle} must not own a BOM")
+
+    for number, assembly in assemblies.items():
+        for line in assembly.lines:
+            child = parts[line.part_number]
+            if not child.is_active:
+                fail(
+                    f"{number}: BOM line {line.part_number} has lifecycle "
+                    f"{child.lifecycle}; only active parts may appear on a live BOM"
+                )
 
     # Cycle check.
     visiting: set[str] = set()

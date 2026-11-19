@@ -10,7 +10,7 @@
 <text x="20" y="42" font-size="2.8" font-family="sans-serif">Item  Part number   Rev  Qty  Name</text>
 <text x="20" y="47" font-size="2.8" font-family="sans-serif">1      VC-PW-5100     A    1    Instagrid ONE max</text>
 <text x="20" y="51.2" font-size="2.8" font-family="sans-serif">2      VC-PW-5200     A    1    DIN-rail supply 48 V 10 A</text>
-<text x="20" y="55.400000000000006" font-size="2.8" font-family="sans-serif">3      VC-PW-5300     A    1    DC converter 48 V to 24 V</text>
+<text x="20" y="55.400000000000006" font-size="2.8" font-family="sans-serif">3      VC-PW-5310     A    1    Mean Well SDR-120-24</text>
 <text x="20" y="59.60000000000001" font-size="2.8" font-family="sans-serif">4      VC-PW-5400     A    1    DC converter 48 V to 12 V and 5 V</text>
 <text x="20" y="63.80000000000001" font-size="2.8" font-family="sans-serif">5      VC-PW-5500     A    1    Power distribution kit</text>
 <text x="20" y="68.00000000000001" font-size="2.8" font-family="sans-serif">6      VC-PW-5600     A    1    Power cable set</text>
@@ -30,7 +30,7 @@
 <text x="268" y="299.19999999999993" font-size="2.4" font-family="sans-serif">Creator</text>
 <text x="332" y="299.19999999999993" font-size="2.6" font-family="sans-serif" font-weight="700">vibrocore cad export</text>
 <text x="268" y="303.3999999999999" font-size="2.4" font-family="sans-serif">Created</text>
-<text x="332" y="303.3999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">2026-11-04</text>
+<text x="332" y="303.3999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">2026-11-19</text>
 <text x="268" y="307.5999999999999" font-size="2.4" font-family="sans-serif">Units</text>
 <text x="332" y="307.5999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">mm</text>
 <text x="268" y="311.7999999999999" font-size="2.4" font-family="sans-serif">Projection</text>

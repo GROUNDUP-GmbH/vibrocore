@@ -1,0 +1,85 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 1 /Kids [3 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 1373 >>
+stream
+BT
+/F1 11 Tf
+36 800 Td
+16 TL
+(VC-ASM-8400 Core scanner assembly  assembly, preliminary) Tj
+T*
+(1  VC-CS-9400  rev A  qty 1  Raspberry Pi 4 2 GB) Tj
+T*
+(2  VC-CS-9410  rev A  qty 1  Raspberry Pi HQ Camera IMX477) Tj
+T*
+(3  VC-CS-9420  rev A  qty 1  C-mount lens 8 mm) Tj
+T*
+(4  VC-CS-9430  rev A  qty 1  NEMA 17 stepper, sled) Tj
+T*
+(5  VC-CS-9440  rev A  qty 1  A4988 stepper driver) Tj
+T*
+(6  VC-CS-9450  rev A  qty 1  GT2 belt and pulleys) Tj
+T*
+(7  VC-CS-9460  rev A  qty 1  mk 2004 rail 1450 mm) Tj
+T*
+(8  VC-CS-9470  rev A  qty 1  Camera sled carriage) Tj
+T*
+(9  VC-CS-9480  rev A  qty 1  HDPE V-cradle) Tj
+T*
+(10  VC-CS-9490  rev A  qty 2  LED strip daylight CRI 97) Tj
+T*
+(11  VC-CS-9500  rev A  qty 1  LED driver PWM) Tj
+T*
+(12  VC-CS-9510  rev A  qty 1  Light-tight scanner cover) Tj
+T*
+(13  VC-CS-9520  rev A  qty 1  Munsell reference tile) Tj
+T*
+(14  VC-CS-9530  rev A  qty 2  Sled home and end switch) Tj
+T*
+(15  VC-CS-9540  rev A  qty 1  Scanner 5 V and 12 V PSU) Tj
+T*
+(16  VC-CS-9550  rev A  qty 1  Industrial USB stick 128 GB) Tj
+T*
+(Owner: Ground UP GmbH) Tj
+T*
+(Document status: preliminary) Tj
+T*
+(Identification: VC-ASM-8400) Tj
+T*
+(Revision index/letter: 0 / A) Tj
+T*
+(Date: 2026-11-19) Tj
+T*
+(Units: mm. Projection: first angle \(ISO 128\).) Tj
+T*
+(General tolerances: TODO.) Tj
+T*
+(ISO 7200 title-block fields. Not released for manufacture.) Tj
+T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000248 00000 n 
+0000001673 00000 n 
+trailer << /Size 6 /Root 1 0 R >>
+startxref
+1743
+%%EOF
