@@ -15,6 +15,7 @@ from cad.tools.bom import ROOT, BillOfMaterials, Part, modelled_parts
 
 STEP_DIR = ROOT / "cad" / "export" / "step"
 GEOMETRY_JSON = ROOT / "cad" / "export" / "geometry.json"
+VENDOR_DIR = ROOT / "cad" / "vendor"
 
 
 def shape_for(part: Part):
@@ -112,6 +113,41 @@ def _freeze_step_header(path: Path, part_number: str, baseline_date: str) -> Non
     if frozen == text:
         raise ValueError(f"{path} has no FILE_NAME timestamp to pin")
     path.write_text(frozen, encoding="utf-8")
+
+
+def vendor_step_path(part_id: str) -> Path | None:
+    """First STEP file in cad/vendor/<part-id>/, or None when the folder is empty."""
+    folder = VENDOR_DIR / part_id
+    if not folder.is_dir():
+        return None
+    matches = sorted(
+        path
+        for path in folder.iterdir()
+        if path.is_file() and path.suffix.lower() in {".step", ".stp"}
+    )
+    return matches[0] if matches else None
+
+
+def load_vendor_shape(part_id: str):
+    """Vendor solid recentered on its bounding box, or None when no STEP is present.
+
+    The assembly places this solid with the same pose as the envelope.
+    The vendor file is expected to use the envelope axis. A missing file
+    is not an error. The caller keeps the envelope.
+    """
+    path = vendor_step_path(part_id)
+    if path is None:
+        return None
+    from build123d import Pos, import_step
+
+    loaded = import_step(path)
+    if loaded is None:
+        raise ValueError(f"{path} did not contain a solid")
+    solid = loaded[0] if isinstance(loaded, (list, tuple)) else loaded
+    center = solid.bounding_box().center()
+    moved = Pos(-float(center.X), -float(center.Y), -float(center.Z)) * solid
+    moved.label = part_id
+    return moved
 
 
 def read_step_bbox_mm(path: Path) -> tuple[float, float, float]:

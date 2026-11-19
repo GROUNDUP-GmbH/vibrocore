@@ -808,6 +808,65 @@ parts:
   - mk 2004 slot geometry is not in the repository. The solid is the outer envelope only and is not a
     machining model.
   - Alloy and the exact mk order code.
+- part_number: VC-FR-4150
+  name: Bottom frame gusset
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Draft bent S355 sheet, 4 mm. Ties the two profiles above the bottom plate. Bolted with T-slot nuts.
+  legacy_ref: draft-fr-4150
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
+- part_number: VC-FR-4160
+  name: Top frame gusset
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Draft bent S355 sheet, 4 mm. Ties the two profiles under the top plate. Bolted with T-slot nuts.
+  legacy_ref: draft-fr-4160
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
+- part_number: VC-FR-4170
+  name: Mid frame gusset
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Draft bent S355 sheet, 4 mm. Ties the two profiles at mid height. Bolted with T-slot nuts.
+  legacy_ref: draft-fr-4170
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
+- part_number: VC-FR-4180
+  name: Drive crossbar mk 2004
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: frame
+  category: Frame
+  spec: mk 2004 profile, 50 x 100 mm, cut to the clear span between the upright inner faces. The uprights
+    VC-FR-4100 stay 1500 mm. At the 300 mm pitch the cut length is 250 mm.
+  legacy_ref: draft-fr-4180
+  supplier_id: mk
+  unknowns:
+  - Final cut length follows the profile pitch. The 300 mm pitch is TBD. Not in BOM.md v1.
+  notes: Draft. Cut this bar to length. Do not change the 1500 mm uprights to hide the height deficit.
 - part_number: VC-FR-4200
   name: Profile connector
   revision_index: 0
@@ -829,7 +888,7 @@ parts:
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: S355 blank 400 x 300 x 15 mm. Rod guide, motor mount and profile seats are not yet located.
+  spec: S355 blank 400 x 300 x 15 mm. The assembly cuts an 83 mm bore at the rod axis. The blank size is unchanged.
   legacy_ref: '3.34'
   estimate_eur_low: 80
   estimate_eur_high: 120
@@ -846,7 +905,7 @@ parts:
     fidelity: partial
     source: docs/engineering/BOM.md#3
   unknowns:
-  - Rod-guide bore position, NEMA 42 mount, profile feet and UTV holes.
+  - Profile feet and UTV holes. The 83 mm bore is a draft assembly cut for casing VC-GP-7100.
 - part_number: VC-FR-4400
   name: Top steel plate
   revision_index: 0
@@ -1075,6 +1134,22 @@ parts:
   notes: 'Candidates: Nanotec, Leadshine. Mass is published as about 6-8 kg, so no single mass is stored.'
   unknowns:
   - Exact catalogue number, body length and mass.
+- part_number: VC-HB-2110
+  name: Lift motor bracket
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: hub
+  category: Hub
+  spec: Draft steel bracket. Holds the NEMA 42, brake and gearbox with the motor axis parallel to the
+    sprocket shaft. Bolts to both uprights and to the cut crossbar VC-FR-4180.
+  legacy_ref: draft-hb-2110
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Plate thickness, bolt size and weld sizes. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
 - part_number: VC-HB-2200
   name: Planetary gearbox PLPE120-040
   revision_index: 0
@@ -1181,6 +1256,37 @@ parts:
   legacy_ref: '2.25'
   estimate_eur_low: 30
   estimate_eur_high: 50
+- part_number: VC-HB-2820
+  name: Idler shaft
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: hub
+  category: Hub
+  spec: Draft keyed shaft, diameter 30 mm, carried in two bearings under the top plate.
+  legacy_ref: draft-hb-2820
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Key size and the bearing catalogue number. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
+- part_number: VC-HB-2830
+  name: Idler bearing bracket
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: hub
+  category: Hub
+  spec: Draft bracket, two pieces. Slotted bearing seat and a tension screw land. Bolts to the profile
+    back face. Seat sized for a 30 mm bore pillow block.
+  legacy_ref: draft-hb-2830
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Bearing catalogue number, slot length and bolt size. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
 - part_number: VC-HB-2900
   name: Chain tensioner
   revision_index: 0
@@ -1761,6 +1867,22 @@ parts:
     source: docs/engineering/DIMENSIONING.md#3.1
   unknowns:
   - Weld position on the plate.
+- part_number: VC-SH-1350
+  name: Vibration motor bracket
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: sonic_head
+  category: Sonic Head
+  spec: Draft S355 bracket. Two 8 mm gussets, 80 mm high, and four M12 bolts into the carriage plate.
+    Sized for pull-out. See docs/engineering/CARRIAGE-BRACKET.md.
+  legacy_ref: draft-sh-1350
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Released plate thickness and the fatigue case. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
 - part_number: VC-SH-1400
   name: Center column
   revision_index: 0
@@ -1967,6 +2089,7 @@ boms:
   - {part_number: VC-SH-1100, qty: 2}
   - {part_number: VC-SH-1200, qty: 1}
   - {part_number: VC-SH-1300, qty: 1}
+  - {part_number: VC-SH-1350, qty: 1}
   - {part_number: VC-SH-1400, qty: 1}
   - {part_number: VC-SH-1500, qty: 1}
   - {part_number: VC-SH-1600, qty: 4}
@@ -1977,6 +2100,7 @@ boms:
   mrp_type: normal
   lines:
   - {part_number: VC-HB-2100, qty: 1}
+  - {part_number: VC-HB-2110, qty: 1}
   - {part_number: VC-HB-2200, qty: 1}
   - {part_number: VC-HB-2300, qty: 1}
   - {part_number: VC-HB-2400, qty: 1}
@@ -1985,6 +2109,8 @@ boms:
   - {part_number: VC-HB-2700, qty: 1}
   - {part_number: VC-HB-2800, qty: 1}
   - {part_number: VC-HB-2810, qty: 1}
+  - {part_number: VC-HB-2820, qty: 1}
+  - {part_number: VC-HB-2830, qty: 2}
   - {part_number: VC-HB-2900, qty: 1}
   - {part_number: VC-HB-3000, qty: 1}
   - {part_number: VC-HB-3100, qty: 2}
@@ -1998,6 +2124,10 @@ boms:
   mrp_type: normal
   lines:
   - {part_number: VC-FR-4100, qty: 2}
+  - {part_number: VC-FR-4150, qty: 1}
+  - {part_number: VC-FR-4160, qty: 1}
+  - {part_number: VC-FR-4170, qty: 1}
+  - {part_number: VC-FR-4180, qty: 1}
   - {part_number: VC-FR-4200, qty: 8}
   - {part_number: VC-FR-4300, qty: 1}
   - {part_number: VC-FR-4400, qty: 1}

@@ -129,9 +129,23 @@ RUNNER_PITCH_MM = 200.0
 GUIDED_TRAVEL_MM = round(RAIL_LENGTH_MM - RUNNER_PITCH_MM - RUNNER_LENGTH_MM, 1)
 # Start pose. Zero is the lower end of travel. The start value is the top of travel.
 STROKE_POSITION_MM = GUIDED_TRAVEL_MM
-# TBD. Gap from the carriage plate to the rear face of the vibrating plate.
-# Large enough that the rear rib stays in front of the bottom plate at the lower end of travel.
-HEAD_FRONT_GAP_MM = 90.0
+# Draft. Gap from the carriage plate to the rear face of the motors.
+# The vibrating plate rear is flush with that face, so the rod sits close to the rails.
+HEAD_FRONT_GAP_MM = 10.0
+# The 400 mm bottom-plate blank stays. Its rear face sits this far behind the profile back face.
+BOTTOM_PLATE_REAR_OVERHANG_MM = 20.0
+# VC-FR-4500 closed bore. It guides the 82.55 mm casing VC-GP-7100, not the column.
+CASING_GUIDE_BORE_DIAMETER_MM = 83.0
+# Gap from the profile back face to the gearbox housing. The drive axis is along Y.
+# Large enough that the housing stays behind the bracket spine on the profile backs.
+DRIVE_BACK_CLEARANCE_MM = 20.0
+# Draft sheet for the frame gussets. Not a shop measurement.
+GUSSET_SHEET_THICKNESS_MM = 4.0
+GUSSET_HEIGHT_MM = 80.0
+# Draft sizes for the vibration-motor bracket VC-SH-1350. See CARRIAGE-BRACKET.md.
+BRACKET_GUSSET_THICKNESS_MM = 8.0
+BRACKET_GUSSET_HEIGHT_MM = 80.0
+BRACKET_BOLT_PITCH_Z_MM = 160.0
 # Yaw of each profile about its own vertical axis. The 100 mm side then lies along X.
 PROFILE_YAW_DEG = 90.0
 # Distance from the bottom of the profile to the bottom of the rail. TBD.
@@ -249,8 +263,24 @@ PLACEHOLDERS: dict[str, tuple[float, str]] = {
     ),
     "head_front_gap_mm": (
         HEAD_FRONT_GAP_MM,
-        "TBD. Gap from the carriage plate to the rear face of the vibrating plate. "
-        "It keeps the rear rib in front of the bottom plate at the lower end of travel.",
+        "TBD. Draft gap from the carriage plate to the rear face of the motors. "
+        "The plate rear is flush with that face.",
+    ),
+    "bottom_plate_rear_overhang_mm": (
+        BOTTOM_PLATE_REAR_OVERHANG_MM,
+        "TBD. Draft overhang of the 400 mm bottom plate behind the profile back face.",
+    ),
+    "gusset_sheet_thickness_mm": (
+        GUSSET_SHEET_THICKNESS_MM,
+        "TBD. Draft thickness of the bent frame gussets. Not a shop measurement.",
+    ),
+    "bracket_gusset_thickness_mm": (
+        BRACKET_GUSSET_THICKNESS_MM,
+        "TBD. Draft thickness of the vibration-motor bracket gussets. See CARRIAGE-BRACKET.md.",
+    ),
+    "bracket_gusset_height_mm": (
+        BRACKET_GUSSET_HEIGHT_MM,
+        "TBD. Draft height of the vibration-motor bracket gussets. See CARRIAGE-BRACKET.md.",
     ),
     "nema42_body_length_mm": (
         NEMA42_BODY_LENGTH_MM,

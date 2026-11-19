@@ -29,7 +29,7 @@
     "source": "docs/engineering/BOM.md#3",
     "step": "cad/export/step/VC-FR-4300.step",
     "unknowns": [
-      "Rod-guide bore position, NEMA 42 mount, profile feet and UTV holes."
+      "Profile feet and UTV holes. The 83 mm bore is a draft assembly cut for casing VC-GP-7100."
     ]
   },
   {
