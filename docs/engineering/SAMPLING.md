@@ -163,5 +163,11 @@ Do not change the 1500 mm profile in this revision.
 Measure the shoe length and the adapter length first.
 Then set the mast length.
 
+The full height chain is in `docs/engineering/MAST-LAYOUT.md`.
+That chain adds the motor height, the carriage and the TBD lengths.
+It compares the sum with the 1300 mm stroke.
+The drawing is `cad/export/layout/mast-stack.svg`.
+The 33.8 mm remainder above is not that chain.
+
 The published machine height remains the range 1.50-1.70 m.
 That range is not a checked stack.

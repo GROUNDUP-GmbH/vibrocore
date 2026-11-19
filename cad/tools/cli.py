@@ -15,6 +15,7 @@ import sys
 import tempfile
 from pathlib import Path
 
+from cad.models.mast_layout import LAYOUT_DIR, export_mast_layout
 from cad.tools.bom import ROOT, load_bom, modelled_parts
 from cad.tools.drawings import export_drawings
 from cad.tools.geometry import export_step_files
@@ -28,6 +29,7 @@ EXPORT_ROOTS = [
     ROOT / "cad" / "drawings",
     ROOT / "cad" / "export" / "geometry.json",
     ROOT / "cad" / "OPEN_POINTS.md",
+    LAYOUT_DIR,
 ]
 
 
@@ -77,6 +79,7 @@ def export_all(bom=None) -> None:
     export_odoo(bom)
     export_drawings(bom)
     export_step_files(bom)
+    export_mast_layout(bom)
     write_open_points(bom)
 
 
@@ -111,6 +114,7 @@ def check() -> int:
             export_odoo(bom)
             export_drawings(bom)
             export_step_files(bom)
+            export_mast_layout(bom, destination=root / "layout")
             write_open_points(bom, root / "OPEN_POINTS.md")
         finally:
             odoo_export.PLM_DIR = originals["plm"]
@@ -128,6 +132,7 @@ def check() -> int:
             (root / "step", originals["step"]),
             (root / "geometry.json", originals["json"]),
             (root / "OPEN_POINTS.md", ROOT / "cad" / "OPEN_POINTS.md"),
+            (root / "layout", LAYOUT_DIR),
         ]
         mismatches: list[str] = []
         for generated, committed in pairs:
@@ -241,7 +246,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.command == "export":
         export_all()
-        print("Exported Odoo CSV, STEP, PDF, SVG and OPEN_POINTS.md.")
+        print("Exported Odoo CSV, STEP, PDF, SVG, mast layout and OPEN_POINTS.md.")
         return 0
     if args.command == "check":
         return check()
