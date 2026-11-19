@@ -1,15 +1,21 @@
 """Create and update Vibrocore records in OdooPLM. Draft only.
 
 The YAML file stays the source. A second run updates the same engineering
-code and revision instead of inserting another one. engineering_state is
-written only as "draft" on create. action_confirm, action_release and
-new_version are not called, and a record that is no longer draft is left
-alone, including its file bytes and its engineering BOM.
+code and revision instead of inserting another one. A file is uploaded only
+when the attachment has no bytes or the stored checksum differs. Float fields
+use the decimal precision from fields_get. engineering_state is written only
+as "draft" on create. action_confirm, action_release and new_version are not
+called, and a record that is no longer draft is left alone, including its
+file bytes and its engineering BOM.
 """
 
 from __future__ import annotations
 
+import base64
+import binascii
+import hashlib
 from dataclasses import dataclass, field
+from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 
 from cad.tools.adr import AdrDocument, load_adrs
@@ -19,6 +25,10 @@ from cad.tools.plm_client import PlmClient, PlmError
 
 DRAFT = "draft"
 ADR_REVISION = 0
+# Reading a remote binary is cheap under this size. Larger printouts are not
+# downloaded when their source datas is unchanged and they have no checksum.
+CHEAP_BYTES = 1024 * 1024
+_EMPTY_SHA1 = hashlib.sha1(b"").hexdigest()
 M2O_FIELDS = {
     "product_tmpl_id",
     "categ_id",
@@ -72,10 +82,38 @@ def m2o_id(value):
     return value or False
 
 
-def _same(current: dict, desired: dict) -> bool:
+def _is_real_number(value) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
+def _decimal_places(digits) -> int | None:
+    if isinstance(digits, bool) or digits is None:
+        return None
+    if isinstance(digits, int):
+        return digits
+    if isinstance(digits, (list, tuple)) and digits:
+        places = digits[-1]
+        if isinstance(places, int) and not isinstance(places, bool):
+            return int(places)
+    return None
+
+
+def _quantize(value, places: int) -> Decimal:
+    number = Decimal(str(float(value or 0)))
+    quantum = Decimal(1).scaleb(-int(places))
+    return number.quantize(quantum, rounding=ROUND_HALF_UP)
+
+
+def _same(current: dict, desired: dict, precision: dict[str, int] | None = None) -> bool:
+    precision = precision or {}
     for key, wanted in desired.items():
         have = current.get(key)
         have = m2o_id(have) if key in M2O_FIELDS or isinstance(have, (list, tuple)) else have
+        places = precision.get(key)
+        if places is not None and (_is_real_number(wanted) or _is_real_number(have) or wanted in (False, None)):
+            if _quantize(have, places) != _quantize(wanted, places):
+                return False
+            continue
         if isinstance(wanted, float) or isinstance(have, float):
             if abs(float(have or 0) - float(wanted or 0)) > 1e-6:
                 return False
@@ -87,6 +125,77 @@ def _same(current: dict, desired: dict) -> bool:
         if (have or False) != (wanted or False):
             return False
     return True
+
+
+def _sha1(content: bytes) -> str:
+    return hashlib.sha1(content).hexdigest()
+
+
+def _normalize_checksum(value) -> str | None:
+    if not isinstance(value, str):
+        return None
+    text = value.strip().lower()
+    if len(text) == 40 and all(char in "0123456789abcdef" for char in text):
+        return text
+    return None
+
+
+def _checksum_decision(local: bytes, checksum, file_size) -> str | None:
+    """Return new, changed, unchanged, or None when the checksum cannot decide.
+
+    `checksum` is the SHA1 of the stored bytes. `file_size` is their length.
+    A missing checksum and a size of 0 mean the attachment has no datas.
+    """
+    stored = _normalize_checksum(checksum)
+    size = file_size if isinstance(file_size, int) and not isinstance(file_size, bool) else None
+    local_sum = _sha1(local)
+    if stored is not None:
+        size_ok = size is None or size == len(local)
+        if stored == local_sum and size_ok:
+            return "unchanged"
+        if size == 0 or stored == _EMPTY_SHA1:
+            return "new" if local else "unchanged"
+        return "changed"
+    if size in (None, 0):
+        return "new" if local else "unchanged"
+    return None
+
+
+def _decode_binary(value) -> bytes:
+    if not value:
+        return b""
+    if isinstance(value, bytes):
+        return value
+    if isinstance(value, str):
+        try:
+            return base64.b64decode(value, validate=False)
+        except (binascii.Error, ValueError):
+            return b""
+    return b""
+
+
+def _parse_human_size(value) -> int | None:
+    """Parse an Odoo bin_size string such as '1.50 Kb'. None when it is not one."""
+    if not isinstance(value, str):
+        return None
+    parts = value.strip().split()
+    if len(parts) != 2:
+        return None
+    try:
+        number = float(parts[0])
+    except ValueError:
+        return None
+    scale = {"bytes": 1, "kb": 1024, "mb": 1024**2, "gb": 1024**3, "tb": 1024**4}.get(parts[1].lower())
+    if scale is None:
+        return None
+    return int(number * scale)
+
+
+def _upload_detail(filename: str, reason: str, document_id: int = 0) -> str:
+    detail = f"{filename} reason={reason}"
+    if document_id:
+        return f"doc_id={document_id} {detail}"
+    return detail
 
 
 class PlmSync:
@@ -115,6 +224,7 @@ class PlmSync:
         self._partners: dict[str, int] = {}
         self._products: dict[str, dict] = {}
         self._adrs: list[AdrDocument] = []
+        self._field_info: dict[str, dict] = {}
 
     def run(self) -> SyncReport:
         self._adrs = self._selected_adrs()
@@ -245,9 +355,226 @@ class PlmSync:
         assert self.client is not None
         return self.client.execute(model, method, args, kwargs)
 
+    def _model_fields(self, model: str) -> dict:
+        if model not in self._field_info:
+            result = self._execute(
+                model,
+                "fields_get",
+                [],
+                {"attributes": ["string", "type", "digits"]},
+            )
+            self._field_info[model] = result or {}
+        return self._field_info[model]
+
     def _fields(self, model: str) -> set[str]:
-        result = self._execute(model, "fields_get", [], {"attributes": ["string"]})
-        return set(result or {})
+        return set(self._model_fields(model))
+
+    def _precision(self, model: str) -> dict[str, int]:
+        found: dict[str, int] = {}
+        for name, spec in self._model_fields(model).items():
+            if not isinstance(spec, dict):
+                continue
+            places = _decimal_places(spec.get("digits"))
+            if places is not None:
+                found[name] = places
+        return found
+
+    def _quantize_vals(self, model: str, vals: dict) -> dict:
+        precision = self._precision(model)
+        if not precision:
+            return vals
+        out = dict(vals)
+        for name, places in precision.items():
+            value = out.get(name)
+            if _is_real_number(value):
+                out[name] = float(_quantize(value, places))
+        return out
+
+    def _document_read_fields(self) -> list[str]:
+        fields = ["id", "name", "engineering_state", "is_plm", "description"]
+        known = self._model_fields("ir.attachment")
+        for name in ("checksum", "file_size"):
+            if not known or name in known:
+                fields.append(name)
+        return fields
+
+    def _datas_reason(self, current: dict | None, local: bytes) -> str:
+        if not current or not current.get("id"):
+            return "new"
+        known = self._model_fields("ir.attachment")
+        use_checksum = (not known) or ("checksum" in known)
+        use_size = (not known) or ("file_size" in known)
+        decision = _checksum_decision(
+            local,
+            current.get("checksum") if use_checksum else None,
+            current.get("file_size") if use_size else None,
+        )
+        if decision:
+            return decision
+        file_size = current.get("file_size") if use_size else None
+        if isinstance(file_size, int) and 0 < file_size <= CHEAP_BYTES:
+            remote = self._read_binary(int(current["id"]), "datas")
+            if not remote:
+                return "new"
+            return "unchanged" if _sha1(remote) == _sha1(local) else "changed"
+        return "changed"
+
+    def _printout_storage(self, document_id: int) -> list[dict]:
+        if not document_id:
+            return []
+        fields = ["id"]
+        known = self._model_fields("ir.attachment")
+        for name in ("checksum", "file_size"):
+            if not known or name in known:
+                fields.append(name)
+        found = self._execute(
+            "ir.attachment",
+            "search_read",
+            [[
+                ("res_model", "=", "ir.attachment"),
+                ("res_field", "=", "printout"),
+                ("res_id", "=", document_id),
+            ]],
+            {"fields": fields, "limit": 5},
+        )
+        return list(found or [])
+
+    def _printout_reason(self, document_id: int, local: bytes, datas_reason: str) -> str:
+        if not document_id:
+            return "new"
+        rows = self._printout_storage(document_id)
+        if rows:
+            return self._reason_from_storage(rows, local, datas_reason, document_id)
+        return self._printout_from_field(document_id, local, datas_reason)
+
+    def _reason_from_storage(self, rows: list[dict], local: bytes, datas_reason: str, document_id: int) -> str:
+        decisions = []
+        for row in rows:
+            decision = _checksum_decision(local, row.get("checksum"), row.get("file_size"))
+            if decision == "unchanged":
+                return "unchanged"
+            if decision:
+                decisions.append(decision)
+        if "changed" in decisions:
+            return "changed"
+        if decisions and "new" not in decisions:
+            return decisions[0]
+        sizes = [
+            row.get("file_size")
+            for row in rows
+            if isinstance(row.get("file_size"), int) and not isinstance(row.get("file_size"), bool)
+        ]
+        if sizes and max(sizes) == 0 and not decisions:
+            return "new"
+        if any(0 < size <= CHEAP_BYTES for size in sizes):
+            return self._compare_printout_bytes(document_id, local)
+        if decisions:
+            # Checksum said the stored printout is empty, or it differs.
+            return "new" if "new" in decisions and "changed" not in decisions else "changed"
+        if datas_reason == "unchanged":
+            return "unchanged"
+        return "changed" if datas_reason == "changed" else "new"
+
+    def _printout_from_field(self, document_id: int, local: bytes, datas_reason: str) -> str:
+        value = self._probe_binary(document_id, "printout")
+        if value in (False, None, ""):
+            return "new"
+        if isinstance(value, (bytes, bytearray)):
+            remote = bytes(value)
+            if not remote:
+                return "new"
+            return "unchanged" if _sha1(remote) == _sha1(local) else "changed"
+        if isinstance(value, str):
+            size = _parse_human_size(value)
+            if size is not None:
+                if size == 0:
+                    return "new"
+                if size <= CHEAP_BYTES:
+                    return self._compare_printout_bytes(document_id, local)
+                if datas_reason == "unchanged":
+                    return "unchanged"
+                return "changed" if datas_reason == "changed" else "new"
+            remote = _decode_binary(value)
+            if not remote:
+                return "new"
+            return "unchanged" if _sha1(remote) == _sha1(local) else "changed"
+        if datas_reason == "unchanged":
+            return "unchanged"
+        return "changed" if datas_reason == "changed" else "new"
+
+    def _compare_printout_bytes(self, document_id: int, local: bytes) -> str:
+        remote = self._read_binary(document_id, "printout")
+        if not remote:
+            return "new"
+        return "unchanged" if _sha1(remote) == _sha1(local) else "changed"
+
+    def _probe_binary(self, record_id: int, field_name: str):
+        rows = self._execute(
+            "ir.attachment",
+            "read",
+            [[record_id]],
+            {"fields": [field_name], "context": {"bin_size": True}},
+        )
+        if not rows:
+            return False
+        return rows[0].get(field_name, False)
+
+    def _read_binary(self, record_id: int, field_name: str) -> bytes:
+        rows = self._execute(
+            "ir.attachment",
+            "read",
+            [[record_id]],
+            {"fields": [field_name]},
+        )
+        if not rows:
+            return b""
+        return _decode_binary(rows[0].get(field_name))
+
+    def _send_upload(self, route: str, document_id: int, key: str, filename: str, content: bytes, reason: str) -> None:
+        if reason == "unchanged":
+            return
+        if reason not in {"new", "changed"}:
+            raise PlmError(f"Unknown upload reason {reason!r}.")
+        if self.dry_run or not document_id:
+            self.report.add("upload", route, key, _upload_detail(filename, reason))
+            return
+        assert self.client is not None
+        if route.endswith("/upload_pdf"):
+            self.client.upload_printout(document_id, filename, content)
+        else:
+            self.client.upload_datas(document_id, filename, content)
+        self.report.add("upload", route, key, _upload_detail(filename, reason, document_id))
+
+    def _upload_datas(self, current: dict | None, document_id: int, key: str, filename: str, path: Path, state: str) -> str:
+        """Plan or send datas. Return the reason, including 'unchanged'."""
+        if state != DRAFT:
+            return "unchanged"
+        if current is None or not document_id:
+            reason = "new"
+            content = b"" if self.dry_run or not document_id else path.read_bytes()
+        else:
+            content = path.read_bytes()
+            reason = self._datas_reason(current, content)
+        self._send_upload("/plm_document_upload/upload", document_id, key, filename, content, reason)
+        return reason
+
+    def _upload_printout(
+        self,
+        document_id: int,
+        key: str,
+        filename: str,
+        path: Path,
+        state: str,
+        datas_reason: str,
+    ) -> None:
+        if state != DRAFT:
+            return
+        if not document_id:
+            self._send_upload("/plm_document_upload/upload_pdf", 0, key, filename, b"", "new")
+            return
+        content = path.read_bytes()
+        reason = self._printout_reason(document_id, content, datas_reason)
+        self._send_upload("/plm_document_upload/upload_pdf", document_id, key, filename, content, reason)
 
     def _xml(self, xml_id: str) -> int | None:
         if xml_id in self._xml_ids:
@@ -430,7 +757,8 @@ class PlmSync:
             "uom_id",
         ]
         current = self._find_part_record("product.product", part, fields)
-        vals = self._product_vals(part)
+        vals = self._quantize_vals("product.product", self._product_vals(part))
+        precision = self._precision("product.product")
         key = f"{part.part_number} rev {part.revision_index}"
         if current is None:
             if self.dry_run:
@@ -474,7 +802,7 @@ class PlmSync:
             for key, value in vals.items()
             if key not in {"engineering_code", "engineering_revision", "uom_id"}
         }
-        if _same(current, comparable):
+        if _same(current, comparable, precision):
             self.report.add("unchanged", "product.product", key, f"id={stored['id']}")
             return
         if self.dry_run:
@@ -512,6 +840,8 @@ class PlmSync:
         }
         if self._currency_id:
             vals["currency_id"] = self._currency_id
+        vals = self._quantize_vals("product.supplierinfo", vals)
+        supplier_precision = self._precision("product.supplierinfo")
         if not found:
             if self.dry_run or not product["id"] or not partner_id:
                 self.report.add("create", "product.supplierinfo", part.part_number, "")
@@ -520,7 +850,8 @@ class PlmSync:
             self.report.add("create", "product.supplierinfo", part.part_number, f"id={_one_id(created)}")
             return
         current = found[0]
-        if _same(current, {"price": vals["price"], "min_qty": 1.0, "product_code": vals["product_code"]}):
+        supplier_compare = {"price": vals["price"], "min_qty": vals["min_qty"], "product_code": vals["product_code"]}
+        if _same(current, supplier_compare, supplier_precision):
             self.report.add("unchanged", "product.supplierinfo", part.part_number, f"id={current['id']}")
             return
         if self.dry_run:
@@ -529,7 +860,7 @@ class PlmSync:
         self._execute(
             "product.supplierinfo",
             "write",
-            [[current["id"]], {"price": vals["price"], "min_qty": 1.0, "product_code": vals["product_code"]}],
+            [[current["id"]], supplier_compare],
         )
         self.report.add("update", "product.supplierinfo", part.part_number, f"id={current['id']}")
 
@@ -543,7 +874,7 @@ class PlmSync:
         current = self._find_part_record(
             "ir.attachment",
             part,
-            ["id", "name", "engineering_state", "is_plm", "description"],
+            self._document_read_fields(),
         )
         if current is not None and not current.get("is_plm", True):
             raise PlmError(
@@ -602,24 +933,9 @@ class PlmSync:
                 self.report.add("unchanged", "ir.attachment", key, f"id={document_id}")
         product = self._products[part.part_number]
         self._sync_link(part, product["id"], document_id, product["engineering_state"], state)
-        if state != DRAFT:
-            return
-        if self.dry_run or not document_id:
-            self.report.add("upload", "/plm_document_upload/upload", key, filename)
-            if printout_path:
-                self.report.add("upload", "/plm_document_upload/upload_pdf", key, printout_name)
-            return
-        assert self.client is not None
-        self.client.upload_datas(document_id, filename, datas_path.read_bytes())
-        self.report.add("upload", "/plm_document_upload/upload", key, f"doc_id={document_id} {filename}")
+        datas_reason = self._upload_datas(current, document_id, key, filename, datas_path, state)
         if printout_path:
-            self.client.upload_printout(document_id, printout_name, printout_path.read_bytes())
-            self.report.add(
-                "upload",
-                "/plm_document_upload/upload_pdf",
-                key,
-                f"doc_id={document_id} {printout_name}",
-            )
+            self._upload_printout(document_id, key, printout_name, printout_path, state, datas_reason)
 
     def _sync_link(
         self,
@@ -684,10 +1000,7 @@ class PlmSync:
             f"Source {adr.source_path.relative_to(ROOT)}. "
             f"Parts: {', '.join(adr.parts)}."
         )
-        current = self._find_adr_record(
-            adr,
-            ["id", "name", "engineering_state", "is_plm", "description"],
-        )
+        current = self._find_adr_record(adr, self._document_read_fields())
         if current is not None and not current.get("is_plm", True):
             raise PlmError(
                 f"ir.attachment {adr.code} rev {ADR_REVISION} exists but is_plm is false. "
@@ -755,19 +1068,7 @@ class PlmSync:
                 key=f"{adr.code}->{part_number}",
             )
 
-        if state != DRAFT:
-            return
-        if self.dry_run or not document_id:
-            self.report.add("upload", "/plm_document_upload/upload", key, filename)
-            return
-        assert self.client is not None
-        self.client.upload_datas(document_id, filename, datas_path.read_bytes())
-        self.report.add(
-            "upload",
-            "/plm_document_upload/upload",
-            key,
-            f"doc_id={document_id} {filename}",
-        )
+        self._upload_datas(current, document_id, key, filename, datas_path, state)
 
     def _sync_bom(self, number: str) -> None:
         part = self.bom.part(number)
@@ -890,7 +1191,8 @@ class PlmSync:
                 "itemnum": line["itemnum"],
                 "itemlbl": line["itemlbl"],
             }
-            if _same(current, comparable):
+            comparable = self._quantize_vals("mrp.bom.line", comparable)
+            if _same(current, comparable, self._precision("mrp.bom.line")):
                 self.report.add("unchanged", "mrp.bom.line", label, f"id={current['id']}")
                 continue
             if self.dry_run:

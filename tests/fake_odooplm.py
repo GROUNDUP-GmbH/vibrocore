@@ -7,6 +7,8 @@ and a JSON-RPC execute_kw object service.
 
 from __future__ import annotations
 
+import base64
+import hashlib
 import json
 import threading
 import urllib.parse
@@ -39,6 +41,8 @@ class FakeOdoo:
         self.rpc_secrets: list[str] = []
         self.auto_default_code = False
         self.fail_login = False
+        self.field_meta: dict[str, dict] = {}
+        self.binary_reads: list[tuple[str, bool]] = []
         self._seed()
         self._httpd: ThreadingHTTPServer | None = None
         self._thread: threading.Thread | None = None
@@ -123,6 +127,8 @@ class FakeOdoo:
                 if path.endswith("/upload"):
                     content = files["mod_file"][1]
                     document["datas"] = content
+                    document["checksum"] = hashlib.sha1(content).hexdigest()
+                    document["file_size"] = len(content)
                     document["name"] = fields.get("filename") or files["mod_file"][0]
                     store.uploads.append(
                         {
@@ -192,14 +198,21 @@ class FakeOdoo:
         kwargs = kwargs or {}
         self.calls.append((model, method))
         if method == "fields_get":
-            fields = {"name": {"string": "Name"}, "engineering_code": {"string": "Code"}}
-            if self.auto_default_code:
-                fields["auto_default_code"] = {"string": "Automatic Internal Reference"}
-            return fields
+            return self._fields_get(model)
+        bin_size = bool((kwargs.get("context") or {}).get("bin_size"))
         if method == "search_read":
-            return self._search_read(model, args[0], kwargs.get("fields") or [], kwargs.get("limit"))
+            return self._search_read(
+                model,
+                args[0],
+                kwargs.get("fields") or [],
+                kwargs.get("limit"),
+                bin_size,
+            )
         if method == "read":
-            return [self._public(self.rows[model][int(item)], kwargs.get("fields") or []) for item in args[0]]
+            return [
+                self._public(self.rows[model][int(item)], kwargs.get("fields") or [], bin_size)
+                for item in args[0]
+            ]
         if method == "create":
             return self._create(model, args[0])
         if method == "write":
@@ -219,17 +232,87 @@ class FakeOdoo:
                 found.append(row)
         return found
 
-    def _search_read(self, model, domain, fields, limit):
+    def _fields_get(self, model: str) -> dict:
+        fields = {
+            "name": {"string": "Name", "type": "char"},
+            "engineering_code": {"string": "Code", "type": "char"},
+        }
+        if model == "ir.attachment":
+            fields.update(
+                {
+                    "checksum": {"string": "Checksum/SHA1", "type": "char"},
+                    "file_size": {"string": "File Size", "type": "integer"},
+                    "datas": {"string": "File Content", "type": "binary"},
+                    "printout": {"string": "Printout Content", "type": "binary"},
+                }
+            )
+        if model == "product.product" and self.auto_default_code:
+            fields["auto_default_code"] = {
+                "string": "Automatic Internal Reference",
+                "type": "boolean",
+            }
+        for name, spec in self.field_meta.get(model, {}).items():
+            merged = dict(fields.get(name, {}))
+            if isinstance(spec, dict):
+                merged.update(spec)
+            fields[name] = merged
+        return fields
+
+    def _store_printout(self, document: dict, content: bytes) -> None:
+        """Store the PDF the way Odoo stores a Binary field (its own attachment)."""
+        checksum = hashlib.sha1(content).hexdigest()
+        existing = [
+            row
+            for row in self.rows["ir.attachment"].values()
+            if row.get("res_model") == "ir.attachment"
+            and row.get("res_field") == "printout"
+            and row.get("res_id") == document["id"]
+        ]
+        if existing:
+            existing[0]["checksum"] = checksum
+            existing[0]["file_size"] = len(content)
+            existing[0]["datas"] = content
+            return
+        self._create(
+            "ir.attachment",
+            {
+                "name": "printout",
+                "res_model": "ir.attachment",
+                "res_field": "printout",
+                "res_id": document["id"],
+                "checksum": checksum,
+                "file_size": len(content),
+                "datas": content,
+                "type": "binary",
+            },
+        )
+
+    def _search_read(self, model, domain, fields, limit, bin_size=False):
         rows = self._matching(model, domain)
         if limit:
             rows = rows[: int(limit)]
-        return [self._public(row, fields) for row in rows]
+        return [self._public(row, fields, bin_size) for row in rows]
 
-    def _public(self, row, fields):
+    def _public(self, row, fields, bin_size=False):
         keys = fields or list(row)
         out = {}
         for key in keys:
             value = row.get(key, False)
+            if key in {"datas", "printout"}:
+                self.binary_reads.append((key, bool(bin_size)))
+                raw = value or b""
+                if isinstance(raw, str):
+                    raw = raw.encode("utf-8")
+                elif not isinstance(raw, (bytes, bytearray)):
+                    raw = b""
+                if bin_size:
+                    out[key] = _human_size(len(raw)) if raw else False
+                elif not raw:
+                    out[key] = False
+                else:
+                    # JSON-RPC returns binary fields as base64 text, same as Odoo.
+                    out[key] = base64.b64encode(bytes(raw)).decode("ascii")
+                continue
             if key in M2O and value:
                 out[key] = [value, "named"]
             else:
@@ -278,6 +361,16 @@ class FakeOdoo:
 
     def records(self, model):
         return list(self.rows[model].values())
+
+
+def _human_size(size: int) -> str:
+    units = ("bytes", "Kb", "Mb", "Gb", "Tb")
+    value = float(size)
+    index = 0
+    while value >= 1024 and index < len(units) - 1:
+        value /= 1024
+        index += 1
+    return f"{value:0.2f} {units[index]}"
 
 
 def _domain_ok(row, domain) -> bool:
