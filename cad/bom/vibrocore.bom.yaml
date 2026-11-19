@@ -830,7 +830,7 @@ parts:
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: Draft bent S355 sheet, 4 mm. Ties the two profiles under the top plate. Bolted with T-slot nuts.
+  spec: Draft bent S355 sheet, 4 mm. Ties the two profiles near the top. Bolted with T-slot nuts.
   legacy_ref: draft-fr-4160
   supplier_id: custom_eu
   material: S355
@@ -867,6 +867,36 @@ parts:
   unknowns:
   - Final cut length follows the profile pitch. The 300 mm pitch is TBD. Not in BOM.md v1.
   notes: Draft. Cut this bar to length. Do not change the 1500 mm uprights to hide the height deficit.
+- part_number: VC-FR-4190
+  name: Front top stiffener
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Draft S355 sheet, 4 mm. Bolts to both profile front faces above the rails. Replaces the stiffness of the top plate.
+  legacy_ref: draft-fr-4190
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
+- part_number: VC-FR-4195
+  name: Rear top stiffener
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Draft S355 sheet, 4 mm. Bolts to both profile rear faces above the rails. The sheet is 4 mm behind the rear face. The tilt mechanism must clear it.
+  legacy_ref: draft-fr-4195
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
 - part_number: VC-FR-4200
   name: Profile connector
   revision_index: 0
@@ -931,6 +961,8 @@ parts:
     source: docs/engineering/BOM.md#3
   unknowns:
   - Idle-sprocket mount and profile bolt pattern.
+  - Not fitted in the current machine pose. The idler bearing blocks sit on the profile ends. The blank stays in the BOM.
+  notes: The machine pose does not mount this plate. Keep the line so the BOM.md quantity stays.
 - part_number: VC-FR-4500
   name: Rod guide bushing
   revision_index: 0
@@ -948,6 +980,7 @@ parts:
   unknowns:
   - Length, flange and housing diameter.
   - The latch or the screws that close the two halves are not selected.
+  - Deferred by Stefan, 2026-11-19. Proposal only, a split or removable guide bushing so the 87.63 mm shoe can pass the closed 83 mm bore, then the bushing closes on the 82.55 mm casing. The bore diameter stays 83 mm.
 - part_number: VC-FR-4600
   name: UTV mounting bracket
   revision_index: 0
@@ -1141,8 +1174,10 @@ parts:
   supply: subcontract
   subsystem: hub
   category: Hub
-  spec: Draft steel bracket. Holds the NEMA 42, brake and gearbox with the motor axis parallel to the
-    sprocket shaft. Bolts to both uprights and to the cut crossbar VC-FR-4180.
+  spec: Draft steel bracket. Holds the NEMA 42, brake and gearbox below the bottom plate. The motor
+    axis is parallel to the sprocket shaft and stays flush with the profile rear face. A draft drop-drive
+    envelope in the profile gap connects that axis to the shaft between the uprights. The gear teeth are
+    not selected. Nothing enters the reserved volume behind the rear faces.
   legacy_ref: draft-hb-2110
   supplier_id: custom_eu
   material: S355
@@ -1263,7 +1298,7 @@ parts:
   supply: subcontract
   subsystem: hub
   category: Hub
-  spec: Draft keyed shaft, diameter 30 mm, carried in two bearings under the top plate.
+  spec: Draft keyed shaft, diameter 30 mm. It sits on top of the profile ends, on the mast mid-plane.
   legacy_ref: draft-hb-2820
   supplier_id: custom_eu
   material: S355
@@ -1278,8 +1313,8 @@ parts:
   supply: subcontract
   subsystem: hub
   category: Hub
-  spec: Draft bracket, two pieces. Slotted bearing seat and a tension screw land. Bolts to the profile
-    back face. Seat sized for a 30 mm bore pillow block.
+  spec: Draft bracket, two pieces. Slotted bearing seat and a tension screw land. Bolts to the top of
+    each profile end. Seat sized for a 30 mm bore.
   legacy_ref: draft-hb-2830
   supplier_id: custom_eu
   material: S355
@@ -2128,6 +2163,8 @@ boms:
   - {part_number: VC-FR-4160, qty: 1}
   - {part_number: VC-FR-4170, qty: 1}
   - {part_number: VC-FR-4180, qty: 1}
+  - {part_number: VC-FR-4190, qty: 1}
+  - {part_number: VC-FR-4195, qty: 1}
   - {part_number: VC-FR-4200, qty: 8}
   - {part_number: VC-FR-4300, qty: 1}
   - {part_number: VC-FR-4400, qty: 1}

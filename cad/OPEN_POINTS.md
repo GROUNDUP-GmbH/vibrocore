@@ -91,11 +91,15 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-FR-4160` Top frame gusset: Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4170` Mid frame gusset: Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4180` Drive crossbar mk 2004: Final cut length follows the profile pitch. The 300 mm pitch is TBD. Not in BOM.md v1.
+- `VC-FR-4190` Front top stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
+- `VC-FR-4195` Rear top stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4200` Profile connector: Which mk connector.
 - `VC-FR-4300` Bottom steel plate: Profile feet and UTV holes. The 83 mm bore is a draft assembly cut for casing VC-GP-7100.
 - `VC-FR-4400` Top steel plate: Idle-sprocket mount and profile bolt pattern.
+- `VC-FR-4400` Top steel plate: Not fitted in the current machine pose. The idler bearing blocks sit on the profile ends. The blank stays in the BOM.
 - `VC-FR-4500` Rod guide bushing: Length, flange and housing diameter.
 - `VC-FR-4500` Rod guide bushing: The latch or the screws that close the two halves are not selected.
+- `VC-FR-4500` Rod guide bushing: Deferred by Stefan, 2026-11-19. Proposal only, a split or removable guide bushing so the 87.63 mm shoe can pass the closed 83 mm bore, then the bushing closes on the 82.55 mm casing. The bore diameter stays 83 mm.
 - `VC-FR-4600` UTV mounting bracket: UTV interface dimensions.
 - `VC-FR-4700` Tilt mechanism: Strut force, hinge pin and lock.
 - `VC-FR-4800` Stabiliser foot: Selected jack and the pad size.

@@ -227,6 +227,7 @@ The bottom plate is not a term in the seven-length sum.
 The schematic study puts the string through the plate centre.
 The machine pose does not.
 The 400 mm blank is shifted forward.
+Its rear face is flush with the profile rear faces.
 It still covers both profiles.
 An 83 mm bore is cut on the rod axis.
 That bore is the closed guide from VC-FR-4500.
@@ -234,7 +235,9 @@ It guides the 82.55 mm casing VC-GP-7100.
 The radial clearance is (83 − 82.55) / 2 = 0.225 mm.
 The cutting shoe is 87.63 mm outside.
 A closed 83 mm bore blocks the shoe.
-The bushing length is still unknown.
+Stefan deferred the shoe passage.
+The open point is a split or removable bushing.
+The bore diameter stays 83 mm.
 
 ## Assembly pose
 
@@ -267,23 +270,43 @@ The guided travel is 1022.5 mm.
 The start value is 1022.5 mm.
 That is the top of the travel.
 The upper block then ends on the rail top at 1415 mm.
-The same solids at stroke 0 and at 500 mm do not overlap.
+The same solids at stroke 0, at mid travel 511.2 mm and at the top do not overlap.
+
+The volume behind the profile rear faces is reserved for the machine tilt mechanism.
+Those faces are the plane X = −50 mm.
+No chain strand, sprocket, shaft, gearbox, brake or motor enters X < −50 mm.
+The rear stiffener VC-FR-4195 is the one exception.
+It is a 4 mm sheet on the rear face, from X = −54 mm to X = −50 mm.
+It covers only the band above the rails, from Z = 1430 mm to the profile top.
+The tilt mechanism must clear that sheet.
+The bottom plate and the gearbox are flush with X = −50 mm.
+The gearbox top is at Z = −2 mm, below the plate.
 
 The chain lift is VC-ASM-2000, not the VC-ASM-8100 actuators.
-The sprocket shaft runs along Y.
-The NEMA 42 motor, the brake and the PLPE120 gearbox use that same axis.
-The train does not stick out sideways.
-It sits behind the profiles.
+Both chain strands, the drive sprocket and the idler sprocket sit in the profile gap.
+The shaft axis is the mast mid-plane, X = 0.
+The axis runs along Y and stops before the inner faces.
+The rear strand stays at X = −45.9 mm, 4.1 mm in front of the rear face.
+The sprocket disk spans X = −41.5 mm to 41.5 mm.
+The NEMA 42 motor, the brake and the PLPE120 gearbox are parallel to that shaft.
+They sit below the bottom plate.
+A 120 mm gearbox on the chain axis would cross the rear face, so its axis is at X = 10 mm.
+The housing rear face is then flush with the profiles.
+VC-HB-2110 is the draft bracket and the draft drop-drive envelope between the two axes.
+The gear teeth are not selected.
 A cut mk 2004 bar, VC-FR-4180, spans the clear gap between the inner faces.
+It sits between the chain strands at mid height.
 At the 300 mm pitch that cut length is 250 mm.
 The two uprights stay 1500 mm.
-The motor bracket VC-HB-2110 bolts to both uprights and to that bar.
-The idle sprocket sits on a shaft.
-The shaft is carried in two slotted bearing brackets.
-Those brackets bolt to the profiles.
-Two chain strands run between the pitch circles.
-One strand meets the carriage on a face.
-Bent 4 mm gussets tie the profiles at the bottom, at mid height and at the top.
+The idle sprocket sits on a shaft above the profile ends.
+Two bearing blocks, VC-HB-2830, bolt to those ends.
+Each block has a slotted seat and a tension screw.
+The top steel plate VC-FR-4400 is not fitted in this pose.
+The blank stays on the BOM.
+Two 4 mm sheets, VC-FR-4190 on the front face and VC-FR-4195 on the rear face, bolt to both profiles above the rails.
+They replace the stiffness the top plate gave.
+Bent 4 mm gussets still tie the profiles at the bottom, at mid height and at the top.
+The gusset webs sit between the chain strands.
 The sprocket envelope uses the published 83 mm tip diameter.
 The pitch radius is the documented 37.9 mm.
 The gearbox envelope is the published PLPE120 two-stage minimum, 120 mm by 219.5 mm.
@@ -295,36 +318,41 @@ The solid is recentered and placed with the envelope pose.
 A missing file keeps the envelope.
 No vendor STEP is in this revision.
 
-The shoe tip is at Z = -503.7 mm in the start pose.
-The head is on the rails.
-The string is longer than the distance down to the ground line.
-Ground clearance stays in the required height.
-It is not a shift of this pose.
+The vibrating plate bottom is at the same height as the lower guide block.
+The plate does not hang below the carriage.
+That pose lifts the shoe tip by 70 mm, to Z = −433.7 mm.
+The parameter chain still adds the head and the carriage in series.
 The required height is still 1761.2 mm.
 The deficit against the 1300 mm stroke is still 461.2 mm.
+Moving the head up does not remove a term from that sum.
+The string is still longer than the distance down to the ground line.
+Ground clearance stays in the required height.
+It is not a shift of this pose.
 
-The plates are stacked on the profile ends.
-The solids meet on a face.
-They do not share a volume.
+The bottom plate meets the profiles on a face.
+The solids do not share a volume.
 At the TBD pitch of 300 mm the profiles overhang the bottom plate by 25 mm.
-The top plate covers 0 mm of each profile.
-The 200 mm top plate does not reach the profiles after the yaw.
+The length study still subtracts the 12 mm top-plate blank.
+The machine pose does not mount that plate.
 
 Clearances below use that TBD pitch and the draft 10 mm front gap.
 Do not treat them as a measured fit.
 The shoe tip is below the profiles, so the shoe distance includes that vertical gap.
+The head clears the rails, the profiles and the gussets at stroke 0, at mid travel and at the top.
 
 | Pair | Clearance | Note |
 |---|---|---|
-| Shoe to nearest profile | 471.7 mm | 3D distance. The tip is below the mast. |
+| Shoe to nearest profile | 407.4 mm | 3D distance. The tip is below the mast. It was 471.7 mm before the head moved up. |
 | Casing to nearest profile | 175.8 mm | The casing passes the mast height. |
-| Casing to the 83 mm bore wall | 0.225 mm | Radial clearance on the 82.55 mm casing. |
+| Casing to the 83 mm bore wall | 0.225 mm | Radial clearance on the 82.55 mm casing. The bore is unchanged. |
 | Rod axis past the rail face | 160.0 mm | Overhang from the rail to the rod. |
 | Motor envelope to carriage | 10.0 mm | Draft gap at the motor rear face. |
 | Motor to nearest profile | 50.0 mm | No collision. |
 | Motor to nearest rail | 32.5 mm | No collision. |
-| Vibrating plate to top plate | 427.5 mm | The head is in front of the mast. |
-| Carriage to chain strand | 0.0 mm | The lug meets the strand on a face. |
+| Vibrating plate to nearest profile | 50.0 mm | The plate rear is flush with the motors. |
+| Vibrating plate to nearest rail | 32.5 mm | The plate shares the guide-block height. |
+| Carriage to chain strand | 0.0 mm | The lug meets the front strand on a face. |
+| Rear chain strand to the rear face | 4.1 mm | The strand stays in the gap, at X = −45.9 mm. |
 
 No pair of part solids shares more than 1 mm³.
 The ground datum is not a part.

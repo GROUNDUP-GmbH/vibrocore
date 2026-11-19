@@ -13,13 +13,15 @@
 <text x="20" y="55.400000000000006" font-size="2.8" font-family="sans-serif">3      VC-FR-4160     A    1    Top frame gusset</text>
 <text x="20" y="59.60000000000001" font-size="2.8" font-family="sans-serif">4      VC-FR-4170     A    1    Mid frame gusset</text>
 <text x="20" y="63.80000000000001" font-size="2.8" font-family="sans-serif">5      VC-FR-4180     A    1    Drive crossbar mk 2004</text>
-<text x="20" y="68.00000000000001" font-size="2.8" font-family="sans-serif">6      VC-FR-4200     A    8    Profile connector</text>
-<text x="20" y="72.20000000000002" font-size="2.8" font-family="sans-serif">7      VC-FR-4300     A    1    Bottom steel plate</text>
-<text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-FR-4400     A    1    Top steel plate</text>
-<text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-FR-4500     A    1    Rod guide bushing</text>
-<text x="20" y="84.80000000000003" font-size="2.8" font-family="sans-serif">10     VC-FR-4600     A    4    UTV mounting bracket</text>
-<text x="20" y="89.00000000000003" font-size="2.8" font-family="sans-serif">11     VC-FR-4800     A    4    Stabiliser foot</text>
-<text x="20" y="93.20000000000003" font-size="2.8" font-family="sans-serif">12     VC-FR-4900     A    1    Fastener kit, frame</text>
+<text x="20" y="68.00000000000001" font-size="2.8" font-family="sans-serif">6      VC-FR-4190     A    1    Front top stiffener</text>
+<text x="20" y="72.20000000000002" font-size="2.8" font-family="sans-serif">7      VC-FR-4195     A    1    Rear top stiffener</text>
+<text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-FR-4200     A    8    Profile connector</text>
+<text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-FR-4300     A    1    Bottom steel plate</text>
+<text x="20" y="84.80000000000003" font-size="2.8" font-family="sans-serif">10     VC-FR-4400     A    1    Top steel plate</text>
+<text x="20" y="89.00000000000003" font-size="2.8" font-family="sans-serif">11     VC-FR-4500     A    1    Rod guide bushing</text>
+<text x="20" y="93.20000000000003" font-size="2.8" font-family="sans-serif">12     VC-FR-4600     A    4    UTV mounting bracket</text>
+<text x="20" y="97.40000000000003" font-size="2.8" font-family="sans-serif">13     VC-FR-4800     A    4    Stabiliser foot</text>
+<text x="20" y="101.60000000000004" font-size="2.8" font-family="sans-serif">14     VC-FR-4900     A    1    Fastener kit, frame</text>
 <text x="20" y="244" font-size="3" font-family="sans-serif">Schematic only. Component positions that are not dimensioned in the design documents are not drawn.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>

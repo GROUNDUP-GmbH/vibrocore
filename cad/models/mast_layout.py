@@ -132,13 +132,15 @@ STROKE_POSITION_MM = GUIDED_TRAVEL_MM
 # Draft. Gap from the carriage plate to the rear face of the motors.
 # The vibrating plate rear is flush with that face, so the rod sits close to the rails.
 HEAD_FRONT_GAP_MM = 10.0
-# The 400 mm bottom-plate blank stays. Its rear face sits this far behind the profile back face.
-BOTTOM_PLATE_REAR_OVERHANG_MM = 20.0
+# The 400 mm bottom-plate blank stays. Its rear face is flush with the profile rear faces.
+# The volume behind those faces is reserved for the machine tilt mechanism.
+BOTTOM_PLATE_REAR_OVERHANG_MM = 0.0
 # VC-FR-4500 closed bore. It guides the 82.55 mm casing VC-GP-7100, not the column.
 CASING_GUIDE_BORE_DIAMETER_MM = 83.0
-# Gap from the profile back face to the gearbox housing. The drive axis is along Y.
-# Large enough that the housing stays behind the bracket spine on the profile backs.
-DRIVE_BACK_CLEARANCE_MM = 20.0
+# The chain axis is the mast mid-plane (X = 0), in the gap between the uprights.
+# The lift motor sits below the bottom plate. Its axis is far enough forward that a
+# 120 mm gearbox stays flush with the profile rear face and does not enter the tilt zone.
+CHAIN_AXIS_X_MM = 0.0
 # Draft sheet for the frame gussets. Not a shop measurement.
 GUSSET_SHEET_THICKNESS_MM = 4.0
 GUSSET_HEIGHT_MM = 80.0
@@ -268,7 +270,7 @@ PLACEHOLDERS: dict[str, tuple[float, str]] = {
     ),
     "bottom_plate_rear_overhang_mm": (
         BOTTOM_PLATE_REAR_OVERHANG_MM,
-        "TBD. Draft overhang of the 400 mm bottom plate behind the profile back face.",
+        "TBD. Draft rear overhang of the 400 mm bottom plate. Zero keeps the rear face flush with the profiles.",
     ),
     "gusset_sheet_thickness_mm": (
         GUSSET_SHEET_THICKNESS_MM,

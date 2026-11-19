@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 545 >>
+<< /Length 677 >>
 stream
 BT
 /F1 11 Tf
@@ -24,6 +24,8 @@ T*
 (Box 300 x 200 x 12 mm) Tj
 T*
 (TODO: Idle-sprocket mount and profile bolt pattern.) Tj
+T*
+(TODO: Not fitted in the current machine pose. The idler bearing blocks sit on the profile ends. The blank stays in the BOM.) Tj
 T*
 (Owner: Ground UP GmbH) Tj
 T*
@@ -54,8 +56,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000000844 00000 n 
+0000000976 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-914
+1046
 %%EOF
