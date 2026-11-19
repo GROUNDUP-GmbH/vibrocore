@@ -210,14 +210,23 @@ is removed. A second engineering BOM for the same product is not created.
 
 Before an upload, the command reads the attachment.
 It uses `fields_get` and `read` for `checksum` and `file_size`.
-`checksum` is the SHA1 value of `datas`.
-The command uploads the local file when the attachment has no file.
+`checksum` is the SHA1 value of the stored file.
+The command leaves the file in place when the checksum matches the local file.
 The command uploads the local file when the checksum differs.
-The command leaves the file in place when the checksum matches.
-The PDF printout can have its own stored file.
-The command uses the checksum of that file when the checksum is present.
-When the printout has no checksum and the file is at most 1 MB, the command reads the bytes and compares the SHA1 value.
-When the printout has no checksum and the file is larger than 1 MB, the command leaves the printout in place when `datas` is unchanged.
+OdooPLM 19.0 can leave `checksum` empty and `file_size` at 0.
+The file can still be present.
+The document bytes are in `datas` (`store_fname` or `db_datas`).
+The PDF bytes are in the `printout` field.
+When the checksum is empty, the command reads that field with XML-RPC `read()`.
+The call runs as the logged-in user.
+The value is base64. The command compares its SHA1 value with the local file.
+The command does not download a file larger than 16 MB for this compare.
+It reads the files in small batches.
+The command reports reason `new` when no attachment record exists.
+The command reports reason `new` when the stored field has no bytes.
+The command reports reason `changed` when the SHA1 values differ.
+A printout larger than 16 MB can have no checksum.
+The command leaves that printout in place when `datas` is unchanged.
 A dry run reports `upload=N` for the files it will send.
 Each upload line gives the file name and the reason `new` or `changed`.
 Float fields use the decimal count from `fields_get`. `weight` is the example.
@@ -262,6 +271,7 @@ Check afterwards, still on the test database:
 2. One `ir.attachment` for that code and revision, `is_plm` set. `datas` is
    the STEP (it starts as a STEP file) and `printout` is the drawing PDF.
    A second `--apply` does not upload a file when the checksum matches.
+   A second `--apply` does not upload a file when the checksum is empty and the stored bytes match.
 3. `plm.component.document.rel` links that product to that document.
 4. `VC-ASM-1000` has one `mrp.bom` with `type` `ebom`. Line `itemnum` matches
    the drawing balloons. There is no `normal` BOM yet, because nothing was
@@ -305,7 +315,8 @@ Procedure:
    `engineering_code = ADR-0001`, `engineering_revision = 0`,
    `engineering_state = draft`, and `is_plm = true`.
 5. The command uploads the file bytes with `/plm_document_upload/upload`
-   when the file is new or the checksum differs.
+   when the record is new, the stored field has no bytes, or the checksum
+   or the stored bytes differ.
 6. The command links the document to each listed part through
    `product.product.linkeddocuments` (Many2many write `(4, doc_id)`). This is
    the same path as CAD document links. The command does not call

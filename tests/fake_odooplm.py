@@ -43,6 +43,7 @@ class FakeOdoo:
         self.fail_login = False
         self.field_meta: dict[str, dict] = {}
         self.binary_reads: list[tuple[str, bool]] = []
+        self.read_calls: list[dict] = []
         self._seed()
         self._httpd: ThreadingHTTPServer | None = None
         self._thread: threading.Thread | None = None
@@ -209,10 +210,12 @@ class FakeOdoo:
                 bin_size,
             )
         if method == "read":
-            return [
-                self._public(self.rows[model][int(item)], kwargs.get("fields") or [], bin_size)
-                for item in args[0]
-            ]
+            ids = [int(item) for item in args[0]]
+            fields = list(kwargs.get("fields") or [])
+            self.read_calls.append(
+                {"model": model, "ids": ids, "fields": fields, "bin_size": bin_size}
+            )
+            return [self._public(self.rows[model][item], fields, bin_size) for item in ids]
         if method == "create":
             return self._create(model, args[0])
         if method == "write":
@@ -386,6 +389,14 @@ def _domain_ok(row, domain) -> bool:
                 return False
         elif operator == "!=":
             if have == expected:
+                return False
+        elif operator == "in":
+            options = expected if isinstance(expected, (list, tuple, set)) else (expected,)
+            if have not in options:
+                return False
+        elif operator == "not in":
+            options = expected if isinstance(expected, (list, tuple, set)) else (expected,)
+            if have in options:
                 return False
         else:
             raise RuntimeError(f"domain operator {operator}")

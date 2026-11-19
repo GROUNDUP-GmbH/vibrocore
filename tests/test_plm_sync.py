@@ -10,7 +10,7 @@ import pytest
 from cad.tools.bom import load_bom
 from cad.tools.cli import main
 from cad.tools.plm_client import PlmClient, PlmConfig, PlmError
-from cad.tools.plm_sync import sync_bom
+from cad.tools.plm_sync import PlmSync, sync_bom
 from tests.fake_odooplm import FakeOdoo
 
 SECRET = "secret-token-should-not-leak"
@@ -386,6 +386,162 @@ def test_printout_checksum_skips_unchanged_pdf(server, tmp_path: Path):
     assert planned[0].model == "/plm_document_upload/upload_pdf"
     assert "reason=changed" in planned[0].detail
     assert "upload=1" in dry.text()
+
+
+def _wipe_checksum(fake, document, datas=None, printout=None):
+    """OdooPLM 19.0 shape: checksum False, file_size 0, bytes still stored."""
+    if datas is not None:
+        document["datas"] = datas
+    if printout is not None:
+        document["printout"] = printout
+    document["checksum"] = False
+    document["file_size"] = 0
+    fake._create(
+        "ir.attachment",
+        {
+            "name": "printout",
+            "res_model": "ir.attachment",
+            "res_field": "printout",
+            "res_id": document["id"],
+            "checksum": False,
+            "file_size": 0,
+            "datas": document.get("printout") or b"",
+            "type": "binary",
+        },
+    )
+
+
+def test_empty_checksum_same_bytes_is_not_uploaded(server):
+    fake, url = server
+    _apply(url, part="VC-SH-1301")
+    document = next(row for row in fake.records("ir.attachment") if row.get("is_plm"))
+    _wipe_checksum(fake, document)
+    uploads = len(fake.uploads)
+    calls = len(fake.calls)
+    before_reads = len(fake.read_calls)
+    dry = sync_bom(client=_connect(url), dry_run=True, part_number="VC-SH-1301")
+    assert len(fake.uploads) == uploads
+    assert not any(action.op == "upload" for action in dry.actions)
+    assert "upload=" not in dry.text()
+    assert {method for _model, method in fake.calls[calls:]} <= {"fields_get", "search_read", "read", "search"}
+    fresh = fake.read_calls[before_reads:]
+    assert any("datas" in call["fields"] and not call["bin_size"] for call in fresh)
+    assert any("printout" in call["fields"] and not call["bin_size"] for call in fresh)
+    applied = _apply(url, part="VC-SH-1301")
+    assert len(fake.uploads) == uploads
+    assert not any(action.op == "upload" for action in applied.actions)
+    assert "upload=" not in applied.text()
+
+
+def test_empty_checksum_different_bytes_is_uploaded(server, tmp_path: Path):
+    fake, url = server
+    _apply(url, part="VC-SH-1301")
+    document = next(row for row in fake.records("ir.attachment") if row.get("is_plm"))
+    _wipe_checksum(fake, document)
+    uploads = len(fake.uploads)
+    step = tmp_path / "VC-SH-1301.step"
+    step.write_bytes(b"ISO-10303-21;\nchanged-step;\n")
+    pdf = tmp_path / "plate.pdf"
+    pdf.write_bytes(b"%PDF-1.4\nchanged-printout\n")
+    dry = sync_bom(
+        client=_connect(url),
+        dry_run=True,
+        part_number="VC-SH-1301",
+        step_path=step,
+        pdf_path=pdf,
+    )
+    assert len(fake.uploads) == uploads
+    planned = [action for action in dry.actions if action.op == "upload"]
+    assert len(planned) == 2
+    assert {action.model for action in planned} == {
+        "/plm_document_upload/upload",
+        "/plm_document_upload/upload_pdf",
+    }
+    assert all("reason=changed" in action.detail for action in planned)
+    assert "reason=new" not in dry.text()
+    assert "upload=2" in dry.text()
+    applied = sync_bom(
+        client=_connect(url, login=True),
+        dry_run=False,
+        part_number="VC-SH-1301",
+        step_path=step,
+        pdf_path=pdf,
+    )
+    sent = fake.uploads[uploads:]
+    assert len(sent) == 2
+    assert {item["field"] for item in sent} == {"mod_file", "file_stream"}
+    assert next(item["content"] for item in sent if item["field"] == "mod_file") == step.read_bytes()
+    assert next(item["content"] for item in sent if item["field"] == "file_stream") == pdf.read_bytes()
+    assert all("reason=changed" in action.detail for action in applied.actions if action.op == "upload")
+    assert "upload=2" in applied.text()
+
+
+def test_missing_attachment_is_reason_new(server):
+    fake, url = server
+    calls = len(fake.calls)
+    report = sync_bom(client=_connect(url), dry_run=True, part_number="VC-SH-1301")
+    uploads = [action for action in report.actions if action.op == "upload"]
+    assert len(uploads) == 2
+    assert all("reason=new" in action.detail for action in uploads)
+    assert "upload=2" in report.text()
+    assert "reason=changed" not in report.text()
+    assert not fake.records("ir.attachment")
+    assert not fake.uploads
+    assert {method for _model, method in fake.calls[calls:]} <= {"fields_get", "search_read", "read", "search"}
+    assert all(
+        method not in {"action_confirm", "action_release", "new_version", "create", "write", "unlink"}
+        for _model, method in fake.calls
+    )
+
+
+def test_empty_stored_content_is_reason_new(server):
+    fake, url = server
+    _apply(url, part="VC-SH-1301")
+    document = next(row for row in fake.records("ir.attachment") if row.get("is_plm"))
+    _wipe_checksum(fake, document, datas=b"", printout=b"")
+    uploads = len(fake.uploads)
+    calls = len(fake.calls)
+    dry = sync_bom(client=_connect(url), dry_run=True, part_number="VC-SH-1301")
+    planned = [action for action in dry.actions if action.op == "upload"]
+    assert len(planned) == 2
+    assert all("reason=new" in action.detail for action in planned)
+    assert "upload=2" in dry.text()
+    assert "reason=changed" not in dry.text()
+    assert len(fake.uploads) == uploads
+    assert {method for _model, method in fake.calls[calls:]} <= {"fields_get", "search_read", "read", "search"}
+
+
+def test_content_reads_are_batched(server):
+    fake, url = server
+    payload = b"ISO-10303-21;\nbatch;\n"
+    ids = []
+    for index in range(3):
+        ids.append(
+            fake._create(
+                "ir.attachment",
+                {
+                    "name": f"batch-{index}.step",
+                    "datas": payload,
+                    "checksum": False,
+                    "file_size": 0,
+                    "is_plm": True,
+                    "engineering_code": f"BATCH-{index}",
+                    "engineering_revision": 0,
+                    "engineering_state": "draft",
+                    "type": "binary",
+                },
+            )
+        )
+    sync = PlmSync(load_bom(), _connect(url), dry_run=True)
+    before = len(fake.read_calls)
+    sync._prefetch_field(ids, "datas")
+    fresh = fake.read_calls[before:]
+    probes = [call for call in fresh if call["bin_size"] and "datas" in call["fields"]]
+    full = [call for call in fresh if not call["bin_size"] and "datas" in call["fields"]]
+    assert len(probes) == 1 and set(probes[0]["ids"]) == set(ids)
+    assert len(full) == 1 and set(full[0]["ids"]) == set(ids)
+    digest = hashlib.sha1(payload).hexdigest()
+    assert all(sync._remote_sha1[(item, "datas")] == digest for item in ids)
 
 
 def test_large_printout_without_checksum_is_not_reread_when_datas_matches(server):
