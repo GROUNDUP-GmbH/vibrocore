@@ -24,19 +24,22 @@ VAR_GLOBAL
     //   1 = DT325_AUTO (full automatic drilling cycle)
     eHMI_OperatingMode      : INT;     // %MW0
 
-    // Register 1: Cycle start command (rising edge triggers cycle)
+    // Register 1: Cycle start command — edge-triggered pulse; PLC auto-clears to 0
     xHMI_CycleStart         : WORD;    // %MW1  (treated as BOOL: 0/1)
 
-    // Register 2: Jog down command (held = continuous jog in MANUAL mode)
+    // Register 2: Jog down — momentary; must be refreshed with heartbeat (%MW33)
+    // Never latch. PLC drops jog if heartbeat stalls > 300 ms.
     xHMI_JogDown            : WORD;    // %MW2
 
-    // Register 3: Jog up command
+    // Register 3: Jog up — momentary (same heartbeat rule as jog down)
     xHMI_JogUp              : WORD;    // %MW3
 
     // Register 4: Sonic toggle (starts/stops sonic head in MANUAL mode)
     xHMI_SonicToggle        : WORD;    // %MW4
 
-    // Register 5: Fault reset (clears all quittable faults)
+    // Register 5: Fault reset — edge-triggered pulse; PLC auto-clears to 0
+    // After E-stop: only a rising edge that arrives while the circuit is healthy
+    // is accepted (never auto-reset).
     xHMI_FaultReset         : WORD;    // %MW5
 
     // Registers 6–7: Target drilling depth [mm]  (REAL, lo/hi)
@@ -75,7 +78,7 @@ VAR_GLOBAL
     rStatus_Current_pct_LO  : WORD;    // %MW17
     rStatus_Current_pct_HI  : WORD;    // %MW18
 
-    // Register 19: Safety fault reason (FB_Safety.eSafetyReason)
+    // Register 19: Safety fault reason (canonical table — FB_Safety + Node-RED)
     //   0=OK  1=ESTOP  2=LIMIT_UP  3=LIMIT_DOWN
     //   4=HUB_ALARM  5=STONE_DETECTED  6=VFD_COMM
     eStatus_SafetyReason    : INT;     // %MW19
@@ -122,26 +125,21 @@ VAR_GLOBAL
     xStatus_CoreImageReady  : WORD;    // %MW31
     iStatus_LastImageCycle  : INT;     // %MW32
 
+    // Register 33: Jog heartbeat — HMI increments while any jog button is held
+    // PLC accepts jog only while this value changes at least every 300 ms.
+    iHMI_JogHeartbeat       : WORD;    // %MW33
+
 END_VAR
 
 
 // ─── PRG_Main usage note ─────────────────────────────────────────────────────
 //
-// In PRG_Main, the PLC writes status to Modbus registers every scan cycle,
-// and reads HMI commands with rising-edge detection. Example pattern:
+// PRG_Main wires GVL_MODBUS every scan:
+//   - Mode change accepted only while hub is IDLE and not in safe/fault
+//   - CycleStart / FaultReset are edge pulses; PLC writes the register back to 0
+//   - JogDown / JogUp are momentary and gated by iHMI_JogHeartbeat watchdog
 //
-//   // Write position to Modbus registers (REAL → 2× WORD)
-//   LREALToWords(fbHub.rPosition_mm,
-//                GVL_MODBUS.rStatus_Position_mm_LO,
-//                GVL_MODBUS.rStatus_Position_mm_HI);
-//
-//   // Read HMI CycleStart with rising edge
-//   IF GVL_MODBUS.xHMI_CycleStart <> 0 AND NOT xCycleStartPrev THEN
-//       fbHub.xCmdCycleStart := TRUE;
-//   END_IF
-//   xCycleStartPrev := GVL_MODBUS.xHMI_CycleStart <> 0;
-//   GVL_MODBUS.xHMI_CycleStart := 0;  // auto-clear after reading
-//
+// See docs/adr/ADR-0001-HMI-PLC-INTERFACE.md for command semantics.
 // The WagoAppModbusSlaveTcp library maps %MW addresses automatically
 // to Holding Register offsets when the Slave device is configured
 // in the CODESYS device tree.

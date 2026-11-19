@@ -72,7 +72,7 @@ class TestLimitSwitches:
 
         safe_defaults(safety, xLimitUp_NC=False, xHubMovingUp=True)
         assert safety.xSafeState is True
-        assert safety.eSafetyReason == 5
+        assert safety.eSafetyReason == 2   # LIMIT_UP
 
     def test_limit_down_causes_safe_state_only_when_moving_down(self, safety):
         safe_defaults(safety, xLimitDown_NC=False, xHubMovingDown=False)
@@ -80,7 +80,7 @@ class TestLimitSwitches:
 
         safe_defaults(safety, xLimitDown_NC=False, xHubMovingDown=True)
         assert safety.xSafeState is True
-        assert safety.eSafetyReason == 6
+        assert safety.eSafetyReason == 3   # LIMIT_DOWN
 
 
 class TestStoneDetection:
@@ -94,7 +94,7 @@ class TestStoneDetection:
         for _ in range(debounce_cycles):
             safe_defaults(safety, rVFD_Current_pct=P.STONE_CURRENT_PCT_THR + 10)
         assert safety.xStoneDetected is True
-        assert safety.eSafetyReason == 4
+        assert safety.eSafetyReason == 5   # STONE_DETECTED
 
     def test_stone_clears_when_current_drops(self, safety):
         debounce_cycles = P.STONE_DEBOUNCE_MS // CYCLE_MS
@@ -119,9 +119,9 @@ class TestStoneDetection:
 class TestFaultPriority:
     def test_hub_alarm_priority_over_vfd(self, safety):
         safe_defaults(safety, xHubAlarm=True, xVFD_Fault=True)
-        assert safety.eSafetyReason == 2   # HubAlarm beats VFD
+        assert safety.eSafetyReason == 4   # HUB_ALARM beats VFD_COMM
 
     def test_vfd_fault_sets_safe_state(self, safety):
         safe_defaults(safety, xVFD_Fault=True)
         assert safety.xSafeState is True
-        assert safety.eSafetyReason == 3
+        assert safety.eSafetyReason == 6   # VFD_COMM

@@ -4,12 +4,21 @@
  * Evaluates all safety-relevant inputs and sets xSafeState.
  * When xSafeState = TRUE, all motion must stop immediately.
  *
+ * Fault-code table (canonical — must match GVL_MODBUS and Node-RED):
+ *   0 = OK
+ *   1 = ESTOP
+ *   2 = LIMIT_UP
+ *   3 = LIMIT_DOWN
+ *   4 = HUB_ALARM
+ *   5 = STONE_DETECTED
+ *   6 = VFD_COMM
+ *
  * Safety categories addressed:
  *   - E-Stop: Category 3 (redundant NC wiring evaluated here)
  *   - Limit switches: NC wiring, software evaluation
  *   - Overcurrent / stone detection: software function
  *   - Hub driver fault: hardware alarm signal
- *   - VFD fault: reported by FB_ModbusVFD
+ *   - VFD fault / Modbus loss: reported by FB_ModbusVFD
  *
  * IMPORTANT: This FB does NOT directly cut power. Physical power cut
  * is handled by the safety relay (Pilz PNOZ or equivalent) wired in
@@ -21,14 +30,14 @@ VAR_INPUT
     (* E-Stop NC contact — FALSE when button pressed *)
     xEStop_NC           : BOOL;
 
-    (* Limit switches — NC wiring, FALSE = triggered *)
+    (* Limit switches — NC wiring: TRUE = healthy, FALSE = limit or wire break *)
     xLimitUp_NC         : BOOL;
     xLimitDown_NC       : BOOL;
 
     (* Hub driver alarm output (active HIGH) *)
     xHubAlarm           : BOOL;
 
-    (* VFD fault flag from FB_ModbusVFD *)
+    (* VFD fault or Modbus communication loss from FB_ModbusVFD *)
     xVFD_Fault          : BOOL;
 
     (* VFD output current as percentage of motor rated current
@@ -55,7 +64,7 @@ VAR_OUTPUT
     (* Lower limit triggered (only blocks downward movement) *)
     xLimitDownTriggered : BOOL;
 
-    (* Reason code: 0=OK 1=EStop 2=HubAlarm 3=VFD 4=Stone *)
+    (* Reason code — see header table *)
     eSafetyReason       : INT;
 END_VAR
 
@@ -63,7 +72,7 @@ VAR
     tStoneDebounce      : TON;
 END_VAR
 
-(* ---- Limit switch evaluation (NC contacts: FALSE = triggered) ---- *)
+(* ---- Limit switch evaluation (NC: FALSE = triggered or wire break) ---- *)
 xLimitUpTriggered   := NOT xLimitUp_NC;
 xLimitDownTriggered := NOT xLimitDown_NC;
 
@@ -81,31 +90,25 @@ eSafetyReason := 0;
 IF NOT xEStop_NC THEN
     (* E-Stop has highest priority — hard stop *)
     xSafeState    := TRUE;
-    eSafetyReason := 1;
+    eSafetyReason := 1;   (* ESTOP *)
 
 ELSIF xHubAlarm THEN
-    (* Hub driver hardware fault *)
     xSafeState    := TRUE;
-    eSafetyReason := 2;
+    eSafetyReason := 4;   (* HUB_ALARM *)
 
 ELSIF xVFD_Fault THEN
-    (* VFD hardware fault *)
     xSafeState    := TRUE;
-    eSafetyReason := 3;
+    eSafetyReason := 6;   (* VFD_COMM *)
 
 ELSIF xStoneDetected THEN
-    (* Overcurrent → stone/obstacle — handled by state machine,
-       but also sets safe state to freeze motion *)
     xSafeState    := TRUE;
-    eSafetyReason := 4;
+    eSafetyReason := 5;   (* STONE_DETECTED *)
 
 ELSIF xLimitUpTriggered AND xHubMovingUp THEN
-    (* Limit in direction of travel — stop motion *)
     xSafeState    := TRUE;
-    eSafetyReason := 5;
+    eSafetyReason := 2;   (* LIMIT_UP *)
 
 ELSIF xLimitDownTriggered AND xHubMovingDown THEN
-    (* Limit in direction of travel — stop motion *)
     xSafeState    := TRUE;
-    eSafetyReason := 6;
+    eSafetyReason := 3;   (* LIMIT_DOWN *)
 END_IF;

@@ -186,7 +186,9 @@ class FB_Safety:
       xStoneDetected   — TRUE: debounced overcurrent → obstacle
       xLimitUpTriggered
       xLimitDownTriggered
-      eSafetyReason    — 0=OK 1=EStop 2=HubAlarm 3=VFD 4=Stone 5=LimitUp 6=LimitDn
+      eSafetyReason    — canonical table:
+        0=OK 1=ESTOP 2=LIMIT_UP 3=LIMIT_DOWN
+        4=HUB_ALARM 5=STONE_DETECTED 6=VFD_COMM
     """
 
     def __init__(self) -> None:
@@ -224,22 +226,22 @@ class FB_Safety:
 
         if not xEStop_NC:
             self.xSafeState = True
-            self.eSafetyReason = 1
+            self.eSafetyReason = 1   # ESTOP
         elif xHubAlarm:
             self.xSafeState = True
-            self.eSafetyReason = 2
+            self.eSafetyReason = 4   # HUB_ALARM
         elif xVFD_Fault:
             self.xSafeState = True
-            self.eSafetyReason = 3
+            self.eSafetyReason = 6   # VFD_COMM
         elif self.xStoneDetected:
             self.xSafeState = True
-            self.eSafetyReason = 4
+            self.eSafetyReason = 5   # STONE_DETECTED
         elif self.xLimitUpTriggered and xHubMovingUp:
             self.xSafeState = True
-            self.eSafetyReason = 5
+            self.eSafetyReason = 2   # LIMIT_UP
         elif self.xLimitDownTriggered and xHubMovingDown:
             self.xSafeState = True
-            self.eSafetyReason = 6
+            self.eSafetyReason = 3   # LIMIT_DOWN
 
 
 # ---------------------------------------------------------------------------
@@ -450,9 +452,13 @@ class FB_HubControl:
         self._tSonicStopTimeout: TON = TON()
         self._tCyclePulse: TON = TON()
 
-        # Hardware mock: limit switches (NC)
-        self._xLimitUp_NC: bool = True    # TRUE = not triggered
+        # Hardware mock: limit switches (NC: TRUE = healthy)
+        self._xLimitUp_NC: bool = True
         self._xLimitDown_NC: bool = True
+
+        # E-stop reset arming: require healthy circuit, then fresh rising edge
+        self._xEStopCleared: bool = False
+        self._rTrigReset: R_TRIG = R_TRIG()
 
     def set_position(self, pos_mm: float) -> None:
         """Test helper: teleport carriage to position."""
@@ -492,6 +498,7 @@ class FB_HubControl:
             self.xBrakeRelease_out  = False
             self.xHubEnable_out     = False
             self.xNeedSonicStop     = True
+            self._xEStopCleared     = False
             self.eState             = HubState.ESTOP_HOLD
             return
 
@@ -584,8 +591,15 @@ class FB_HubControl:
             self.xHubEnable_out    = False
             self.xNeedSonicStop    = True
 
-            if not xSafeState and xCmdReset:
+            if xSafeState:
+                self._xEStopCleared = False
+            else:
+                self._xEStopCleared = True
+
+            self._rTrigReset(xCmdReset)
+            if self._xEStopCleared and self._rTrigReset.Q:
                 self.xNeedSonicStop = False
+                self._xEStopCleared = False
                 self.eState         = HubState.HOMING
 
         elif self.eState == HubState.FAULT:

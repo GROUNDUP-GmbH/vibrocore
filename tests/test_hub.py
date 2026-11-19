@@ -253,3 +253,17 @@ class TestEStop:
             safe_tick(hub, xSafeState=True)
         safe_tick(hub, xSafeState=False, xCmdReset=True)
         assert hub.eState == HubState.HOMING
+
+    def test_reset_held_during_estop_does_not_autoreset(self, hub):
+        """Reset that stays TRUE while safe-state is active must not count.
+        A fresh rising edge is required after the E-stop circuit is healthy."""
+        safe_tick(hub, xSafeState=True, xCmdReset=True)
+        for _ in range(5):
+            safe_tick(hub, xSafeState=True, xCmdReset=True)
+        # Circuit healthy but reset still held (no new rising edge)
+        safe_tick(hub, xSafeState=False, xCmdReset=True)
+        assert hub.eState == HubState.ESTOP_HOLD
+        # Release then press reset → fresh rising edge
+        safe_tick(hub, xSafeState=False, xCmdReset=False)
+        safe_tick(hub, xSafeState=False, xCmdReset=True)
+        assert hub.eState == HubState.HOMING
