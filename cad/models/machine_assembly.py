@@ -1,8 +1,15 @@
 """Study assembly of the machine in the start pose. Not a manufacturing model.
 
 Every length comes from cad.models.mast_layout. A value marked TBD there is not
-a measurement. The shoe tip is on the ground. The motors sit left and right of
-the rod, so their 175 mm height is not in the axial chain.
+a measurement. The motors sit left and right of the rod, so their 175 mm height
+is not in the axial chain.
+
+The start pose puts the carriage at the top of the guided stroke. The four
+HGH20 blocks stay on the rails. The shoe tip is then below the ground line.
+That is the height deficit. The tip is not forced onto the ground.
+
+Purchased-part solids are catalogue envelopes. The vendor STEP files need a
+login, so they are not in this tree. See the pull-request note.
 
 Solids that already exist are built with cad.tools.geometry.shape_for.
 This module only places them. It does not add a BOM line.
@@ -16,21 +23,29 @@ from pathlib import Path
 from cad.models.mast_layout import (
     ADAPTER_LENGTH_MM,
     ADAPTER_OD_MM,
+    BOTTOM_PLATE_LENGTH_MM,
     BOTTOM_PLATE_THICKNESS_MM,
     BOTTOM_PLATE_WIDTH_MM,
-    CARRIAGE_DEPTH_MM,
+    BRAKE_LENGTH_MM,
     CARRIAGE_HEIGHT_MM,
-    CARRIAGE_WIDTH_MM,
+    CARRIAGE_PLATE_THICKNESS_MM,
     CASING_ID_MM,
     CASING_LENGTH_MM,
     CASING_OD_MM,
+    CHAIN_SECTION_X_MM,
+    CHAIN_SECTION_Y_MM,
     COLUMN_DIAMETER_MM,
     COLUMN_FLANGE_DIAMETER_MM,
     COLUMN_FLANGE_THICKNESS_MM,
-    COLUMN_PASSAGE_RADIAL_CLEARANCE_MM,
     COLUMN_SHAFT_LENGTH_MM,
+    COUPLING_DIAMETER_MM,
+    COUPLING_LENGTH_MM,
+    GEARBOX_HOUSING_DIAMETER_MM,
+    GEARBOX_LENGTH_MM,
     GROUND_CLEARANCE_MM,
     GROUND_DATUM_THICKNESS_MM,
+    GUIDED_TRAVEL_MM,
+    HEAD_FRONT_GAP_MM,
     ISOLATOR_COUNT,
     ISOLATOR_DIAMETER_MM,
     ISOLATOR_FREE_HEIGHT_MM,
@@ -41,22 +56,34 @@ from cad.models.mast_layout import (
     MOTOR_CENTRE_DISTANCE_MM,
     MOTOR_HEIGHT_MM,
     MOTOR_LENGTH_MM,
-    MOTOR_TO_CARRIAGE_GAP_MM,
     MOTOR_WIDTH_MM,
+    NEMA42_BODY_LENGTH_MM,
+    NEMA42_FRAME_MM,
+    PILLOW_HEIGHT_MM,
+    PILLOW_LENGTH_MM,
+    PILLOW_WIDTH_MM,
     PROFILE_SPACING_MM,
+    PROFILE_YAW_DEG,
     RAIL_BOTTOM_OFFSET_MM,
     RAIL_LENGTH_MM,
     RAIL_SECTION_HEIGHT_MM,
     RAIL_SECTION_WIDTH_MM,
     RIB_CENTRE_X_MM,
+    RUNNER_COUNT,
+    RUNNER_HEIGHT_MM,
+    RUNNER_LENGTH_MM,
+    RUNNER_PITCH_MM,
+    RUNNER_WIDTH_MM,
+    SHAFT_DIAMETER_MM,
     SHOE_LENGTH_MM,
     SHOE_OD_MM,
-    SHOE_PASSAGE_RADIAL_CLEARANCE_MM,
-    STRING_AXIS_X_MM,
+    SPROCKET_PITCH_RADIUS_MM,
+    SPROCKET_TIP_DIAMETER_MM,
+    SPROCKET_WIDTH_MM,
     STRING_AXIS_Y_MM,
+    STROKE_POSITION_MM,
     TOP_MARGIN_MM,
     TOP_PLATE_THICKNESS_MM,
-    TOP_PLATE_WIDTH_MM,
     VIBRATING_PLATE_LENGTH_MM,
     VIBRATING_PLATE_THICKNESS_MM,
     VIBRATING_PLATE_WIDTH_MM,
@@ -73,8 +100,12 @@ OVERLAP_TOLERANCE_MM3 = 1.0
 RENDER_VIEWS = ("iso", "side", "top")
 
 # Datum plan for this pose. Not a part and not a chain term.
-_DATUM_LENGTH_MM = 420.0
-_DATUM_WIDTH_MM = 400.0
+# It matches the bottom plate. It does not set the assembly bounding box.
+_DATUM_LENGTH_MM = BOTTOM_PLATE_LENGTH_MM
+_DATUM_WIDTH_MM = BOTTOM_PLATE_WIDTH_MM
+_DATUM_CENTER_X_MM = 0.0
+# Model air gap so a wrapped chain and a bored block do not share a volume.
+_MODEL_GAP_MM = 0.4
 
 
 @dataclass(frozen=True)
@@ -84,7 +115,11 @@ class Placed:
 
 
 def posed_stack_height_mm() -> float:
-    """Shoe tip to the top of the carriage. Ground clearance and the top margin are not in this pose."""
+    """Parameter sum from the shoe tip to the top of the carriage term.
+
+    Ground clearance and the top margin are not in this sum.
+    The visual shoe tip is not on the ground. See shoe_tip_z_mm.
+    """
     return _mm(
         SHOE_LENGTH_MM
         + CASING_LENGTH_MM
@@ -94,39 +129,84 @@ def posed_stack_height_mm() -> float:
     )
 
 
-def pose_stations() -> dict[str, float]:
-    """Bottom Z of each axial piece. Z is up. The shoe tip is Z = 0."""
-    shoe = 0.0
-    casing = shoe + SHOE_LENGTH_MM
-    adapter = casing + CASING_LENGTH_MM
-    column = adapter + ADAPTER_LENGTH_MM
-    flange = column + COLUMN_SHAFT_LENGTH_MM
-    plate = flange + COLUMN_FLANGE_THICKNESS_MM
-    carriage = plate + VIBRATING_PLATE_THICKNESS_MM
+def _stroke_mm(stroke_mm: float | None) -> float:
+    stroke = STROKE_POSITION_MM if stroke_mm is None else float(stroke_mm)
+    if stroke < -0.05 or stroke > GUIDED_TRAVEL_MM + 0.05:
+        raise ValueError("stroke position is outside the guided travel")
+    return stroke
+
+
+def profile_front_x_mm() -> float:
+    """+X face of a profile after the 90 degree yaw. This face points at the rod."""
+    return MAST_PROFILE_DEPTH_MM / 2.0
+
+
+def carriage_web_x_mm() -> tuple[float, float]:
+    """Inner and outer X of the 10 mm carriage plate on the runner faces."""
+    inner = profile_front_x_mm() + RUNNER_HEIGHT_MM
+    return inner, inner + CARRIAGE_PLATE_THICKNESS_MM
+
+
+def rod_axis_x_mm() -> float:
+    """Rod axis in front of the rails. The front gap is TBD."""
+    rear = carriage_web_x_mm()[1] + HEAD_FRONT_GAP_MM
+    return rear + VIBRATING_PLATE_LENGTH_MM / 2.0
+
+
+def visual_stations(stroke_mm: float | None = None) -> dict[str, float]:
+    """World positions for the guided pose. Z is up.
+
+    The carriage is on the rails. The string hangs below it.
+    The shoe tip is not forced to Z = 0.
+    """
+    stroke = _stroke_mm(stroke_mm)
     profile_bottom = BOTTOM_PLATE_THICKNESS_MM
     profile_top = profile_bottom + MAST_PROFILE_LENGTH_MM
     rail_bottom = profile_bottom + RAIL_BOTTOM_OFFSET_MM
     rail_top = rail_bottom + RAIL_LENGTH_MM
+    lower_bottom = rail_bottom + stroke
+    upper_top = lower_bottom + RUNNER_PITCH_MM + RUNNER_LENGTH_MM
+    if upper_top > rail_top + 0.05 or lower_bottom < rail_bottom - 0.05:
+        raise ValueError("runners leave the rail")
+    shelf_bottom = lower_bottom - CARRIAGE_PLATE_THICKNESS_MM
+    plate_top = shelf_bottom - ISOLATOR_FREE_HEIGHT_MM
+    plate_bottom = plate_top - VIBRATING_PLATE_THICKNESS_MM
+    flange_bottom = plate_bottom - COLUMN_FLANGE_THICKNESS_MM
+    shaft_bottom = flange_bottom - COLUMN_SHAFT_LENGTH_MM
+    adapter_bottom = shaft_bottom - ADAPTER_LENGTH_MM
+    casing_bottom = adapter_bottom - CASING_LENGTH_MM
+    shoe_bottom = casing_bottom - SHOE_LENGTH_MM
+    web_inner, web_outer = carriage_web_x_mm()
     return {
-        "shoe": shoe,
-        "casing": casing,
-        "adapter": adapter,
-        "column": column,
-        "flange": flange,
-        "vibrating_plate": plate,
-        "carriage": carriage,
-        "carriage_top": carriage + CARRIAGE_HEIGHT_MM,
         "profile_bottom": profile_bottom,
         "profile_top": profile_top,
-        "top_plate": profile_top,
         "rail_bottom": rail_bottom,
         "rail_top": rail_top,
+        "lower_bottom": lower_bottom,
+        "upper_top": upper_top,
+        "shelf_bottom": shelf_bottom,
+        "plate_top": plate_top,
+        "plate_bottom": plate_bottom,
+        "flange_bottom": flange_bottom,
+        "shaft_bottom": shaft_bottom,
+        "adapter_bottom": adapter_bottom,
+        "casing_bottom": casing_bottom,
+        "shoe_bottom": shoe_bottom,
+        "rod_x": rod_axis_x_mm(),
+        "web_inner": web_inner,
+        "web_outer": web_outer,
+        "stroke": stroke,
     }
 
 
-def assembly_parts(bom=None) -> list[Placed]:
+def shoe_tip_z_mm(stroke_mm: float | None = None) -> float:
+    """Shoe tip in the guided pose. Negative means the tip is below the ground line."""
+    return _mm(visual_stations(stroke_mm)["shoe_bottom"])
+
+
+def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     """One named solid per instance. Labels are the part numbers FreeCAD shows."""
-    from build123d import Box, Cylinder, Pos, Rot
+    from build123d import Box, Compound, Cylinder, Pos, Rot
 
     from cad.tools.geometry import shape_for
 
@@ -135,9 +215,9 @@ def assembly_parts(bom=None) -> list[Placed]:
 
         bom = load_bom()
 
-    station = pose_stations()
-    axis_x = STRING_AXIS_X_MM
-    axis_y = STRING_AXIS_Y_MM
+    station = visual_stations(stroke_mm)
+    rod_x = station["rod_x"]
+    rod_y = STRING_AXIS_Y_MM
     parts: list[Placed] = []
 
     def add(name: str, shape, x: float, y: float, z: float, turn=None) -> None:
@@ -150,30 +230,29 @@ def assembly_parts(bom=None) -> list[Placed]:
             return
         add(name, Cylinder(radius, length), x, y, z_bottom + length / 2.0)
 
-    # Ground datum. Below Z = 0. Not a part.
+    def along_x(radius: float, length: float):
+        return Rot(0, 90, 0) * Cylinder(radius, length)
+
     add(
         "GROUND-DATUM",
         Box(_DATUM_LENGTH_MM, _DATUM_WIDTH_MM, GROUND_DATUM_THICKNESS_MM),
-        0.0,
+        _DATUM_CENTER_X_MM,
         0.0,
         -GROUND_DATUM_THICKNESS_MM / 2.0,
     )
 
-    bottom = shape_for(bom.part("VC-FR-4300"))
-    shoe_hole = Cylinder(
-        SHOE_OD_MM / 2.0 + SHOE_PASSAGE_RADIAL_CLEARANCE_MM,
-        BOTTOM_PLATE_THICKNESS_MM + 2.0,
-    )
+    # The string hangs in front of the mast, so the plates are not bored.
     add(
         "VC-FR-4300",
-        bottom - shoe_hole,
-        axis_x,
-        axis_y,
+        shape_for(bom.part("VC-FR-4300")),
+        0.0,
+        0.0,
         BOTTOM_PLATE_THICKNESS_MM / 2.0,
     )
 
     half_pitch = PROFILE_SPACING_MM / 2.0
     profile_center_z = station["profile_bottom"] + MAST_PROFILE_LENGTH_MM / 2.0
+    profile_turn = Rot(0, 0, PROFILE_YAW_DEG)
     for index, sign in enumerate((-1.0, 1.0), start=1):
         add(
             f"VC-FR-4100-{index}",
@@ -181,23 +260,20 @@ def assembly_parts(bom=None) -> list[Placed]:
             0.0,
             sign * half_pitch,
             profile_center_z,
+            profile_turn,
         )
 
-    top = shape_for(bom.part("VC-FR-4400"))
-    column_hole = Cylinder(
-        COLUMN_DIAMETER_MM / 2.0 + COLUMN_PASSAGE_RADIAL_CLEARANCE_MM,
-        TOP_PLATE_THICKNESS_MM + 2.0,
-    )
     add(
         "VC-FR-4400",
-        top - column_hole,
-        axis_x,
-        axis_y,
-        station["top_plate"] + TOP_PLATE_THICKNESS_MM / 2.0,
+        shape_for(bom.part("VC-FR-4400")),
+        0.0,
+        0.0,
+        station["profile_top"] + TOP_PLATE_THICKNESS_MM / 2.0,
     )
 
+    front = profile_front_x_mm()
     rail_center_z = station["rail_bottom"] + RAIL_LENGTH_MM / 2.0
-    rail_x = MAST_PROFILE_WIDTH_MM / 2.0 + RAIL_SECTION_HEIGHT_MM / 2.0
+    rail_x = front + RAIL_SECTION_HEIGHT_MM / 2.0
     for index, sign in enumerate((-1.0, 1.0), start=1):
         add(
             f"VC-HB-3100-{index}",
@@ -207,24 +283,80 @@ def assembly_parts(bom=None) -> list[Placed]:
             rail_center_z,
         )
 
-    # Carriage block. The 10 mm plate thickness is not this height.
-    add(
-        "VC-HB-3200",
-        Box(CARRIAGE_WIDTH_MM, CARRIAGE_DEPTH_MM, CARRIAGE_HEIGHT_MM),
-        axis_x,
-        axis_y,
-        station["carriage"] + CARRIAGE_HEIGHT_MM / 2.0,
-    )
+    def runner_blank():
+        block = Box(RUNNER_HEIGHT_MM, RUNNER_WIDTH_MM, RUNNER_LENGTH_MM)
+        channel = Box(
+            RAIL_SECTION_HEIGHT_MM + _MODEL_GAP_MM,
+            RAIL_SECTION_WIDTH_MM + _MODEL_GAP_MM,
+            RUNNER_LENGTH_MM + 2.0,
+        )
+        shift = -RUNNER_HEIGHT_MM / 2.0 + (RAIL_SECTION_HEIGHT_MM + _MODEL_GAP_MM) / 2.0
+        return block - Pos(shift, 0, 0) * channel
 
-    plate_bottom = station["vibrating_plate"]
+    runner_x = front + RUNNER_HEIGHT_MM / 2.0
+    runner_zs = (
+        station["lower_bottom"] + RUNNER_LENGTH_MM / 2.0,
+        station["lower_bottom"] + RUNNER_PITCH_MM + RUNNER_LENGTH_MM / 2.0,
+    )
+    runner_index = 1
+    for sign in (-1.0, 1.0):
+        for center_z in runner_zs:
+            add(
+                f"VC-HB-3110-{runner_index}",
+                runner_blank(),
+                runner_x,
+                sign * half_pitch,
+                center_z,
+            )
+            runner_index += 1
+    if runner_index - 1 != RUNNER_COUNT:
+        raise ValueError("runner count does not match the BOM quantity")
+
+    web_z0 = station["shelf_bottom"]
+    web_z1 = station["upper_top"]
+    web_y = PROFILE_SPACING_MM + RUNNER_WIDTH_MM
+    web = Pos(
+        (station["web_inner"] + station["web_outer"]) / 2.0,
+        0.0,
+        (web_z0 + web_z1) / 2.0,
+    ) * Box(CARRIAGE_PLATE_THICKNESS_MM, web_y, web_z1 - web_z0)
+    plate_rear = station["web_outer"] + HEAD_FRONT_GAP_MM
+    plate_front = plate_rear + VIBRATING_PLATE_LENGTH_MM
+    strip_inner = VIBRATING_PLATE_WIDTH_MM / 2.0 - ISOLATOR_DIAMETER_MM
+    strip_outer = web_y / 2.0
+    strip_y = strip_outer - strip_inner
+    strip_x = plate_front - station["web_inner"]
+    children = [web]
+    for sign in (-1.0, 1.0):
+        children.append(
+            Pos(
+                station["web_inner"] + strip_x / 2.0,
+                sign * (strip_inner + strip_outer) / 2.0,
+                station["shelf_bottom"] + CARRIAGE_PLATE_THICKNESS_MM / 2.0,
+            )
+            * Box(strip_x, strip_y, CARRIAGE_PLATE_THICKNESS_MM)
+        )
+    # Lug from one chain strand to the carriage. It meets both on a face.
+    strand_y = SPROCKET_PITCH_RADIUS_MM
+    lug_z = station["lower_bottom"] + RUNNER_LENGTH_MM / 2.0
+    lug_x0 = CHAIN_SECTION_X_MM / 2.0
+    lug_x1 = station["web_inner"]
+    children.append(
+        Pos((lug_x0 + lug_x1) / 2.0, strand_y, lug_z)
+        * Box(lug_x1 - lug_x0, CHAIN_SECTION_X_MM, 20.0)
+    )
+    carriage = Compound(children=children)
+    carriage.label = "VC-HB-3200"
+    parts.append(Placed("VC-HB-3200", carriage))
+
+    plate_bottom = station["plate_bottom"]
     add(
         "VC-SH-1301",
         shape_for(bom.part("VC-SH-1301")),
-        axis_x,
-        axis_y,
+        rod_x,
+        rod_y,
         plate_bottom + VIBRATING_PLATE_THICKNESS_MM / 2.0,
     )
-    # Rib blank is 300 x 10 x 60, length along local X. Turn it along Y, under the plate.
     rib_turn = Rot(0, 0, 90)
     rib_height = float(bom.part("VC-SH-1302").geometry["height_mm"])
     rib_z = plate_bottom - rib_height / 2.0
@@ -232,41 +364,38 @@ def assembly_parts(bom=None) -> list[Placed]:
         add(
             f"VC-SH-1302-{index}",
             shape_for(bom.part("VC-SH-1302")),
-            axis_x + sign * RIB_CENTRE_X_MM,
-            axis_y,
+            rod_x + sign * RIB_CENTRE_X_MM,
+            rod_y,
             rib_z,
             rib_turn,
         )
 
-    # The BOM solid is the shaft only. Place that solid. Do not draw a second shaft.
     add(
         "VC-SH-1400",
         shape_for(bom.part("VC-SH-1400")),
-        axis_x,
-        axis_y,
-        station["column"] + COLUMN_SHAFT_LENGTH_MM / 2.0,
+        rod_x,
+        rod_y,
+        station["shaft_bottom"] + COLUMN_SHAFT_LENGTH_MM / 2.0,
     )
-    # The shaft solid from shape_for has no flange. The flange uses the documented diameter.
     vertical_cylinder(
         "VC-SH-1400-FLANGE",
         COLUMN_FLANGE_DIAMETER_MM / 2.0,
         COLUMN_FLANGE_THICKNESS_MM,
-        station["flange"],
-        axis_x,
-        axis_y,
+        station["flange_bottom"],
+        rod_x,
+        rod_y,
     )
 
     # Shaft along Y (the 255 mm side). That axis is perpendicular to the rod (Z).
-    # Local box is 255 x 154 x 175. A yaw of 90 degrees swaps length and width.
     motor_turn = Rot(0, 0, 90)
-    motor_z = station["carriage"] + MOTOR_HEIGHT_MM / 2.0
+    motor_z = station["plate_top"] + MOTOR_HEIGHT_MM / 2.0
     half_centres = MOTOR_CENTRE_DISTANCE_MM / 2.0
     for index, sign in enumerate((-1.0, 1.0), start=1):
         add(
             f"VC-SH-1100-{index}",
             shape_for(bom.part("VC-SH-1100")),
-            axis_x + sign * half_centres,
-            axis_y,
+            rod_x + sign * half_centres,
+            rod_y,
             motor_z,
             motor_turn,
         )
@@ -281,18 +410,18 @@ def assembly_parts(bom=None) -> list[Placed]:
             f"VC-SH-1600-{index}",
             ISOLATOR_DIAMETER_MM / 2.0,
             ISOLATOR_FREE_HEIGHT_MM,
-            station["carriage"],
-            axis_x + sx * iso_x,
-            axis_y + sy * iso_y,
+            station["plate_top"],
+            rod_x + sx * iso_x,
+            rod_y + sy * iso_y,
         )
 
     vertical_cylinder(
         "VC-SH-1500",
         ADAPTER_OD_MM / 2.0,
         ADAPTER_LENGTH_MM,
-        station["adapter"],
-        axis_x,
-        axis_y,
+        station["adapter_bottom"],
+        rod_x,
+        rod_y,
     )
     casing = Cylinder(CASING_OD_MM / 2.0, CASING_LENGTH_MM) - Cylinder(
         CASING_ID_MM / 2.0, CASING_LENGTH_MM + 1.0
@@ -300,22 +429,22 @@ def assembly_parts(bom=None) -> list[Placed]:
     add(
         "VC-GP-7100",
         casing,
-        axis_x,
-        axis_y,
-        station["casing"] + CASING_LENGTH_MM / 2.0,
+        rod_x,
+        rod_y,
+        station["casing_bottom"] + CASING_LENGTH_MM / 2.0,
     )
     vertical_cylinder(
         "VC-GP-7200",
         SHOE_OD_MM / 2.0,
         SHOE_LENGTH_MM,
-        station["shoe"],
-        axis_x,
-        axis_y,
+        station["shoe_bottom"],
+        rod_x,
+        rod_y,
     )
 
     # shape_for recentres each half on its own box. Move the flat face back to the rod axis
     # so the two halves meet on the split and stay inside the casing bore.
-    carrier_z = station["casing"] + CASING_LENGTH_MM / 2.0
+    carrier_z = station["casing_bottom"] + CASING_LENGTH_MM / 2.0
     for number in ("VC-SP-7620", "VC-SP-7621"):
         part = bom.part(number)
         half = shape_for(part)
@@ -324,16 +453,91 @@ def assembly_parts(bom=None) -> list[Placed]:
             shift = -float(box.min.X)
         else:
             shift = -float(box.max.X)
-        add(number, half, axis_x + shift, axis_y, carrier_z)
+        add(number, half, rod_x + shift, rod_y, carrier_z)
+
+    # Chain lift. The axis is X so the motor sits behind the mast, not through a profile.
+    # The gearbox diameter sets the shaft height. The sprocket then clears the bottom plate.
+    sprocket_r = SPROCKET_TIP_DIAMETER_MM / 2.0
+    z_drive = BOTTOM_PLATE_THICKNESS_MM + GEARBOX_HOUSING_DIAMETER_MM / 2.0 + 5.0
+    z_idler = station["rail_top"] + 5.0 + sprocket_r
+    add("VC-HB-2800", along_x(sprocket_r, SPROCKET_WIDTH_MM), 0.0, 0.0, z_drive)
+    add("VC-HB-2810", along_x(sprocket_r, SPROCKET_WIDTH_MM), 0.0, 0.0, z_idler)
+
+    strand_z0 = z_drive + sprocket_r + _MODEL_GAP_MM
+    strand_z1 = z_idler - sprocket_r - _MODEL_GAP_MM
+    strand_length = strand_z1 - strand_z0
+    for index, sign in enumerate((1.0, -1.0), start=1):
+        add(
+            f"VC-HB-2700-{index}",
+            Box(CHAIN_SECTION_X_MM, CHAIN_SECTION_Y_MM, strand_length),
+            0.0,
+            sign * SPROCKET_PITCH_RADIUS_MM,
+            (strand_z0 + strand_z1) / 2.0,
+        )
+
+    shaft_max = -SPROCKET_WIDTH_MM / 2.0
+    shaft_span = 110.0
+    shaft_min = shaft_max - shaft_span
+    add(
+        "VC-HB-2500",
+        along_x(SHAFT_DIAMETER_MM / 2.0, shaft_span),
+        (shaft_min + shaft_max) / 2.0,
+        0.0,
+        z_drive,
+    )
+    pillow = Box(PILLOW_LENGTH_MM, PILLOW_WIDTH_MM, PILLOW_HEIGHT_MM) - along_x(
+        SHAFT_DIAMETER_MM / 2.0 + _MODEL_GAP_MM,
+        PILLOW_LENGTH_MM + 2.0,
+    )
+    for index, fraction in enumerate((0.3, 0.7), start=1):
+        add(
+            f"VC-HB-2600-{index}",
+            pillow,
+            shaft_min + fraction * shaft_span,
+            0.0,
+            z_drive,
+        )
+    coupling_max = shaft_min
+    add(
+        "VC-HB-2400",
+        along_x(COUPLING_DIAMETER_MM / 2.0, COUPLING_LENGTH_MM),
+        coupling_max - COUPLING_LENGTH_MM / 2.0,
+        0.0,
+        z_drive,
+    )
+    gearbox_max = coupling_max - COUPLING_LENGTH_MM
+    add(
+        "VC-HB-2200",
+        along_x(GEARBOX_HOUSING_DIAMETER_MM / 2.0, GEARBOX_LENGTH_MM),
+        gearbox_max - GEARBOX_LENGTH_MM / 2.0,
+        0.0,
+        z_drive,
+    )
+    brake_max = gearbox_max - GEARBOX_LENGTH_MM
+    add(
+        "VC-HB-3000",
+        Box(BRAKE_LENGTH_MM, NEMA42_FRAME_MM, NEMA42_FRAME_MM),
+        brake_max - BRAKE_LENGTH_MM / 2.0,
+        0.0,
+        z_drive,
+    )
+    motor_max = brake_max - BRAKE_LENGTH_MM
+    add(
+        "VC-HB-2100",
+        Box(NEMA42_BODY_LENGTH_MM, NEMA42_FRAME_MM, NEMA42_FRAME_MM),
+        motor_max - NEMA42_BODY_LENGTH_MM / 2.0,
+        0.0,
+        z_drive,
+    )
 
     _check_pose(parts, station)
     return parts
 
 
-def assembly_shape(bom=None):
+def assembly_shape(bom=None, stroke_mm: float | None = None):
     from build123d import Compound
 
-    parts = assembly_parts(bom)
+    parts = assembly_parts(bom, stroke_mm=stroke_mm)
     compound = Compound(children=[item.shape for item in parts])
     compound.label = ASSEMBLY_ID
     return compound
@@ -341,34 +545,55 @@ def assembly_shape(bom=None):
 
 def _check_pose(parts: list[Placed], station: dict[str, float]) -> None:
     by_name = {item.name: item.shape for item in parts}
+    profile = by_name["VC-FR-4100-1"].bounding_box()
+    size_x = float(profile.max.X - profile.min.X)
+    size_y = float(profile.max.Y - profile.min.Y)
+    size_z = float(profile.max.Z - profile.min.Z)
+    if abs(size_x - MAST_PROFILE_DEPTH_MM) > 0.05:
+        raise ValueError("profile is not yawed; the 100 mm side is not along X")
+    if abs(size_y - MAST_PROFILE_WIDTH_MM) > 0.05:
+        raise ValueError("profile is not yawed; the 50 mm side is not along Y")
+    if abs(size_z - MAST_PROFILE_LENGTH_MM) > 0.05:
+        raise ValueError("profile axis is not +Z")
+    if abs(float(profile.max.X) - profile_front_x_mm()) > 0.05:
+        raise ValueError("profile front face is not the +X face")
+    rail = by_name["VC-HB-3100-1"].bounding_box()
+    if float(rail.min.X) + 0.05 < float(profile.max.X):
+        raise ValueError("rail is not on the profile front face")
+    runners = [by_name[f"VC-HB-3110-{index}"] for index in range(1, RUNNER_COUNT + 1)]
+    for runner in runners:
+        box = runner.bounding_box()
+        if float(box.min.Z) < station["rail_bottom"] - 0.05:
+            raise ValueError("runner hangs below the rail")
+        if float(box.max.Z) > station["rail_top"] + 0.05:
+            raise ValueError("runner hangs above the rail")
+        if float(box.min.X) > float(rail.max.X):
+            raise ValueError("runner does not engage the rail")
+    if abs(station["stroke"] - GUIDED_TRAVEL_MM) < 0.05:
+        upper = max(float(runner.bounding_box().max.Z) for runner in runners)
+        if abs(upper - station["rail_top"]) > 0.05:
+            raise ValueError("start pose is not the top of the guided stroke")
     shoe = by_name["VC-GP-7200"].bounding_box()
-    carriage = by_name["VC-HB-3200"].bounding_box()
-    if abs(float(shoe.min.Z)) > 0.05:
-        raise ValueError("shoe tip is not on the ground")
-    height = float(carriage.max.Z) - float(shoe.min.Z)
-    if abs(height - posed_stack_height_mm()) > 0.05:
-        raise ValueError("carriage top does not match the sum of the pose lengths")
+    if abs(float(shoe.min.Z) - station["shoe_bottom"]) > 0.05:
+        raise ValueError("shoe tip does not match the guided pose")
     motors = [by_name["VC-SH-1100-1"], by_name["VC-SH-1100-2"]]
     centres = []
     for motor in motors:
         box = motor.bounding_box()
-        size_x = float(box.max.X - box.min.X)
-        size_y = float(box.max.Y - box.min.Y)
-        size_z = float(box.max.Z - box.min.Z)
-        if abs(size_z - MOTOR_HEIGHT_MM) > 0.05:
+        if abs(float(box.max.Z - box.min.Z) - MOTOR_HEIGHT_MM) > 0.05:
             raise ValueError("motor height is not vertical")
-        if abs(size_y - MOTOR_LENGTH_MM) > 0.05 or abs(size_x - MOTOR_WIDTH_MM) > 0.05:
+        if abs(float(box.max.Y - box.min.Y) - MOTOR_LENGTH_MM) > 0.05:
             raise ValueError("motor shaft is not perpendicular to the rod")
-        centres.append((float(box.center().X), float(box.center().Y)))
-    pitch = ((centres[0][0] - centres[1][0]) ** 2 + (centres[0][1] - centres[1][1]) ** 2) ** 0.5
+        if abs(float(box.max.X - box.min.X) - MOTOR_WIDTH_MM) > 0.05:
+            raise ValueError("motor width is not along X")
+        centres.append(float(box.center().X))
+    pitch = abs(centres[0] - centres[1])
     if pitch + 0.05 < MOTOR_CENTRE_DISTANCE_MIN_MM:
         raise ValueError("motor centre distance is below 170 mm")
     if abs(pitch - MOTOR_CENTRE_DISTANCE_MM) > 0.05:
         raise ValueError("motor centre distance does not match the shared parameter")
-    gap = pitch - MOTOR_WIDTH_MM
-    if CARRIAGE_WIDTH_MM > gap - 2.0 * MOTOR_TO_CARRIAGE_GAP_MM + 0.05:
-        raise ValueError("carriage block overlaps the motor envelopes in plan")
-    del station
+    if COLUMN_FLANGE_DIAMETER_MM > pitch - MOTOR_WIDTH_MM + 0.05:
+        raise ValueError("column flange does not fit between the motors")
 
 
 def _boxes_overlap(left, right, pad: float = 0.2) -> bool:
@@ -430,41 +655,45 @@ def _find(parts: list[Placed], name: str):
 
 
 def clearance_report(parts: list[Placed] | None = None, bom=None) -> dict[str, float]:
-    """Clearances in millimetres. Profile figures use the TBD profile pitch."""
+    """Clearances in millimetres. Profile pitch and several envelopes are TBD."""
     items = parts if parts is not None else assembly_parts(bom)
-    station = pose_stations()
-    shoe_r = SHOE_OD_MM / 2.0
-    casing_r = CASING_OD_MM / 2.0
-    inner_face = PROFILE_SPACING_MM / 2.0 - MAST_PROFILE_DEPTH_MM / 2.0
-    motor_inner = MOTOR_CENTRE_DISTANCE_MM / 2.0 - MOTOR_WIDTH_MM / 2.0
-    carriage_outer = CARRIAGE_WIDTH_MM / 2.0
-    profile_outer = PROFILE_SPACING_MM / 2.0 + MAST_PROFILE_DEPTH_MM / 2.0
-    motor = _find(items, "VC-SH-1100-1")
+    station = visual_stations()
     profile = _find(items, "VC-FR-4100-1")
+    bottom = _find(items, "VC-FR-4300")
+    top = _find(items, "VC-FR-4400")
+    shoe = _find(items, "VC-GP-7200")
+    casing = _find(items, "VC-GP-7100")
+    motor = _find(items, "VC-SH-1100-1")
     rail = _find(items, "VC-HB-3100-1")
     plate = _find(items, "VC-SH-1301")
-    top = _find(items, "VC-FR-4400")
+    carriage = _find(items, "VC-HB-3200")
+    chain = _find(items, "VC-HB-2700-1")
+    profile_box = profile.bounding_box()
+    bottom_box = bottom.bounding_box()
+    outer_y = max(abs(float(profile_box.min.Y)), abs(float(profile_box.max.Y)))
+    inner_y = min(abs(float(profile_box.min.Y)), abs(float(profile_box.max.Y)))
+    top_half = float(top.bounding_box().max.Y)
+    cover = max(0.0, min(outer_y, top_half) - max(inner_y, -top_half))
     return {
-        "shoe_to_profile_mm": _mm(inner_face - shoe_r),
-        "casing_to_profile_mm": _mm(inner_face - casing_r),
-        "motor_to_carriage_mm": _mm(motor_inner - carriage_outer),
+        "shoe_to_profile_mm": _mm(shape_distance_mm(shoe, profile)),
+        "casing_to_profile_mm": _mm(shape_distance_mm(casing, profile)),
         "motor_to_profile_mm": _mm(shape_distance_mm(motor, profile)),
         "motor_to_rail_mm": _mm(shape_distance_mm(motor, rail)),
+        "motor_to_carriage_mm": _mm(shape_distance_mm(motor, carriage)),
         "vibrating_plate_to_top_plate_mm": _mm(shape_distance_mm(plate, top)),
-        "carriage_above_rail_mm": _mm(station["carriage"] - station["rail_top"]),
-        "profile_overhang_past_bottom_plate_mm": _mm(profile_outer - BOTTOM_PLATE_WIDTH_MM / 2.0),
-        "top_plate_cover_of_profile_mm": _mm(
-            max(
-                0.0,
-                min(profile_outer, TOP_PLATE_WIDTH_MM / 2.0)
-                - max(inner_face, -TOP_PLATE_WIDTH_MM / 2.0),
-            )
-        ),
-        "motor_above_plate_mm": _mm(MOTOR_HEIGHT_MM),
+        "carriage_to_chain_mm": _mm(shape_distance_mm(carriage, chain)),
+        "shoe_tip_z_mm": _mm(float(shoe.bounding_box().min.Z)),
+        "profile_overhang_past_bottom_plate_mm": _mm(outer_y - float(bottom_box.max.Y)),
+        "top_plate_cover_of_profile_mm": _mm(cover),
+        "guided_travel_mm": _mm(GUIDED_TRAVEL_MM),
+        "stroke_position_mm": _mm(station["stroke"]),
+        "rod_axis_x_mm": _mm(station["rod_x"]),
         "posed_stack_mm": posed_stack_height_mm(),
         "required_mm": required_total_mm(),
         "rail_top_mm": _mm(station["rail_top"]),
-        "carriage_bottom_mm": _mm(station["carriage"]),
+        "profile_size_x_mm": _mm(float(profile_box.max.X - profile_box.min.X)),
+        "profile_size_y_mm": _mm(float(profile_box.max.Y - profile_box.min.Y)),
+        "profile_size_z_mm": _mm(float(profile_box.max.Z - profile_box.min.Z)),
     }
 
 
@@ -488,6 +717,7 @@ def export_machine_assembly(bom, step_dir: Path, render_dir: Path) -> list[Path]
     step_path = step_dir / STEP_NAME
     export_step(shape, step_path)
     _freeze_step_header(step_path, ASSEMBLY_ID, bom.meta["cad_baseline_date"])
+    _write_z_up_step(step_path)
     written = [step_path]
     for view in RENDER_VIEWS:
         path = render_dir / f"{ASSEMBLY_ID}-{view}.png"
@@ -498,6 +728,24 @@ def export_machine_assembly(bom, step_dir: Path, render_dir: Path) -> list[Path]
 
 def render_paths() -> list[Path]:
     return [RENDER_DIR / f"{ASSEMBLY_ID}-{view}.png" for view in RENDER_VIEWS]
+
+
+def _write_z_up_step(path: Path) -> None:
+    """Keep the mast on +Z. Drop negative zeros in direction triples.
+
+    A negative zero in a reference direction is still +X geometrically.
+    Some STEP readers rebuild the frame from that token and lay the mast over.
+    The solids are not rotated.
+    """
+    import re
+
+    text = path.read_text(encoding="utf-8")
+    cleaned = re.sub(r"-0\.(?!\d)", "0.", text)
+    if "DIRECTION('',(0.,0.,1.))" not in cleaned:
+        raise ValueError(f"{path} has no +Z axis direction")
+    if re.search(r"-0\.(?!\d)", cleaned):
+        raise ValueError(f"{path} still has a negative zero")
+    path.write_text(cleaned, encoding="utf-8")
 
 
 def _render_png(parts: list[Placed], view: str, path: Path) -> None:
@@ -608,7 +856,17 @@ def _color_for(name: str) -> tuple[int, int, int]:
         ("VC-FR-4100", (148, 163, 184)),
         ("VC-FR-4300", (100, 116, 139)),
         ("VC-FR-4400", (71, 85, 105)),
+        ("VC-HB-2100", (30, 64, 175)),
+        ("VC-HB-2200", (51, 65, 85)),
+        ("VC-HB-2400", (100, 116, 139)),
+        ("VC-HB-2500", (148, 163, 184)),
+        ("VC-HB-2600", (71, 85, 105)),
+        ("VC-HB-2700", (180, 130, 40)),
+        ("VC-HB-2800", (55, 65, 81)),
+        ("VC-HB-2810", (71, 85, 105)),
+        ("VC-HB-3000", (127, 29, 29)),
         ("VC-HB-3100", (15, 118, 110)),
+        ("VC-HB-3110", (13, 148, 136)),
         ("VC-HB-3200", (22, 163, 74)),
         ("VC-SH-1301", (234, 88, 12)),
         ("VC-SH-1302", (194, 65, 12)),

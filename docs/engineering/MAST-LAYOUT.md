@@ -88,15 +88,15 @@ The documented minimum centre distance is 170 mm.
 The layout pitch is 266 mm.
 That pitch is TBD.
 It keeps both 154 mm widths on the 420 mm plate.
-The carriage block sits between the motors.
-The lateral gap from each motor to the carriage is 11 mm.
-That gap is TBD.
+The column flange sits between the motors.
+The flange diameter is 80 mm.
+The gap between the motor envelopes is 112 mm.
 
 The motor bodies still rise 175 mm above the plate.
-They stand beside the carriage.
 They are not stacked on the column.
-A carriage plate that covers both motors needs isolators taller than 175 mm.
-That free height is unknown.
+The isolators sit in the strips beside the 255 mm motor length.
+They do not stand under the motor bodies.
+The free height is unknown.
 It is not in the sum.
 
 ## Head term
@@ -169,8 +169,19 @@ These visual stand-ins are not in the height sum.
 | carriage_depth_mm | 120 mm | Plan size only. |
 | isolator_free_height_mm | 40 mm | Not in the height chain. Not a catalogue height. |
 | isolator_diameter_mm | 16 mm | Placeholder sized to the strip beside the 255 mm motor. |
-| rail_section_width_mm | 20 mm | Series name only. The catalogue section is not in the repository. |
-| rail_section_height_mm | 20 mm | Catalogue section is not in the repository. |
+| rail_section_width_mm | 20 mm | Hiwin HGR20R published width WR. The solid is the envelope. |
+| rail_section_height_mm | 17.5 mm | Hiwin HGR20R published height HR. The solid is the envelope. |
+| runner_pitch_mm | 200 mm | Centre distance of the two HGH20CA blocks on one rail. Not in the BOM. |
+| head_front_gap_mm | 90 mm | Gap from the carriage plate to the vibrating plate. Keeps the rear rib clear of the bottom plate. |
+| nema42_body_length_mm | 180 mm | NEMA 42 body length. The 110 mm frame is documented. |
+| brake_length_mm | 40 mm | Envelope of VC-HB-3000. The catalogue number is unknown. |
+| coupling_diameter_mm | 65 mm | Envelope of VC-HB-2400. The bore pair is unknown. |
+| coupling_length_mm | 50 mm | Envelope of VC-HB-2400. The bore pair is unknown. |
+| pillow_length_mm | 30 mm | UCP 206 envelope along the shaft. The 30 mm bore is selected. |
+| pillow_width_mm | 70 mm | UCP 206 envelope. The housing outline was not downloaded. |
+| pillow_height_mm | 45 mm | UCP 206 envelope. The housing outline was not downloaded. |
+| chain_section_x_mm | 16 mm | Strand thickness. The pitch is 15.875 mm. The link CAD was not downloaded. |
+| chain_section_y_mm | 32 mm | Strand width for duplex 10B-2. The link CAD was not downloaded. |
 | rail_bottom_offset_mm | 100 mm | From the bottom of the profile to the bottom of the rail. |
 | rib_centre_x_mm | 170 mm | Weld position of VC-SH-1302 from the rod axis. |
 | shoe_passage_radial_clearance_mm | 1 mm | Layout bore in the bottom plate. The bore position is unknown. |
@@ -178,8 +189,6 @@ These visual stand-ins are not in the height sum.
 | string_axis_x_mm | 0 mm | Rod axis on the plates. Zero is the plate centre. |
 | string_axis_y_mm | 0 mm | Rod axis on the plates. Zero is the plate centre. |
 
-The stroke position along the profile is unknown.
-The sprocket diameters are unknown.
 The drawing puts the stroke and the profile on the same ground baseline.
 That comparison is a length comparison.
 It is not a located zone on the mast.
@@ -209,7 +218,9 @@ That thickness is not in the height sum.
 
 The bottom plate is drawn.
 The bottom plate is not a term in the seven-length sum.
-The string passes through the plate.
+The schematic study puts the string through the plate centre.
+The machine pose does not.
+The string hangs in front of the mast.
 
 ## Assembly pose
 
@@ -218,34 +229,72 @@ It is not a BOM part.
 Do not manufacture from it.
 Each solid keeps its part number in the STEP name.
 FreeCAD 1.1 reads those names.
+The mast axis in the file is +Z.
+The reference directions do not use a negative zero.
 
-The shoe tip is on the ground line.
-Ground clearance is still in the required height.
-It is not applied in this pose.
-The head is not at the top of the stroke.
-The rail top is at 1415 mm with the TBD rail offset.
-The carriage bottom is at 1591.2 mm.
-The carriage is 176.2 mm above the rail top.
-The lengths do not allow the tip on the ground and the head on the rail at the same time.
+Each profile is yawed 90 degrees about its own vertical axis.
+The 100 mm side then lies along X.
+The 50 mm side lies along Y.
+The rail sits on the +X face.
+That face points at the rod.
+The rod axis is at X = 390 mm.
+That position comes from the TBD front gap.
+
+Four Hiwin HGH20CA blocks engage the two rails.
+The selected block is HGH20CA.
+H is 30 mm, W is 44 mm and L is 77.5 mm.
+The block pitch on one rail is 200 mm.
+That pitch is TBD.
+The guided travel is 1022.5 mm.
+`STROKE_POSITION_MM` is the travel of the lower block from the rail bottom.
+The start value is 1022.5 mm.
+That is the top of the travel.
+The upper block then ends on the rail top at 1415 mm.
+The same solids at stroke 0 and at 500 mm do not overlap.
+
+The chain lift is VC-ASM-2000, not the VC-ASM-8100 actuators.
+The NEMA 42 motor, the brake, the PLPE120 gearbox and the drive sprocket sit behind the bottom plate.
+The idle sprocket sits under the top plate.
+Two chain strands run between the pitch circles.
+One strand meets the carriage on a face.
+The sprocket envelope uses the published 83 mm tip diameter.
+The pitch radius is the documented 37.9 mm.
+The gearbox envelope is the published PLPE120 two-stage minimum, 120 mm by 219.5 mm.
+The NEMA 42 frame is 110 mm.
+The body length is TBD.
+
+Purchased-part STEP files were not downloaded.
+Each portal asked for an account.
+The solids above are catalogue envelopes.
+They are not vendor CAD.
+
+The shoe tip is at Z = -503.7 mm in the start pose.
+The head is on the rails.
+The string is longer than the distance down to the ground line.
+Ground clearance stays in the required height.
+It is not a shift of this pose.
+The required height is still 1761.2 mm.
+The deficit against the 1300 mm stroke is still 461.2 mm.
 
 The plates are stacked on the profile ends.
 The solids meet on a face.
 They do not share a volume.
-At the TBD pitch of 300 mm the profiles overhang the bottom plate by 50 mm.
+At the TBD pitch of 300 mm the profiles overhang the bottom plate by 25 mm.
 The top plate covers 0 mm of each profile.
-The 200 mm top plate cannot seat both profiles if the shoe passes between them.
+The 200 mm top plate does not reach the profiles after the yaw.
 
-Clearances below use that TBD pitch.
+Clearances below use that TBD pitch and the TBD front gap.
 Do not treat them as a measured fit.
 
 | Pair | Clearance | Note |
 |---|---|---|
-| Shoe to profile inner face | 56.2 mm | Pitch is TBD. |
-| Casing to profile inner face | 58.7 mm | Pitch is TBD. |
-| Motor envelope to carriage | 11.0 mm | Lateral gap. TBD. |
-| Motor to nearest profile | 82.3 mm | No collision. |
-| Motor to nearest rail | 194.3 mm | No collision. |
-| Vibrating plate to top plate | 44.2 mm | The head is above the mast. |
+| Shoe to nearest profile | 542.1 mm | The shoe is in front of the mast. |
+| Casing to nearest profile | 321.0 mm | The casing is in front of the mast. |
+| Motor envelope to carriage | 6.5 mm | The strip beside the 255 mm motor. |
+| Motor to nearest profile | 130.0 mm | No collision. |
+| Motor to nearest rail | 113.2 mm | No collision. |
+| Vibrating plate to top plate | 428.6 mm | The head is in front of the mast. |
+| Carriage to chain strand | 0.0 mm | The lug meets the strand on a face. |
 
 No pair of part solids shares more than 1 mm³.
 The ground datum is not a part.
@@ -266,11 +315,12 @@ The views are:
 6. Column flange thickness.
 7. Isolator free height and diameter for VC-SH-1600.
 8. Motor centre distance. The minimum is 170 mm. The 266 mm pitch is only a layout placeholder.
-9. Usable stroke position between the plates. The rail offset is TBD.
-10. Centre distance of the two mast profiles. The shoe must pass between the profiles. The outside diameter 87.63 mm is known.
-11. Guide bore position on both plates. The layout uses the plate centre.
-12. Rail section. Size 20 is the series name. The catalogue section is not in the repository.
-13. Weld position of the two ribs VC-SH-1302.
+9. Usable stroke. The model travel is 1022.5 mm because two 77.5 mm blocks sit 200 mm apart on the 1300 mm rail. The 200 mm pitch is TBD.
+10. Centre distance of the two mast profiles. The rod is in front of the rails. The 300 mm pitch is TBD.
+11. Front gap from the carriage plate to the vibrating plate. The model uses 90 mm so the rear rib clears the bottom plate.
+12. NEMA 42 catalogue number and body length. The frame is 110 mm. The model uses a TBD length of 180 mm.
+13. Brake catalogue number, coupling bores, pillow-block outline and chain-link section.
+14. Weld position of the two ribs VC-SH-1302.
 
 ## Options
 

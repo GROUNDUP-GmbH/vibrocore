@@ -112,11 +112,57 @@ CARRIAGE_DEPTH_MM = 120.0
 ISOLATOR_FREE_HEIGHT_MM = 40.0
 ISOLATOR_DIAMETER_MM = 16.0
 ISOLATOR_COUNT = 4
-# VC-HB-3100. The section is not in the repository. Size 20 is only the series name. TBD.
+# VC-HB-3100. Hiwin HGR20R published section. WR is the width. HR is the height.
+# The vendor STEP needs the Hiwin configurator. The solid is the rectangular envelope.
 RAIL_SECTION_WIDTH_MM = 20.0
-RAIL_SECTION_HEIGHT_MM = 20.0
+RAIL_SECTION_HEIGHT_MM = 17.5
+# VC-HB-3110. Hiwin HGH20CA published block.
+# H is the height from the rail mounting face. W is the width. L is the length.
+# The vendor STEP needs the Hiwin product page. The solid is an envelope with a rail channel.
+RUNNER_HEIGHT_MM = 30.0
+RUNNER_WIDTH_MM = 44.0
+RUNNER_LENGTH_MM = 77.5
+RUNNER_COUNT = 4
+# TBD. Centre distance of the two blocks on one rail. Not in the BOM.
+RUNNER_PITCH_MM = 200.0
+# Travel of the lower block. The upper block stays on the 1300 mm rail.
+GUIDED_TRAVEL_MM = round(RAIL_LENGTH_MM - RUNNER_PITCH_MM - RUNNER_LENGTH_MM, 1)
+# Start pose. Zero is the lower end of travel. The start value is the top of travel.
+STROKE_POSITION_MM = GUIDED_TRAVEL_MM
+# TBD. Gap from the carriage plate to the rear face of the vibrating plate.
+# Large enough that the rear rib stays in front of the bottom plate at the lower end of travel.
+HEAD_FRONT_GAP_MM = 90.0
+# Yaw of each profile about its own vertical axis. The 100 mm side then lies along X.
+PROFILE_YAW_DEG = 90.0
 # Distance from the bottom of the profile to the bottom of the rail. TBD.
 RAIL_BOTTOM_OFFSET_MM = 100.0
+# Drive envelopes. A catalogue number is named. An unknown length stays TBD.
+# Pitch radius already used for the hub force calculation.
+SPROCKET_PITCH_RADIUS_MM = 37.9
+# iwis 10B-2, 15 teeth. Tip diameter and overall length from the published product page.
+SPROCKET_TIP_DIAMETER_MM = 83.0
+SPROCKET_WIDTH_MM = 40.0
+# Neugart PLPE120, ratio 40, two stages. L1 is the published minimum total length.
+# The input flange can be longer. This envelope is that minimum.
+GEARBOX_HOUSING_DIAMETER_MM = 120.0
+GEARBOX_LENGTH_MM = 219.5
+# NEMA 42 frame is documented. The body length is not. TBD.
+NEMA42_FRAME_MM = 110.0
+NEMA42_BODY_LENGTH_MM = 180.0
+# Brake envelope. The catalogue number is unknown. TBD.
+BRAKE_LENGTH_MM = 40.0
+# Coupling envelope. The bore pair is unknown. TBD.
+COUPLING_DIAMETER_MM = 65.0
+COUPLING_LENGTH_MM = 50.0
+# Shaft diameter at the top of the 25-30 mm range. It matches the UCP 206 bore.
+SHAFT_DIAMETER_MM = 30.0
+# Pillow-block envelope. TBD. The bore is the 30 mm UCP 206 bore.
+PILLOW_LENGTH_MM = 30.0
+PILLOW_WIDTH_MM = 70.0
+PILLOW_HEIGHT_MM = 45.0
+# Chain strand section. TBD. The pitch is documented. The link CAD was not downloaded.
+CHAIN_SECTION_X_MM = 16.0
+CHAIN_SECTION_Y_MM = 32.0
 # VC-SH-1302 weld position along the plate length. TBD.
 # The ribs hang under the plate and must stay outside the top plate.
 RIB_CENTRE_X_MM = 170.0
@@ -191,11 +237,56 @@ PLACEHOLDERS: dict[str, tuple[float, str]] = {
     ),
     "rail_section_width_mm": (
         RAIL_SECTION_WIDTH_MM,
-        "TBD. VC-HB-3100 section width. Size 20 is the series name, not a measured section.",
+        "Hiwin HGR20R published rail width WR. The STEP file was not downloaded. The solid is the envelope.",
     ),
     "rail_section_height_mm": (
         RAIL_SECTION_HEIGHT_MM,
-        "TBD. VC-HB-3100 section height. The catalogue section is not in the repository.",
+        "Hiwin HGR20R published rail height HR. The STEP file was not downloaded. The solid is the envelope.",
+    ),
+    "runner_pitch_mm": (
+        RUNNER_PITCH_MM,
+        "TBD. Centre distance of the two HGH20CA blocks on one rail. Not in the BOM.",
+    ),
+    "head_front_gap_mm": (
+        HEAD_FRONT_GAP_MM,
+        "TBD. Gap from the carriage plate to the rear face of the vibrating plate. "
+        "It keeps the rear rib in front of the bottom plate at the lower end of travel.",
+    ),
+    "nema42_body_length_mm": (
+        NEMA42_BODY_LENGTH_MM,
+        "TBD. NEMA 42 body length. The 110 mm frame is documented. The catalogue number is not chosen.",
+    ),
+    "brake_length_mm": (
+        BRAKE_LENGTH_MM,
+        "TBD. Envelope length of VC-HB-3000. The catalogue number is unknown.",
+    ),
+    "coupling_diameter_mm": (
+        COUPLING_DIAMETER_MM,
+        "TBD. Envelope diameter of VC-HB-2400. The bore pair is unknown.",
+    ),
+    "coupling_length_mm": (
+        COUPLING_LENGTH_MM,
+        "TBD. Envelope length of VC-HB-2400. The bore pair is unknown.",
+    ),
+    "pillow_length_mm": (
+        PILLOW_LENGTH_MM,
+        "TBD. Envelope length of UCP 206 along the shaft. The 30 mm bore is the selected size.",
+    ),
+    "pillow_width_mm": (
+        PILLOW_WIDTH_MM,
+        "TBD. Envelope width of UCP 206. The housing outline was not downloaded.",
+    ),
+    "pillow_height_mm": (
+        PILLOW_HEIGHT_MM,
+        "TBD. Envelope height of UCP 206. The housing outline was not downloaded.",
+    ),
+    "chain_section_x_mm": (
+        CHAIN_SECTION_X_MM,
+        "TBD. Chain strand thickness. The 15.875 mm pitch is documented. The link CAD was not downloaded.",
+    ),
+    "chain_section_y_mm": (
+        CHAIN_SECTION_Y_MM,
+        "TBD. Chain strand width. Duplex 10B-2. The link CAD was not downloaded.",
     ),
     "rail_bottom_offset_mm": (
         RAIL_BOTTOM_OFFSET_MM,

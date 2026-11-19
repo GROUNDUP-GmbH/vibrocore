@@ -32,7 +32,17 @@ PART_NUMBERS = (
     "VC-FR-4100",
     "VC-FR-4300",
     "VC-FR-4400",
+    "VC-HB-2100",
+    "VC-HB-2200",
+    "VC-HB-2400",
+    "VC-HB-2500",
+    "VC-HB-2600",
+    "VC-HB-2700",
+    "VC-HB-2800",
+    "VC-HB-2810",
+    "VC-HB-3000",
     "VC-HB-3100",
+    "VC-HB-3110",
     "VC-HB-3200",
     "VC-SH-1100",
     "VC-SH-1301",
@@ -73,31 +83,41 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
     bom = load_bom()
     parts = assembly_parts(bom)
     assert overlap_pairs(parts) == []
+    assert overlap_pairs(assembly_parts(bom, stroke_mm=0.0)) == []
     report = clearance_report(parts)
-    assert report["shoe_to_profile_mm"] == 56.2
-    assert report["casing_to_profile_mm"] == 58.7
-    assert report["motor_to_carriage_mm"] == 11.0
-    assert report["motor_to_profile_mm"] == 82.3
-    assert report["motor_to_rail_mm"] == 194.3
-    assert report["vibrating_plate_to_top_plate_mm"] == 44.2
-    assert report["carriage_above_rail_mm"] == 176.2
-    assert report["profile_overhang_past_bottom_plate_mm"] == 50.0
+    assert report["shoe_to_profile_mm"] == 542.1
+    assert report["casing_to_profile_mm"] == 321.0
+    assert report["motor_to_carriage_mm"] == 6.5
+    assert report["motor_to_profile_mm"] == 130.0
+    assert report["motor_to_rail_mm"] == 113.2
+    assert report["vibrating_plate_to_top_plate_mm"] == 428.6
+    assert report["carriage_to_chain_mm"] == 0.0
+    assert report["shoe_tip_z_mm"] == -503.7
+    assert report["profile_overhang_past_bottom_plate_mm"] == 25.0
     assert report["top_plate_cover_of_profile_mm"] == 0.0
-    assert report["motor_to_profile_mm"] > 0
-    assert report["motor_to_rail_mm"] > 0
+    assert report["guided_travel_mm"] == 1022.5
+    assert report["stroke_position_mm"] == 1022.5
+    assert report["profile_size_x_mm"] == 100.0
+    assert report["profile_size_y_mm"] == 50.0
+    assert report["profile_size_z_mm"] == 1500.0
+    assert report["required_mm"] == 1761.2
     names = [item.name for item in parts]
     assert names.count("VC-SH-1100-1") == 1
     assert names.count("VC-SH-1100-2") == 1
+    assert names.count("VC-HB-3110-1") == 1
+    assert sum(name.startswith("VC-HB-3110-") for name in names) == 4
     assert PLACEHOLDERS["motor_centre_distance_mm"][0] >= MOTOR_CENTRE_DISTANCE_MIN_MM
     assert OVERLAP_TOLERANCE_MM3 == 1.0
 
 
 def test_bbox_matches_the_placed_solids():
     size = assembly_bbox_mm()
-    assert abs(size[0] - 420.0) < 0.05
-    assert abs(size[1] - 400.0) < 0.05
-    # Shoe tip at Z=0, datum 0.5 mm below, motor tops at 1766.2 mm.
-    assert abs(size[2] - 1766.7) < 0.05
+    assert abs(size[0] - 1219.5) < 0.05
+    assert abs(size[1] - 350.0) < 0.05
+    # Shoe tip at Z=-503.7. Top plate at Z=1527. The mast axis is Z.
+    assert abs(size[2] - 2030.7) < 0.05
+    assert size[2] > size[0]
+    assert size[2] > size[1]
     bom = load_bom()
     assert ASSEMBLY_ID not in bom.parts
     step = read_step_bbox_mm(STEP_DIR / STEP_NAME)
@@ -109,6 +129,8 @@ def test_bbox_matches_the_placed_solids():
 def test_step_names_each_part_and_pngs_are_distinct():
     text = (STEP_DIR / STEP_NAME).read_text(encoding="utf-8")
     assert "FILE_NAME('VC-ASM-0000-layout','2026-11-19T00:00:00'" in text
+    assert "DIRECTION('',(0.,0.,1.))" in text
+    assert "DIRECTION('',(1.,0.,-0.))" not in text
     for number in PART_NUMBERS:
         assert f"PRODUCT('{number}" in text
     pngs = [RENDER_DIR / f"{ASSEMBLY_ID}-{view}.png" for view in ("iso", "side", "top")]
