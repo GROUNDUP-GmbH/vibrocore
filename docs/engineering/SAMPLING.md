@@ -1,18 +1,26 @@
 # Sampling concept
 
 Decision date: 2026-11-19.
-The machine drives the 3.25 in Geoprobe casing.
-It does not use the DT325 inner string.
+The sampling string is only the 3.25 in outer casing.
+The cutting shoe sits at the bottom of that casing.
+Open lab tubes sit inside the casing.
+The split carrier holds those tubes.
+The machine does not use an inner string.
 
 Do not add centre rods, a centring drive cap, a sample sheath, PVC liners, core catchers, end caps, a lift cap, a leaf puller, a rod clamp or a retainer wrench.
 
-## What stays
+## What stays on the kit
+
+VC-KIT-6000 has six lines.
 
 | Part | Role | Offer 26100096, EUR net, freight excluded |
 |---|---|---|
-| VC-GP-7100, rod 201446 | One 48 in casing. Mass 17.7 kg. Inside diameter 2.625 in = 66.675 mm. | 389.99 each |
-| VC-GP-7200, shoe 205449 | Cuts the hole. Outside diameter 3.45 in = 87.63 mm. | 300.78 each |
-| VC-GP-7150, O-rings 201325 | Seal the casing joints. Pack of 25. | 24.75 per pack |
+| VC-GP-7100, rod 201446 | One 48 in outer casing. Mass 17.7 kg. Inside diameter 2.625 in = 66.675 mm. | 389.99 each |
+| VC-GP-7200, shoe 205449 | Cutting shoe at the bottom of the casing. Outside diameter 3.45 in = 87.63 mm. | 300.78 each |
+| VC-GP-7150, O-rings 201325 | Seal the joints between 3.25 in casing sections. Pack of 25. | 24.75 per pack |
+| VC-SP-7620 | Draft half-shell A. | No price |
+| VC-SP-7621 | Draft half-shell B. | No price |
+| VC-SP-7630 | Clamp fasteners for the half-shells. Size TBD. | No price |
 
 The kit holds two rods.
 That quantity is two rods, not two pairs.
@@ -54,15 +62,18 @@ A cap in the tube would stop the soil.
 Caps are a lab consumable.
 Do not put tubes or caps on this BOM.
 
-## Drive head and liner retainer
+## Offer parts that are not the sampling string
 
-Offer 26100096 also prices these parts.
-They are not on the BOM.
+Stefan must confirm these three decisions.
+The source pages are the Geoprobe tooling pages cited below.
+Offer 26100096 gives the prices.
+Prices are EUR net and exclude freight.
 
-| Part | Offer price, EUR net | Decision |
+| Part | Decision | Reason |
 |---|---|---|
-| Drive head 201385 | 171.34 | Not added. The pull path is VC-SH-1500. The pull rating of 201385 is not in this repository. Do not buy it until that rating is confirmed. |
-| Liner retainer HD 208472 | 161.93 | Not added. A retainer holds a liner. This machine does not use a liner. The half-shells hold the open tubes. |
+| O-ring 201325, VC-GP-7150 | Keep on VC-KIT-6000. Quantity 1 pack. | Geoprobe names it "O-Ring (3.25 in. Probe Rod)", quantity 25. It seals the joints between outer casing sections. https://geoprobe.com/tooling/dt325-soil-sampling-system/mn201325 |
+| Drive head 201385, VC-GP-7310 | Obsolete. Not on any BOM. History price EUR 171.34. | Geoprobe names it "DT325 Drive Head" with a 1.25 in pin. That pin fits the centre rod. It does not join 3.25 in casing sections. VC-SH-1500 connects the casing to the sonic head. https://geoprobe.com/tooling/dt37-soil-sampling-system/mn201385 |
+| Retainer HD 208472, VC-GP-7410 | Obsolete. Not on any BOM. History price EUR 161.93. | Geoprobe names it "DT325 Retainer HD" and notes "No O-ring". It holds a liner. This machine does not use a liner. https://geoprobe.com/tooling/dt325-soil-sampling-system/mn208472 |
 
 ## Split carrier
 

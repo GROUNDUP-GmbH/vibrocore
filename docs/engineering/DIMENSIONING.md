@@ -103,7 +103,7 @@ Total plate assembly: ~22.6 kg
 Plate + ribs:         22.6 kg
 2× OLI motors:        14.4 kg
 Center column:          3.5 kg
-DT325 adapter:          1.0 kg
+Casing adapter:         1.0 kg
 Fasteners:              0.5 kg
 ─────────────────────────────
 Total vibrating mass:  42.0 kg
@@ -331,7 +331,7 @@ V2 eliminates this concern entirely.*
 | VFD                         | 1.5 kW, 230V 1ph, V/f, 0–400 Hz   | EU              |
 | Vibrating plate             | S355J2, 420×300×20 mm + ribs       | Custom/EU       |
 | Center column               | 42CrMo4, Ø50×200 mm               | Custom/EU       |
-| DT325 adapter               | Steel, custom threaded             | Custom/EU       |
+| Casing adapter              | Steel, custom threaded             | Custom/EU       |
 | Rubber isolators (4×)       | M12, 55–65 Shore A, f₀ ~10 Hz     | EU              |
 | Hub motor                   | NEMA 42 CL stepper, 20 Nm         | Nanotec/EU      |
 | Hub gearbox                 | Neugart PLPE120, 40:1              | DE              |
