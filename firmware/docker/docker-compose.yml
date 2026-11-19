@@ -10,6 +10,13 @@
 #   OS:  Raspberry Pi OS (Debian)
 #   → Change platform below: linux/arm/v7 → linux/arm/v8
 #
+# Secrets (required — never commit real values):
+#   Create firmware/docker/.env from .env.example and set:
+#     NODE_RED_CREDENTIAL_SECRET
+#     NODE_RED_PASSWORD_HASH
+#     NODE_RED_USERNAME (optional)
+#   Create mosquitto/passwd and mosquitto/acl from the *.example files.
+#
 # Deploy:
 #   ssh admin@192.168.1.10
 #   cd /home/admin/vibrocore
@@ -25,20 +32,26 @@ version: "3.8"
 services:
 
   # ─────────────────────────────────────────────────────────────────
-  # MOSQUITTO — local MQTT broker
-  #   - receives data from Node-RED and SE050 wallet (ESP32-C3 WiFi)
-  #   - bridges outbound MQTT to RDDL/cloud via WireGuard/LTE
+  # MOSQUITTO — local MQTT broker (internal Docker network only)
+  #   - Node-RED connects via service name "mosquitto"
+  #   - Port 1883 is NOT published to the host / 0.0.0.0
+  #   - WebSocket 9001 stays on the internal network; auth required
   # ─────────────────────────────────────────────────────────────────
   mosquitto:
     image: eclipse-mosquitto:2
     platform: linux/arm/v7    # WAGO PFC200 XTR; change to linux/arm/v8 for RevPi Connect 4
     container_name: vibrocore-mqtt
     restart: unless-stopped
-    ports:
-      - "1883:1883"    # local MQTT (WAGO LAN)
-      - "9001:9001"    # WebSocket MQTT (Node-RED dashboard live data)
+    # No host ports: bind MQTT to the internal Docker network only.
+    # To reach MQTT from the HMI LAN host process, publish a specific IP:
+    #   ports: ["192.168.1.10:1883:1883"]
+    expose:
+      - "1883"
+      - "9001"
     volumes:
       - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - ./mosquitto/passwd:/mosquitto/config/passwd:ro
+      - ./mosquitto/acl:/mosquitto/config/acl:ro
       - mosquitto_data:/mosquitto/data
       - mosquitto_log:/mosquitto/log
     networks:
@@ -47,7 +60,7 @@ services:
   # ─────────────────────────────────────────────────────────────────
   # NODE-RED — operator HMI dashboard
   #   - polls CODESYS variables via Modbus TCP (WAGO Modbus Slave TCP)
-  #   - provides web dashboard on port 1880
+  #   - provides web dashboard on port 1880 (loopback / HMI LAN only)
   #   - publishes cycle records to Mosquitto → RDDL
   #
   # Official WAGO image: armv7-compatible, includes
@@ -62,12 +75,21 @@ services:
     restart: unless-stopped
     depends_on:
       - mosquitto
+    # Bind HMI to loopback on the controller. For tablet access on the HMI
+    # LAN, replace 127.0.0.1 with the PFC200 HMI interface IP (not 0.0.0.0).
     ports:
-      - "1880:1880"    # Node-RED editor + dashboard
+      - "127.0.0.1:1880:1880"
     environment:
       - TZ=Europe/Vienna
       - NODE_RED_ENABLE_PROJECTS=false
       - NODE_OPTIONS=--max-old-space-size=128    # constrain heap on 512 MB PFC
+      - NODE_RED_CREDENTIAL_SECRET=${NODE_RED_CREDENTIAL_SECRET}
+      - NODE_RED_PASSWORD_HASH=${NODE_RED_PASSWORD_HASH}
+      - NODE_RED_USERNAME=${NODE_RED_USERNAME:-admin}
+      - MQTT_USERNAME=${MQTT_USERNAME:-vibrocore}
+      - MQTT_PASSWORD=${MQTT_PASSWORD}
+    env_file:
+      - .env
     volumes:
       - nodered_data:/data
       - ./nodered/flows.json:/data/flows.json:ro

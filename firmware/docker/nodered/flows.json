@@ -183,7 +183,7 @@
     "id": "mqtt_broker_local",
     "type": "mqtt-broker",
     "name": "Lokaler Mosquitto",
-    "broker": "localhost",
+    "broker": "mosquitto",
     "port": 1883,
     "clientid": "nodered-hmi",
     "autoConnect": true,
@@ -425,57 +425,68 @@
   },
 
   {
-    "id": "btn_jog_down",
-    "type": "ui_button",
-    "name": "Jog Runter",
+    "id": "tpl_jog_down",
+    "type": "ui_template",
     "group": "grp_control",
+    "name": "Jog Runter (hold)",
     "order": 3,
     "width": 3,
     "height": 1,
-    "passthru": false,
-    "label": "▼ JOG -",
-    "tooltip": "Schlitten manuell runterfahren (nur im MANUAL Mode)",
-    "color": "white",
-    "bgcolor": "#2196f3",
-    "payload": "1",
-    "payloadType": "num",
-    "wires": [["fn_write_jog_down"]]
+    "format": "<md-button class=\"md-raised\" style=\"background:#2196f3;color:#fff;width:100%;margin:0\"\n  ng-mousedown=\"send({payload:1, topic:'jog_down'})\"\n  ng-mouseup=\"send({payload:0, topic:'jog_down'})\"\n  ng-mouseleave=\"send({payload:0, topic:'jog_down'})\"\n  touchstart=\"send({payload:1, topic:'jog_down'})\"\n  touchend=\"send({payload:0, topic:'jog_down'})\">▼ JOG -</md-button>",
+    "storeOutMessages": false,
+    "fwdInMessages": false,
+    "resendOnRefresh": false,
+    "templateScope": "local",
+    "wires": [["fn_jog_hold"]]
   },
 
   {
-    "id": "fn_write_jog_down",
-    "type": "function",
-    "name": "JogDown → PLC",
-    "func": "return { payload: [1], fc: 6, unitid: 1, address: 2 };",
-    "outputs": 1,
-    "wires": [["modbus_write"]]
-  },
-
-  {
-    "id": "btn_jog_up",
-    "type": "ui_button",
-    "name": "Jog Hoch",
+    "id": "tpl_jog_up",
+    "type": "ui_template",
     "group": "grp_control",
+    "name": "Jog Hoch (hold)",
     "order": 4,
     "width": 3,
     "height": 1,
-    "passthru": false,
-    "label": "▲ JOG +",
-    "tooltip": "Schlitten manuell hochfahren (nur im MANUAL Mode)",
-    "color": "white",
-    "bgcolor": "#2196f3",
-    "payload": "1",
-    "payloadType": "num",
-    "wires": [["fn_write_jog_up"]]
+    "format": "<md-button class=\"md-raised\" style=\"background:#2196f3;color:#fff;width:100%;margin:0\"\n  ng-mousedown=\"send({payload:1, topic:'jog_up'})\"\n  ng-mouseup=\"send({payload:0, topic:'jog_up'})\"\n  ng-mouseleave=\"send({payload:0, topic:'jog_up'})\"\n  touchstart=\"send({payload:1, topic:'jog_up'})\"\n  touchend=\"send({payload:0, topic:'jog_up'})\">▲ JOG +</md-button>",
+    "storeOutMessages": false,
+    "fwdInMessages": false,
+    "resendOnRefresh": false,
+    "templateScope": "local",
+    "wires": [["fn_jog_hold"]]
   },
 
   {
-    "id": "fn_write_jog_up",
+    "id": "fn_jog_hold",
     "type": "function",
-    "name": "JogUp → PLC",
-    "func": "return { payload: [1], fc: 6, unitid: 1, address: 3 };",
+    "name": "Jog hold-to-run flag",
+    "func": "// Momentary jog: never latch. PLC watchdog stops motion if heartbeat stalls > 300 ms.\nvar dir = msg.topic;\nvar pressed = msg.payload ? 1 : 0;\nif (dir === 'jog_down') {\n    flow.set('jog_down', pressed);\n    if (pressed) { flow.set('jog_up', 0); }\n} else if (dir === 'jog_up') {\n    flow.set('jog_up', pressed);\n    if (pressed) { flow.set('jog_down', 0); }\n}\nif (!pressed && !flow.get('jog_down') && !flow.get('jog_up')) {\n    // Immediate clear of direction bits; heartbeat inject also clears when idle.\n    node.send({ payload: [0], fc: 6, unitid: 1, address: 2 });\n    node.send({ payload: [0], fc: 6, unitid: 1, address: 3 });\n}\nreturn null;",
     "outputs": 1,
     "wires": [["modbus_write"]]
+  },
+
+  {
+    "id": "inject_jog_heartbeat",
+    "type": "inject",
+    "name": "Jog heartbeat 100ms",
+    "props": [{"p": "payload"}],
+    "repeat": "0.1",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 1,
+    "topic": "jog_hb",
+    "payload": "1",
+    "payloadType": "num",
+    "wires": [["fn_jog_heartbeat"]]
+  },
+
+  {
+    "id": "fn_jog_heartbeat",
+    "type": "function",
+    "name": "Jog heartbeat → PLC",
+    "func": "// While a jog button is held, refresh direction bits and bump heartbeat (%MW33).\n// PLC clears jog if iHMI_JogHeartbeat does not change for > 300 ms.\nvar down = flow.get('jog_down') || 0;\nvar up = flow.get('jog_up') || 0;\nvar hb = (flow.get('jog_hb') || 0) + 1;\nif (hb > 65535) { hb = 1; }\nflow.set('jog_hb', hb);\n\nvar out = [];\nout.push({ payload: [down ? 1 : 0], fc: 6, unitid: 1, address: 2 });\nout.push({ payload: [up ? 1 : 0], fc: 6, unitid: 1, address: 3 });\nout.push({ payload: [hb], fc: 6, unitid: 1, address: 33 });\nreturn [out[0], out[1], out[2]];",
+    "outputs": 3,
+    "wires": [["modbus_write"], ["modbus_write"], ["modbus_write"]]
   },
 
   {
