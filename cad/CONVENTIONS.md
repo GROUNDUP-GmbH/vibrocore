@@ -70,6 +70,9 @@ cad/export/step/VC-….step           one solid per modelled part
 cad/export/pdf/VC-…_.pdf            drawing printout
 cad/drawings/VC-…_.svg              same sheet, easier to diff
 cad/export/geometry.json            dimensions the FreeCAD script reads
+cad/export/layout/mast-stack.svg    mast study sheet, not a part drawing
+cad/export/layout/mast-stack.pdf    same chain as text
+cad/export/layout/mast-stack.step   study solid, not for manufacture
 cad/kicad/vibrocore-control/        wiring skeleton
 cad/freecad/make_plate.py           optional freecadcmd check
 ```

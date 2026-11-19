@@ -137,8 +137,9 @@ data_issues:
     the split carrier. O-ring 201325 stays, because it seals casing joints. Drive head 201385 and
     retainer 208472 are obsolete and are not on a BOM.
 - id: mast-height-deficit
-  summary: The 1500 mm mast does not show a fit for the 1219.2 mm rod plus the head, the shoe and the adapter.
-    Shoe length and adapter length are unknown. The profile length is unchanged.
+  summary: The 1500 mm profile is unchanged. The study layout in docs/engineering/MAST-LAYOUT.md and
+    cad/export/layout/mast-stack.svg computes the deficit for one 1219.2 mm casing plus the head, the
+    shoe and the adapter. Shoe length, adapter length, carriage height and ground clearance are TBD.
 - id: se050-double-count
   summary: Closed 2026-11-19. VC-CT-6410 is obsolete. The SE050 breakout is inside VC-CT-6400 and is not a
     second purchase.

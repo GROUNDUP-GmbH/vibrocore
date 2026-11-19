@@ -17,7 +17,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `option-b-savings-v1-vs-v11`: Realistic budget is a rounded scenario, not the YAML rollup. Option B is EUR 530 less than Option A for V1 (8968-8438) and EUR 680 less for V1.1 (10718-10038).
 - `core-scanner-subtotal-mismatch`: Closed 2026-11-19. The scanner subtotal is the VC-ASM-8400 rollup, EUR 429-780.
 - `sampling-concept-2026-11-19`: The sampling string is the 3.25 in outer casing and cutting shoe 205449. Open tubes sit in the split carrier. O-ring 201325 stays, because it seals casing joints. Drive head 201385 and retainer 208472 are obsolete and are not on a BOM.
-- `mast-height-deficit`: The 1500 mm mast does not show a fit for the 1219.2 mm rod plus the head, the shoe and the adapter. Shoe length and adapter length are unknown. The profile length is unchanged.
+- `mast-height-deficit`: The 1500 mm profile is unchanged. The study layout in docs/engineering/MAST-LAYOUT.md and cad/export/layout/mast-stack.svg computes the deficit for one 1219.2 mm casing plus the head, the shoe and the adapter. Shoe length, adapter length, carriage height and ground clearance are TBD.
 - `se050-double-count`: Closed 2026-11-19. VC-CT-6410 is obsolete. The SE050 breakout is inside VC-CT-6400 and is not a second purchase.
 - `rut241-9v-converter`: Closed 2026-11-19. VC-CT-6620 is obsolete. The RUT241 input is 9-30 V DC. The router runs from the 24 V rail.
 
