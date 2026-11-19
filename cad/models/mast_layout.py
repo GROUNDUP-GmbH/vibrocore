@@ -138,8 +138,8 @@ BOTTOM_PLATE_REAR_OVERHANG_MM = 0.0
 # VC-FR-4500 closed bore. It guides the 82.55 mm casing VC-GP-7100, not the column.
 CASING_GUIDE_BORE_DIAMETER_MM = 83.0
 # The chain axis is the mast mid-plane (X = 0), in the gap between the uprights.
-# The lift motor sits below the bottom plate. Its axis is far enough forward that a
-# 120 mm gearbox stays flush with the profile rear face and does not enter the tilt zone.
+# The lift motor sits above the bottom plate, outside the head sweep on the drive side.
+# The brake body is flush with the profile rear face and does not enter the tilt zone.
 CHAIN_AXIS_X_MM = 0.0
 # Draft sheet for the frame gussets. Not a shop measurement.
 GUSSET_SHEET_THICKNESS_MM = 4.0
@@ -162,12 +162,13 @@ SPROCKET_WIDTH_MM = 40.0
 # The input flange can be longer. This envelope is that minimum.
 GEARBOX_HOUSING_DIAMETER_MM = 120.0
 GEARBOX_LENGTH_MM = 219.5
-# NEMA 42 frame is documented. The body length is not. TBD.
+# NEMA 42 frame is documented. The 180 mm length is the fallback envelope. TBD.
+# The placed solid is the public ST11018M6504 STEP, a stand-in for the closed-loop motor.
 NEMA42_FRAME_MM = 110.0
 NEMA42_BODY_LENGTH_MM = 180.0
-# Brake envelope. The catalogue number is unknown. TBD.
+# Fallback brake envelope. The placed solid is the BFK457-10 STEP. TBD when that file is absent.
 BRAKE_LENGTH_MM = 40.0
-# Coupling envelope. The bore pair is unknown. TBD.
+# Fallback coupling envelope. The placed solid is the ROTEX 28 STEP set. TBD when those files are absent.
 COUPLING_DIAMETER_MM = 65.0
 COUPLING_LENGTH_MM = 50.0
 # Shaft diameter at the top of the 25-30 mm range. It matches the UCP 206 bore.
@@ -286,19 +287,19 @@ PLACEHOLDERS: dict[str, tuple[float, str]] = {
     ),
     "nema42_body_length_mm": (
         NEMA42_BODY_LENGTH_MM,
-        "TBD. NEMA 42 body length. The 110 mm frame is documented. The catalogue number is not chosen.",
+        "TBD. Fallback NEMA 42 body length when no STEP is present. The placed file is a geometry stand-in.",
     ),
     "brake_length_mm": (
         BRAKE_LENGTH_MM,
-        "TBD. Envelope length of VC-HB-3000. The catalogue number is unknown.",
+        "TBD. Fallback envelope length of VC-HB-3000 when no STEP is present.",
     ),
     "coupling_diameter_mm": (
         COUPLING_DIAMETER_MM,
-        "TBD. Envelope diameter of VC-HB-2400. The bore pair is unknown.",
+        "TBD. Fallback envelope diameter of VC-HB-2400 when no STEP is present.",
     ),
     "coupling_length_mm": (
         COUPLING_LENGTH_MM,
-        "TBD. Envelope length of VC-HB-2400. The bore pair is unknown.",
+        "TBD. Fallback envelope length of VC-HB-2400 when no STEP is present.",
     ),
     "pillow_length_mm": (
         PILLOW_LENGTH_MM,

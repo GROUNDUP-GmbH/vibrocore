@@ -44,6 +44,9 @@ PART_NUMBERS = (
     "VC-FR-4160",
     "VC-FR-4170",
     "VC-FR-4180",
+    "VC-FR-4182",
+    "VC-FR-4185",
+    "VC-FR-4186",
     "VC-FR-4190",
     "VC-FR-4195",
     "VC-FR-4300",
@@ -123,7 +126,18 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
     assert report["chain_min_x_mm"] == -45.9
     assert report["rear_face_x_mm"] == -50.0
     assert report["rear_stiffener_min_x_mm"] == -54.0
-    assert report["lift_motor_min_x_mm"] == -45.0
+    assert report["lift_motor_min_x_mm"] == -40.0
+    lift = next(item for item in parts if item.name == "VC-HB-2100")
+    assert float(lift.shape.bounding_box().min.Z) > 15.0
+    short = next(item for item in parts if item.name == "VC-FR-4100-1")
+    long = next(item for item in parts if item.name == "VC-FR-4100-2")
+    assert float(short.shape.bounding_box().size.Z) < MAST_PROFILE_LENGTH_MM - 1.0
+    assert abs(float(long.shape.bounding_box().size.Z) - MAST_PROFILE_LENGTH_MM) < 0.05
+    assert abs(float(short.shape.bounding_box().max.Z) - float(long.shape.bounding_box().max.Z)) < 0.05
+    flange = next(item for item in parts if item.name == "VC-FR-4182")
+    gearbox = next(item for item in parts if item.name == "VC-HB-2200")
+    assert float(flange.shape.bounding_box().max.Y) < 0.0
+    assert abs(float(flange.shape.bounding_box().max.Z) - float(gearbox.shape.bounding_box().min.Z)) < 0.05
     assert report["guided_travel_mm"] == 1022.5
     assert report["stroke_position_mm"] == 1022.5
     assert report["profile_size_x_mm"] == 100.0
@@ -142,9 +156,9 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
 def test_bbox_matches_the_placed_solids():
     size = assembly_bbox_mm()
     assert abs(size[0] - 454.0) < 0.05
-    assert abs(size[1] - 689.5) < 0.05
-    # Shoe tip at Z=-433.7. Idler sprocket top at Z=1592.5. The mast axis is Z.
-    assert abs(size[2] - 2026.2) < 0.05
+    assert abs(size[1] - 1022.37) < 0.05
+    # Shoe tip at Z=-433.7. Idler tooth tip at about Z=1592.1. The mast axis is Z.
+    assert abs(size[2] - 2025.84) < 0.05
     assert size[2] > size[0]
     assert size[2] > size[1]
     bom = load_bom()
@@ -193,6 +207,17 @@ def test_pull_out_bracket_stays_below_yield():
     text = (ROOT / "docs/engineering/CARRIAGE-BRACKET.md").read_text(encoding="utf-8")
     assert "2227 N" in text
     assert "41.7 MPa" in text
+
+
+def test_compound_intersection_uses_leaf_solids():
+    from build123d import Box, Compound, Pos
+
+    from cad.models.machine_assembly import intersection_volume_mm3
+
+    left = Compound(children=[Box(10, 10, 10), Pos(0, 0, 40) * Box(10, 10, 10)])
+    far = Pos(0, 0, 200) * Box(10, 10, 10)
+    assert intersection_volume_mm3(left, far) == 0.0
+    assert intersection_volume_mm3(left, Box(10, 10, 10)) > 1.0
 
 
 def test_vendor_step_replaces_the_envelope(tmp_path, monkeypatch):

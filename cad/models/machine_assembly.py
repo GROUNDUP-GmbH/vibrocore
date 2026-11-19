@@ -15,8 +15,9 @@ HGH20 blocks stay on the rails. The shoe tip is then below the ground line.
 That is the height deficit. The tip is not forced onto the ground.
 
 A purchased part uses cad/vendor/<part-id>/*.step when that file exists.
-The solid is recentered and placed with the envelope pose. A missing file
-keeps the catalogue envelope.
+load_vendor_shape recenters the bounding box and keeps the file axes.
+The assembly then applies the rotation named in that part's SOURCE.md.
+A missing file keeps the catalogue envelope.
 
 Solids that already exist are built with cad.tools.geometry.shape_for.
 This module only places them. It does not add a BOM line.
@@ -191,8 +192,103 @@ def chain_axis_x_mm() -> float:
 
 
 def lift_motor_axis_x_mm() -> float:
-    """Motor axis below the plate. The gearbox rear face is flush with the profiles."""
+    """Fallback axis when the brake STEP is absent. The gearbox then clears the rear face."""
     return rear_face_x_mm() + GEARBOX_HOUSING_DIAMETER_MM / 2.0
+
+
+def _drive_bay() -> dict:
+    """Lift train above the bottom plate, in front of the rails.
+
+    The axis stays parallel to the chain shaft. It sits in front of the rail so the
+    chain, the pillows and the uprights stay clear. The gearbox rests on a horizontal
+    flange on the plate, offset to the drive side. The drive-side upright starts
+    above that gearbox. The purchased length stays 1500 mm.
+    The cable points forward. The motor connector points up.
+    """
+    from cad.models.vendor_parts import oriented_brake, oriented_coupling, oriented_motor
+
+    brake = oriented_brake()
+    motor = oriented_motor()
+    coupling = oriented_coupling()
+    plate_top = BOTTOM_PLATE_THICKNESS_MM
+    gap = 2.0
+    if brake is not None:
+        brake_box = brake.bounding_box()
+        # Brake body flush with the profile rear face. The head never reaches this Y.
+        motor_x = rear_face_x_mm() - float(brake_box.min.X)
+        z_lift = plate_top + gap - float(brake_box.min.Z)
+    else:
+        brake_box = None
+        motor_x = lift_motor_axis_x_mm()
+        z_lift = plate_top + gap + GEARBOX_HOUSING_DIAMETER_MM / 2.0
+    gear_bottom = z_lift - GEARBOX_HOUSING_DIAMETER_MM / 2.0
+    # The horizontal flange fills the gap under the gearbox and rests on the plate.
+    if gear_bottom < plate_top + 6.0:
+        z_lift += plate_top + 6.0 - gear_bottom
+        gear_bottom = plate_top + 6.0
+    # The head plate spans Y = ±210 mm and sweeps down to the rail. The gearbox
+    # stays outside that sweep, on the drive side. The output points outboard.
+    gear_y1 = -(VIBRATING_PLATE_LENGTH_MM / 2.0) - gap
+    gear_y0 = gear_y1 - GEARBOX_LENGTH_MM
+    if coupling is not None:
+        from build123d import Rot
+
+        coupling = Rot(0, 0, 180) * coupling
+        coupling_box = coupling.bounding_box()
+        coupling_y = (gear_y0 - gap) - float(coupling_box.max.Y)
+        coupling_y0 = coupling_y + float(coupling_box.min.Y)
+        coupling_y1 = coupling_y + float(coupling_box.max.Y)
+    else:
+        coupling_box = None
+        coupling_y1 = gear_y0 - gap
+        coupling_y0 = coupling_y1 - COUPLING_LENGTH_MM
+        coupling_y = (coupling_y0 + coupling_y1) / 2.0
+    if brake is not None:
+        brake_y = (coupling_y0 - gap) - float(brake_box.max.Y)
+        brake_y0 = brake_y + float(brake_box.min.Y)
+        brake_y1 = brake_y + float(brake_box.max.Y)
+    else:
+        brake_y1 = coupling_y0 - gap
+        brake_y0 = brake_y1 - BRAKE_LENGTH_MM
+        brake_y = (brake_y0 + brake_y1) / 2.0
+    if motor is not None:
+        motor_box = motor.bounding_box()
+        motor_y = (brake_y0 - gap) - float(motor_box.max.Y)
+        motor_y0 = motor_y + float(motor_box.min.Y)
+        motor_y1 = motor_y + float(motor_box.max.Y)
+        motor_low_z = z_lift + float(motor_box.min.Z)
+    else:
+        motor_box = None
+        motor_y1 = brake_y0 - gap
+        motor_y0 = motor_y1 - NEMA42_BODY_LENGTH_MM
+        motor_y = (motor_y0 + motor_y1) / 2.0
+        motor_low_z = z_lift - NEMA42_FRAME_MM / 2.0
+    return {
+        "brake": brake,
+        "motor": motor,
+        "coupling": coupling,
+        "brake_box": brake_box,
+        "motor_box": motor_box,
+        "coupling_box": coupling_box,
+        "motor_x": motor_x,
+        "z_lift": z_lift,
+        "gear_y0": gear_y0,
+        "gear_y1": gear_y1,
+        "gear_bottom": gear_bottom,
+        "coupling_y": coupling_y,
+        "coupling_y0": coupling_y0,
+        "coupling_y1": coupling_y1,
+        "brake_y": brake_y,
+        "brake_y0": brake_y0,
+        "brake_y1": brake_y1,
+        "motor_y": motor_y,
+        "motor_y0": motor_y0,
+        "motor_y1": motor_y1,
+        "motor_low_z": motor_low_z,
+        "short_z0": z_lift + GEARBOX_HOUSING_DIAMETER_MM / 2.0 + gap,
+        "plate_top": plate_top,
+        "flange_y1": -(PROFILE_SPACING_MM / 2.0 - MAST_PROFILE_WIDTH_MM / 2.0),
+    }
 
 
 def guide_radial_clearance_mm() -> float:
@@ -328,20 +424,38 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         BOTTOM_PLATE_THICKNESS_MM / 2.0,
     )
 
+    bay = _drive_bay()
     half_pitch = PROFILE_SPACING_MM / 2.0
     profile_center_z = station["profile_bottom"] + MAST_PROFILE_LENGTH_MM / 2.0
     profile_turn = Rot(0, 0, PROFILE_YAW_DEG)
     profile_inner_y = half_pitch - MAST_PROFILE_WIDTH_MM / 2.0
     profile_outer_y = half_pitch + MAST_PROFILE_WIDTH_MM / 2.0
+    from cad.tools.geometry import vendor_step_path
+
+    profile_vendor = vendor_step_path("VC-FR-4100") is not None
     for index, sign in enumerate((-1.0, 1.0), start=1):
-        add(
-            f"VC-FR-4100-{index}",
-            bought("VC-FR-4100", shape_for(bom.part("VC-FR-4100"))),
-            0.0,
-            sign * half_pitch,
-            profile_center_z,
-            profile_turn,
-        )
+        # The drive-side tube is cut short so the gearbox can sit above the plate.
+        # A vendor file replaces both tubes. The test hook depends on that.
+        if sign < 0 and not profile_vendor:
+            length = station["profile_top"] - bay["short_z0"]
+            blank = Box(MAST_PROFILE_WIDTH_MM, MAST_PROFILE_DEPTH_MM, length)
+            add(
+                f"VC-FR-4100-{index}",
+                blank,
+                0.0,
+                sign * half_pitch,
+                bay["short_z0"] + length / 2.0,
+                profile_turn,
+            )
+        else:
+            add(
+                f"VC-FR-4100-{index}",
+                bought("VC-FR-4100", shape_for(bom.part("VC-FR-4100"))),
+                0.0,
+                sign * half_pitch,
+                profile_center_z,
+                profile_turn,
+            )
 
     front = profile_front_x_mm()
     rail_center_z = station["rail_bottom"] + RAIL_LENGTH_MM / 2.0
@@ -583,8 +697,23 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         hole = along_y(SHAFT_DIAMETER_MM / 2.0 + _MODEL_GAP_MM, SPROCKET_WIDTH_MM + 2.0)
         return disk - hole
 
-    add("VC-HB-2800", bought("VC-HB-2800", bored_sprocket()), drive_x, 0.0, z_drive)
-    add("VC-HB-2810", bought("VC-HB-2810", bored_sprocket()), drive_x, 0.0, z_idler)
+    from cad.models.vendor_parts import oriented_sprocket
+
+    sprocket_solid = oriented_sprocket()
+    add(
+        "VC-HB-2800",
+        bored_sprocket() if sprocket_solid is None else sprocket_solid,
+        drive_x,
+        0.0,
+        z_drive,
+    )
+    add(
+        "VC-HB-2810",
+        bored_sprocket() if sprocket_solid is None else sprocket_solid,
+        drive_x,
+        0.0,
+        z_idler,
+    )
 
     strand_z0 = z_drive + sprocket_r + _MODEL_GAP_MM
     strand_z1 = z_idler - sprocket_r - _MODEL_GAP_MM
@@ -623,81 +752,84 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
             z_drive,
         )
 
-    # Motor, brake and gearbox sit below the plate. The 120 mm housing is flush with the rear face.
-    # A 120 mm housing on the chain axis would cross that face, so the axes are parallel and 10 mm apart.
-    motor_x = lift_motor_axis_x_mm()
-    z_lift = -(2.0 + GEARBOX_HOUSING_DIAMETER_MM / 2.0)
-    gear_y1 = -20.0
-    gear_y0 = gear_y1 - GEARBOX_LENGTH_MM
-    brake_y1 = gear_y0
-    brake_y0 = brake_y1 - BRAKE_LENGTH_MM
-    motor_y1 = brake_y0
-    motor_y0 = motor_y1 - NEMA42_BODY_LENGTH_MM
-    coupling_y0 = gear_y1
-    coupling_y1 = coupling_y0 + COUPLING_LENGTH_MM
-    add(
-        "VC-HB-2400",
-        bought("VC-HB-2400", along_y(COUPLING_DIAMETER_MM / 2.0, COUPLING_LENGTH_MM)),
-        motor_x,
-        (coupling_y0 + coupling_y1) / 2.0,
-        z_lift,
-    )
+    # Motor, brake and gearbox sit above the plate. The axis stays parallel to the chain shaft.
+    # The brake body is flush with the rear face. The cable runs forward, above the plate.
+    motor_x = bay["motor_x"]
+    z_lift = bay["z_lift"]
+    train_turn = Rot(0, 0, 90)
+    if bay["coupling"] is not None:
+        add("VC-HB-2400", bay["coupling"], motor_x, bay["coupling_y"], z_lift)
+    else:
+        add(
+            "VC-HB-2400",
+            along_y(COUPLING_DIAMETER_MM / 2.0, COUPLING_LENGTH_MM),
+            motor_x,
+            bay["coupling_y"],
+            z_lift,
+        )
     add(
         "VC-HB-2200",
         bought("VC-HB-2200", along_y(GEARBOX_HOUSING_DIAMETER_MM / 2.0, GEARBOX_LENGTH_MM)),
         motor_x,
-        (gear_y0 + gear_y1) / 2.0,
+        (bay["gear_y0"] + bay["gear_y1"]) / 2.0,
         z_lift,
     )
-    train_turn = Rot(0, 0, 90)
-    add(
-        "VC-HB-3000",
-        bought("VC-HB-3000", Box(BRAKE_LENGTH_MM, NEMA42_FRAME_MM, NEMA42_FRAME_MM)),
-        motor_x,
-        (brake_y0 + brake_y1) / 2.0,
-        z_lift,
-        train_turn,
-    )
-    add(
-        "VC-HB-2100",
-        bought("VC-HB-2100", Box(NEMA42_BODY_LENGTH_MM, NEMA42_FRAME_MM, NEMA42_FRAME_MM)),
-        motor_x,
-        (motor_y0 + motor_y1) / 2.0,
-        z_lift,
-        train_turn,
-    )
+    if bay["brake"] is not None:
+        add("VC-HB-3000", bay["brake"], motor_x, bay["brake_y"], z_lift)
+    else:
+        add(
+            "VC-HB-3000",
+            Box(BRAKE_LENGTH_MM, NEMA42_FRAME_MM, NEMA42_FRAME_MM),
+            motor_x,
+            bay["brake_y"],
+            z_lift,
+            train_turn,
+        )
+    if bay["motor"] is not None:
+        add("VC-HB-2100", bay["motor"], motor_x, bay["motor_y"], z_lift)
+    else:
+        add(
+            "VC-HB-2100",
+            Box(NEMA42_BODY_LENGTH_MM, NEMA42_FRAME_MM, NEMA42_FRAME_MM),
+            motor_x,
+            bay["motor_y"],
+            z_lift,
+            train_turn,
+        )
 
-    # Draft drop drive. The tooth counts are not selected. Nothing crosses the rear face.
-    case = span(-12.0, 12.0, 60.0, 90.0, -40.0, 36.0)
-    stub = Pos(motor_x, 37.2, z_lift) * along_y(14.0, 13.6)
-    lower_gear = Pos(motor_x, 37.0, z_lift) * along_y(18.0, 12.0)
-    lower_gear = lower_gear - Pos(motor_x, 37.0, z_lift) * along_y(15.4, 16.0)
-    upper_gear = Pos(drive_x, 62.0, z_drive) * along_y(18.0, 14.0)
-    upper_gear = upper_gear - Pos(drive_x, 62.0, z_drive) * along_y(
-        SHAFT_DIAMETER_MM / 2.0 + _MODEL_GAP_MM, 18.0
-    )
-    gear_bottom = z_lift - GEARBOX_HOUSING_DIAMETER_MM / 2.0
-    frame_bottom = z_lift - NEMA42_FRAME_MM / 2.0
-    lift_parts = [
-        case,
-        stub,
-        lower_gear,
-        upper_gear,
-        span(-40.0, 70.0, motor_y0 - 16.0, coupling_y1 + 28.0, -1.8, -0.4),
-        span(72.0, 80.0, motor_y0 - 16.0, coupling_y1 + 28.0, -134.0, -0.4),
-        span(-48.0, 80.0, motor_y0 - 20.0, motor_y0 - 8.0, -134.0, -0.4),
-        span(-48.0, 80.0, coupling_y1 + 16.0, coupling_y1 + 28.0, -134.0, -0.4),
-        span(-48.0, 76.0, gear_y0 + 4.0, gear_y1 - 4.0, gear_bottom - 12.0, gear_bottom - 2.0),
+    # Horizontal flange. It sits on the plate, meets both stiffeners, and runs out
+    # under the gearbox. It does not cross the mast centre. The gearbox rests on it.
+    add(
+        "VC-FR-4182",
         span(
-            -43.0,
-            76.0,
-            motor_y0 + 4.0,
-            brake_y1 - 4.0,
-            frame_bottom - 12.0,
-            frame_bottom - 2.4,
+            rear_face_x_mm(),
+            front,
+            bay["gear_y0"],
+            bay["flange_y1"],
+            bay["plate_top"],
+            bay["gear_bottom"],
         ),
-    ]
-    add("VC-HB-2110", fuse(lift_parts), 0.0, 0.0, 0.0)
+        0.0,
+        0.0,
+        0.0,
+    )
+    # Draft shelf under the motor. Tooth counts for the drop to the chain shaft are not selected.
+    shelf_top = bay["motor_low_z"] - 2.0
+    shelf_bottom = max(bay["plate_top"] + 2.0, shelf_top - 8.0)
+    add(
+        "VC-HB-2110",
+        span(
+            max(rear_face_x_mm() + 2.0, motor_x - NEMA42_FRAME_MM / 2.0 + 4.0),
+            motor_x + NEMA42_FRAME_MM / 2.0 - 4.0,
+            bay["motor_y0"] + 4.0,
+            bay["motor_y1"] - 4.0,
+            shelf_bottom,
+            shelf_top,
+        ),
+        0.0,
+        0.0,
+        0.0,
+    )
 
     # Same mk 2004 section as the uprights. Cut to the clear span and set between the strands.
     bar_length = profile_inner_y * 2.0
@@ -769,7 +901,7 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     bottom_gusset = frame_gusset(4.0, profile_front_x_mm(), 12.0)
     mid_gusset = frame_gusset(-40.0, 40.0, -18.0)
     gusset_stations = (
-        ("VC-FR-4150", z_drive + sprocket_r + 8.0, bottom_gusset),
+        ("VC-FR-4150", bay["short_z0"], bottom_gusset),
         (
             "VC-FR-4170",
             station["profile_bottom"] + MAST_PROFILE_LENGTH_MM / 2.0 - GUSSET_HEIGHT_MM / 2.0,
@@ -805,6 +937,39 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         0.0,
     )
 
+    # Lower bay. The drive-side tube starts above the gearbox.
+    # The front sheet stops under the carriage. At stroke 0 the carriage web is at Z = 105 mm.
+    short_z0 = bay["short_z0"]
+    front_top = station["rail_bottom"] - CARRIAGE_PLATE_THICKNESS_MM - 2.0
+    add(
+        "VC-FR-4185",
+        span(
+            front,
+            front + GUSSET_SHEET_THICKNESS_MM,
+            -profile_outer_y,
+            profile_outer_y,
+            bay["plate_top"],
+            front_top,
+        ),
+        0.0,
+        0.0,
+        0.0,
+    )
+    add(
+        "VC-FR-4186",
+        span(
+            rear_face_x_mm() - GUSSET_SHEET_THICKNESS_MM,
+            rear_face_x_mm(),
+            -profile_outer_y,
+            profile_outer_y,
+            bay["plate_top"],
+            short_z0,
+        ),
+        0.0,
+        0.0,
+        0.0,
+    )
+
     _check_pose(parts, station)
     return parts
 
@@ -821,19 +986,27 @@ def _check_pose(parts: list[Placed], station: dict[str, float]) -> None:
     from cad.tools.geometry import vendor_step_path
 
     by_name = {item.name: item.shape for item in parts}
-    profile = by_name["VC-FR-4100-1"].bounding_box()
+    long_profile = by_name["VC-FR-4100-2"].bounding_box()
+    short_profile = by_name["VC-FR-4100-1"].bounding_box()
+    profile = long_profile
     if vendor_step_path("VC-FR-4100") is None:
-        size_x = float(profile.max.X - profile.min.X)
-        size_y = float(profile.max.Y - profile.min.Y)
-        size_z = float(profile.max.Z - profile.min.Z)
-        if abs(size_x - MAST_PROFILE_DEPTH_MM) > 0.05:
-            raise ValueError("profile is not yawed; the 100 mm side is not along X")
-        if abs(size_y - MAST_PROFILE_WIDTH_MM) > 0.05:
-            raise ValueError("profile is not yawed; the 50 mm side is not along Y")
-        if abs(size_z - MAST_PROFILE_LENGTH_MM) > 0.05:
-            raise ValueError("profile axis is not +Z")
-        if abs(float(profile.max.X) - profile_front_x_mm()) > 0.05:
-            raise ValueError("profile front face is not the +X face")
+        for box in (long_profile, short_profile):
+            size_x = float(box.max.X - box.min.X)
+            size_y = float(box.max.Y - box.min.Y)
+            if abs(size_x - MAST_PROFILE_DEPTH_MM) > 0.05:
+                raise ValueError("profile is not yawed; the 100 mm side is not along X")
+            if abs(size_y - MAST_PROFILE_WIDTH_MM) > 0.05:
+                raise ValueError("profile is not yawed; the 50 mm side is not along Y")
+            if abs(float(box.max.X) - profile_front_x_mm()) > 0.05:
+                raise ValueError("profile front face is not the +X face")
+        long_z = float(long_profile.max.Z - long_profile.min.Z)
+        short_z = float(short_profile.max.Z - short_profile.min.Z)
+        if abs(long_z - MAST_PROFILE_LENGTH_MM) > 0.05:
+            raise ValueError("the idle-side profile is not the 1500 mm tube")
+        if short_z > long_z - 1.0:
+            raise ValueError("the drive-side profile was not cut short")
+        if abs(float(long_profile.max.Z) - float(short_profile.max.Z)) > 0.05:
+            raise ValueError("the short profile does not reach the same top")
     bar = by_name["VC-FR-4180"].bounding_box()
     clear_span = PROFILE_SPACING_MM - MAST_PROFILE_WIDTH_MM
     if abs(float(bar.max.Y - bar.min.Y) - clear_span) > 0.05:
@@ -913,7 +1086,7 @@ def _check_pose(parts: list[Placed], station: dict[str, float]) -> None:
         if item.name == "GROUND-DATUM":
             continue
         low_x = float(item.shape.bounding_box().min.X)
-        if item.name.startswith("VC-FR-4195"):
+        if item.name.startswith("VC-FR-4195") or item.name.startswith("VC-FR-4186"):
             if low_x < rear - GUSSET_SHEET_THICKNESS_MM - 0.05:
                 raise ValueError("rear stiffener is thicker than the draft sheet")
             continue
@@ -934,17 +1107,29 @@ def _boxes_overlap(left, right, pad: float = 0.2) -> bool:
     )
 
 
+def _leaf_solids(shape) -> list:
+    """Solids inside a compound. A compound intersect can report a false volume."""
+    solids = [item for item in shape.solids() if abs(item.volume) > 1.0] if hasattr(shape, "solids") else []
+    return solids or [shape]
+
+
 def intersection_volume_mm3(left, right) -> float:
     """Shared solid volume. Face contact and a missed pair both return 0."""
     if not _boxes_overlap(left, right):
         return 0.0
-    common = left.intersect(right)
-    if common is None:
-        return 0.0
-    shapes = common if hasattr(common, "volume") else list(common)
     total = 0.0
-    for shape in shapes:
-        total += abs(float(shape.volume))
+    for leaf in _leaf_solids(left):
+        if not _boxes_overlap(leaf, right):
+            continue
+        for other in _leaf_solids(right):
+            if not _boxes_overlap(leaf, other):
+                continue
+            common = leaf.intersect(other)
+            if common is None:
+                continue
+            shapes = common.solids() if hasattr(common, "solids") else [common]
+            for shape in shapes:
+                total += abs(float(shape.volume))
     return total
 
 
@@ -983,7 +1168,8 @@ def clearance_report(parts: list[Placed] | None = None, bom=None) -> dict[str, f
     """Clearances in millimetres. Profile pitch and several envelopes are TBD."""
     items = parts if parts is not None else assembly_parts(bom)
     station = visual_stations()
-    profile = _find(items, "VC-FR-4100-1")
+    profiles = [item.shape for item in items if item.name.startswith("VC-FR-4100-")]
+    profile = max(profiles, key=lambda shape: float(shape.bounding_box().size.Z))
     bottom = _find(items, "VC-FR-4300")
     stiffener = _find(items, "VC-FR-4195")
     shoe = _find(items, "VC-GP-7200")
@@ -1003,7 +1189,7 @@ def clearance_report(parts: list[Placed] | None = None, bom=None) -> dict[str, f
         "shoe_to_profile_mm": _mm(shape_distance_mm(shoe, profile)),
         "casing_to_profile_mm": _mm(shape_distance_mm(casing, profile)),
         "casing_to_bottom_plate_mm": round(shape_distance_mm(casing, bottom), 3),
-        "motor_to_profile_mm": _mm(shape_distance_mm(motor, profile)),
+        "motor_to_profile_mm": _mm(min(shape_distance_mm(motor, item) for item in profiles)),
         "motor_to_rail_mm": _mm(shape_distance_mm(motor, rail)),
         "motor_to_carriage_mm": _mm(shape_distance_mm(motor, carriage)),
         "plate_bottom_vs_lower_block_mm": _mm(station["plate_bottom"] - station["lower_bottom"]),
@@ -1101,27 +1287,33 @@ def _render_png(parts: list[Placed], view: str, path: Path) -> None:
     shades = []
     for item in parts:
         color = _color_for(item.name)
-        vertices, faces = item.shape.tessellate(1.8)
-        if not faces:
-            continue
-        points = np.array([(vertex.X, vertex.Y, vertex.Z) for vertex in vertices], dtype=np.float64)
-        for face in faces:
-            tri = points[list(face)]
-            normal = np.cross(tri[1] - tri[0], tri[2] - tri[0])
-            norm = np.linalg.norm(normal)
-            if norm < 1e-9:
+        # A compound mesh can come back empty. Mesh each solid on its own.
+        leaves = [solid for solid in item.shape.solids() if abs(solid.volume) > 1.0]
+        meshes = []
+        for solid in leaves or [item.shape]:
+            # Some vendor faces do not mesh at the default angular tolerance.
+            meshes.append(solid.tessellate(1.8, 0.5))
+        for vertices, faces in meshes:
+            if not faces:
                 continue
-            shade = 0.38 + 0.62 * abs(float(np.dot(normal / norm, light)))
-            # The third column grows toward the camera so a nearer face wins the depth test.
-            cam = np.column_stack(
-                (
-                    tri @ right,
-                    tri @ true_up,
-                    tri @ -forward,
+            points = np.array([(vertex.X, vertex.Y, vertex.Z) for vertex in vertices], dtype=np.float64)
+            for face in faces:
+                tri = points[list(face)]
+                normal = np.cross(tri[1] - tri[0], tri[2] - tri[0])
+                norm = np.linalg.norm(normal)
+                if norm < 1e-9:
+                    continue
+                shade = 0.38 + 0.62 * abs(float(np.dot(normal / norm, light)))
+                # The third column grows toward the camera so a nearer face wins the depth test.
+                cam = np.column_stack(
+                    (
+                        tri @ right,
+                        tri @ true_up,
+                        tri @ -forward,
+                    )
                 )
-            )
-            triangles.append(cam)
-            shades.append((color[0] * shade, color[1] * shade, color[2] * shade))
+                triangles.append(cam)
+                shades.append((color[0] * shade, color[1] * shade, color[2] * shade))
 
     width, height = 960, 720
     image = np.zeros((height, width, 3), dtype=np.uint8)
@@ -1187,6 +1379,9 @@ def _color_for(name: str) -> tuple[int, int, int]:
         ("GROUND-DATUM", (210, 206, 196)),
         ("VC-FR-4195", (100, 116, 139)),
         ("VC-FR-4190", (100, 116, 139)),
+        ("VC-FR-4186", (100, 116, 139)),
+        ("VC-FR-4185", (100, 116, 139)),
+        ("VC-FR-4182", (71, 85, 105)),
         ("VC-FR-4180", (148, 163, 184)),
         ("VC-FR-4150", (203, 213, 225)),
         ("VC-FR-4160", (203, 213, 225)),

@@ -808,6 +808,8 @@ parts:
   - mk 2004 slot geometry is not in the repository. The solid is the outer envelope only and is not a
     machining model.
   - Alloy and the exact mk order code.
+  - Cut length of the drive-side upright. The purchased length stays 1500 mm. The pose starts that tube
+    above the gearbox.
 - part_number: VC-FR-4150
   name: Bottom frame gusset
   revision_index: 0
@@ -866,7 +868,55 @@ parts:
   supplier_id: mk
   unknowns:
   - Final cut length follows the profile pitch. The 300 mm pitch is TBD. Not in BOM.md v1.
-  notes: Draft. Cut this bar to length. Do not change the 1500 mm uprights to hide the height deficit.
+  notes: Draft. Cut this bar to length. Do not change the purchased 1500 mm uprights to hide the height deficit.
+- part_number: VC-FR-4182
+  name: Gearbox flange
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Draft horizontal S355 plate. Sits on the bottom plate on the drive side and runs out under the
+    gearbox. It does not cross the mast centre. The gearbox housing rests on it.
+  legacy_ref: draft-fr-4182
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Thickness, outline and the bolt pattern. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
+- part_number: VC-FR-4185
+  name: Lower front stiffener
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Draft S355 sheet, 4 mm. Bolts across the profile front faces in the lower bay. Stops under the
+    carriage so the sheet stays clear at stroke 0.
+  legacy_ref: draft-fr-4185
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
+- part_number: VC-FR-4186
+  name: Lower rear stiffener
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Draft S355 sheet, 4 mm. Bolts across the profile rear faces in the lower bay, up to the short
+    upright. The sheet is 4 mm behind the rear face. The tilt mechanism must clear it.
+  legacy_ref: draft-fr-4186
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
 - part_number: VC-FR-4190
   name: Front top stiffener
   revision_index: 0
@@ -1164,9 +1214,11 @@ parts:
   legacy_ref: '2.17'
   estimate_eur_low: 250
   estimate_eur_high: 400
-  notes: 'Candidates: Nanotec, Leadshine. Mass is published as about 6-8 kg, so no single mass is stored.'
+  notes: 'Candidates: Nanotec, Leadshine. Mass is published as about 6-8 kg, so no single mass is stored.
+    The assembly uses the public Nanotec ST11018M6504 STEP as a geometry stand-in. That file has no encoder.
+    It is not the closed-loop motor. See cad/vendor/VC-HB-2100/SOURCE.md.'
   unknowns:
-  - Exact catalogue number, body length and mass.
+  - Exact catalogue number, body length and mass of the closed-loop motor.
 - part_number: VC-HB-2110
   name: Lift motor bracket
   revision_index: 0
@@ -1174,10 +1226,9 @@ parts:
   supply: subcontract
   subsystem: hub
   category: Hub
-  spec: Draft steel bracket. Holds the NEMA 42, brake and gearbox below the bottom plate. The motor
-    axis is parallel to the sprocket shaft and stays flush with the profile rear face. A draft drop-drive
-    envelope in the profile gap connects that axis to the shaft between the uprights. The gear teeth are
-    not selected. Nothing enters the reserved volume behind the rear faces.
+  spec: Draft steel shelf. Holds the NEMA 42 above the bottom plate. The motor axis is parallel to the
+    sprocket shaft. The brake body is flush with the profile rear face. The gear teeth that drop the drive
+    onto the chain shaft are not selected. Nothing enters the reserved volume behind the rear faces.
   legacy_ref: draft-hb-2110
   supplier_id: custom_eu
   material: S355
@@ -1222,12 +1273,14 @@ parts:
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: R+W EKH or KTR ROTEX 28, torque only, between gearbox and drive shaft.
+  spec: KTR ROTEX 28, torque only, between gearbox and drive shaft.
   legacy_ref: '2.20'
   estimate_eur_low: 60
   estimate_eur_high: 100
+  notes: 'The STEP set is a 32H7 hub with keyway, an unbored hub and a 92 Sh-A spider. See
+    cad/vendor/VC-HB-2400/SOURCE.md.'
   unknowns:
-  - Bore pair. Gearbox output is 32 mm; the drive shaft is not frozen.
+  - Chain-side bore. The gearbox-side hub in the STEP is 32H7. The chain-side hub is unbored.
 - part_number: VC-HB-2500
   name: Hub drive shaft
   revision_index: 0
@@ -1279,7 +1332,8 @@ parts:
   legacy_ref: '2.24'
   estimate_eur_low: 25
   estimate_eur_high: 40
-  notes: z24.de or ETKF. Pitch radius used in the force calculation is 37.9 mm.
+  notes: 'G&G 501-302-0515, 10B-2 15 teeth, taper bush 1210. The STEP is in cad/vendor/VC-HB-2800.
+    Pitch radius used in the force calculation is 37.9 mm. The idler VC-HB-2810 reuses this solid.'
 - part_number: VC-HB-2810
   name: Sprocket 10B-2 15T idle
   revision_index: 0
@@ -1291,6 +1345,7 @@ parts:
   legacy_ref: '2.25'
   estimate_eur_low: 30
   estimate_eur_high: 50
+  notes: Same G&G 501-302-0515 solid as VC-HB-2800. No second STEP file. See cad/vendor/VC-HB-2810/SOURCE.md.
 - part_number: VC-HB-2820
   name: Idler shaft
   revision_index: 0
@@ -1346,9 +1401,10 @@ parts:
   legacy_ref: '2.27'
   estimate_eur_low: 100
   estimate_eur_high: 180
-  notes: Kendrion or Mayr.
+  notes: 'Kendrion INTORQ BFK457-10 Compact, 16 Nm, bore d10H7. The STEP is in cad/vendor/VC-HB-3000.
+    See SOURCE.md.'
   unknowns:
-  - Catalogue number and the matching shaft bore.
+  - The d10H7 bore does not match the Ø19 stand-in motor shaft. The two are not mated.
 - part_number: VC-HB-3100
   name: Linear guide rail HGR20
   revision_index: 0
@@ -2163,6 +2219,9 @@ boms:
   - {part_number: VC-FR-4160, qty: 1}
   - {part_number: VC-FR-4170, qty: 1}
   - {part_number: VC-FR-4180, qty: 1}
+  - {part_number: VC-FR-4182, qty: 1}
+  - {part_number: VC-FR-4185, qty: 1}
+  - {part_number: VC-FR-4186, qty: 1}
   - {part_number: VC-FR-4190, qty: 1}
   - {part_number: VC-FR-4195, qty: 1}
   - {part_number: VC-FR-4200, qty: 8}
