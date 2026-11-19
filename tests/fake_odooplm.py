@@ -44,6 +44,11 @@ class FakeOdoo:
         self.field_meta: dict[str, dict] = {}
         self.binary_reads: list[tuple[str, bool]] = []
         self.read_calls: list[dict] = []
+        # store: keep the bytes. empty: HTTP 200 "Upload succeeded" and keep
+        # the field empty. html: HTTP 200 login page. redirect: HTTP 303 to
+        # /web/login, which the client must not follow.
+        self.upload_response = "store"
+        self.block_binary_write = False
         self._seed()
         self._httpd: ThreadingHTTPServer | None = None
         self._thread: threading.Thread | None = None
@@ -91,6 +96,13 @@ class FakeOdoo:
                     self._jsonrpc(body)
                     return
                 if path in ("/plm_document_upload/upload", "/plm_document_upload/upload_pdf"):
+                    if store.upload_response == "redirect":
+                        store.uploads.append({"path": path, "response": "redirect"})
+                        self.send_response(303)
+                        self.send_header("Location", "/web/login?redirect=" + path)
+                        self.send_header("Content-Length", "0")
+                        self.end_headers()
+                        return
                     self._upload(path, body)
                     return
                 self._body(404, b"missing", "text/plain")
@@ -127,33 +139,35 @@ class FakeOdoo:
                     return
                 if path.endswith("/upload"):
                     content = files["mod_file"][1]
-                    document["datas"] = content
-                    document["checksum"] = hashlib.sha1(content).hexdigest()
-                    document["file_size"] = len(content)
-                    document["name"] = fields.get("filename") or files["mod_file"][0]
-                    store.uploads.append(
-                        {
-                            "path": path,
-                            "doc_id": doc_id,
-                            "doc_id_raw": fields.get("doc_id"),
-                            "filename": fields.get("filename"),
-                            "field": "mod_file",
-                            "content": content,
-                        }
-                    )
+                    filename = fields.get("filename") or files["mod_file"][0]
+                    field_name = "mod_file"
                 else:
                     content = files["file_stream"][1]
-                    document["printout"] = content
-                    store.uploads.append(
-                        {
-                            "path": path,
-                            "doc_id": doc_id,
-                            "doc_id_raw": fields.get("doc_id"),
-                            "filename": files["file_stream"][0],
-                            "field": "file_stream",
-                            "content": content,
-                        }
-                    )
+                    filename = files["file_stream"][0]
+                    field_name = "file_stream"
+                store.uploads.append(
+                    {
+                        "path": path,
+                        "doc_id": doc_id,
+                        "doc_id_raw": fields.get("doc_id"),
+                        "filename": filename,
+                        "field": field_name,
+                        "content": content,
+                        "response": store.upload_response,
+                    }
+                )
+                if store.upload_response == "html":
+                    self._body(200, b"<html>login</html>", "text/html")
+                    return
+                if store.upload_response == "store":
+                    if field_name == "mod_file":
+                        document["datas"] = content
+                        document["checksum"] = hashlib.sha1(content).hexdigest()
+                        document["file_size"] = len(content)
+                        document["store_fname"] = "ab/" + document["checksum"]
+                        document["name"] = filename
+                    else:
+                        document["printout"] = content
                 self._body(200, b"Upload succeeded", "text/plain")
 
             def _jsonrpc(self, body: bytes):
@@ -340,6 +354,21 @@ class FakeOdoo:
     def _write(self, model, ids, vals):
         if "engineering_state" in vals:
             raise RuntimeError("write of engineering_state is refused")
+        vals = dict(vals)
+        if self.block_binary_write:
+            vals.pop("datas", None)
+            vals.pop("printout", None)
+        else:
+            for key in ("datas", "printout"):
+                value = vals.get(key)
+                if isinstance(value, str):
+                    vals[key] = base64.b64decode(value)
+            raw = vals.get("datas")
+            if isinstance(raw, (bytes, bytearray)) and raw:
+                vals["datas"] = bytes(raw)
+                vals["checksum"] = hashlib.sha1(vals["datas"]).hexdigest()
+                vals["file_size"] = len(vals["datas"])
+                vals["store_fname"] = "ab/" + vals["checksum"]
         for item in ids:
             row = self.rows[model][int(item)]
             if row.get("engineering_state") not in (None, "draft"):

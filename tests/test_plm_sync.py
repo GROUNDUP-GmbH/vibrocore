@@ -628,6 +628,76 @@ def test_adr_upload_links_listed_parts(server):
     assert len([row for row in fake.records("ir.attachment") if row.get("engineering_code") == "ADR-0001"]) == 1
 
 
+def _draft_document(client, name="VC-SH-1400.step"):
+    return client.execute(
+        "ir.attachment",
+        "create",
+        [
+            {
+                "name": name,
+                "is_plm": True,
+                "engineering_code": name.split(".", 1)[0],
+                "engineering_revision": 0,
+                "engineering_state": "draft",
+            }
+        ],
+    )
+
+
+def test_route_success_without_bytes_is_repaired_by_read_back(server):
+    """HTTP 200 and the text 'Upload succeeded' with empty datas is not success."""
+    fake, url = server
+    fake.upload_response = "empty"
+    client = _connect(url, login=True)
+    document_id = _draft_document(client)
+    payload = b"ISO-10303-21;\nHEADER;\nEND-ISO-10303-21;"
+    client.upload_datas(document_id, "VC-SH-1400.step", payload)
+    document = fake.rows["ir.attachment"][document_id]
+    assert document["datas"] == payload
+    assert document["checksum"] == hashlib.sha1(payload).hexdigest()
+    assert document["file_size"] == len(payload)
+    assert fake.uploads[-1]["response"] == "empty"
+    assert fake.uploads[-1]["content"] == payload
+    pdf = b"%PDF-1.4\nrepair\n"
+    client.upload_printout(document_id, "VC-SH-1400.pdf", pdf)
+    assert document["printout"] == pdf
+
+
+def test_route_login_page_and_redirect_do_not_count_as_stored(server):
+    fake, url = server
+    client = _connect(url, login=True)
+    document_id = _draft_document(client, "VC-ASM-0000_vibrocore-v1.pdf")
+    payload = b"%PDF-1.4\nlogin-was-not-the-file\n"
+    fake.upload_response = "html"
+    client.upload_printout(document_id, "VC-ASM-0000_vibrocore-v1.pdf", payload)
+    assert fake.rows["ir.attachment"][document_id]["printout"] == payload
+    assert "/web/login" not in fake.http
+
+    fake.upload_response = "redirect"
+    step = b"ISO-10303-21;\nredirect;\n"
+    client.upload_datas(document_id, "VC-ASM-0000.step", step)
+    assert fake.rows["ir.attachment"][document_id]["datas"] == step
+    assert "/web/login" not in fake.http
+    assert any(item.get("response") == "redirect" for item in fake.uploads)
+
+
+def test_apply_exits_when_read_back_is_still_empty(server, monkeypatch, capsys):
+    fake, url = server
+    fake.upload_response = "empty"
+    fake.block_binary_write = True
+    for key, value in _env(url).items():
+        monkeypatch.setenv(key, value)
+    assert main(["plm-sync", "--apply", "--part", "VC-SH-1301"]) == 1
+    captured = capsys.readouterr()
+    assert "VC-SH-1301.step" in captured.err
+    assert "datas" in captured.err
+    assert "ir.attachment" in captured.err
+    assert "not counted" in captured.err
+    assert "upload=" not in captured.out
+    document = fake.records("ir.attachment")[0]
+    assert not document.get("datas")
+
+
 def test_released_adr_is_not_rewritten(server):
     fake, url = server
     _apply(url, part="VC-CT-6100")

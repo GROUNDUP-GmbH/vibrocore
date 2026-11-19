@@ -186,13 +186,30 @@ at `a81f10aaedb8eed773c32a6e0a1bd6d975f9ee72`.
 | `POST /plm_document_upload/login` | Form fields `login`, `password`, `db`. `auth="none"`. Starts a session. HTTP 200 has an empty body, a `session_id` cookie and `X-CSRF-TOKEN`. The upload routes set `csrf=False`, so the token is not sent back. A `db` that is not the request's database becomes HTTP 500. |
 | `POST /jsonrpc` `common.authenticate` | `db`, login, secret, `{}`. Returns the uid. This call is non-interactive, so an API key works. |
 | `POST /jsonrpc` `object.execute_kw` | Creates and updates `product.product`, `ir.attachment` (`is_plm` true), `plm.component.document.rel`, `mrp.bom` (`type` `ebom`) and `mrp.bom.line` (`itemnum`, `itemlbl`). |
-| `POST /plm_document_upload/upload` | Multipart `mod_file`, `filename`, `doc_id`. `doc_id` is JSON, so `123` is the integer 123. Writes `datas` and `name` on that PLM document. 400 if the id is missing or `is_plm` is false. |
-| `POST /plm_document_upload/upload_pdf` | Multipart `file_stream` and `doc_id`. Writes `printout`. |
+| `POST /plm_document_upload/upload` | Multipart `mod_file`, `filename`, `doc_id`. `doc_id` is JSON, so `123` is the ir.attachment id, not the engineering code. The route writes `datas` and `name`. The success body is the text `Upload succeeded`. |
+| `POST /plm_document_upload/upload_pdf` | Multipart `file_stream` and `doc_id`. Writes `printout`. The success body is the text `Upload succeeded`. |
 
 The upload routes do not create the document. The command creates the
 `ir.attachment` first (`is_plm` true, engineering code and revision, state
 `draft`), then posts the bytes. `hostname` and `hostpws` are left empty, so
 `setupCadOpen` does not record a CAD session.
+
+The route answers `Upload succeeded` when `write` returns.
+The route does not read the field again.
+An empty file part still gets that answer.
+Odoo answers HTTP 303 to `/web/login` when the session has no user.
+The command does not follow redirects.
+After the POST, the command reads the field with JSON-RPC `read()`.
+`bin_size` is false.
+The stored bytes must be the local file.
+When they are not, the command writes that field over JSON-RPC.
+The value is base64 text.
+`datas` and `name` are the upload fields.
+`printout` is the PDF field.
+The command reads the field again.
+The command stops with an error when the field is still empty.
+That upload is not counted.
+`plm-sync` exits with code 1.
 
 `/plm_document_upload/login` calls `Session.authenticate` with
 `interactive=True`. Odoo accepts an API key only when the check is not
@@ -317,6 +334,8 @@ Procedure:
 5. The command uploads the file bytes with `/plm_document_upload/upload`
    when the record is new, the stored field has no bytes, or the checksum
    or the stored bytes differ.
+   The command reads `datas` after the upload.
+   The command stops when `datas` is still empty.
 6. The command links the document to each listed part through
    `product.product.linkeddocuments` (Many2many write `(4, doc_id)`). This is
    the same path as CAD document links. The command does not call
