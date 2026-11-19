@@ -34,7 +34,15 @@ VC-PW-        power parts
 VC-CT-        control parts
 VC-GP-        Geoprobe parts
 VC-PS-        positioning parts
+VC-LT-        lift and tilt actuator parts (V1.1)
+VC-PN-        penetrometer parts (V1.1)
+VC-CS-        core scanner parts (V1.1)
+VC-ASM-8nnn   V1.1 field subsystems (lift, tilt, penetrometer, scanner)
 ```
+
+Lifecycle values on a part: `active` (default), `obsolete`, `superseded`,
+`alternative`. Only `active` parts may appear on a live BOM. Superseded and
+obsolete rows stay in the YAML for history (`superseded_by` / `replaces`).
 
 `legacy_ref` is `section.row` from `docs/engineering/BOM.md`. Those row numbers
 are not unique and are not the part number.

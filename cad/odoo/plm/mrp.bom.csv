@@ -5,6 +5,11 @@ vibrocore.bom_ebom_vc_asm_2000,VC-ASM-2000,vibrocore.product_vc_asm_2000,1.0,uom
 vibrocore.bom_ebom_vc_asm_3000,VC-ASM-3000,vibrocore.product_vc_asm_3000,1.0,uom.product_uom_unit,ebom,VC-ASM-3000
 vibrocore.bom_ebom_vc_asm_4000,VC-ASM-4000,vibrocore.product_vc_asm_4000,1.0,uom.product_uom_unit,ebom,VC-ASM-4000
 vibrocore.bom_ebom_vc_asm_5000,VC-ASM-5000,vibrocore.product_vc_asm_5000,1.0,uom.product_uom_unit,ebom,VC-ASM-5000
+vibrocore.bom_ebom_vc_asm_8000,VC-ASM-8000,vibrocore.product_vc_asm_8000,1.0,uom.product_uom_unit,ebom,VC-ASM-8000
+vibrocore.bom_ebom_vc_asm_8100,VC-ASM-8100,vibrocore.product_vc_asm_8100,1.0,uom.product_uom_unit,ebom,VC-ASM-8100
+vibrocore.bom_ebom_vc_asm_8200,VC-ASM-8200,vibrocore.product_vc_asm_8200,1.0,uom.product_uom_unit,ebom,VC-ASM-8200
+vibrocore.bom_ebom_vc_asm_8300,VC-ASM-8300,vibrocore.product_vc_asm_8300,1.0,uom.product_uom_unit,ebom,VC-ASM-8300
+vibrocore.bom_ebom_vc_asm_8400,VC-ASM-8400,vibrocore.product_vc_asm_8400,1.0,uom.product_uom_unit,ebom,VC-ASM-8400
 vibrocore.bom_ebom_vc_kit_6000,VC-KIT-6000,vibrocore.product_vc_kit_6000,1.0,uom.product_uom_unit,ebom,VC-KIT-6000
 vibrocore.bom_ebom_vc_kit_7000,VC-KIT-7000,vibrocore.product_vc_kit_7000,1.0,uom.product_uom_unit,ebom,VC-KIT-7000
 vibrocore.bom_ebom_vc_sh_1300,VC-SH-1300,vibrocore.product_vc_sh_1300,1.0,uom.product_uom_unit,ebom,VC-SH-1300

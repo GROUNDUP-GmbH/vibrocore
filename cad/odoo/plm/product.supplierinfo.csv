@@ -1,4 +1,10 @@
 id,product_id/id,partner_id/id,min_qty,price,currency_id/id,product_code
+vibrocore.seller_vc_cs_9400,vibrocore.product_vc_cs_9400,vibrocore.partner_raspberrypi,1.0,50.00,base.EUR,
+vibrocore.seller_vc_cs_9410,vibrocore.product_vc_cs_9410,vibrocore.partner_raspberrypi,1.0,50.00,base.EUR,
+vibrocore.seller_vc_cs_9460,vibrocore.product_vc_cs_9460,vibrocore.partner_mk,1.0,40.00,base.EUR,
+vibrocore.seller_vc_cs_9480,vibrocore.product_vc_cs_9480,vibrocore.partner_custom_eu,1.0,25.00,base.EUR,
+vibrocore.seller_vc_cs_9500,vibrocore.product_vc_cs_9500,vibrocore.partner_meanwell,1.0,20.00,base.EUR,LDD-1000H
+vibrocore.seller_vc_cs_9510,vibrocore.product_vc_cs_9510,vibrocore.partner_custom_eu,1.0,40.00,base.EUR,
 vibrocore.seller_vc_ct_6100,vibrocore.product_vc_ct_6100,vibrocore.partner_wago,1.0,600.00,base.EUR,750-8212
 vibrocore.seller_vc_ct_6110,vibrocore.product_vc_ct_6110,vibrocore.partner_wago,1.0,60.00,base.EUR,750-430
 vibrocore.seller_vc_ct_6120,vibrocore.product_vc_ct_6120,vibrocore.partner_wago,1.0,60.00,base.EUR,750-530
@@ -8,6 +14,8 @@ vibrocore.seller_vc_ct_6150,vibrocore.product_vc_ct_6150,vibrocore.partner_wago,
 vibrocore.seller_vc_ct_6500,vibrocore.product_vc_ct_6500,vibrocore.partner_ublox,1.0,50.00,base.EUR,ANN-MB
 vibrocore.seller_vc_ct_6510,vibrocore.product_vc_ct_6510,vibrocore.partner_ublox,1.0,150.00,base.EUR,ZED-F9P
 vibrocore.seller_vc_ct_6600,vibrocore.product_vc_ct_6600,vibrocore.partner_teltonika,1.0,100.00,base.EUR,RUT241
+vibrocore.seller_vc_ct_6800,vibrocore.product_vc_ct_6800,vibrocore.partner_revolutionpi,1.0,450.00,base.EUR,
+vibrocore.seller_vc_ct_6810,vibrocore.product_vc_ct_6810,vibrocore.partner_revolutionpi,1.0,196.00,base.EUR,
 vibrocore.seller_vc_fr_4100,vibrocore.product_vc_fr_4100,vibrocore.partner_mk,1.0,60.00,base.EUR,
 vibrocore.seller_vc_fr_4200,vibrocore.product_vc_fr_4200,vibrocore.partner_mk,1.0,5.00,base.EUR,
 vibrocore.seller_vc_fr_4300,vibrocore.product_vc_fr_4300,vibrocore.partner_custom_eu,1.0,80.00,base.EUR,
@@ -21,8 +29,13 @@ vibrocore.seller_vc_gp_7400,vibrocore.product_vc_gp_7400,vibrocore.partner_geopr
 vibrocore.seller_vc_hb_2200,vibrocore.product_vc_hb_2200,vibrocore.partner_neugart,1.0,600.00,base.EUR,PLPE120-040
 vibrocore.seller_vc_hb_2500,vibrocore.product_vc_hb_2500,vibrocore.partner_custom_eu,1.0,30.00,base.EUR,
 vibrocore.seller_vc_hb_3200,vibrocore.product_vc_hb_3200,vibrocore.partner_custom_eu,1.0,80.00,base.EUR,
+vibrocore.seller_vc_lt_9120,vibrocore.product_vc_lt_9120,vibrocore.partner_lapp,1.0,10.00,base.EUR,
+vibrocore.seller_vc_lt_9210,vibrocore.product_vc_lt_9210,vibrocore.partner_custom_eu,1.0,40.00,base.EUR,
+vibrocore.seller_vc_pn_9330,vibrocore.product_vc_pn_9330,vibrocore.partner_custom_eu,1.0,60.00,base.EUR,
 vibrocore.seller_vc_ps_8100,vibrocore.product_vc_ps_8100,vibrocore.partner_pix4d,1.0,2000.00,base.EUR,
 vibrocore.seller_vc_pw_5100,vibrocore.product_vc_pw_5100,vibrocore.partner_instagrid,1.0,2500.00,base.EUR,
+vibrocore.seller_vc_pw_5300,vibrocore.product_vc_pw_5300,vibrocore.partner_meanwell,1.0,20.00,base.EUR,DDR-60D-24
+vibrocore.seller_vc_pw_5310,vibrocore.product_vc_pw_5310,vibrocore.partner_meanwell,1.0,40.00,base.EUR,SDR-120-24
 vibrocore.seller_vc_pw_5600,vibrocore.product_vc_pw_5600,vibrocore.partner_lapp,1.0,40.00,base.EUR,
 vibrocore.seller_vc_sh_1100,vibrocore.product_vc_sh_1100,vibrocore.partner_oli,1.0,300.00,base.EUR,MVE 400/6-HF
 vibrocore.seller_vc_sh_1300,vibrocore.product_vc_sh_1300,vibrocore.partner_custom_eu,1.0,200.00,base.EUR,

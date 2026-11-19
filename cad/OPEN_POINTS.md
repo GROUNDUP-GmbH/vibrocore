@@ -9,23 +9,47 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `control-subtotal-mismatch`: Control line estimates sum to EUR 1515-2420. BOM.md prints 1475-2610 in the section and 1345-2220 in the summary. Line estimates are kept.
 - `positioning-gps-duplicate`: Section 7 items 61-62 repeat the GPS antenna and ZED-F9P of section 5 items 59-60. One of each is kept on the control BOM. The positioning kit is viDoc plus the WLAN bridge. The published positioning subtotal is EUR 200-350 higher, which matches that duplicate pair.
 - `power-psu-conflict`: BOM.md specifies 48 V / 10 A. CONTROL_SYSTEM.md draws Mean Well SDR-75-48 at 1.6 A. The part follows the BOM text and does not take the diagram order code.
-- `dc-converter-candidate`: CONTROL_SYSTEM.md names Mean Well DDR-60D-24. BOM.md does not. It stays a note, not a manufacturer PN.
+- `dc-converter-candidate`: CONTROL_SYSTEM.md previously named Mean Well DDR-60D-24. V1.1 BOM.md §8b upgrades to Mean Well SDR-120-24 (120 W / 5 A). VC-PW-5300 is retained as superseded history; VC-PW-5310 is the live line.
 - `plc-name-in-dimensioning`: DIMENSIONING.md section 9 still says CONTROLLINO or Arduino Opta. The later BOM and CONTROL_SYSTEM.md specify the WAGO PFC200 XTR.
 - `instagrid-rental`: The power rollup uses the EUR 2500 purchase price. BOM.md's low scenario is a rental and is not a stock component.
 - `fastener-kits`: Fasteners stay as the single kit lines from BOM.md. The 8x M12x40 and 6x M10 mentions in SONIC_HEAD.md are not exploded.
+- `gas-spring-vs-electric-tilt`: BOM.md §3 #38 gas-spring tilt (VC-FR-4700) conflicts with §8b electric tilt (#73-75). V1.1 firmware drives the electric tilt. VC-FR-4700 is obsolete/alternative and is not on the live frame BOM.
+- `option-b-savings-v1-vs-v11`: Realistic budget: Option B is EUR 530 less than Option A for V1 (8660-8130) and EUR 680 less for V1.1 (10410-9730). Both figures are correct for their column; the note must name the baseline.
+- `core-scanner-subtotal-mismatch`: BOM.md §8d line estimates sum near EUR 363-650; the §8e rollup table prints 388-710. Line estimates in the YAML follow the item table.
 
 ## Parts with undocumented geometry or procurement data
 
-- `VC-ASM-0000` Vibrocore V1: Machine height is published as a range, 1.50-1.70 m, not a single value.
-- `VC-ASM-0000` Vibrocore V1: UTV mount and tilt-lock dimensions are not specified.
+- `VC-ASM-0000` Vibrocore V1.1: Machine height is published as a range, 1.50-1.70 m, not a single value.
+- `VC-ASM-0000` Vibrocore V1.1: UTV mount and tilt-lock dimensions are not specified.
 - `VC-ASM-1000` Sonic head assembly: Motor centre distance is only a minimum of 170 mm. It is not a frozen pitch, so the motors are not placed in the 3D model.
 - `VC-ASM-1000` Sonic head assembly: Isolator coordinates are not given.
 - `VC-ASM-2000` Hub system assembly: Carriage plate length and width are not given, only the 10 mm thickness.
 - `VC-ASM-2000` Hub system assembly: Drive-shaft length is not given. Diameter is published as a range, 25-30 mm.
 - `VC-ASM-3000` Frame assembly: Profile connector types are not identified beyond mk standard corners or T-slot nuts.
-- `VC-ASM-3000` Frame assembly: Tilt mechanism, gas strut and stabiliser feet have no selected order codes.
+- `VC-ASM-3000` Frame assembly: Stabiliser feet have no selected order codes.
 - `VC-ASM-4000` Power system assembly: no solid. Dimensions were not complete enough to model.
 - `VC-ASM-5000` Control system assembly: no solid. Dimensions were not complete enough to model.
+- `VC-ASM-8000` Field subsystems assembly: no solid. Dimensions were not complete enough to model.
+- `VC-ASM-8100` Lift actuator assembly: no solid. Dimensions were not complete enough to model.
+- `VC-ASM-8200` Tilt actuator assembly: no solid. Dimensions were not complete enough to model.
+- `VC-ASM-8300` Penetrometer assembly: no solid. Dimensions were not complete enough to model.
+- `VC-ASM-8400` Core scanner assembly: no solid. Dimensions were not complete enough to model.
+- `VC-CS-9400` Raspberry Pi 4 2 GB: no solid. Dimensions were not complete enough to model.
+- `VC-CS-9410` Raspberry Pi HQ Camera IMX477: no solid. Dimensions were not complete enough to model.
+- `VC-CS-9420` C-mount lens 8 mm: no solid. Dimensions were not complete enough to model.
+- `VC-CS-9430` NEMA 17 stepper, sled: no solid. Dimensions were not complete enough to model.
+- `VC-CS-9440` A4988 stepper driver: no solid. Dimensions were not complete enough to model.
+- `VC-CS-9450` GT2 belt and pulleys: no solid. Dimensions were not complete enough to model.
+- `VC-CS-9460` mk 2004 rail 1450 mm: no solid. Dimensions were not complete enough to model.
+- `VC-CS-9470` Camera sled carriage: no solid. Dimensions were not complete enough to model.
+- `VC-CS-9480` HDPE V-cradle: no solid. Dimensions were not complete enough to model.
+- `VC-CS-9490` LED strip daylight CRI 97: no solid. Dimensions were not complete enough to model.
+- `VC-CS-9500` LED driver PWM: no solid. Dimensions were not complete enough to model.
+- `VC-CS-9510` Light-tight scanner cover: no solid. Dimensions were not complete enough to model.
+- `VC-CS-9520` Munsell reference tile: no solid. Dimensions were not complete enough to model.
+- `VC-CS-9530` Sled home and end switch: no solid. Dimensions were not complete enough to model.
+- `VC-CS-9540` Scanner 5 V and 12 V PSU: no solid. Dimensions were not complete enough to model.
+- `VC-CS-9550` Industrial USB stick 128 GB: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6100` WAGO PFC200 XTR: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6110` WAGO 750-430 XTR: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6120` WAGO 750-530 XTR: no solid. Dimensions were not complete enough to model.
@@ -44,6 +68,8 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-CT-6610` LTE SIM data plan: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6620` DC converter 24 V to 9 V: Confirm the router is not powered directly from 24 V.
 - `VC-CT-6700` Wiring harness: no solid. Dimensions were not complete enough to model.
+- `VC-CT-6800` RevPi Connect 4: no solid. Dimensions were not complete enough to model.
+- `VC-CT-6810` RevPi DIO module: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4100` Aluminium profile 50x100x1500: mk 2004 slot geometry is not in the repository. The solid is the outer envelope only and is not a machining model.
 - `VC-FR-4100` Aluminium profile 50x100x1500: Alloy and the exact mk order code.
 - `VC-FR-4200` Profile connector: Which mk connector.
@@ -75,11 +101,22 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-HB-3300` Fastener kit, hub: no solid. Dimensions were not complete enough to model.
 - `VC-KIT-6000` DT325 sampling kit: no solid. Dimensions were not complete enough to model.
 - `VC-KIT-7000` Positioning kit: no solid. Dimensions were not complete enough to model.
+- `VC-LT-9100` Electric linear actuator, lift: no solid. Dimensions were not complete enough to model.
+- `VC-LT-9110` H-bridge relay module: no solid. Dimensions were not complete enough to model.
+- `VC-LT-9120` Lift limit switch wiring: no solid. Dimensions were not complete enough to model.
+- `VC-LT-9200` Electric linear actuator, tilt: no solid. Dimensions were not complete enough to model.
+- `VC-LT-9210` Tilt pivot bracket: no solid. Dimensions were not complete enough to model.
+- `VC-LT-9220` Tilt detent pin and spring: no solid. Dimensions were not complete enough to model.
+- `VC-PN-9300` Load cell S-type 0-5 kN: no solid. Dimensions were not complete enough to model.
+- `VC-PN-9310` 4-20 mA transmitter: no solid. Dimensions were not complete enough to model.
+- `VC-PN-9320` Modbus RTU ADC 4-20 mA: no solid. Dimensions were not complete enough to model.
+- `VC-PN-9330` Penetrometer inline adapter: no solid. Dimensions were not complete enough to model.
 - `VC-PS-8100` viDoc RTK Light: no solid. Dimensions were not complete enough to model.
 - `VC-PS-8200` WLAN bridge: no solid. Dimensions were not complete enough to model.
 - `VC-PW-5100` Instagrid ONE max: no solid. Dimensions were not complete enough to model.
 - `VC-PW-5200` DIN-rail supply 48 V 10 A: no solid. Dimensions were not complete enough to model.
-- `VC-PW-5300` DC converter 48 V to 24 V: no solid. Dimensions were not complete enough to model.
+- `VC-PW-5300` Mean Well DDR-60D-24: no solid. Dimensions were not complete enough to model.
+- `VC-PW-5310` Mean Well SDR-120-24: no solid. Dimensions were not complete enough to model.
 - `VC-PW-5400` DC converter 48 V to 12 V and 5 V: Whether this is one dual-output converter or two parts.
 - `VC-PW-5500` Power distribution kit: no solid. Dimensions were not complete enough to model.
 - `VC-PW-5600` Power cable set: no solid. Dimensions were not complete enough to model.
@@ -100,10 +137,10 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 
 ## Modelled in this revision
 
+- `VC-FR-4100` Aluminium profile 50x100x1500: box, fidelity `envelope` (docs/engineering/BOM.md#3).
+- `VC-FR-4300` Bottom steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).
+- `VC-FR-4400` Top steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).
 - `VC-SH-1100` OLI MVE 400/6-HF: box, fidelity `envelope` (docs/design/SONIC_HEAD.md#2.2).
 - `VC-SH-1301` Vibrating plate blank: box, fidelity `partial` (docs/engineering/DIMENSIONING.md#3.1).
 - `VC-SH-1302` Stiffener rib: box, fidelity `solid` (docs/engineering/DIMENSIONING.md#3.1).
 - `VC-SH-1400` Center column: cylinder, fidelity `partial` (docs/design/SONIC_HEAD.md#8).
-- `VC-FR-4100` Aluminium profile 50x100x1500: box, fidelity `envelope` (docs/engineering/BOM.md#3).
-- `VC-FR-4300` Bottom steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).
-- `VC-FR-4400` Top steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).

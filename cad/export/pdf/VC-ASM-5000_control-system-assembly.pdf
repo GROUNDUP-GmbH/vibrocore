@@ -19,9 +19,9 @@ BT
 T*
 (1  VC-CT-6100  rev A  qty 1  WAGO PFC200 XTR) Tj
 T*
-(2  VC-CT-6110  rev A  qty 1  WAGO 750-430 XTR) Tj
+(2  VC-CT-6110  rev A  qty 2  WAGO 750-430 XTR) Tj
 T*
-(3  VC-CT-6120  rev A  qty 1  WAGO 750-530 XTR) Tj
+(3  VC-CT-6120  rev A  qty 2  WAGO 750-530 XTR) Tj
 T*
 (4  VC-CT-6130  rev A  qty 1  WAGO 750-637) Tj
 T*
@@ -61,7 +61,7 @@ T*
 T*
 (Revision index/letter: 0 / A) Tj
 T*
-(Date: 2026-11-04) Tj
+(Date: 2026-11-19) Tj
 T*
 (Units: mm. Projection: first angle \(ISO 128\).) Tj
 T*

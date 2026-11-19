@@ -19,7 +19,7 @@ The Vibrocore V1 control system is built around the **WAGO PFC200 XTR (750-8212)
          │ 3× AC                          │ 48V DC
          ▼                       ┌────────┴──────────┐
   ┌─────────────┐                │  Mean Well         │
-  │ 2× OLI MVE │                │  DDR-60D-24        │
+  │ 2× OLI MVE │                │  SDR-120-24 (V1.1) │
   │ 400/6-HF   │                │  48V→24V/2.5A      │
   │ 7.2 kg ea. │                └────────┬──────────┘
   └─────────────┘                        │ 24V DC

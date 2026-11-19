@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="420mm" height="297mm" viewBox="0 0 420.0 297.0">
+<title>VC-ASM-8400 Core scanner assembly</title>
+<rect width="100%" height="100%" fill="#fff"/>
+<rect x="10" y="10" width="400" height="277" fill="none" stroke="#111" stroke-width="0.6"/>
+<rect x="14" y="14" width="392" height="269" fill="none" stroke="#111" stroke-width="0.25"/>
+<rect x="262" y="248" width="144" height="35" fill="none" stroke="#111" stroke-width="0.4"/>
+<text x="18" y="22" font-size="3.2" font-family="sans-serif">ISO 7200 title block · ISO 5457 A3 · not released for manufacture</text>
+<text x="20" y="36" font-size="4" font-family="sans-serif" font-weight="700">Parts list (same item numbers as the OdooPLM EBOM itemnum)</text>
+<text x="20" y="42" font-size="2.8" font-family="sans-serif">Item  Part number   Rev  Qty  Name</text>
+<text x="20" y="47" font-size="2.8" font-family="sans-serif">1      VC-CS-9400     A    1    Raspberry Pi 4 2 GB</text>
+<text x="20" y="51.2" font-size="2.8" font-family="sans-serif">2      VC-CS-9410     A    1    Raspberry Pi HQ Camera IMX477</text>
+<text x="20" y="55.400000000000006" font-size="2.8" font-family="sans-serif">3      VC-CS-9420     A    1    C-mount lens 8 mm</text>
+<text x="20" y="59.60000000000001" font-size="2.8" font-family="sans-serif">4      VC-CS-9430     A    1    NEMA 17 stepper, sled</text>
+<text x="20" y="63.80000000000001" font-size="2.8" font-family="sans-serif">5      VC-CS-9440     A    1    A4988 stepper driver</text>
+<text x="20" y="68.00000000000001" font-size="2.8" font-family="sans-serif">6      VC-CS-9450     A    1    GT2 belt and pulleys</text>
+<text x="20" y="72.20000000000002" font-size="2.8" font-family="sans-serif">7      VC-CS-9460     A    1    mk 2004 rail 1450 mm</text>
+<text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-CS-9470     A    1    Camera sled carriage</text>
+<text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-CS-9480     A    1    HDPE V-cradle</text>
+<text x="20" y="84.80000000000003" font-size="2.8" font-family="sans-serif">10     VC-CS-9490     A    2    LED strip daylight CRI 97</text>
+<text x="20" y="89.00000000000003" font-size="2.8" font-family="sans-serif">11     VC-CS-9500     A    1    LED driver PWM</text>
+<text x="20" y="93.20000000000003" font-size="2.8" font-family="sans-serif">12     VC-CS-9510     A    1    Light-tight scanner cover</text>
+<text x="20" y="97.40000000000003" font-size="2.8" font-family="sans-serif">13     VC-CS-9520     A    1    Munsell reference tile</text>
+<text x="20" y="101.60000000000004" font-size="2.8" font-family="sans-serif">14     VC-CS-9530     A    2    Sled home and end switch</text>
+<text x="20" y="105.80000000000004" font-size="2.8" font-family="sans-serif">15     VC-CS-9540     A    1    Scanner 5 V and 12 V PSU</text>
+<text x="20" y="110.00000000000004" font-size="2.8" font-family="sans-serif">16     VC-CS-9550     A    1    Industrial USB stick 128 GB</text>
+<text x="20" y="244" font-size="3" font-family="sans-serif">Schematic only. Component positions that are not dimensioned in the design documents are not drawn.</text>
+<text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
+<text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>
+<text x="268" y="278.2" font-size="2.4" font-family="sans-serif">Document title</text>
+<text x="332" y="278.2" font-size="2.6" font-family="sans-serif" font-weight="700">Core scanner assembly</text>
+<text x="268" y="282.4" font-size="2.4" font-family="sans-serif">Document type</text>
+<text x="332" y="282.4" font-size="2.6" font-family="sans-serif" font-weight="700">assembly drawing</text>
+<text x="268" y="286.59999999999997" font-size="2.4" font-family="sans-serif">Document status</text>
+<text x="332" y="286.59999999999997" font-size="2.6" font-family="sans-serif" font-weight="700">preliminary</text>
+<text x="268" y="290.79999999999995" font-size="2.4" font-family="sans-serif">Identification number</text>
+<text x="332" y="290.79999999999995" font-size="2.6" font-family="sans-serif" font-weight="700">VC-ASM-8400</text>
+<text x="268" y="294.99999999999994" font-size="2.4" font-family="sans-serif">Revision index / letter</text>
+<text x="332" y="294.99999999999994" font-size="2.6" font-family="sans-serif" font-weight="700">0 / A</text>
+<text x="268" y="299.19999999999993" font-size="2.4" font-family="sans-serif">Creator</text>
+<text x="332" y="299.19999999999993" font-size="2.6" font-family="sans-serif" font-weight="700">vibrocore cad export</text>
+<text x="268" y="303.3999999999999" font-size="2.4" font-family="sans-serif">Created</text>
+<text x="332" y="303.3999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">2026-11-19</text>
+<text x="268" y="307.5999999999999" font-size="2.4" font-family="sans-serif">Units</text>
+<text x="332" y="307.5999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">mm</text>
+<text x="268" y="311.7999999999999" font-size="2.4" font-family="sans-serif">Projection</text>
+<text x="332" y="311.7999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">first angle (ISO 128)</text>
+<text x="268" y="315.9999999999999" font-size="2.4" font-family="sans-serif">Sheet</text>
+<text x="332" y="315.9999999999999" font-size="2.6" font-family="sans-serif" font-weight="700">1 / 1</text>
+</svg>

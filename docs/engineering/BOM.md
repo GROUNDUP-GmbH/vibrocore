@@ -54,11 +54,15 @@ complexity reduction vs. V1 custom design.*
 |35 | Top steel plate         | S355, 300×200×12 mm, machined     |   1 |   50–80  | Custom (EU)                |
 |36 | Rod guide bushing       | Bronze/PTFE, Ø83 bore             |   1 |   20–40  | Custom (EU)                |
 |37 | UTV mounting brackets   | Steel, welded/bolted              |   4 |   60–100 | Custom (EU)                |
-|38 | Tilt mechanism          | Hinge + gas strut + lock          |   1 |  100–180 | Standard parts (EU)        |
+|38 | Tilt mechanism (obsolete) | Hinge + gas strut + lock — **obsolete for V1.1**; use electric tilt §8b #73–75 | 0 |  100–180 | Alternative only (EU)   |
 |39 | Stabiliser feet         | Adjustable screw jacks            |   4 |   40–80  | Standard (EU)              |
 |40 | Fasteners (frame)       | M8–M16, various                   |   1 |   30–50  | Würth / Bossard (EU)       |
 
-**Frame Subtotal: ~540–910 €**
+**Frame Subtotal (V1.1 live lines, without #38): ~440–730 €**
+
+> **#38 vs §8b:** V1.1 firmware drives the electric tilt actuator (`FB_TiltControl`).
+> The gas-spring / hinge line #38 is retained as an obsolete alternative only and is
+> **not** on the live manufacturing BOM (`VC-FR-4700` lifecycle `obsolete`).
 
 ## 4. Power System (Phase 1 — PoC)
 
@@ -66,7 +70,7 @@ complexity reduction vs. V1 custom design.*
 |---|-------------------------|-----------------------------------|-----|----------|----------------------------|
 |41 | Instagrid ONE max       | 230V AC, 3.6 kW, 2.1 kWh         |   1 | 2,500*   | instagrid.co (rental opt.) |
 |42 | DC PSU 48V              | 230V AC → 48V/10A DC, DIN rail   |   1 |   80–140 | Mean Well (EU)             |
-|43 | DC/DC 48V → 24V        | For brake, relays                 |   1 |   20–40  | Traco / Mean Well (EU)     |
+|43 | DC/DC 48V → 24V        | For brake, relays. V1.1 live PN: Mean Well **SDR-120-24** (supersedes DDR-60D-24) | 1 | 40–70 | Mean Well (EU) |
 |44 | DC/DC 48V → 12V/5V    | For PLC, sensors                  |   1 |   15–30  | Traco / Mean Well (EU)     |
 |45 | Power distribution      | DIN rail, fuses, contactors       |   1 |   60–100 | Schneider / Eaton (EU)     |
 |46 | Cable set               | Silicone, shielded, 2.5–6 mm²    |   1 |   40–80  | Lapp (DE)                  |
@@ -467,7 +471,7 @@ New signals introduced by subsystems 8a–8c:
 | xTiltVerticalLimit | DI | Limit switch → PLC | 1 |
 | xTiltFoldedLimit | DI | Limit switch → PLC | 1 |
 | rForce_N (via Modbus) | RS-485 | Load cell ADC Slave 3 | — |
-| Core image (via MQTT) | MQTT | RPi Zero 2W | — |
+| Core image (via MQTT) | MQTT | Raspberry Pi 4 (2 GB) | — |
 | **Total new hard-wired** | | | **4 DI + 4 DO** |
 
 **WAGO Option A — additional modules required:**
@@ -560,7 +564,12 @@ New signals introduced by subsystems 8a–8c:
 | Penetrometer (load cell)    |     — |            400 | §8c |
 | Core scanner (sled)         |     — |            550 | §8d: sled + RPi4 + stitching |
 | Misc / contingency          |     600 |            700 | |
-| **TOTAL Option B**          | **8,130** | **9,730** | **~€680 less than Option A V1.1** |
+| **TOTAL Option B**          | **8,130** | **9,730** | See savings note below |
+
+> **Option B savings (arithmetic, not a third estimate):**
+> - **V1:** EUR 8 660 − EUR 8 130 = **EUR 530** less than Option A.
+> - **V1.1:** EUR 10 410 − EUR 9 730 = **EUR 680** less than Option A.
+> Both figures are correct for their column. Do not mix them.
 
 ---
 
@@ -607,5 +616,6 @@ New signals introduced by subsystems 8a–8c:
 
 ---
 
-*Last updated: 2026-03-26*
+*Last updated: 2026-11-19*
 *Status: PRELIMINARY — verify all prices and availability before ordering*
+*Single-source YAML: `cad/bom/vibrocore.bom.yaml` (V1.1 baseline)*

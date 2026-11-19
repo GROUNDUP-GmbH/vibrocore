@@ -276,3 +276,59 @@ def test_online_dry_run_does_not_create(server):
     text = report.text()
     assert "dry-run" in text
     assert SECRET not in text
+
+
+def test_dry_run_plans_adr_links(monkeypatch, capsys):
+    for name in ("ODOO_URL", "ODOO_DB", "ODOO_USER", "ODOO_API_KEY", "ODOO_PASSWORD"):
+        monkeypatch.delenv(name, raising=False)
+    assert main(["plm-sync"]) == 0
+    out = capsys.readouterr().out
+    assert "ADR-0001" in out
+    assert "ADR-0001->VC-CT-6100" in out
+    assert "linkeddocuments" in out
+    assert SECRET not in out
+
+
+def test_adr_upload_links_listed_parts(server):
+    fake, url = server
+    report = _apply(url, part="VC-CT-6100")
+    text = report.text()
+    assert SECRET not in text
+    adr_docs = [
+        row for row in fake.records("ir.attachment") if row.get("engineering_code") == "ADR-0001"
+    ]
+    assert len(adr_docs) == 1
+    document = adr_docs[0]
+    assert document["engineering_state"] == "draft"
+    assert document["is_plm"] is True
+    assert document["name"] == "ADR-0001.pdf"
+    assert document["datas"].startswith(b"%PDF")
+    products = {
+        row["engineering_code"]: row
+        for row in fake.records("product.product")
+        if row["engineering_code"] in {"VC-CT-6100", "VC-CT-6110", "VC-CT-6120", "VC-ASM-5000"}
+    }
+    assert set(products) == {"VC-CT-6100", "VC-CT-6110", "VC-CT-6120", "VC-ASM-5000"}
+    links = fake.records("plm.component.document.rel")
+    linked_components = {link["component_id"] for link in links if link["document_id"] == document["id"]}
+    assert linked_components == {products[code]["id"] for code in products}
+    assert all(method not in {"action_confirm", "action_release", "new_version"} for _model, method in fake.calls)
+    # Idempotent: second apply does not create a second ADR document.
+    _apply(url, part="VC-CT-6100")
+    assert len([row for row in fake.records("ir.attachment") if row.get("engineering_code") == "ADR-0001"]) == 1
+
+
+def test_released_adr_is_not_rewritten(server):
+    fake, url = server
+    _apply(url, part="VC-CT-6100")
+    document = next(row for row in fake.records("ir.attachment") if row.get("engineering_code") == "ADR-0001")
+    document["engineering_state"] = "released"
+    frozen = document["datas"]
+    uploads = len(fake.uploads)
+    report = _apply(url, part="VC-CT-6100")
+    assert document["datas"] == frozen
+    assert len(fake.uploads) == uploads
+    assert any(
+        action.op == "skip-locked" and action.model == "ir.attachment" and "ADR-0001" in action.key
+        for action in report.actions
+    )
