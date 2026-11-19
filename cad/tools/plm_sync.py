@@ -12,11 +12,13 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from cad.tools.adr import AdrDocument, load_adrs
 from cad.tools.bom import ROOT, BillOfMaterials, BomError, Part, load_bom
 from cad.tools.odoo_export import _description, document_rows
 from cad.tools.plm_client import PlmClient, PlmError
 
 DRAFT = "draft"
+ADR_REVISION = 0
 M2O_FIELDS = {
     "product_tmpl_id",
     "categ_id",
@@ -112,8 +114,10 @@ class PlmSync:
         self._materials: dict[str, int] = {}
         self._partners: dict[str, int] = {}
         self._products: dict[str, dict] = {}
+        self._adrs: list[AdrDocument] = []
 
     def run(self) -> SyncReport:
+        self._adrs = self._selected_adrs()
         self._check_files()
         if self.offline:
             self._plan_offline()
@@ -132,9 +136,20 @@ class PlmSync:
             self._sync_supplier(part)
         for part, payload in self._document_payloads():
             self._sync_document(part, payload)
+        for adr in self._adrs:
+            self._sync_adr(adr)
         for number in self._assembly_numbers():
             self._sync_bom(number)
         return self.report
+
+    def _selected_adrs(self) -> list[AdrDocument]:
+        try:
+            docs = load_adrs()
+        except ValueError as exc:
+            raise PlmError(str(exc)) from exc
+        if not self.part_number:
+            return docs
+        return [doc for doc in docs if self.part_number in doc.parts]
 
     def _product_parts(self) -> list[Part]:
         if not self.part_number:
@@ -178,6 +193,15 @@ class PlmSync:
             for key in ("odoo_datas_file", "odoo_printout_file"):
                 if payload.get(key) and not _resolve(payload[key]).is_file():
                     missing.append(payload[key])
+        for adr in self._adrs:
+            if not adr.attachment_path.is_file():
+                missing.append(str(adr.attachment_path))
+            for part_number in adr.parts:
+                if part_number not in self.bom.parts:
+                    raise PlmError(
+                        f"{adr.code} lists unknown part {part_number}. "
+                        "Fix the ADR front matter or add the part to the YAML."
+                    )
         if missing:
             raise PlmError(
                 "Generated files are missing. Run `python -m cad.tools.cli export` first:\n"
@@ -199,6 +223,20 @@ class PlmSync:
                 f"datas={datas} printout={Path(payload['odoo_printout_file']).name}",
             )
             self.report.add("plan", "plm.component.document.rel", part.part_number, "")
+        for adr in self._adrs:
+            self.report.add(
+                "plan",
+                "ir.attachment",
+                adr.code,
+                f"datas={adr.attachment_filename} rendered_as={adr.rendered_as}",
+            )
+            for part_number in adr.parts:
+                self.report.add(
+                    "plan",
+                    "plm.component.document.rel",
+                    f"{adr.code}->{part_number}",
+                    "linkeddocuments",
+                )
         for number in self._assembly_numbers():
             count = len(self.bom.children(number))
             self.report.add("plan", "mrp.bom", number, f"type=ebom lines={count}")
@@ -583,8 +621,16 @@ class PlmSync:
                 f"doc_id={document_id} {printout_name}",
             )
 
-    def _sync_link(self, part: Part, product_id: int, document_id: int, product_state: str, document_state: str) -> None:
-        key = part.part_number
+    def _sync_link(
+        self,
+        part: Part,
+        product_id: int,
+        document_id: int,
+        product_state: str,
+        document_state: str,
+        key: str | None = None,
+    ) -> None:
+        key = key or part.part_number
         if product_state != DRAFT or document_state != DRAFT:
             self.report.add("skip-locked", "plm.component.document.rel", key, "component or document is not draft")
             return
@@ -612,6 +658,116 @@ class PlmSync:
             [[product_id], {"linkeddocuments": [(4, document_id, False)]}],
         )
         self.report.add("create", "plm.component.document.rel", key, f"doc_id={document_id}")
+
+    def _find_adr_record(self, adr: AdrDocument, fields: list[str]) -> dict | None:
+        found = self._execute(
+            "ir.attachment",
+            "search_read",
+            [[
+                ("engineering_code", "=", adr.code),
+                ("engineering_revision", "=", ADR_REVISION),
+            ]],
+            {"fields": fields, "limit": 2},
+        )
+        if len(found) > 1:
+            raise PlmError(f"ir.attachment {adr.code} rev {ADR_REVISION} exists more than once.")
+        return found[0] if found else None
+
+    def _sync_adr(self, adr: AdrDocument) -> None:
+        """Upload an ADR and link it to every named part. Draft only, idempotent."""
+        key = f"{adr.code} rev {ADR_REVISION}"
+        datas_path = adr.attachment_path
+        filename = adr.attachment_filename
+        description = (
+            f"ADR {adr.code}: {adr.title}. Status {adr.status}. "
+            f"Rendered as {adr.rendered_as} by plm-sync. "
+            f"Source {adr.source_path.relative_to(ROOT)}. "
+            f"Parts: {', '.join(adr.parts)}."
+        )
+        current = self._find_adr_record(
+            adr,
+            ["id", "name", "engineering_state", "is_plm", "description"],
+        )
+        if current is not None and not current.get("is_plm", True):
+            raise PlmError(
+                f"ir.attachment {adr.code} rev {ADR_REVISION} exists but is_plm is false. "
+                "The upload routes refuse it."
+            )
+        if current is None:
+            if self.dry_run:
+                self.report.add("create", "ir.attachment", key, f"datas={filename}")
+                document_id = 0
+                state = DRAFT
+            else:
+                created = _one_id(
+                    self._execute(
+                        "ir.attachment",
+                        "create",
+                        [
+                            {
+                                "name": filename,
+                                "engineering_code": adr.code,
+                                "engineering_revision": ADR_REVISION,
+                                "engineering_revision_letter": "A",
+                                "engineering_state": DRAFT,
+                                "is_plm": True,
+                                "type": "binary",
+                                "description": description,
+                            }
+                        ],
+                    )
+                )
+                document_id = created
+                state = DRAFT
+                self.report.add("create", "ir.attachment", key, f"id={created}")
+        else:
+            document_id = int(current["id"])
+            state = current.get("engineering_state") or DRAFT
+            if state != DRAFT:
+                self.report.add("skip-locked", "ir.attachment", key, f"engineering_state={state}")
+            elif current.get("name") != filename or current.get("description") != description:
+                if self.dry_run:
+                    self.report.add("update", "ir.attachment", key, f"id={document_id}")
+                else:
+                    self._execute(
+                        "ir.attachment",
+                        "write",
+                        [[document_id], {"name": filename, "description": description, "is_plm": True}],
+                    )
+                    self.report.add("update", "ir.attachment", key, f"id={document_id}")
+            else:
+                self.report.add("unchanged", "ir.attachment", key, f"id={document_id}")
+
+        # Ensure every named part exists in _products (may be outside --part selection).
+        for part_number in adr.parts:
+            if part_number not in self._products:
+                self._sync_product(self.bom.part(part_number))
+
+        for part_number in adr.parts:
+            product = self._products[part_number]
+            part = self.bom.part(part_number)
+            self._sync_link(
+                part,
+                product["id"],
+                document_id,
+                product["engineering_state"],
+                state,
+                key=f"{adr.code}->{part_number}",
+            )
+
+        if state != DRAFT:
+            return
+        if self.dry_run or not document_id:
+            self.report.add("upload", "/plm_document_upload/upload", key, filename)
+            return
+        assert self.client is not None
+        self.client.upload_datas(document_id, filename, datas_path.read_bytes())
+        self.report.add(
+            "upload",
+            "/plm_document_upload/upload",
+            key,
+            f"doc_id={document_id} {filename}",
+        )
 
     def _sync_bom(self, number: str) -> None:
         part = self.bom.part(number)

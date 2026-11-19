@@ -252,6 +252,58 @@ Check afterwards, still on the test database:
 5. Open the linked document in the `plm_web_3d` viewer (section 5). The plate
    is 420 × 300 × 20 mm. If the viewer lists it as `other`, section 2 was
    skipped.
+6. Each ADR in `docs/adr/` that lists `parts:` is one PLM document. The
+   document links to those parts. See the ADR subsection below.
+
+### ADR documents (Architecture Decision Records)
+
+`plm-sync` reads Markdown files in `docs/adr/`. Each file must have YAML front
+matter with a `parts` list of Vibrocore part numbers (`VC-…`).
+
+Example:
+
+```yaml
+---
+title: ADR-0001 HMI–PLC Interface
+status: Accepted
+date: 2026-11-19
+parts:
+  - VC-CT-6100
+  - VC-CT-6110
+  - VC-CT-6120
+  - VC-ASM-5000
+---
+```
+
+Procedure:
+
+1. The command finds each `ADR-*.md` file.
+2. The command makes a PDF from the ADR text. The PDF writer is the same small
+   Helvetica writer that the CAD drawings use. The repository does not add
+   weasyprint or pandoc. If PDF creation fails, the command stores the
+   Markdown file as the attachment and reports `rendered_as=markdown`.
+3. The command writes the file under `cad/export/adr/` (for example
+   `ADR-0001.pdf`).
+4. The command creates or updates one `ir.attachment` with
+   `engineering_code = ADR-0001`, `engineering_revision = 0`,
+   `engineering_state = draft`, and `is_plm = true`.
+5. The command uploads the file bytes with `/plm_document_upload/upload`.
+6. The command links the document to each listed part through
+   `product.product.linkeddocuments` (Many2many write `(4, doc_id)`). This is
+   the same path as CAD document links. The command does not call
+   `plm.component.document.rel.create` directly.
+
+Rules (same as CAD document upload):
+
+- The default mode is dry-run. No write occurs without `--apply`.
+- A second run with the same ADR code and revision updates the same record.
+  The command does not create a second document.
+- If the document or a target part is not in `draft`, the command reports
+  `skip-locked` and does not change that record.
+- The command never calls `action_confirm`, `action_release` or `new_version`.
+- Do not put credentials in the repository.
+
+Units in ADR text use SI with a space (example: `12 mm`, `100 Hz`, `24 V`).
 
 `cad/freecad/plm_upload_macro.py` is the same command from FreeCAD 1.x,
 including macOS. It exports the active solid to STEP, a TechDraw page to PDF
@@ -296,5 +348,9 @@ silent edits in Odoo:
 - Fastener kits are not exploded. Buy them as kits or replace the lines.
 - The two GPS rows in BOM.md section 7 were not imported. See
   `positioning-gps-duplicate` in the YAML.
+- Core scanner §8d line subtotal (about EUR 363–650) still differs from the
+  §8e rollup table (EUR 388–710). See `core-scanner-subtotal-mismatch`.
+- Option A versus Option B (RevPi) remains a commercial choice. RevPi parts
+  stay `lifecycle: alternative` and are not on the Option A control BOM.
 
 `cad/OPEN_POINTS.md` is the generated list of every `unknowns` entry.

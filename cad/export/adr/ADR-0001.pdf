@@ -1,0 +1,219 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 1 /Kids [3 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 4004 >>
+stream
+BT
+/F1 10 Tf
+40 800 Td
+12 TL
+(ADR-0001) Tj
+T*
+(ADR-0001 HMI?PLC Interface) Tj
+T*
+(Status: Accepted) Tj
+T*
+(Parts: VC-CT-6100, VC-CT-6110, VC-CT-6120, VC-ASM-5000) Tj
+T*
+() Tj
+T*
+(# ADR-0001 ? HMI?PLC Interface) Tj
+T*
+() Tj
+T*
+(## Context) Tj
+T*
+() Tj
+T*
+(The Vibrocore HMI runs in Node-RED on the controller \(WAGO PFC200 XTR or RevPi\).) Tj
+T*
+(The PLC runs in CODESYS. The two sides exchange data over Modbus TCP holding) Tj
+T*
+(registers \(`GVL_MODBUS`\) and publish events on MQTT \(`Mosquitto`\).) Tj
+T*
+() Tj
+T*
+(This ADR fixes the command semantics so that motion is hold-to-run, start and) Tj
+T*
+(reset are pulses, and all sides use one fault-code table.) Tj
+T*
+() Tj
+T*
+(## Decision) Tj
+T*
+() Tj
+T*
+(### Transport) Tj
+T*
+() Tj
+T*
+(| Path | Use |) Tj
+T*
+(|------|-----|) Tj
+T*
+(| Modbus TCP port 502 on the PLC | Command and status registers \(`GVL_MODBUS`\) |) Tj
+T*
+(| MQTT broker service name `mosquitto` | Cycle records, alarms, HMI presence |) Tj
+T*
+() Tj
+T*
+(MQTT topics:) Tj
+T*
+() Tj
+T*
+(| Topic | Direction | Retain | Meaning |) Tj
+T*
+(|-------|-----------|--------|---------|) Tj
+T*
+(| `vibrocore/hmi/status` | HMI ? broker | yes | `online` / `offline` |) Tj
+T*
+(| `vibrocore/alarm` | HMI ? broker | no | Safety fault event \(JSON\) |) Tj
+T*
+(| `vibrocore/cycle/{id}` | logger ? broker | no | Signed cycle record \(JSON\) |) Tj
+T*
+(| `vibrocore/status/#` | reserved | yes | Future live status mirror |) Tj
+T*
+() Tj
+T*
+(Units in payloads use SI with a space \(example: `12 mm`, `100 Hz`\).) Tj
+T*
+() Tj
+T*
+(### Command semantics) Tj
+T*
+() Tj
+T*
+(| Command | Register | Semantics |) Tj
+T*
+(|---------|----------|-----------|) Tj
+T*
+(| Operating mode | `%MW0` | Change accepted only while the machine is idle \(hub IDLE, no safe s) Tj
+T*
+(tate, no fault\). PLC writes the old mode back if the change is rejected. |) Tj
+T*
+(| Cycle start | `%MW1` | Edge-triggered pulse. PLC clears the register to 0 after it reads the ) Tj
+T*
+(rising edge. |) Tj
+T*
+(| Jog down / up | `%MW2` / `%MW3` | Momentary \(hold-to-run\). Do not latch to 1. |) Tj
+T*
+(| Jog heartbeat | `%MW33` | HMI increments this value at least every 100 ms while a jog button ) Tj
+T*
+(is pressed. |) Tj
+T*
+(| Sonic toggle | `%MW4` | Level in MANUAL mode. |) Tj
+T*
+(| Fault reset | `%MW5` | Edge-triggered pulse. PLC clears to 0. After E-stop: accept only a fre) Tj
+T*
+(sh rising edge that arrives while the E-stop circuit is healthy. Never auto-reset. |) Tj
+T*
+(| Lift / tilt | `%MW22`?`%MW25` | Momentary. Direction interlock and end-limit stop are in the ) Tj
+T*
+(actuator FBs. No motion while the hub is not IDLE. |) Tj
+T*
+() Tj
+T*
+(### Jog watchdog) Tj
+T*
+() Tj
+T*
+(1. While the operator holds a jog control, the HMI writes the direction bit and) Tj
+T*
+(   increments `%MW33` about every 100 ms.) Tj
+T*
+(2. The PLC starts a 300 ms timer when the heartbeat value stops changing.) Tj
+T*
+(3. If the timer ends, the PLC clears jog commands and stops motion.) Tj
+T*
+(4. Jog must never stay at 1 without a live heartbeat.) Tj
+T*
+() Tj
+T*
+(### Fault-code table \(canonical\)) Tj
+T*
+() Tj
+T*
+(Used by `FB_Safety.eSafetyReason`, `GVL_MODBUS.eStatus_SafetyReason`, and the) Tj
+T*
+(Node-RED `SAFETY_REASON` list:) Tj
+T*
+() Tj
+T*
+(| Code | Name |) Tj
+T*
+(|------|------|) Tj
+T*
+(| 0 | OK |) Tj
+T*
+(| 1 | ESTOP |) Tj
+T*
+(| 2 | LIMIT_UP |) Tj
+T*
+(| 3 | LIMIT_DOWN |) Tj
+T*
+(| 4 | HUB_ALARM |) Tj
+T*
+(| 5 | STONE_DETECTED |) Tj
+T*
+(| 6 | VFD_COMM |) Tj
+T*
+() Tj
+T*
+(Penetrometer Modbus loss uses a local FB fault flag and status force value. It) Tj
+T*
+(does not add a seventh safety reason to this table.) Tj
+T*
+() Tj
+T*
+(### Mode switch) Tj
+T*
+() Tj
+T*
+(`eMode` follows `%MW0` only when:) Tj
+T*
+() Tj
+T*
+(- hub state is IDLE, and) Tj
+T*
+(- safe state is false, and) Tj
+T*
+(- hub and sonic have no fault.) Tj
+T*
+() Tj
+T*
+(If the HMI writes a new mode while the machine is busy, the PLC restores the) Tj
+T*
+(previous mode in `%MW0`.) Tj
+T*
+() Tj
+T*
+(### NC limit logic) Tj
+T*
+(? truncated for PLM text PDF; full Markdown is in git.) Tj
+T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000004297 00000 n 
+trailer << /Size 6 /Root 1 0 R >>
+startxref
+4367
+%%EOF
