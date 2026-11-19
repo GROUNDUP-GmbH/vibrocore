@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 1846 >>
+<< /Length 1895 >>
 stream
 BT
 /F1 10 Tf
@@ -27,31 +27,33 @@ T*
 T*
 (adapter: 60.0 mm TBD. Station 1409.2 mm. TBD placeholder, VC-SH-1500) Tj
 T*
-(head: 407.0 mm. Station 1816.2 mm. shaft 200.0 + flange 12.0 TBD + plate 20.0 + motor height in the stack) Tj
+(head: 232.0 mm. Station 1641.2 mm. shaft 200.0 + flange 12.0 TBD + plate 20.0 + motor height not in the stack) Tj
 T*
-(carriage: 80.0 mm TBD. Station 1896.2 mm. TBD placeholder. Plate thickness is 10 mm and is not this term.) Tj
+(carriage: 80.0 mm TBD. Station 1721.2 mm. TBD placeholder. Plate thickness is 10 mm and is not this term.) Tj
 T*
-(top_margin: 40.0 mm TBD. Station 1936.2 mm. TBD placeholder) Tj
+(top_margin: 40.0 mm TBD. Station 1761.2 mm. TBD placeholder) Tj
 T*
-(Required total: 1936.2 mm.) Tj
+(Required total: 1761.2 mm.) Tj
 T*
 (Available mast stroke: 1300.0 mm.) Tj
 T*
-(Deficit against stroke: 636.2 mm.) Tj
+(Deficit against stroke: 461.2 mm.) Tj
 T*
 (Mast profile: 1500.0 mm. Length unchanged.) Tj
 T*
-(Deficit against profile: 436.2 mm.) Tj
+(Deficit against profile: 261.2 mm.) Tj
 T*
-(Documented lengths alone, TBD set to 0: 1614.2 mm.) Tj
+(Documented lengths alone, TBD set to 0: 1439.2 mm.) Tj
 T*
-(Deficit of documented lengths against the profile: 114.2 mm.) Tj
+(Documented lengths minus the profile: -60.8 mm.) Tj
 T*
 (Plate opening assumption: 1473.0 mm. SAMPLING remainder: 33.8 mm.) Tj
 T*
-(The SAMPLING remainder is not this chain. It omits motor height, carriage, shoe, adapter and margins.) Tj
+(The SAMPLING remainder is not this chain. It omits carriage, shoe, adapter and margins.) Tj
 T*
-(Head uses column shaft 200 mm, plate 20 mm, motor height 175 mm, plus the flange placeholder.) Tj
+(Head uses column shaft 200 mm and plate 20 mm, plus the flange placeholder.) Tj
+T*
+(Motor height 175 mm is not in the head. The motors sit left and right of the rod.) Tj
 T*
 (Casing OD 82.55 mm. Casing ID 66.675 mm. Shoe OD 87.63 mm.) Tj
 T*
@@ -80,8 +82,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000002146 00000 n 
+0000002195 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-2216
+2265
 %%EOF

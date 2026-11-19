@@ -42,11 +42,15 @@ The study does not change the profile length.
 
 ## Result with the current parameters
 
-Required height: 1936.2 mm.
+The motors sit left and right of the rod.
+Their 175 mm height is not in the sum.
+
+Required height: 1761.2 mm.
 Mast stroke: 1300 mm.
-Deficit against the stroke: 636.2 mm.
+Deficit against the stroke: 461.2 mm.
+Margin against the stroke: -461.2 mm.
 Mast profile: 1500 mm.
-Deficit against the profile: 436.2 mm.
+Deficit against the profile: 261.2 mm.
 
 These numbers use the placeholders in `cad/models/mast_layout.py`.
 A new measured length changes the deficit.
@@ -58,48 +62,62 @@ Documented lengths alone, with every TBD length set to 0:
 - Casing: 1219.2 mm.
 - Column shaft: 200 mm.
 - Vibrating plate: 20 mm.
-- Motor height: 175 mm.
-- Sum: 1614.2 mm.
+- Sum: 1439.2 mm.
 
-1614.2 mm is 114.2 mm longer than the 1500 mm profile.
-1614.2 mm is 314.2 mm longer than the 1300 mm stroke.
-The TBD lengths make the deficit larger.
-They do not create it, while the motor height stays in the stack.
+1439.2 mm is 60.8 mm shorter than the 1500 mm profile.
+That is a margin against the profile.
+1439.2 mm is 139.2 mm longer than the 1300 mm stroke.
+The stroke deficit is already present in the documented lengths.
+The TBD lengths make that deficit larger.
+The TBD lengths also turn the profile margin into the 261.2 mm deficit.
 
-## Motor assumption
+## Motor placement
 
 SONIC_HEAD.md gives the motor envelope as 255 mm x 154 mm x 175 mm.
 That drawing calls 175 mm the height.
-The motor shafts are perpendicular to the rod axis.
-This study adds the 175 mm height to the axial head.
-The two motors are not placed.
-The centre distance is only a minimum of 170 mm.
+The shafts stay perpendicular to the rod axis.
+The assembly puts both motors on the vibrating plate.
+One motor is on the left of the rod.
+One motor is on the right of the rod.
+The 255 mm side is the shaft axis.
+That axis is horizontal.
+The 175 mm side stays vertical.
+It does not add a serial term to the head.
 
-Remove 175 mm if the motor height is not axial.
-The documented lengths are then 1439.2 mm.
-1439.2 mm is 60.8 mm shorter than the 1500 mm profile.
-1439.2 mm is 139.2 mm longer than the 1300 mm stroke.
-The TBD lengths then decide the fit on the profile.
-A fit is still not shown.
+The documented minimum centre distance is 170 mm.
+The layout pitch is 266 mm.
+That pitch is TBD.
+It keeps both 154 mm widths on the 420 mm plate.
+The column flange sits between the motors.
+The flange diameter is 80 mm.
+The gap between the motor envelopes is 112 mm.
+
+The motor bodies still rise 175 mm above the plate.
+They are not stacked on the column.
+The isolators sit in the strips beside the 255 mm motor length.
+They do not stand under the motor bodies.
+The free height is unknown.
+It is not in the sum.
 
 ## Head term
 
 The head term is one length in the chain.
-It is the sum of four lengths.
+It is the sum of three lengths.
 
 | Piece | Length | Status |
 |---|---|---|
 | Column shaft VC-SH-1400 | 200 mm | Documented. The shaft solid does not include the flange. |
 | Column flange thickness | 12 mm | TBD. The flange diameter 80 mm is documented. |
 | Vibrating plate VC-SH-1301 | 20 mm | Documented. |
-| Motor height VC-SH-1100 | 175 mm | Documented envelope height. See the motor assumption. |
-| Head total | 407 mm | The flange part of this total is TBD. |
+| Head total | 232 mm | The flange part of this total is TBD. |
 
+The motor height is not in this total.
 Isolator free height is unknown.
 VC-SH-1600 does not give a free height.
 This study does not add the isolator height.
-The motors are taken as taller than the isolators.
-Add the difference if the isolators are taller.
+The assembly shows a 40 mm placeholder at the plate corners.
+That placeholder is not a catalogue height.
+Add the real free height if the isolators lift the carriage.
 
 The carriage is a separate term above the head.
 Do not use the 10 mm carriage-plate thickness as the carriage height.
@@ -145,10 +163,32 @@ These visual stand-ins are not in the height sum.
 |---|---|---|
 | profile_spacing_mm | 300 mm | Centre distance of the two profiles. Do not claim a shoe clearance from this pitch. |
 | adapter_od_mm | 50 mm | Envelope only. The thread is not modelled. |
-| carriage width and depth | 160 mm x 120 mm | Plan size only. |
+| motor_centre_distance_mm | 266 mm | Layout pitch. The documented minimum is 170 mm. |
+| motor_to_carriage_gap_mm | 11 mm | Lateral gap from each motor envelope to the carriage block. |
+| carriage_width_mm | 90 mm | Derived from the pitch and the lateral gap. Not a measured plate. |
+| carriage_depth_mm | 120 mm | Plan size only. |
+| isolator_free_height_mm | 40 mm | Not in the height chain. Not a catalogue height. |
+| isolator_diameter_mm | 16 mm | Placeholder sized to the strip beside the 255 mm motor. |
+| rail_section_width_mm | 20 mm | Hiwin HGR20R published width WR. The solid is the envelope. |
+| rail_section_height_mm | 17.5 mm | Hiwin HGR20R published height HR. The solid is the envelope. |
+| runner_pitch_mm | 200 mm | Centre distance of the two HGH20CA blocks on one rail. Not in the BOM. |
+| head_front_gap_mm | 90 mm | Gap from the carriage plate to the vibrating plate. Keeps the rear rib clear of the bottom plate. |
+| nema42_body_length_mm | 180 mm | NEMA 42 body length. The 110 mm frame is documented. |
+| brake_length_mm | 40 mm | Envelope of VC-HB-3000. The catalogue number is unknown. |
+| coupling_diameter_mm | 65 mm | Envelope of VC-HB-2400. The bore pair is unknown. |
+| coupling_length_mm | 50 mm | Envelope of VC-HB-2400. The bore pair is unknown. |
+| pillow_length_mm | 30 mm | UCP 206 envelope along the shaft. The 30 mm bore is selected. |
+| pillow_width_mm | 70 mm | UCP 206 envelope. The housing outline was not downloaded. |
+| pillow_height_mm | 45 mm | UCP 206 envelope. The housing outline was not downloaded. |
+| chain_section_x_mm | 16 mm | Strand thickness. The pitch is 15.875 mm. The link CAD was not downloaded. |
+| chain_section_y_mm | 32 mm | Strand width for duplex 10B-2. The link CAD was not downloaded. |
+| rail_bottom_offset_mm | 100 mm | From the bottom of the profile to the bottom of the rail. |
+| rib_centre_x_mm | 170 mm | Weld position of VC-SH-1302 from the rod axis. |
+| shoe_passage_radial_clearance_mm | 1 mm | Layout bore in the bottom plate. The bore position is unknown. |
+| column_passage_radial_clearance_mm | 5 mm | Layout bore in the top plate. The bore position is unknown. |
+| string_axis_x_mm | 0 mm | Rod axis on the plates. Zero is the plate centre. |
+| string_axis_y_mm | 0 mm | Rod axis on the plates. Zero is the plate centre. |
 
-The stroke position along the profile is unknown.
-The sprocket diameters are unknown.
 The drawing puts the stroke and the profile on the same ground baseline.
 That comparison is a length comparison.
 It is not a located zone on the mast.
@@ -178,7 +218,92 @@ That thickness is not in the height sum.
 
 The bottom plate is drawn.
 The bottom plate is not a term in the seven-length sum.
-The string passes through the plate.
+The schematic study puts the string through the plate centre.
+The machine pose does not.
+The string hangs in front of the mast.
+
+## Assembly pose
+
+The study solid is `cad/export/step/VC-ASM-0000-layout.step`.
+It is not a BOM part.
+Do not manufacture from it.
+Each solid keeps its part number in the STEP name.
+FreeCAD 1.1 reads those names.
+The mast axis in the file is +Z.
+The reference directions do not use a negative zero.
+
+Each profile is yawed 90 degrees about its own vertical axis.
+The 100 mm side then lies along X.
+The 50 mm side lies along Y.
+The rail sits on the +X face.
+That face points at the rod.
+The rod axis is at X = 390 mm.
+That position comes from the TBD front gap.
+
+Four Hiwin HGH20CA blocks engage the two rails.
+The selected block is HGH20CA.
+H is 30 mm, W is 44 mm and L is 77.5 mm.
+The block pitch on one rail is 200 mm.
+That pitch is TBD.
+The guided travel is 1022.5 mm.
+`STROKE_POSITION_MM` is the travel of the lower block from the rail bottom.
+The start value is 1022.5 mm.
+That is the top of the travel.
+The upper block then ends on the rail top at 1415 mm.
+The same solids at stroke 0 and at 500 mm do not overlap.
+
+The chain lift is VC-ASM-2000, not the VC-ASM-8100 actuators.
+The NEMA 42 motor, the brake, the PLPE120 gearbox and the drive sprocket sit behind the bottom plate.
+The idle sprocket sits under the top plate.
+Two chain strands run between the pitch circles.
+One strand meets the carriage on a face.
+The sprocket envelope uses the published 83 mm tip diameter.
+The pitch radius is the documented 37.9 mm.
+The gearbox envelope is the published PLPE120 two-stage minimum, 120 mm by 219.5 mm.
+The NEMA 42 frame is 110 mm.
+The body length is TBD.
+
+Purchased-part STEP files were not downloaded.
+Each portal asked for an account.
+The solids above are catalogue envelopes.
+They are not vendor CAD.
+
+The shoe tip is at Z = -503.7 mm in the start pose.
+The head is on the rails.
+The string is longer than the distance down to the ground line.
+Ground clearance stays in the required height.
+It is not a shift of this pose.
+The required height is still 1761.2 mm.
+The deficit against the 1300 mm stroke is still 461.2 mm.
+
+The plates are stacked on the profile ends.
+The solids meet on a face.
+They do not share a volume.
+At the TBD pitch of 300 mm the profiles overhang the bottom plate by 25 mm.
+The top plate covers 0 mm of each profile.
+The 200 mm top plate does not reach the profiles after the yaw.
+
+Clearances below use that TBD pitch and the TBD front gap.
+Do not treat them as a measured fit.
+
+| Pair | Clearance | Note |
+|---|---|---|
+| Shoe to nearest profile | 542.1 mm | The shoe is in front of the mast. |
+| Casing to nearest profile | 321.0 mm | The casing is in front of the mast. |
+| Motor envelope to carriage | 6.5 mm | The strip beside the 255 mm motor. |
+| Motor to nearest profile | 130.0 mm | No collision. |
+| Motor to nearest rail | 113.2 mm | No collision. |
+| Vibrating plate to top plate | 428.6 mm | The head is in front of the mast. |
+| Carriage to chain strand | 0.0 mm | The lug meets the strand on a face. |
+
+No pair of part solids shares more than 1 mm³.
+The ground datum is not a part.
+
+The views are:
+
+- `cad/export/renders/VC-ASM-0000-layout-iso.png`
+- `cad/export/renders/VC-ASM-0000-layout-side.png`
+- `cad/export/renders/VC-ASM-0000-layout-top.png`
 
 ## Values Stefan must get
 
@@ -188,10 +313,14 @@ The string passes through the plate.
 4. Required ground clearance at the start of the stroke.
 5. Top margin for the sprocket, the chain and the upper limit switch.
 6. Column flange thickness.
-7. Isolator free height for VC-SH-1600. Confirm that the motors are taller than the isolators.
-8. Confirm that the 175 mm motor side is vertical.
-9. Usable stroke position between the plates.
-10. Centre distance of the two mast profiles. The shoe must pass between the profiles. The outside diameter 87.63 mm is known.
+7. Isolator free height and diameter for VC-SH-1600.
+8. Motor centre distance. The minimum is 170 mm. The 266 mm pitch is only a layout placeholder.
+9. Usable stroke. The model travel is 1022.5 mm because two 77.5 mm blocks sit 200 mm apart on the 1300 mm rail. The 200 mm pitch is TBD.
+10. Centre distance of the two mast profiles. The rod is in front of the rails. The 300 mm pitch is TBD.
+11. Front gap from the carriage plate to the vibrating plate. The model uses 90 mm so the rear rib clears the bottom plate.
+12. NEMA 42 catalogue number and body length. The frame is 110 mm. The model uses a TBD length of 180 mm.
+13. Brake catalogue number, coupling bores, pillow-block outline and chain-link section.
+14. Weld position of the two ribs VC-SH-1302.
 
 ## Options
 
@@ -230,6 +359,8 @@ The parameters are in `cad/models/mast_layout.py`.
 The sheet is `cad/export/layout/mast-stack.svg`.
 The same numbers are in `cad/export/layout/mast-stack.pdf`.
 The study solid is `cad/export/layout/mast-stack.step`.
-Do not manufacture from the STEP file.
+The machine pose is `cad/export/step/VC-ASM-0000-layout.step`.
+The views are in `cad/export/renders/`.
+Do not manufacture from the STEP files.
 `MAST-LAYOUT` is a document name.
 It is not a part number.
