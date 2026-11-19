@@ -1,5 +1,6 @@
 """plm-sync against a fake OdooPLM. No real Odoo process."""
 
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -162,7 +163,8 @@ def test_full_sync_is_idempotent_and_stays_draft(server):
     assert len(fake.records("product.product")) == len(bom.parts)
     assert len(fake.records("ir.attachment")) == len({row["engineering_code"] for row in fake.records("ir.attachment")})
     assert all(row["id"] != extra for row in fake.records("mrp.bom.line"))
-    assert len(fake.uploads) > uploads_after_first
+    assert len(fake.uploads) == uploads_after_first
+    assert "upload" not in {action.op for action in second.actions}
     assert "create" not in {action.op for action in second.actions}
     assert "skip-locked" not in {action.op for action in first.actions}
     assert all(method not in {"action_confirm", "action_release", "new_version"} for _model, method in fake.calls)
@@ -275,7 +277,159 @@ def test_online_dry_run_does_not_create(server):
     assert any(action.op == "create" and action.model == "product.product" for action in report.actions)
     text = report.text()
     assert "dry-run" in text
+    assert "upload=2" in text
+    uploads = [action for action in report.actions if action.op == "upload"]
+    assert len(uploads) == 2
+    assert all("reason=new" in action.detail for action in uploads)
+    assert any(action.model == "/plm_document_upload/upload" for action in uploads)
+    assert any(action.model == "/plm_document_upload/upload_pdf" for action in uploads)
     assert SECRET not in text
+
+
+def _connect(url, login=False):
+    config = PlmConfig.from_env(_env(url))
+    client = PlmClient(config)
+    client.authenticate()
+    if login:
+        client.isalive()
+        client.login_upload()
+    return client
+
+
+def test_unchanged_file_is_not_uploaded(server):
+    fake, url = server
+    _apply(url, part="VC-SH-1301")
+    document = fake.records("ir.attachment")[0]
+    assert document["checksum"] == hashlib.sha1(document["datas"]).hexdigest()
+    uploads = len(fake.uploads)
+    http = len(fake.http)
+    calls = len(fake.calls)
+    # The stored checksum is enough. Empty datas must not cause another upload.
+    document["datas"] = b""
+    dry = sync_bom(client=_connect(url), dry_run=True, part_number="VC-SH-1301")
+    assert document["datas"] == b""
+    assert not fake.uploads[uploads:]
+    assert not any(action.op == "upload" for action in dry.actions)
+    assert "upload=" not in dry.text()
+    assert {method for _model, method in fake.calls[calls:]} <= {"fields_get", "search_read", "read", "search"}
+    assert all(
+        path not in {"/plm_document_upload/upload", "/plm_document_upload/upload_pdf"}
+        for path in fake.http[http:]
+    )
+    document["datas"] = (Path(__file__).resolve().parents[1] / "cad/export/step/VC-SH-1301.step").read_bytes()
+    second = _apply(url, part="VC-SH-1301")
+    assert len(fake.uploads) == uploads
+    assert not any(action.op == "upload" for action in second.actions)
+    assert "upload=" not in second.text()
+
+
+def test_changed_file_is_uploaded(server, tmp_path: Path):
+    fake, url = server
+    _apply(url, part="VC-SH-1301")
+    uploads = len(fake.uploads)
+    step = tmp_path / "VC-SH-1301.step"
+    step.write_bytes(b"ISO-10303-21;\nchanged-step;\n")
+    dry = sync_bom(
+        client=_connect(url),
+        dry_run=True,
+        part_number="VC-SH-1301",
+        step_path=step,
+    )
+    assert len(fake.uploads) == uploads
+    planned = [action for action in dry.actions if action.op == "upload"]
+    assert len(planned) == 1
+    assert planned[0].model == "/plm_document_upload/upload"
+    assert "VC-SH-1301.step" in planned[0].detail
+    assert "reason=changed" in planned[0].detail
+    assert "upload=1" in dry.text()
+    assert "reason=new" not in dry.text()
+    applied = sync_bom(
+        client=_connect(url, login=True),
+        dry_run=False,
+        part_number="VC-SH-1301",
+        step_path=step,
+    )
+    new_uploads = fake.uploads[uploads:]
+    assert len(new_uploads) == 1
+    assert new_uploads[0]["field"] == "mod_file"
+    assert new_uploads[0]["content"] == step.read_bytes()
+    sent = [action for action in applied.actions if action.op == "upload"]
+    assert len(sent) == 1
+    assert "reason=changed" in sent[0].detail
+    assert sent[0].model == "/plm_document_upload/upload"
+
+
+def test_printout_checksum_skips_unchanged_pdf(server, tmp_path: Path):
+    fake, url = server
+    _apply(url, part="VC-SH-1301")
+    document = next(row for row in fake.records("ir.attachment") if row.get("is_plm"))
+    pdf = document["printout"]
+    fake._store_printout(document, pdf)
+    document["printout"] = b""
+    uploads = len(fake.uploads)
+    reads = len(fake.binary_reads)
+    report = _apply(url, part="VC-SH-1301")
+    assert len(fake.uploads) == uploads
+    assert not any(action.op == "upload" for action in report.actions)
+    assert document["printout"] == b""
+    assert not [item for item in fake.binary_reads[reads:] if item[0] == "printout" and not item[1]]
+    changed = tmp_path / "plate.pdf"
+    changed.write_bytes(b"%PDF-1.4\nchanged-printout\n")
+    dry = sync_bom(
+        client=_connect(url),
+        dry_run=True,
+        part_number="VC-SH-1301",
+        pdf_path=changed,
+    )
+    planned = [action for action in dry.actions if action.op == "upload"]
+    assert len(planned) == 1
+    assert planned[0].model == "/plm_document_upload/upload_pdf"
+    assert "reason=changed" in planned[0].detail
+    assert "upload=1" in dry.text()
+
+
+def test_large_printout_without_checksum_is_not_reread_when_datas_matches(server):
+    fake, url = server
+    _apply(url, part="VC-SH-1301")
+    document = next(row for row in fake.records("ir.attachment") if row.get("is_plm"))
+    storage_id = fake._create(
+        "ir.attachment",
+        {
+            "name": "printout",
+            "res_model": "ir.attachment",
+            "res_field": "printout",
+            "res_id": document["id"],
+            "file_size": 50 * 1024 * 1024,
+            "checksum": False,
+            "type": "binary",
+        },
+    )
+    assert storage_id
+    uploads = len(fake.uploads)
+    reads = len(fake.binary_reads)
+    report = sync_bom(client=_connect(url), dry_run=True, part_number="VC-SH-1301")
+    assert len(fake.uploads) == uploads
+    assert not any(action.op == "upload" for action in report.actions)
+    assert not [item for item in fake.binary_reads[reads:] if item[0] == "printout"]
+
+
+def test_weight_within_field_digits_is_unchanged(server):
+    fake, url = server
+    fake.field_meta["product.product"] = {
+        "weight": {"string": "Weight", "type": "float", "digits": [16, 2]},
+    }
+    _apply(url, part="VC-SH-1301")
+    product = fake.records("product.product")[0]
+    # Odoo stores Stock Weight with 2 decimals. The YAML value is 19.782 kg.
+    product["weight"] = 19.78
+    report = _apply(url, part="VC-SH-1301")
+    assert product["weight"] == 19.78
+    assert any(action.op == "unchanged" and action.model == "product.product" for action in report.actions)
+    assert not any(action.op == "update" and action.model == "product.product" for action in report.actions)
+    product["weight"] = 19.70
+    changed = _apply(url, part="VC-SH-1301")
+    assert any(action.op == "update" and action.model == "product.product" for action in changed.actions)
+    assert product["weight"] == 19.78
 
 
 def test_dry_run_plans_adr_links(monkeypatch, capsys):

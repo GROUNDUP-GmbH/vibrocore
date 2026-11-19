@@ -208,6 +208,22 @@ again after a YAML change: the same code and revision are updated, not
 inserted a second time. An engineering BOM line that is no longer in the YAML
 is removed. A second engineering BOM for the same product is not created.
 
+Before an upload, the command reads the attachment.
+It uses `fields_get` and `read` for `checksum` and `file_size`.
+`checksum` is the SHA1 value of `datas`.
+The command uploads the local file when the attachment has no file.
+The command uploads the local file when the checksum differs.
+The command leaves the file in place when the checksum matches.
+The PDF printout can have its own stored file.
+The command uses the checksum of that file when the checksum is present.
+When the printout has no checksum and the file is at most 1 MB, the command reads the bytes and compares the SHA1 value.
+When the printout has no checksum and the file is larger than 1 MB, the command leaves the printout in place when `datas` is unchanged.
+A dry run reports `upload=N` for the files it will send.
+Each upload line gives the file name and the reason `new` or `changed`.
+Float fields use the decimal count from `fields_get`. `weight` is the example.
+The command reports the field as unchanged when the stored value and the YAML value are equal at that precision.
+The command rounds the YAML value to that precision before a write.
+
 The command does not install modules and it does not edit
 `file_exte_type_rel_3D`. Until section 2 is done, a stored `VC-SH-1301.step`
 keeps `document_type` `other`. Leave `plm_auto_internalref` uninstalled, or
@@ -245,6 +261,7 @@ Check afterwards, still on the test database:
    A, state draft. A second `--apply` does not add another.
 2. One `ir.attachment` for that code and revision, `is_plm` set. `datas` is
    the STEP (it starts as a STEP file) and `printout` is the drawing PDF.
+   A second `--apply` does not upload a file when the checksum matches.
 3. `plm.component.document.rel` links that product to that document.
 4. `VC-ASM-1000` has one `mrp.bom` with `type` `ebom`. Line `itemnum` matches
    the drawing balloons. There is no `normal` BOM yet, because nothing was
@@ -287,7 +304,8 @@ Procedure:
 4. The command creates or updates one `ir.attachment` with
    `engineering_code = ADR-0001`, `engineering_revision = 0`,
    `engineering_state = draft`, and `is_plm = true`.
-5. The command uploads the file bytes with `/plm_document_upload/upload`.
+5. The command uploads the file bytes with `/plm_document_upload/upload`
+   when the file is new or the checksum differs.
 6. The command links the document to each listed part through
    `product.product.linkeddocuments` (Many2many write `(4, doc_id)`). This is
    the same path as CAD document links. The command does not call
