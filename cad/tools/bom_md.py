@@ -26,6 +26,7 @@ REQUIRED_ITEM_POSITIONS = (
     [str(n) for n in list(range(1, 9)) + list(range(17, 65))]
     + ["47b", "48b"]
     + [str(n) for n in range(70, 96)]
+    + [str(n) for n in range(96, 110)]
 )
 
 # Fixed part anchors used by firmware / V1.1 docs.
@@ -158,18 +159,19 @@ def live_qty(bom: BillOfMaterials, part_number: str) -> float:
 
 
 def _pick_part(pos: str, refs: list[tuple[str, str | None]], bom: BillOfMaterials) -> str | None:
+    """Pick the YAML part that the first BOM.md row for this number describes.
+
+    Reused numbers (56-63) prefer section 5. An inactive preferred part stays
+    selected so a later section cannot take over the quantity check.
+    """
     preferred_section = PREFERRED_SECTION_FOR_REUSED.get(pos)
-    active = [
-        (pn, section)
-        for pn, section in refs
-        if bom.part(pn).is_active
-        and (preferred_section is None or section == preferred_section)
-    ]
-    if not active and preferred_section is not None:
-        # Fall back if the preferred section part is inactive.
-        active = [(pn, section) for pn, section in refs if bom.part(pn).is_active]
+    if preferred_section is not None:
+        preferred = [pn for pn, section in refs if section == preferred_section]
+        if len(preferred) == 1:
+            return preferred[0]
+    active = [pn for pn, _section in refs if bom.part(pn).is_active]
     if len(active) == 1:
-        return active[0][0]
+        return active[0]
     if pos in ANCHORS:
         for pn, _section in refs:
             if pn == ANCHORS[pos]:
@@ -224,6 +226,17 @@ def compare_bom_md_and_yaml(
 
         part = bom.part(pn)
         if not part.is_active:
+            # Option B lines stay in BOM.md with a quantity, but they are not on the live BOM.
+            if part.lifecycle == "alternative":
+                if live_qty(bom, pn) != 0:
+                    errors.append(f"position {pos} ({pn}): alternative part must have live qty 0")
+                continue
+            if live_qty(bom, pn) != 0:
+                errors.append(f"position {pos} ({pn}): inactive part must have live qty 0")
+            if md.qty not in (None, 0.0):
+                errors.append(
+                    f"position {pos} ({pn}): inactive part must have BOM.md qty 0, got {md.raw_qty}"
+                )
             continue
         yaml_qty = live_qty(bom, pn)
         if md.qty is None:

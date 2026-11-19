@@ -1,6 +1,7 @@
 id,name,is_company,supplier_rank,website,country_id/id,comment
 vibrocore.partner_custom_eu,Custom fabrication (EU),1,1,,,"Placeholder partner, not a vendor master record. Replace before purchasing."
 vibrocore.partner_geoprobe,Geoprobe Systems,1,1,https://geoprobe.com,base.us,
+vibrocore.partner_geoprobe_eu,Geoprobe Environmental Technologies S.A.,1,1,,base.be,"Seller on offer 26100096, dated 2026-03-03, Braine-le-Comte, Belgium. Prices are EUR net and exclude freight."
 vibrocore.partner_instagrid,instagrid,1,1,https://instagrid.co,base.de,Purchase price is on the product. Rental is a separate commercial decision.
 vibrocore.partner_lapp,Lapp,1,1,https://www.lappkabel.de,base.de,
 vibrocore.partner_meanwell,Mean Well,1,1,https://www.meanwell.com,base.tw,

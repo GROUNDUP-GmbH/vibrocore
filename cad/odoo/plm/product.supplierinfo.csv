@@ -22,10 +22,12 @@ vibrocore.seller_vc_fr_4300,vibrocore.product_vc_fr_4300,vibrocore.partner_custo
 vibrocore.seller_vc_fr_4400,vibrocore.product_vc_fr_4400,vibrocore.partner_custom_eu,1.0,50.00,base.EUR,
 vibrocore.seller_vc_fr_4500,vibrocore.product_vc_fr_4500,vibrocore.partner_custom_eu,1.0,20.00,base.EUR,
 vibrocore.seller_vc_fr_4600,vibrocore.product_vc_fr_4600,vibrocore.partner_custom_eu,1.0,15.00,base.EUR,
-vibrocore.seller_vc_gp_7100,vibrocore.product_vc_gp_7100,vibrocore.partner_geoprobe,1.0,400.00,base.EUR,201446
-vibrocore.seller_vc_gp_7200,vibrocore.product_vc_gp_7200,vibrocore.partner_geoprobe,1.0,50.00,base.EUR,205449
-vibrocore.seller_vc_gp_7300,vibrocore.product_vc_gp_7300,vibrocore.partner_geoprobe,1.0,100.00,base.EUR,201275
-vibrocore.seller_vc_gp_7400,vibrocore.product_vc_gp_7400,vibrocore.partner_geoprobe,1.0,3.00,base.EUR,
+vibrocore.seller_vc_gp_7100,vibrocore.product_vc_gp_7100,vibrocore.partner_geoprobe_eu,1.0,389.99,base.EUR,201446
+vibrocore.seller_vc_gp_7150,vibrocore.product_vc_gp_7150,vibrocore.partner_geoprobe_eu,1.0,24.75,base.EUR,201325
+vibrocore.seller_vc_gp_7200,vibrocore.product_vc_gp_7200,vibrocore.partner_geoprobe_eu,1.0,300.78,base.EUR,205449
+vibrocore.seller_vc_gp_7300,vibrocore.product_vc_gp_7300,vibrocore.partner_geoprobe_eu,1.0,586.47,base.EUR,201275
+vibrocore.seller_vc_gp_7310,vibrocore.product_vc_gp_7310,vibrocore.partner_geoprobe_eu,1.0,171.34,base.EUR,201385
+vibrocore.seller_vc_gp_7410,vibrocore.product_vc_gp_7410,vibrocore.partner_geoprobe_eu,1.0,161.93,base.EUR,208472
 vibrocore.seller_vc_hb_2200,vibrocore.product_vc_hb_2200,vibrocore.partner_neugart,1.0,600.00,base.EUR,PLPE120-040
 vibrocore.seller_vc_hb_2500,vibrocore.product_vc_hb_2500,vibrocore.partner_custom_eu,1.0,30.00,base.EUR,
 vibrocore.seller_vc_hb_3200,vibrocore.product_vc_hb_3200,vibrocore.partner_custom_eu,1.0,80.00,base.EUR,

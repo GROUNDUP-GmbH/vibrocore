@@ -377,27 +377,25 @@ database if you want the real server in the loop. The mocked tests in
 These change the BOM, so they belong in the YAML before another import, not as
 silent edits in Odoo:
 
-- Close the 48 V supply conflict (BOM: 10 A, control diagram: Mean Well
-  SDR-75-48 at 1.6 A) before anyone orders.
+- The 48 V supply is closed. Order Mean Well SDR-480-48. Do not order SDR-75-48.
+  The EUR price is still unknown.
 - Freeze the VFD, the stepper driver, the coupling, the brake and the
   isolator catalogue numbers. The YAML lists candidates and does not pick one
   where the source document doesn't.
 - Motor pitch is only "at least 170 mm". Isolator coordinates, flange
   thickness, PCD, carriage size, shaft length and the DT325 thread are unknown.
   No holes were modelled.
-- Confirm the 200 × 150 × 80 mm enclosure cannot hold the WAGO rack. The note
-  is on `VC-CT-6300`.
-- Decide whether `VC-CT-6410` (SE050 breakout) is already inside `VC-CT-6400`.
+- `VC-CT-6300` no longer uses 200 x 150 x 80 mm. The order code is still unknown
+  because the VFD size is unknown.
+- `VC-CT-6410` is obsolete. The SE050 breakout stays inside `VC-CT-6400`.
 - Decide whether the WLAN bridge and the ESP32-C3 wallet are one board.
 - Instagrid rental versus the EUR 2500 purchase line.
 - Map `purchase_ok` / manufacturing routes onto the real warehouse. Routes are
   not in the CSV, because `mrp.route_warehouse0_manufacture` depends on the
   warehouse xml id of that database.
 - Fastener kits are not exploded. Buy them as kits or replace the lines.
-- The two GPS rows in BOM.md section 7 were not imported. See
-  `positioning-gps-duplicate` in the YAML.
-- Core scanner §8d line subtotal (about EUR 363–650) still differs from the
-  §8e rollup table (EUR 388–710). See `core-scanner-subtotal-mismatch`.
+- The duplicate GPS rows are removed from BOM.md section 7.
+- Scanner and control subtotals now follow the YAML rollups.
 - Option A versus Option B (RevPi) remains a commercial choice. RevPi parts
   stay `lifecycle: alternative` and are not on the Option A control BOM.
 

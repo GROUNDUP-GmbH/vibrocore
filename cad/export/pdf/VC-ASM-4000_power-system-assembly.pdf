@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 778 >>
+<< /Length 943 >>
 stream
 BT
 /F1 11 Tf
@@ -19,7 +19,7 @@ BT
 T*
 (1  VC-PW-5100  rev A  qty 1  Instagrid ONE max) Tj
 T*
-(2  VC-PW-5200  rev A  qty 1  DIN-rail supply 48 V 10 A) Tj
+(2  VC-PW-5200  rev A  qty 1  Mean Well SDR-480-48) Tj
 T*
 (3  VC-PW-5310  rev A  qty 1  Mean Well SDR-120-24) Tj
 T*
@@ -28,6 +28,12 @@ T*
 (5  VC-PW-5500  rev A  qty 1  Power distribution kit) Tj
 T*
 (6  VC-PW-5600  rev A  qty 1  Power cable set) Tj
+T*
+(7  VC-PW-5700  rev A  qty 1  Main isolator) Tj
+T*
+(8  VC-PW-5710  rev A  qty 1  Line circuit breaker) Tj
+T*
+(9  VC-PW-5720  rev A  qty 1  Residual current device) Tj
 T*
 (Owner: Ground UP GmbH) Tj
 T*
@@ -58,8 +64,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000001077 00000 n 
+0000001242 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-1147
+1312
 %%EOF

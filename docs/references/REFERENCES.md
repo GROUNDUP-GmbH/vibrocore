@@ -40,11 +40,15 @@
 
 ### Core Sampling Equipment
 
-5. **Geoprobe Systems** — DT325 Direct Push System.
-   https://geoprobe.com/
-   - 3.25" × 48" Probe Rod (PN: 201446) — 35.4 kg/pair
-   - DT325 Cutting Shoe (PN: 205449)
-   - 3.25" Drive Cap GH60 (PN: 201275)
+5. **Geoprobe Environmental Technologies S.A.** — offer 26100096, 2026-03-03.
+   Seller in Braine-le-Comte, Belgium. Prices are EUR net and exclude freight.
+   - Probe rod 3.25 in x 48 in (PN 201446) — one rod, 17.7 kg, EUR 389.99
+   - Inside diameter used for the carrier: 2.625 in = 66.675 mm (decision 2026-11-19)
+   - Cutting shoe (PN 205449) — EUR 300.78, outside diameter 3.45 in = 87.63 mm
+   - O-rings (PN 201325, pack of 25) — EUR 24.75. Geoprobe name: O-Ring (3.25 in. Probe Rod). On the kit.
+   - Drive head (PN 201385) — EUR 171.34. Geoprobe name: DT325 Drive Head, 1.25 in pin. Obsolete. Not on a BOM.
+   - Liner retainer HD (PN 208472) — EUR 161.93. Geoprobe name: DT325 Retainer HD. Obsolete. Not on a BOM.
+   - Drive cap GH60 (PN 201275) — EUR 586.47, obsolete, not on the kit
 
 ## Related Open-Source Projects
 

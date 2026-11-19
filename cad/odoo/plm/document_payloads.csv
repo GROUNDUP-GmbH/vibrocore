@@ -13,10 +13,12 @@ VC-ASM-8400,0,vibrocore.doc_vc_asm_8400,cad/export/pdf/VC-ASM-8400_core-scanner-
 VC-FR-4100,0,vibrocore.doc_vc_fr_4100,cad/export/step/VC-FR-4100.step,cad/export/pdf/VC-FR-4100_aluminium-profile-50x100x1500.pdf,cad/drawings/VC-FR-4100_aluminium-profile-50x100x1500.svg,envelope
 VC-FR-4300,0,vibrocore.doc_vc_fr_4300,cad/export/step/VC-FR-4300.step,cad/export/pdf/VC-FR-4300_bottom-steel-plate.pdf,cad/drawings/VC-FR-4300_bottom-steel-plate.svg,partial
 VC-FR-4400,0,vibrocore.doc_vc_fr_4400,cad/export/step/VC-FR-4400.step,cad/export/pdf/VC-FR-4400_top-steel-plate.pdf,cad/drawings/VC-FR-4400_top-steel-plate.svg,partial
-VC-KIT-6000,0,vibrocore.doc_vc_kit_6000,cad/export/pdf/VC-KIT-6000_dt325-sampling-kit.pdf,cad/export/pdf/VC-KIT-6000_dt325-sampling-kit.pdf,cad/drawings/VC-KIT-6000_dt325-sampling-kit.svg,schematic
+VC-KIT-6000,0,vibrocore.doc_vc_kit_6000,cad/export/pdf/VC-KIT-6000_casing-sampling-kit.pdf,cad/export/pdf/VC-KIT-6000_casing-sampling-kit.pdf,cad/drawings/VC-KIT-6000_casing-sampling-kit.svg,schematic
 VC-KIT-7000,0,vibrocore.doc_vc_kit_7000,cad/export/pdf/VC-KIT-7000_positioning-kit.pdf,cad/export/pdf/VC-KIT-7000_positioning-kit.pdf,cad/drawings/VC-KIT-7000_positioning-kit.svg,schematic
 VC-SH-1100,0,vibrocore.doc_vc_sh_1100,cad/export/step/VC-SH-1100.step,cad/export/pdf/VC-SH-1100_oli-mve-400-6-hf.pdf,cad/drawings/VC-SH-1100_oli-mve-400-6-hf.svg,envelope
 VC-SH-1300,0,vibrocore.doc_vc_sh_1300,cad/export/pdf/VC-SH-1300_vibrating-plate-weldment.pdf,cad/export/pdf/VC-SH-1300_vibrating-plate-weldment.pdf,cad/drawings/VC-SH-1300_vibrating-plate-weldment.svg,schematic
 VC-SH-1301,0,vibrocore.doc_vc_sh_1301,cad/export/step/VC-SH-1301.step,cad/export/pdf/VC-SH-1301_vibrating-plate-blank.pdf,cad/drawings/VC-SH-1301_vibrating-plate-blank.svg,partial
 VC-SH-1302,0,vibrocore.doc_vc_sh_1302,cad/export/step/VC-SH-1302.step,cad/export/pdf/VC-SH-1302_stiffener-rib.pdf,cad/drawings/VC-SH-1302_stiffener-rib.svg,solid
 VC-SH-1400,0,vibrocore.doc_vc_sh_1400,cad/export/step/VC-SH-1400.step,cad/export/pdf/VC-SH-1400_center-column.pdf,cad/drawings/VC-SH-1400_center-column.svg,partial
+VC-SP-7620,0,vibrocore.doc_vc_sp_7620,cad/export/step/VC-SP-7620.step,cad/export/pdf/VC-SP-7620_split-carrier-half-a.pdf,cad/drawings/VC-SP-7620_split-carrier-half-a.svg,partial
+VC-SP-7621,0,vibrocore.doc_vc_sp_7621,cad/export/step/VC-SP-7621.step,cad/export/pdf/VC-SP-7621_split-carrier-half-b.pdf,cad/drawings/VC-SP-7621_split-carrier-half-b.svg,partial

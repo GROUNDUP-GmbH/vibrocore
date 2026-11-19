@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 661 >>
+<< /Length 724 >>
 stream
 BT
 /F1 11 Tf
@@ -24,6 +24,8 @@ T*
 (3  VC-PN-9320  rev A  qty 1  Modbus RTU ADC 4-20 mA) Tj
 T*
 (4  VC-PN-9330  rev A  qty 1  Penetrometer inline adapter) Tj
+T*
+(5  VC-PN-9340  rev A  qty 1  Load-cell overload bypass) Tj
 T*
 (Owner: Ground UP GmbH) Tj
 T*
@@ -54,8 +56,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000000960 00000 n 
+0000001023 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-1030
+1093
 %%EOF

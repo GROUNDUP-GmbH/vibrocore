@@ -12,6 +12,7 @@
 <text x="20" y="51.2" font-size="2.8" font-family="sans-serif">2      VC-PN-9310     A    1    4-20 mA transmitter</text>
 <text x="20" y="55.400000000000006" font-size="2.8" font-family="sans-serif">3      VC-PN-9320     A    1    Modbus RTU ADC 4-20 mA</text>
 <text x="20" y="59.60000000000001" font-size="2.8" font-family="sans-serif">4      VC-PN-9330     A    1    Penetrometer inline adapter</text>
+<text x="20" y="63.80000000000001" font-size="2.8" font-family="sans-serif">5      VC-PN-9340     A    1    Load-cell overload bypass</text>
 <text x="20" y="244" font-size="3" font-family="sans-serif">Schematic only. Component positions that are not dimensioned in the design documents are not drawn.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>

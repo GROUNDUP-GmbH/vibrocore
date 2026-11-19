@@ -17,14 +17,14 @@
 <text x="20" y="72.20000000000002" font-size="2.8" font-family="sans-serif">7      VC-CT-6200     A    2    Inductive limit switch</text>
 <text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-CT-6210     A    1    Emergency stop</text>
 <text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-CT-6220     A    1    Safety relay</text>
-<text x="20" y="84.80000000000003" font-size="2.8" font-family="sans-serif">10     VC-CT-6300     A    1    Control enclosure</text>
-<text x="20" y="89.00000000000003" font-size="2.8" font-family="sans-serif">11     VC-CT-6400     A    1    RDDL trust wallet</text>
-<text x="20" y="93.20000000000003" font-size="2.8" font-family="sans-serif">12     VC-CT-6410     A    1    SE050 breakout</text>
-<text x="20" y="97.40000000000003" font-size="2.8" font-family="sans-serif">13     VC-CT-6500     A    1    GPS antenna u-blox ANN-MB</text>
-<text x="20" y="101.60000000000004" font-size="2.8" font-family="sans-serif">14     VC-CT-6510     A    1    GPS receiver u-blox ZED-F9P</text>
-<text x="20" y="105.80000000000004" font-size="2.8" font-family="sans-serif">15     VC-CT-6600     A    1    Teltonika RUT241</text>
-<text x="20" y="110.00000000000004" font-size="2.8" font-family="sans-serif">16     VC-CT-6610     A    1    LTE SIM data plan</text>
-<text x="20" y="114.20000000000005" font-size="2.8" font-family="sans-serif">17     VC-CT-6620     A    1    DC converter 24 V to 9 V</text>
+<text x="20" y="84.80000000000003" font-size="2.8" font-family="sans-serif">10     VC-CT-6230     A    1    Warning beacon</text>
+<text x="20" y="89.00000000000003" font-size="2.8" font-family="sans-serif">11     VC-CT-6240     A    1    Operator tablet</text>
+<text x="20" y="93.20000000000003" font-size="2.8" font-family="sans-serif">12     VC-CT-6300     A    1    Control enclosure</text>
+<text x="20" y="97.40000000000003" font-size="2.8" font-family="sans-serif">13     VC-CT-6400     A    1    RDDL trust wallet</text>
+<text x="20" y="101.60000000000004" font-size="2.8" font-family="sans-serif">14     VC-CT-6500     A    1    GPS antenna u-blox ANN-MB</text>
+<text x="20" y="105.80000000000004" font-size="2.8" font-family="sans-serif">15     VC-CT-6510     A    1    GPS receiver u-blox ZED-F9P</text>
+<text x="20" y="110.00000000000004" font-size="2.8" font-family="sans-serif">16     VC-CT-6600     A    1    Teltonika RUT241</text>
+<text x="20" y="114.20000000000005" font-size="2.8" font-family="sans-serif">17     VC-CT-6610     A    1    LTE SIM data plan</text>
 <text x="20" y="118.40000000000005" font-size="2.8" font-family="sans-serif">18     VC-CT-6700     A    1    Wiring harness</text>
 <text x="20" y="244" font-size="3" font-family="sans-serif">Schematic only. Component positions that are not dimensioned in the design documents are not drawn.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>

@@ -59,6 +59,11 @@ suppliers:
   name: Geoprobe Systems
   country_xml: base.us
   website: https://geoprobe.com
+- id: geoprobe_eu
+  name: Geoprobe Environmental Technologies S.A.
+  country_xml: base.be
+  comment: Seller on offer 26100096, dated 2026-03-03, Braine-le-Comte, Belgium. Prices are EUR net
+    and exclude freight.
 - id: pix4d
   name: Pix4D
   country_xml: base.ch
@@ -98,21 +103,20 @@ data_issues:
   summary: BOM.md skips rows 9-16 and reuses rows 56-63 in Control, Geoprobe and Positioning. legacy_ref
     is section.row.
 - id: control-subtotal-mismatch
-  summary: Control line estimates sum to EUR 1515-2420. BOM.md prints 1475-2610 in the section and 1345-2220
-    in the summary. Line estimates are kept.
+  summary: Closed 2026-11-19. BOM.md control, power and scanner totals are the YAML rollups. The old prints
+    1475-2610, 1345-2220, 363-650 and 388-710 are withdrawn.
 - id: positioning-gps-duplicate
-  summary: Section 7 items 61-62 repeat the GPS antenna and ZED-F9P of section 5 items 59-60. One of each
-    is kept on the control BOM. The positioning kit is viDoc plus the WLAN bridge. The published positioning
-    subtotal is EUR 200-350 higher, which matches that duplicate pair.
+  summary: Closed 2026-11-19. BOM.md section 7 no longer repeats the GPS antenna and the ZED-F9P. One of
+    each stays on the control BOM. The positioning kit is viDoc plus the WLAN bridge.
 - id: power-psu-conflict
-  summary: BOM.md specifies 48 V / 10 A. CONTROL_SYSTEM.md draws Mean Well SDR-75-48 at 1.6 A. The part
-    follows the BOM text and does not take the diagram order code.
+  summary: Closed 2026-11-19. VC-PW-5200 is Mean Well SDR-480-48, 48 V, 10 A, 480 W. SDR-75-48 is 1.6 A
+    and is not the order code. The EUR price of SDR-480-48 is unknown.
 - id: dc-converter-candidate
   summary: CONTROL_SYSTEM.md previously named Mean Well DDR-60D-24. V1.1 BOM.md §8b upgrades to Mean Well
     SDR-120-24 (120 W / 5 A). VC-PW-5300 is retained as superseded history; VC-PW-5310 is the live line.
 - id: plc-name-in-dimensioning
-  summary: DIMENSIONING.md section 9 still says CONTROLLINO or Arduino Opta. The later BOM and CONTROL_SYSTEM.md
-    specify the WAGO PFC200 XTR.
+  summary: Closed 2026-11-19. DIMENSIONING.md names the WAGO PFC200 XTR. CONTROLLINO and Arduino Opta are
+    not the controller.
 - id: instagrid-rental
   summary: The power rollup uses the EUR 2500 purchase price. BOM.md's low scenario is a rental and is
     not a stock component.
@@ -124,11 +128,23 @@ data_issues:
     firmware drives the electric tilt. VC-FR-4700 is obsolete/alternative and is not on the live frame
     BOM.'
 - id: option-b-savings-v1-vs-v11
-  summary: 'Realistic budget: Option B is EUR 530 less than Option A for V1 (8660-8130) and EUR 680 less
-    for V1.1 (10410-9730). Both figures are correct for their column; the note must name the baseline.'
+  summary: 'Realistic budget is a rounded scenario, not the YAML rollup. Option B is EUR 530 less than
+    Option A for V1 (8968-8438) and EUR 680 less for V1.1 (10718-10038).'
 - id: core-scanner-subtotal-mismatch
-  summary: BOM.md §8d line estimates sum near EUR 363-650; the §8e rollup table prints 388-710. Line estimates
-    in the YAML follow the item table.
+  summary: Closed 2026-11-19. The scanner subtotal is the VC-ASM-8400 rollup, EUR 429-780.
+- id: sampling-concept-2026-11-19
+  summary: The sampling string is the 3.25 in outer casing and cutting shoe 205449. Open tubes sit in
+    the split carrier. O-ring 201325 stays, because it seals casing joints. Drive head 201385 and
+    retainer 208472 are obsolete and are not on a BOM.
+- id: mast-height-deficit
+  summary: The 1500 mm mast does not show a fit for the 1219.2 mm rod plus the head, the shoe and the adapter.
+    Shoe length and adapter length are unknown. The profile length is unchanged.
+- id: se050-double-count
+  summary: Closed 2026-11-19. VC-CT-6410 is obsolete. The SE050 breakout is inside VC-CT-6400 and is not a
+    second purchase.
+- id: rut241-9v-converter
+  summary: Closed 2026-11-19. VC-CT-6620 is obsolete. The RUT241 input is 9-30 V DC. The router runs from
+    the 24 V rail.
 parts:
 - part_number: VC-ASM-0000
   name: Vibrocore V1.1
@@ -137,8 +153,9 @@ parts:
   supply: assemble
   subsystem: machine
   category: Assemblies
-  spec: Compact electric sonic vibro-corer for DT325 core tubes. Saleable machine, engineering revision
-    0, field-ready V1.1 with lift, tilt, penetrometer and core scanner.
+  spec: Compact electric sonic vibro-corer. The tool drives a 3.25 in casing. Sample tubes are a lab
+    consumable and are not on this BOM. Engineering revision 0. Field-ready V1.1 adds lift, tilt, penetrometer
+    and core scanner.
   legacy_ref: product
   sale_ok: true
   unknowns:
@@ -252,7 +269,7 @@ parts:
   supply: assemble
   subsystem: core_scanner
   category: Assemblies
-  spec: Camera sled that photographs through an intact polycarbonate liner. Host is Raspberry Pi 4; not
+  spec: Camera sled for one sample tube. Tube wall clarity is not confirmed. Host is Raspberry Pi 4; not
     a Raspberry Pi Zero 2W.
   legacy_ref: 8d
   lifecycle: active
@@ -277,7 +294,7 @@ parts:
   supply: purchase
   subsystem: core_scanner
   category: Core Scanner
-  spec: 12.3 MP CSI-2 camera for colour through the polycarbonate liner.
+  spec: 12.3 MP CSI-2 camera. Through-wall colour is not confirmed until the tube is known.
   legacy_ref: '8.81'
   supplier_id: raspberrypi
   estimate_eur_low: 50
@@ -363,11 +380,17 @@ parts:
   supply: subcontract
   subsystem: core_scanner
   category: Core Scanner
-  spec: Diameter 82.6 mm round cradle, matte black, 1300 mm, splits for transport.
+  spec: V-cradle for one open sample tube. The opening follows the tube outside diameter. That diameter
+    is TBD. Do not use 82.6 mm. That figure was the casing outside diameter. The tube is a lab consumable
+    and is not a BOM line. Colour of the tube wall is not confirmed, so do not plan a through-wall scan
+    until RadicleLab confirms the tube.
   legacy_ref: '8.88'
   supplier_id: custom_eu
   estimate_eur_low: 25
   estimate_eur_high: 50
+  unknowns:
+  - Tube outside diameter is TBD. The cradle opening cannot be cut until that value is known.
+  - Cradle length stays 1300 mm only as the previous transport length. Confirm it against the real tube length.
   lifecycle: active
 - part_number: VC-CS-9490
   name: LED strip daylight CRI 97
@@ -573,6 +596,36 @@ parts:
   estimate_eur_low: 80
   estimate_eur_high: 130
   notes: PNOZ m B0 is a candidate, not a frozen order.
+- part_number: VC-CT-6230
+  name: Warning beacon
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: 24 V DC beacon. Firmware output xAlarmBeacon at %QX0.3 drives it. The 750-530 channel is rated
+    0.5 A. Beacon current must be 0.5 A or less.
+  legacy_ref: '5.103'
+  unknowns:
+  - Order code is unknown.
+  - Price is unknown.
+  - Steady or flashing pattern is not selected.
+  notes: The output exists in GVL_IO and PRG_Main. The beacon was missing from the BOM.
+- part_number: VC-CT-6240
+  name: Operator tablet
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: Tablet for the operator HMI. The HMI is a web page on the WLAN of the Teltonika RUT241.
+  legacy_ref: '5.104'
+  unknowns:
+  - Screen size is unknown.
+  - Ingress protection is unknown.
+  - Order code is unknown.
+  - Price is unknown.
+  notes: ARCHITECTURE.md names a tablet or HMI via WLAN. No catalogue tablet is selected.
 - part_number: VC-CT-6300
   name: Control enclosure
   revision_index: 0
@@ -580,15 +633,19 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: IP65 enclosure with DIN rail, 200 x 150 x 80 mm.
+  spec: IP65 enclosure with a DIN rail. The size 200 x 150 x 80 mm is withdrawn. Mean Well SDR-480-48
+    is 128.5 mm deep. The old depth is 80 mm, so the supply does not fit. WAGO 750-8212 is 78.6 x 100
+    x 71.9 mm. The VFD size is unknown. Do not order an enclosure until the VFD order code is known.
   legacy_ref: '5.56'
-  estimate_eur_low: 40
-  estimate_eur_high: 80
-  notes: Rittal or Spelsberg. The 200 x 150 x 80 mm size is unlikely to hold the PFC200 rack, the VFD
-    and the driver together.
   unknowns:
-  - Confirm the enclosure actually fits the WAGO rack and the VFD. Do not treat 200 x 150 x 80 mm as a
-    checked layout.
+  - VFD envelope is unknown, so internal width and height are unknown.
+  - Order code is unknown.
+  - Price is unknown.
+  - Only the 750-430 width (12 mm) was verified. The other module widths were not summed.
+  notes: 'Sources: https://www.meanwell.com/Upload/PDF/SDR-480/SDR-480-SPEC.PDF and
+    https://www.wago.com/wagoweb/documentation/750/eng_dat/d07508212_00400000_0en.pdf and
+    https://www.wago.com/wagoweb/documentation/750/eng_manu/modules/m07500430_00xx0000_0en.pdf.
+    Mean Well also asks for 40 mm above the supply, 20 mm below it, and 5 mm at each side.'
 - part_number: VC-CT-6400
   name: RDDL trust wallet
   revision_index: 0
@@ -608,12 +665,14 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: NXP OM-SE050ARD or a compatible SE050 breakout.
+  spec: NXP OM-SE050ARD or a compatible SE050 breakout. Not a separate purchase.
   legacy_ref: '5.58'
   manufacturer_pn: OM-SE050ARD
   estimate_eur_low: 20
   estimate_eur_high: 40
-  notes: Listed both inside the wallet line and as its own board. Confirm this is not a double purchase.
+  lifecycle: obsolete
+  notes: Obsolete as a second line. VC-CT-6400 already includes the SE050 breakout. Do not buy this board
+    in addition to the wallet. The 20-40 EUR range stays as history and is not in the control rollup.
 - part_number: VC-CT-6500
   name: GPS antenna u-blox ANN-MB
   revision_index: 0
@@ -674,12 +733,14 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: Step-down for the RUT241 from the 24 V rail. RUT241 accepts 9-30 V, so this may be unnecessary.
+  spec: Step-down from 24 V to 9 V. Not required.
   legacy_ref: '5.63'
   estimate_eur_low: 10
   estimate_eur_high: 20
-  unknowns:
-  - Confirm the router is not powered directly from 24 V.
+  lifecycle: obsolete
+  notes: 'Obsolete. Teltonika states RUT241 input 9-30 V DC and power below 6.5 W. The 24 V rail is inside
+    that range. Do not fit this converter. Source: https://wiki.teltonika-networks.com/view/RUT241_Powering_Options.
+    The 10-20 EUR range stays as history and is not in the control rollup.'
 - part_number: VC-CT-6700
   name: Wiring harness
   revision_index: 0
@@ -817,13 +878,16 @@ parts:
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: Bronze or PTFE bushing, 83 mm bore, for the 82.55 mm DT325 rod.
+  spec: Split bronze or PTFE bushing. Closed bore 83 mm guides the 82.55 mm casing. The cutting shoe
+    outside diameter is 3.45 in (87.63 mm). A closed 83 mm bore blocks the shoe. Open the bushing to pass
+    the shoe, then close it on the casing.
   legacy_ref: '3.36'
   estimate_eur_low: 20
   estimate_eur_high: 40
   supplier_id: custom_eu
   unknowns:
   - Length, flange and housing diameter.
+  - The latch or the screws that close the two halves are not selected.
 - part_number: VC-FR-4600
   name: UTV mounting bracket
   revision_index: 0
@@ -879,35 +943,58 @@ parts:
   estimate_eur_low: 30
   estimate_eur_high: 50
 - part_number: VC-GP-7100
-  name: DT325 probe rod pair
+  name: Probe rod 3.25 in x 48 in
   revision_index: 0
   revision_letter: A
   supply: purchase
   subsystem: sampling
   category: Sampling
-  spec: Geoprobe probe rod 3.25 inch by 48 inch. The unit of purchase is a pair, 35.4 kg.
+  spec: One Geoprobe probe rod, 3.25 in outside diameter, 48 in long. Inside diameter 2.625 in
+    (66.675 mm) per the 2026-11-19 decision. This line is one rod, not a pair.
   legacy_ref: '6.56'
   manufacturer_pn: '201446'
-  supplier_id: geoprobe
-  estimate_eur_low: 400
-  estimate_eur_high: 600
-  mass_kg: 35.4
-  mass_note: Published mass of one pair, Geoprobe PN 201446.
-- part_number: VC-GP-7200
-  name: DT325 cutting shoe
+  supplier_id: geoprobe_eu
+  estimate_eur_low: 389.99
+  estimate_eur_high: 389.99
+  mass_kg: 17.7
+  mass_note: One rod, 17.7 kg, offer 26100096 dated 2026-03-03. The old 35.4 kg figure was two rods.
+  notes: 'Price is EUR net and excludes freight. Seller is Geoprobe Environmental Technologies S.A.
+    Kit quantity 2 means two rods. Do not double it because older text said pair.'
+- part_number: VC-GP-7150
+  name: Probe rod O-ring pack
   revision_index: 0
   revision_letter: A
   supply: purchase
   subsystem: sampling
   category: Sampling
-  spec: DT325 cutting shoe.
+  spec: O-ring pack for the 3.25 in probe-rod joints. One pack contains 25 rings.
+  legacy_ref: '6.108'
+  manufacturer_pn: '201325'
+  supplier_id: geoprobe_eu
+  estimate_eur_low: 24.75
+  estimate_eur_high: 24.75
+  notes: 'Offer 26100096, 2026-03-03, EUR 24.75 net for 25 rings, freight excluded. Geoprobe names this
+    part "O-Ring (3.25 in. Probe Rod)", quantity 25
+    (https://geoprobe.com/tooling/dt325-soil-sampling-system/mn201325). The rings seal the joints
+    between 3.25 in casing sections. They stay on VC-KIT-6000. The liner-retainer O-ring is a
+    different part (600428) and is not used.'
+- part_number: VC-GP-7200
+  name: Cutting shoe 3.25 in
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: sampling
+  category: Sampling
+  spec: Cutting shoe for the 3.25 in casing. Outside diameter 3.45 in (87.63 mm). The shoe stays on
+    the casing. It is not part of the inner string.
   legacy_ref: '6.57'
   manufacturer_pn: '205449'
-  supplier_id: geoprobe
-  estimate_eur_low: 50
-  estimate_eur_high: 100
+  supplier_id: geoprobe_eu
+  estimate_eur_low: 300.78
+  estimate_eur_high: 300.78
   mass_kg: 1.5
-  mass_note: SONIC_HEAD.md mass budget, one shoe.
+  mass_note: SONIC_HEAD.md mass budget, one shoe. The offer does not state a mass.
+  notes: Offer 26100096, 2026-03-03, EUR 300.78 net each, freight excluded.
 - part_number: VC-GP-7300
   name: Drive cap GH60
   revision_index: 0
@@ -915,12 +1002,15 @@ parts:
   supply: purchase
   subsystem: sampling
   category: Sampling
-  spec: Geoprobe GH60 drive cap.
+  spec: Geoprobe GH60 threadless drive cap, part 201275. Push only. It cannot pull the casing. It can rattle at 100 Hz. It does not fit this sonic head.
   legacy_ref: '6.58'
   manufacturer_pn: '201275'
-  supplier_id: geoprobe
-  estimate_eur_low: 100
-  estimate_eur_high: 200
+  supplier_id: geoprobe_eu
+  estimate_eur_low: 586.47
+  estimate_eur_high: 586.47
+  lifecycle: obsolete
+  notes: Obsolete. Do not put this cap on the kit. Offer 26100096, 2026-03-03, EUR 586.47 net, freight
+    excluded. The price is history only and is not in the kit rollup. Pull and push go through VC-SH-1500.
 - part_number: VC-GP-7400
   name: Core liner 3.25 inch
   revision_index: 0
@@ -928,11 +1018,48 @@ parts:
   supply: purchase
   subsystem: sampling
   category: Sampling
-  spec: Polycarbonate liner, 3.25 inch. Consumable.
+  spec: Withdrawn. This was a polycarbonate 3.25 in liner. The machine does not use that liner.
   legacy_ref: '6.59'
-  supplier_id: geoprobe
-  estimate_eur_low: 3
-  estimate_eur_high: 6
+  lifecycle: obsolete
+  notes: Obsolete. Do not buy liners. Sample tubes and push-on caps are lab consumables and are not BOM
+    lines. The split carrier VC-SP-7620 and VC-SP-7621 holds the open tubes. The old EUR 3-6 estimate
+    is withdrawn.
+- part_number: VC-GP-7310
+  name: DT325 drive head
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: sampling
+  category: Sampling
+  spec: Geoprobe DT325 drive head, part 201385, with a 1.25 in pin. The pin fits the centre rod, not
+    the 3.25 in casing. The sonic head connects to the casing through VC-SH-1500.
+  legacy_ref: '6.110'
+  manufacturer_pn: '201385'
+  supplier_id: geoprobe_eu
+  estimate_eur_low: 171.34
+  estimate_eur_high: 171.34
+  lifecycle: obsolete
+  notes: 'Obsolete. Offer 26100096, 2026-03-03, EUR 171.34 net, freight excluded. The price is history
+    only and is not in any rollup. Geoprobe lists "DT325 Drive Head, 1.25 in. Pin"
+    (https://geoprobe.com/tooling/dt37-soil-sampling-system/mn201385). Do not buy it.'
+- part_number: VC-GP-7410
+  name: DT325 liner retainer HD
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: sampling
+  category: Sampling
+  spec: Geoprobe DT325 retainer HD, part 208472. It holds a liner in the inner string. This machine
+    does not use a liner. The half-shells hold the open tubes.
+  legacy_ref: '6.111'
+  manufacturer_pn: '208472'
+  supplier_id: geoprobe_eu
+  estimate_eur_low: 161.93
+  estimate_eur_high: 161.93
+  lifecycle: obsolete
+  notes: 'Obsolete. Offer 26100096, 2026-03-03, EUR 161.93 net, freight excluded. The price is history
+    only and is not in any rollup. Geoprobe lists "DT325 Retainer HD" and notes "No O-ring"
+    (https://geoprobe.com/tooling/dt325-soil-sampling-system/mn208472). Do not buy it.'
 - part_number: VC-HB-2100
   name: NEMA 42 closed-loop stepper
   revision_index: 0
@@ -1128,15 +1255,71 @@ parts:
   legacy_ref: '2.31'
   estimate_eur_low: 20
   estimate_eur_high: 40
+- part_number: VC-HB-3400
+  name: Drag chain
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: hub
+  category: Hub
+  spec: Cable carrier for the moving sonic-head carriage. Travel is 1300 mm, the same value as
+    rMAX_STROKE_MM. Cables in the carrier are two shielded motor cables 3 x 1.5 mm2 (VC-SH-1700) and
+    one GNSS antenna cable from VC-CT-6500. Cable outside diameters are unknown, so the carrier section
+    is unknown.
+  legacy_ref: '2.96'
+  unknowns:
+  - Cable outside diameters are unknown.
+  - Inner width, inner height and bend radius are unknown.
+  - Order code is unknown.
+  - Price is unknown.
+  notes: Do not order a chain until the cable diameters are known.
+- part_number: VC-HB-3410
+  name: Chain-shaft encoder 1000 ppr
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: hub
+  category: Hub
+  spec: Incremental encoder, 1000 pulses per revolution, quadrature A and B, on the chain shaft. The
+    signal goes to WAGO 750-637 (VC-CT-6130).
+  legacy_ref: '2.97'
+  unknowns:
+  - Bore is unknown. The chain shaft diameter is still 25-30 mm.
+  - Supply voltage and output circuit must match 750-637. The exact interface is not frozen.
+  - Order code is unknown.
+  - Price is unknown.
+  notes: 'GVL_IO maps %IW4 and %IW5 to this encoder. GVL_PARAMS uses 671.9 counts per mm from
+    (1000 x 4 x 40) / (15 x 15.875). The factor 40 is the gearbox ratio, so that scale fits a motor-shaft
+    encoder. A chain-shaft encoder is (1000 x 4) / (15 x 15.875) = 16.80 counts per mm. FB_HubControl
+    reads the drive position, not the 750-637 words. Do not change 671.9 in this revision.'
+- part_number: VC-HB-3420
+  name: Chain drive guard
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: hub
+  category: Safety
+  spec: Fixed guard over the 10B-2 chain and the sprockets. Directive 2006/42/EC requires a guard
+    before the machine is put into service.
+  legacy_ref: '2.98'
+  supplier_id: custom_eu
+  unknowns:
+  - Length, width and mounting holes are unknown. Shaft length and sprocket position are not frozen.
+  - Material thickness is unknown.
+  - Price is unknown.
 - part_number: VC-KIT-6000
-  name: DT325 sampling kit
+  name: Casing sampling kit
   revision_index: 0
   revision_letter: A
   supply: kit
   subsystem: sampling
   category: Sampling
-  spec: Geoprobe DT325 rods, cutting shoes, drive cap and liners. Field kit, not part of the machine BOM.
+  spec: The sampling string is the 3.25 in outer casing and the cutting shoe. Open lab tubes sit inside
+    on the draft split carrier. O-rings seal the casing joints. Field kit, not part of the machine BOM.
   legacy_ref: '6'
+  notes: 'Kit lines are VC-GP-7100, VC-GP-7150, VC-GP-7200, VC-SP-7620, VC-SP-7621 and VC-SP-7630.
+    Sample tubes and push-on caps are lab consumables. VC-GP-7300, VC-GP-7310, VC-GP-7400 and
+    VC-GP-7410 are obsolete history and are not kit lines. See docs/engineering/SAMPLING.md.'
   sale_ok: true
 - part_number: VC-KIT-7000
   name: Positioning kit
@@ -1238,7 +1421,10 @@ parts:
   legacy_ref: '8.76'
   estimate_eur_low: 100
   estimate_eur_high: 200
-  notes: HBK S9M, Burster 8417, Bosche S2 or equivalent.
+  notes: 'HBK S9M, Burster 8417, Bosche S2 or equivalent. The cell sits in the pull path. Gearbox nominal
+    tension is 5805 N and emergency tension is 9499 N. Both exceed 5 kN. Keep this cell for the soil-force
+    range and fit VC-PN-9340 so the cell is not the structural fuse. No higher-rated catalogue cell is
+    selected.'
   lifecycle: active
 - part_number: VC-PN-9310
   name: 4-20 mA transmitter
@@ -1273,12 +1459,30 @@ parts:
   supply: subcontract
   subsystem: penetrometer
   category: Penetrometer
-  spec: CNC insert for carriage-to-DT325 load path, M12 thread x 2.
+  spec: CNC insert in the pull path between the carriage and the casing adapter, M12 thread x 2. The
+    load cell and the overload bypass mount on this insert.
   legacy_ref: '8.79'
   supplier_id: custom_eu
   estimate_eur_low: 60
   estimate_eur_high: 100
   lifecycle: active
+- part_number: VC-PN-9340
+  name: Load-cell overload bypass
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: penetrometer
+  category: Penetrometer
+  spec: Mechanical bypass in parallel with the 5 kN load cell. The bypass must close before 5 kN. It
+    must carry the gearbox emergency tension of 9499 N. The 5 kN cell measures soil force. It must not
+    carry a stall.
+  legacy_ref: '8.109'
+  supplier_id: custom_eu
+  unknowns:
+  - Set point, spring and hard-stop dimensions are unknown.
+  - Price is unknown.
+  lifecycle: active
+  notes: See docs/engineering/PULL_FORCE.md. No catalogue load cell above 5 kN is selected.
 - part_number: VC-PS-8100
   name: viDoc RTK Light
   revision_index: 0
@@ -1318,18 +1522,23 @@ parts:
   estimate_eur_high: 2500
   notes: BOM.md also allows rental at about EUR 95 per week. That rental is not this product.
 - part_number: VC-PW-5200
-  name: DIN-rail supply 48 V 10 A
+  name: Mean Well SDR-480-48
   revision_index: 0
   revision_letter: A
   supply: purchase
   subsystem: power
   category: Power
-  spec: 230 V AC to 48 V DC, 10 A, DIN rail, for the hub drive.
+  spec: 230 V AC to 48 V DC, DIN rail, for the hub drive. Order code SDR-480-48. Rated 48 V, 10 A, 480 W.
+    Body 85.5 x 125.2 x 128.5 mm. Do not order SDR-75-48. That supply is 1.6 A and 75 W.
   legacy_ref: '4.42'
-  estimate_eur_low: 80
-  estimate_eur_high: 140
-  notes: CONTROL_SYSTEM.md shows Mean Well SDR-75-48, which is 1.6 A, not 10 A. Do not order SDR-75-48
-    against this line until the conflict is closed.
+  manufacturer_pn: SDR-480-48
+  supplier_id: meanwell
+  unknowns:
+  - EUR price is unknown. The old EUR 80-140 range was not a quote for SDR-480-48 and is withdrawn.
+  notes: 'The only stated 48 V load is the hub motor. The BOM gives a 6 A phase current. 6 A x 48 V =
+    288 W. That product is an upper bound, not a measured bus current. VC-PW-5400 is a further 48 V load
+    and its current is unknown. 10 A leaves 4 A above the 6 A bound. Source:
+    https://www.meanwell.com/Upload/PDF/SDR-480/SDR-480-SPEC.PDF (SDR-480-SPEC 2025-02-17).'
 - part_number: VC-PW-5300
   name: Mean Well DDR-60D-24
   revision_index: 0
@@ -1386,7 +1595,7 @@ parts:
   legacy_ref: '4.45'
   estimate_eur_low: 60
   estimate_eur_high: 100
-  notes: Schneider or Eaton. Not exploded.
+  notes: Schneider or Eaton. Not exploded. The isolator, the MCB and the RCD are separate lines.
 - part_number: VC-PW-5600
   name: Power cable set
   revision_index: 0
@@ -1399,6 +1608,49 @@ parts:
   supplier_id: lapp
   estimate_eur_low: 40
   estimate_eur_high: 80
+- part_number: VC-PW-5700
+  name: Main isolator
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: power
+  category: Safety
+  spec: Lockable main switch on the 230 V feed, between the Instagrid output and the machine. Instagrid
+    ONE max is 3.6 kW. The current is 3600 / 230 = 15.7 A. The switch rating must be at least 20 A.
+  legacy_ref: '4.100'
+  unknowns:
+  - Order code is unknown.
+  - Price is unknown.
+  notes: Directive 2006/42/EC expects a supply disconnect. No catalogue switch is selected.
+- part_number: VC-PW-5710
+  name: Line circuit breaker
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: power
+  category: Safety
+  spec: Circuit breaker on the 230 V feed, ahead of the VFD and the DC supplies. The feeder current is
+    15.7 A. Use a 20 A breaker unless the selected VFD manual requires another rating.
+  legacy_ref: '4.101'
+  unknowns:
+  - Trip curve is unknown until the VFD order code is known.
+  - Order code is unknown.
+  - Price is unknown.
+- part_number: VC-PW-5720
+  name: Residual current device
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: power
+  category: Safety
+  spec: Type B residual current device, 30 mA, rated at least 20 A, between the isolator and the VFD.
+    Do not use a type A device on this feeder. A VFD can pass a direct-current fault component.
+  legacy_ref: '4.102'
+  unknowns:
+  - Order code is unknown.
+  - Price is unknown.
+  notes: Place this device on the incoming 230 V feed. The VFD order code is still open, so confirm the
+    device class against that manual before purchase.
 - part_number: VC-SH-1100
   name: OLI MVE 400/6-HF
   revision_index: 0
@@ -1534,13 +1786,14 @@ parts:
   - Flange thickness, bolt-circle diameter and whether the 6x M10 holes are tapped or through.
   - Flange diameter 80 mm is published, but it is not modelled until the thickness is known.
 - part_number: VC-SH-1500
-  name: DT325 adapter
+  name: Casing adapter
   revision_index: 0
   revision_letter: A
   supply: subcontract
   subsystem: sonic_head
   category: Sonic Head
-  spec: Steel adapter, thread to the Geoprobe DT325 drive interface.
+  spec: Steel adapter between the centre column and the 3.25 in casing. The adapter must push and pull.
+    Do not use the GH60 cap. The thread is not confirmed.
   legacy_ref: '1.5'
   estimate_eur_low: 60
   estimate_eur_high: 100
@@ -1588,6 +1841,115 @@ parts:
   estimate_eur_low: 20
   estimate_eur_high: 40
   notes: SONIC_HEAD.md mass budget mentions 8x M12x40. The flange is 6x M10. The kit is not exploded.
+- part_number: VC-SH-1900
+  name: Vibro head guard
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: sonic_head
+  category: Safety
+  spec: Fixed guard over the vibro head. Directive 2006/42/EC requires a guard over the hazard at the
+    motors and the carriage before the machine is put into service.
+  legacy_ref: '1.99'
+  supplier_id: custom_eu
+  unknowns:
+  - Outline and mounting holes are unknown.
+  - Material thickness is unknown.
+  - Price is unknown.
+- part_number: VC-SP-7620
+  name: Split carrier half A
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: sampling
+  category: Sampling
+  spec: Draft half-shell. Two halves hold 4 to 6 open sample tubes end to end inside the 3.25 in casing.
+    The tubes have no caps during driving. Tube outside diameter and tube length are TBD. Do not
+    manufacture from the study solid.
+  legacy_ref: '6.105'
+  supplier_id: custom_eu
+  material: TBD
+  geometry:
+    kind: split_carrier
+    fidelity: partial
+    source: docs/engineering/SAMPLING.md
+    side: A
+    casing_id_mm: 66.675
+    radial_clearance_mm: 0.5
+    pocket_clearance_mm: 0.5
+    wall_thickness_mm: 3.0
+    tube_od_mm: 30.0
+    tube_length_mm: 100.0
+    tube_count: 6
+    placeholders:
+    - radial_clearance_mm
+    - pocket_clearance_mm
+    - wall_thickness_mm
+    - tube_od_mm
+    - tube_length_mm
+    - tube_count
+  unknowns:
+  - Tube outside diameter is TBD. Confirm it with RadicleLab. The geometry value is a placeholder.
+  - Tube length is TBD. Confirm it with RadicleLab. The geometry value is a placeholder.
+  - Material is TBD.
+  - Fastener positions are TBD.
+  - Rib depth on the tube is unknown and is not in the solid.
+  - Usable length inside the casing threads is unknown.
+  notes: 'Draft. The tubes and the push-on caps are lab consumables and are not BOM lines. A photo shows
+    orange plastic tubes, a ribbed outside and a label recess, stacked end to end. The photo suggests
+    length is about 2.2 to 2.5 times the diameter. That ratio is not a measurement and this model does
+    not use it. Caps go on only after extraction. The pocket has no cap clearance. Placeholder tube OD
+    30 mm and placeholder tube length 100 mm let the study STEP export. They are not tube data.'
+- part_number: VC-SP-7621
+  name: Split carrier half B
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: sampling
+  category: Sampling
+  spec: Draft mirror of VC-SP-7620. Same placeholders. Do not manufacture from the study solid.
+  legacy_ref: '6.106'
+  supplier_id: custom_eu
+  material: TBD
+  geometry:
+    kind: split_carrier
+    fidelity: partial
+    source: docs/engineering/SAMPLING.md
+    side: B
+    casing_id_mm: 66.675
+    radial_clearance_mm: 0.5
+    pocket_clearance_mm: 0.5
+    wall_thickness_mm: 3.0
+    tube_od_mm: 30.0
+    tube_length_mm: 100.0
+    tube_count: 6
+    placeholders:
+    - radial_clearance_mm
+    - pocket_clearance_mm
+    - wall_thickness_mm
+    - tube_od_mm
+    - tube_length_mm
+    - tube_count
+  unknowns:
+  - Tube outside diameter is TBD. Confirm it with RadicleLab. The geometry value is a placeholder.
+  - Tube length is TBD. Confirm it with RadicleLab. The geometry value is a placeholder.
+  - Material is TBD.
+  - Fastener positions are TBD.
+  notes: Draft. Side B is the mirror of side A. With a round pocket the two solids are congruent.
+- part_number: VC-SP-7630
+  name: Split carrier fasteners
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: sampling
+  category: Sampling
+  spec: Fasteners that clamp half A to half B. The size follows the carrier length. That length is TBD.
+  legacy_ref: '6.107'
+  unknowns:
+  - Screw size, count and material are unknown.
+  - Order code is unknown.
+  - Price is unknown.
+  notes: Draft. Do not buy a fastener kit until the tube length is known.
 boms:
 - part_number: VC-ASM-0000
   mrp_type: normal
@@ -1609,6 +1971,7 @@ boms:
   - {part_number: VC-SH-1600, qty: 4}
   - {part_number: VC-SH-1700, qty: 2}
   - {part_number: VC-SH-1800, qty: 1}
+  - {part_number: VC-SH-1900, qty: 1}
 - part_number: VC-ASM-2000
   mrp_type: normal
   lines:
@@ -1627,6 +1990,9 @@ boms:
   - {part_number: VC-HB-3110, qty: 4}
   - {part_number: VC-HB-3200, qty: 1}
   - {part_number: VC-HB-3300, qty: 1}
+  - {part_number: VC-HB-3400, qty: 1}
+  - {part_number: VC-HB-3410, qty: 1}
+  - {part_number: VC-HB-3420, qty: 1}
 - part_number: VC-ASM-3000
   mrp_type: normal
   lines:
@@ -1647,6 +2013,9 @@ boms:
   - {part_number: VC-PW-5400, qty: 1}
   - {part_number: VC-PW-5500, qty: 1}
   - {part_number: VC-PW-5600, qty: 1}
+  - {part_number: VC-PW-5700, qty: 1}
+  - {part_number: VC-PW-5710, qty: 1}
+  - {part_number: VC-PW-5720, qty: 1}
 - part_number: VC-ASM-5000
   mrp_type: normal
   lines:
@@ -1659,14 +2028,14 @@ boms:
   - {part_number: VC-CT-6200, qty: 2}
   - {part_number: VC-CT-6210, qty: 1}
   - {part_number: VC-CT-6220, qty: 1}
+  - {part_number: VC-CT-6230, qty: 1}
+  - {part_number: VC-CT-6240, qty: 1}
   - {part_number: VC-CT-6300, qty: 1}
   - {part_number: VC-CT-6400, qty: 1}
-  - {part_number: VC-CT-6410, qty: 1}
   - {part_number: VC-CT-6500, qty: 1}
   - {part_number: VC-CT-6510, qty: 1}
   - {part_number: VC-CT-6600, qty: 1}
   - {part_number: VC-CT-6610, qty: 1}
-  - {part_number: VC-CT-6620, qty: 1}
   - {part_number: VC-CT-6700, qty: 1}
 - part_number: VC-ASM-8000
   mrp_type: normal
@@ -1694,6 +2063,7 @@ boms:
   - {part_number: VC-PN-9310, qty: 1}
   - {part_number: VC-PN-9320, qty: 1}
   - {part_number: VC-PN-9330, qty: 1}
+  - {part_number: VC-PN-9340, qty: 1}
 - part_number: VC-ASM-8400
   mrp_type: normal
   lines:
@@ -1717,9 +2087,11 @@ boms:
   mrp_type: phantom
   lines:
   - {part_number: VC-GP-7100, qty: 2}
+  - {part_number: VC-GP-7150, qty: 1}
   - {part_number: VC-GP-7200, qty: 4}
-  - {part_number: VC-GP-7300, qty: 1}
-  - {part_number: VC-GP-7400, qty: 50}
+  - {part_number: VC-SP-7620, qty: 1}
+  - {part_number: VC-SP-7621, qty: 1}
+  - {part_number: VC-SP-7630, qty: 1}
 - part_number: VC-KIT-7000
   mrp_type: phantom
   lines:

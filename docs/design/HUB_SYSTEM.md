@@ -109,31 +109,27 @@ gearbox output bearings if directly mounted. The separate shaft absorbs these lo
 
 ## 4. Force Analysis
 
-### 4.1 Available Torque at Chain Sprocket
+The allowable pull force is **4.5 kN**.
+The calculation is in [PULL_FORCE.md](../engineering/PULL_FORCE.md).
+Do not use 14.3 kN. That figure is the motor-times-ratio tension. The gearbox cannot deliver it.
 
-```
-Motor torque (nominal):           ~15 Nm  (NEMA 42)
-Gearbox ratio:                     40:1
-Gearbox efficiency:                ~90%
-→ Output torque (nominal):         15 × 40 × 0.90 = 540 Nm
+### 4.1 Allowable pull force
 
-Sprocket pitch radius (15T, 10B-2):
-  R = (p × z) / (2π) = (15.875 × 15) / (2π) ≈ 37.9 mm
-
-Chain force (nominal):
-  F = T / R = 540 / 0.0379 ≈ 14,250 N ≈ 14.3 kN
-```
+The chain working load is about 4.5 kN.
+The gearbox nominal tension is 5.80 kN.
+The allowable pull force is the lower value, 4.5 kN.
 
 ### 4.2 Required Forces
 
 | Operation            | Force Needed | Notes                              |
 |----------------------|-------------|------------------------------------|
 | Push-in (vibration ON) | 0.5–1.5 kN | Vibration does most of the work   |
-| Pull-out             | 2.0–4.0 kN  | Full friction, no vibration        |
+| Pull-out (required)  | 2.0–4.0 kN  | Process need. Not the drive capacity. |
 | Head weight hold     | ~0.3 kN     | Static, when parked                |
 | Emergency stop       | —           | Brake engages, motor de-energised  |
 
-**Safety factor:** 14.3 kN available / 4.0 kN max required = **3.6× margin** ✓
+Margin on the upper required pull: 4.5 / 4.0 = 1.13.
+That margin is small. See the note.
 
 ### 4.3 Speed
 
@@ -244,7 +240,7 @@ redundant obstacle detection.
 
 ## 9. Operating Sequence
 
-### DT325 Core Sampling Cycle
+### Casing sampling cycle
 
 ```
 1. POSITION  — Navigate to GPS waypoint (AR overlay on tablet)

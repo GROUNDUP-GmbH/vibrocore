@@ -138,6 +138,17 @@ def _cylinder_views(part: Part) -> str:
 """.strip()
 
 
+def _split_carrier_note(part: Part) -> str:
+    geometry = part.geometry or {}
+    length = float(geometry["tube_count"]) * float(geometry["tube_length_mm"])
+    return f"""
+<text x="20" y="40" font-size="4" font-family="sans-serif" font-weight="700">PLACEHOLDER study model. Do not manufacture.</text>
+<text x="20" y="48" font-size="3.2" font-family="sans-serif">Side { _esc(str(geometry.get("side"))) }. Open tubes, end to end. No cap in the pocket.</text>
+<text x="20" y="56" font-size="3.2" font-family="sans-serif">Casing ID {float(geometry['casing_id_mm']):.3f} mm. Placeholder tube OD {float(geometry['tube_od_mm']):g} mm.</text>
+<text x="20" y="64" font-size="3.2" font-family="sans-serif">Placeholder stack {int(geometry['tube_count'])} x {float(geometry['tube_length_mm']):g} mm = {length:.0f} mm.</text>
+""".strip()
+
+
 def _bom_table(part: Part, bom: BillOfMaterials) -> str:
     lines = [
         '<text x="20" y="36" font-size="4" font-family="sans-serif" font-weight="700">Parts list (same item numbers as the OdooPLM EBOM itemnum)</text>'
@@ -175,6 +186,9 @@ def svg_for(part: Part, bom: BillOfMaterials) -> str:
         document_type = "part drawing"
     elif part.geometry and part.geometry["kind"] == "cylinder":
         body = _cylinder_views(part) + "\n" + _notes(part)
+        document_type = "part drawing"
+    elif part.geometry and part.geometry["kind"] == "split_carrier":
+        body = _split_carrier_note(part) + "\n" + _notes(part)
         document_type = "part drawing"
     else:
         raise ValueError(f"{part.part_number} has neither a BOM nor geometry")
@@ -214,6 +228,12 @@ def pdf_for(part: Part, bom: BillOfMaterials) -> bytes:
             )
         elif geometry.get("kind") == "cylinder":
             rows.append(f"Cylinder diameter {geometry['diameter_mm']:g} mm, length {geometry['length_mm']:g} mm")
+        elif geometry.get("kind") == "split_carrier":
+            rows.append("PLACEHOLDER study model. Do not manufacture.")
+            rows.append(
+                f"Side {geometry['side']}. Stack {geometry['tube_count']:g} x {geometry['tube_length_mm']:g} mm."
+            )
+            rows.append("Tube OD and tube length are TBD. No cap clearance.")
         rows.extend(f"TODO: {item}" for item in part.unknowns)
     rows.extend(
         [

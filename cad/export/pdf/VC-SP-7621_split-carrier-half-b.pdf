@@ -9,27 +9,37 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 640 >>
+<< /Length 890 >>
 stream
 BT
 /F1 11 Tf
 36 800 Td
 16 TL
-(VC-KIT-6000 DT325 sampling kit  assembly, preliminary) Tj
+(VC-SP-7621 Split carrier half B) Tj
 T*
-(1  VC-GP-7100  rev A  qty 2  DT325 probe rod pair) Tj
+(Fidelity: partial) Tj
 T*
-(2  VC-GP-7200  rev A  qty 4  DT325 cutting shoe) Tj
+(Source: docs/engineering/SAMPLING.md) Tj
 T*
-(3  VC-GP-7300  rev A  qty 1  Drive cap GH60) Tj
+(PLACEHOLDER study model. Do not manufacture.) Tj
 T*
-(4  VC-GP-7400  rev A  qty 50  Core liner 3.25 inch) Tj
+(Side B. Stack 6 x 100 mm.) Tj
+T*
+(Tube OD and tube length are TBD. No cap clearance.) Tj
+T*
+(TODO: Tube outside diameter is TBD. Confirm it with RadicleLab. The geometry value is a placeholder.) Tj
+T*
+(TODO: Tube length is TBD. Confirm it with RadicleLab. The geometry value is a placeholder.) Tj
+T*
+(TODO: Material is TBD.) Tj
+T*
+(TODO: Fastener positions are TBD.) Tj
 T*
 (Owner: Ground UP GmbH) Tj
 T*
 (Document status: preliminary) Tj
 T*
-(Identification: VC-KIT-6000) Tj
+(Identification: VC-SP-7621) Tj
 T*
 (Revision index/letter: 0 / A) Tj
 T*
@@ -54,8 +64,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000000939 00000 n 
+0000001189 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-1009
+1259
 %%EOF

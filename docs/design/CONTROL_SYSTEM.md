@@ -13,14 +13,14 @@ The Vibrocore V1 control system is built around the **WAGO PFC200 XTR (750-8212)
          ▼                              ▼
   ┌─────────────┐                ┌──────────────────┐
   │ Siemens V20 │ Modbus RTU     │  Mean Well        │
-  │    1.5 kW   │◄──────────────►│  SDR-75-48        │
-  │    VFD      │  RS-485        │  48V/1.6A DC PSU  │
+  │    1.5 kW   │◄──────────────►│  SDR-480-48       │
+  │    VFD      │  RS-485        │  48V/10A DC PSU   │
   └──────┬──────┘ Slave addr 1   └────────┬──────────┘
          │ 3× AC                          │ 48V DC
          ▼                       ┌────────┴──────────┐
   ┌─────────────┐                │  Mean Well         │
   │ 2× OLI MVE │                │  SDR-120-24 (V1.1) │
-  │ 400/6-HF   │                │  48V→24V/2.5A      │
+  │ 400/6-HF   │                │  230V to 24V/5A    │
   │ 7.2 kg ea. │                └────────┬──────────┘
   └─────────────┘                        │ 24V DC
                                   ┌──────▼──────────────────────────────┐
@@ -67,16 +67,23 @@ The Vibrocore V1 control system is built around the **WAGO PFC200 XTR (750-8212)
 | DO 0    | `xBrakeRelease`  | HIGH   | Spring brake: 24V = released         |
 | DO 1    | `xHubEnable`     | HIGH   | Nanotec C5-E ENA pin                 |
 | DO 2    | `xVFD_Reset`     | HIGH   | VFD fault reset pulse (200ms)        |
-| DO 3    | `xAlarmBeacon`   | HIGH   | Visual alarm beacon / HMI indicator  |
+| DO 3    | `xAlarmBeacon`   | HIGH   | VC-CT-6230, 24 V, current at or below 0.5 A |
 
 ### Slot 3 — 750-637: Incremental Encoder Interface
 
 | Parameter | Value                                |
 |-----------|--------------------------------------|
-| Encoder   | 1000 ppr quadrature on chain shaft   |
-| Register  | `%IW4` (low word) + `%IW5` (high word) → 32-bit signed position |
-| Scale     | 671.9 encoder counts per mm of carriage travel |
+| Encoder   | 1000 ppr quadrature. VC-HB-3410 is specified on the chain shaft. |
+| Register  | `%IW4` (low word) + `%IW5` (high word). FB_HubControl does not read these words. |
+| Scale     | `rENCODER_PULSES_PER_MM` stays 671.9. Do not change it in this revision. |
 | Zero      | Set in Nanotec C5-E on home (upper limit) |
+
+671.9 equals (1000 x 4 x 40) / (15 x 15.875). The factor 40 is the gearbox ratio.
+That scale fits an encoder on the motor shaft.
+A chain-shaft encoder at 1000 ppr is (1000 x 4) / (15 x 15.875) = 16.80 counts per mm.
+The hub position in firmware comes from the C5-E Modbus word, divided by 671.9.
+The chain-shaft encoder is the 750-637 input. The two scales are not the same.
+Do not retune 671.9 until one encoder location is chosen.
 
 ### Slot 4 — 750-826: RS-485 Modbus RTU
 
@@ -265,7 +272,10 @@ For field use the WAGO PFC200 needs LTE connectivity for:
 - OTA firmware updates (CODESYS Online Change)
 - MQTT data upload to RDDL/cloud (backup path if WiFi unavailable)
 
-**Selected router: Teltonika RUT241** (DIN-rail mountable, IP30, −40 °C to +75 °C, Cat4 LTE)
+**Selected router: Teltonika RUT241** (DIN-rail mountable, IP30, −40 °C to +75 °C, Cat4 LTE).
+
+The RUT241 input is 9–30 V DC and the draw is below 6.5 W.
+Power it from the 24 V rail. Do not fit a 24 V to 9 V converter.
 
 ```
 Instagrid ONE max

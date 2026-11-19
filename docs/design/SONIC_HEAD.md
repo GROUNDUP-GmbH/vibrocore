@@ -189,7 +189,7 @@ At any instant t:
 | Combined motor mass           | 14.4 kg (2 × 7.2)  |                                 |
 | Total vibrating mass          | ~37 kg              | Plate + motors + column + adapt.|
 | Center column OD              | 50 mm               | 42CrMo4, flanged to plate       |
-| DT325 adapter                 | Custom, threaded    | Connects column to Geoprobe rod |
+| Casing adapter                | Custom, threaded    | Connects column to the 3.25 in casing |
 
 ## 4. Force & Frequency Analysis
 
@@ -403,7 +403,7 @@ T = 1 / (100 − 1) = 0.0101 = ~1% transmitted
 - M12 thread top and bottom for easy assembly
 - Operating temperature: −20°C to +80°C
 
-## 8. Center Column & DT325 Connection
+## 8. Center Column and Casing Connection
 
 ```
     CROSS-SECTION
@@ -423,22 +423,22 @@ T = 1 / (100 − 1) = 0.0101 = ~1% transmitted
        └────┬────┘
             │
        ┌────┴────┐
-       │ DT325   │  Custom adapter
-       │ ADAPTER │  Thread to Geoprobe spec
-       │         │  Internally threaded for DT325 drive cap
+       │ ADAPTER │  Custom adapter VC-SH-1500
+       │         │  Must push and pull the casing
+       │         │  Do not use the GH60 cap
        └────┬────┘
             │
        ┌────┴────────┐
-       │  DT325 Rod  │  3.25″ OD × 48″
-       │  PN: 201446 │  with cutting shoe PN: 205449
+       │  CASING     │  3.25 in OD x 48 in
+       │  PN: 201446 │  one rod, 17.7 kg, shoe PN 205449
        └─────────────┘
 ```
 
 The center column is a **solid 42CrMo4 shaft** flanged to the vibrating plate.
-It transmits the full 8 kN alternating axial force to the DT325 system.
+It transmits the full 8 kN alternating axial force to the casing.
 
 Bearing option: If rotation is needed (for auger mode), the column can be
-mounted with thrust/radial bearings in the plate. For DT325 core sampling
+mounted with thrust/radial bearings in the plate. For casing sampling
 (no rotation), a rigid flange connection is simpler and stronger.
 
 ## 9. Assembly Mass Budget
@@ -448,13 +448,13 @@ mounted with thrust/radial bearings in the plate. For DT325 core sampling
 | OLI MVE 400/6-HF × 2         | 14.4      | 7.2 kg each                  |
 | Vibrating plate (+ ribs)     | 22.0      | 420×300×20 mm S355 + ribs    |
 | Center column (+ flange)     | 3.5       | Ø50×200 mm, 42CrMo4         |
-| DT325 adapter                | 1.0       | Steel, machined              |
+| Casing adapter               | 1.0       | Steel, machined              |
 | Fasteners (M12 motor bolts)  | 0.5       | 8× M12×40, washers           |
 | **Total vibrating mass**     | **41.4**  | Moves with vibration         |
 | 4× rubber isolators          | 0.8       | Static on carriage           |
-| DT325 rod (per pair)         | 35.4      | Geoprobe PN 201446           |
-| DT325 cutting shoe           | 1.5       | PN 205449                    |
-| **Total moved mass (in soil)**| **78.3** | Vibrating + rod + shoe       |
+| Casing rod (one)             | 17.7      | Geoprobe PN 201446, one rod  |
+| Cutting shoe                 | 1.5       | PN 205449                    |
+| **Total moved mass (in soil)**| **60.6** | 41.4 + 17.7 + 1.5            |
 
 ## 10. Comparison: OLI Dual Motor vs. Custom Eccentric
 
@@ -526,7 +526,7 @@ Cable sizing for 2 × 1.45 A = 2.9 A total:
 - [ ] Confirm exact VFD frequency needed for 6,000 rpm (pole count verification)
 - [ ] Vibrating plate FEA (natural frequencies, stress under cyclic 8 kN)
 - [ ] Optimal plate rib pattern for maximum stiffness vs. weight
-- [ ] DT325 adapter thread specification (verify with Geoprobe)
+- [ ] Casing adapter thread specification (verify with Geoprobe)
 - [ ] Field test: optimal VFD frequency ramp for different soil types
 - [ ] Temperature monitoring: motor surface temp during extended operation
 - [ ] Eccentric weight adjustment procedure (OLI manual)
