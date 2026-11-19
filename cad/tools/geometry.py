@@ -21,16 +21,21 @@ def shape_for(part: Part):
     """Return a build123d solid centered on the origin, in millimetres."""
     if not part.geometry:
         raise ValueError(f"{part.part_number} has no documented geometry")
-    from build123d import Box, Cylinder
-
     geometry = part.geometry
     kind = geometry["kind"]
-    if kind == "box":
-        solid = Box(geometry["length_mm"], geometry["width_mm"], geometry["height_mm"])
-    elif kind == "cylinder":
-        solid = Cylinder(geometry["diameter_mm"] / 2.0, geometry["length_mm"])
+    if kind == "split_carrier":
+        from cad.models.split_carrier import shape_for_geometry
+
+        solid = shape_for_geometry(geometry)
     else:
-        raise ValueError(f"{part.part_number}: unsupported kind {kind}")
+        from build123d import Box, Cylinder
+
+        if kind == "box":
+            solid = Box(geometry["length_mm"], geometry["width_mm"], geometry["height_mm"])
+        elif kind == "cylinder":
+            solid = Cylinder(geometry["diameter_mm"] / 2.0, geometry["length_mm"])
+        else:
+            raise ValueError(f"{part.part_number}: unsupported kind {kind}")
     solid.label = part.part_number
     solid.color = None
     return solid
@@ -47,6 +52,10 @@ def expected_bbox_mm(part: Part) -> tuple[float, float, float]:
     if geometry.get("kind") == "cylinder":
         diameter = float(geometry["diameter_mm"])
         return (diameter, diameter, float(geometry["length_mm"]))
+    if geometry.get("kind") == "split_carrier":
+        from cad.models.split_carrier import bbox_mm
+
+        return bbox_mm(geometry)
     raise ValueError(part.part_number)
 
 

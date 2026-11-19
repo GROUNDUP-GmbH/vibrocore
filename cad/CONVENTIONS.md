@@ -25,14 +25,15 @@ VC-ASM-2nnn   hub
 VC-ASM-3nnn   frame
 VC-ASM-4nnn   power
 VC-ASM-5nnn   control
-VC-KIT-6000   DT325 kit (not a machine BOM line)
+VC-KIT-6000   Casing sampling kit (not a machine BOM line)
 VC-KIT-7000   positioning kit
 VC-SH-        sonic-head parts
 VC-HB-        hub parts
 VC-FR-        frame parts
 VC-PW-        power parts
 VC-CT-        control parts
-VC-GP-        Geoprobe parts
+VC-GP-        Geoprobe purchased parts
+VC-SP-        Sampling make parts (split carrier)
 VC-PS-        positioning parts
 VC-LT-        lift and tilt actuator parts (V1.1)
 VC-PN-        penetrometer parts (V1.1)

@@ -20,7 +20,10 @@ drawing once the missing dimensions exist. They are not the CI path: a headless
 TechDraw PDF still depends on a build with a GUI. The upload into OdooPLM is
 `plm-sync` (see `docs/cad/ODOOPLM.md`), including the FreeCAD macro that calls it.
 
-Code-CAD such as CadQuery would sit on the same OpenCascade kernel as build123d.
+Code-CAD uses the same build123d kernel.
+The split-carrier study model is `cad/models/split_carrier.py`.
+Tube diameter and tube length in that file path are placeholders.
+Do not manufacture from the STEP file.
 build123d 0.13 is the one pinned here because its STEP reader and writer are what
 `plm_automated_convertion` also expects from a current OCP build.
 

@@ -17,7 +17,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[2]
 BOM_PATH = ROOT / "cad" / "bom" / "vibrocore.bom.yaml"
 
-PART_NUMBER_RE = re.compile(r"^VC-(ASM|KIT|SH|HB|FR|PW|CT|GP|PS|LT|PN|CS)-\d{4}$")
+PART_NUMBER_RE = re.compile(r"^VC-(ASM|KIT|SH|HB|FR|PW|CT|GP|PS|LT|PN|CS|SP)-\d{4}$")
 SUPPLIES = {"purchase", "subcontract", "assemble", "kit", "service"}
 FIDELITY = {"solid", "partial", "envelope"}
 # Parts stay in the YAML for history. Only "active" lines belong on a live BOM.
@@ -233,8 +233,8 @@ def load_bom(path: Path | None = None) -> BillOfMaterials:
         if geometry:
             kind = geometry.get("kind")
             fidelity = geometry.get("fidelity")
-            if kind not in {"box", "cylinder"}:
-                fail(f"{number}: geometry.kind {kind} is not box or cylinder")
+            if kind not in {"box", "cylinder", "split_carrier"}:
+                fail(f"{number}: geometry.kind {kind} is not box, cylinder or split_carrier")
             if fidelity not in FIDELITY:
                 fail(f"{number}: geometry.fidelity {fidelity} is invalid")
             if not geometry.get("source"):
@@ -247,6 +247,13 @@ def load_bom(path: Path | None = None) -> BillOfMaterials:
                 for axis in ("diameter_mm", "length_mm"):
                     if not geometry.get(axis) or float(geometry[axis]) <= 0:
                         fail(f"{number}: geometry.{axis} must be a positive documented value")
+            if kind == "split_carrier":
+                from cad.models.split_carrier import validate_split_carrier
+
+                try:
+                    validate_split_carrier(geometry)
+                except ValueError as exc:
+                    fail(f"{number}: {exc}")
         plm_material = raw.get("plm_material")
         if plm_material and plm_material not in material_ids:
             fail(f"{number}: unknown plm_material {plm_material}")

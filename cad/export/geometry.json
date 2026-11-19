@@ -115,5 +115,45 @@
       "Flange thickness, bolt-circle diameter and whether the 6x M10 holes are tapped or through.",
       "Flange diameter 80 mm is published, but it is not modelled until the thickness is known."
     ]
+  },
+  {
+    "bbox_mm": {
+      "x": 32.8375,
+      "y": 65.675,
+      "z": 600.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "partial",
+    "kind": "split_carrier",
+    "part_number": "VC-SP-7620",
+    "source": "docs/engineering/SAMPLING.md",
+    "step": "cad/export/step/VC-SP-7620.step",
+    "unknowns": [
+      "Tube outside diameter is TBD. Confirm it with RadicleLab. The geometry value is a placeholder.",
+      "Tube length is TBD. Confirm it with RadicleLab. The geometry value is a placeholder.",
+      "Material is TBD.",
+      "Fastener positions are TBD.",
+      "Rib depth on the tube is unknown and is not in the solid.",
+      "Usable length inside the casing threads is unknown."
+    ]
+  },
+  {
+    "bbox_mm": {
+      "x": 32.8375,
+      "y": 65.675,
+      "z": 600.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "partial",
+    "kind": "split_carrier",
+    "part_number": "VC-SP-7621",
+    "source": "docs/engineering/SAMPLING.md",
+    "step": "cad/export/step/VC-SP-7621.step",
+    "unknowns": [
+      "Tube outside diameter is TBD. Confirm it with RadicleLab. The geometry value is a placeholder.",
+      "Tube length is TBD. Confirm it with RadicleLab. The geometry value is a placeholder.",
+      "Material is TBD.",
+      "Fastener positions are TBD."
+    ]
   }
 ]

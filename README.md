@@ -1,7 +1,7 @@
 # Vibrocore — Open-Source Compact Electric Sonic Soil Sampler
 
 An open-source, battery-powered, compact sonic vibro-corer for undisturbed soil sampling
-(bulk density / core probes) — compatible with Geoprobe DT325 core tubes.
+(bulk density / core probes). The machine drives a 3.25 in Geoprobe casing.
 
 **Company:** Ground UP GmbH · Vienna, Austria
 **License:** CERN-OHL-S-2.0 (Hardware) / MIT (Software)
@@ -20,14 +20,14 @@ layer around the tube — reducing friction dramatically and preserving soil str
 
 | Parameter               | Value                              |
 |-------------------------|------------------------------------|
-| Core tube               | Geoprobe DT325 (3.25″ OD, 48″)   |
+| Casing                  | Geoprobe 3.25 in x 48 in rod, part 201446 |
 | Sampling depth          | 1.0 m (single rod)                |
 | Sonic head              | 2× OLI MVE 400/6-HF (counter-rot.)|
 | Vibration frequency     | ~100 Hz at 6,000 rpm (VFD-tunable) |
 | Axial dynamic force     | ~8 kN peak (2× 4 kN)              |
 | Sonic power draw        | ~1.2 kW (2× 0.58 kW)              |
 | Hub drive               | NEMA 42 closed-loop stepper        |
-| Hub force (pull-out)    | ~14.3 kN available (10B-2 chain)   |
+| Allowable pull force    | 4.5 kN (10B-2 working load)        |
 | Power                   | Instagrid ONE max (230V AC, 2.1 kWh)|
 | Frame                   | mk 2004 aluminium profile 50×100   |
 | Machine height          | 1.50 – 1.70 m                      |
@@ -116,7 +116,7 @@ described in Šporin & Vukelić (2017) and OLI's own application guide for linea
                └─────┬─────┘
                      │
               ┌──────┴──────┐
-              │  DT325 Rod  │
+              │  3.25 in rod │
               │  (82.55 mm) │
               └─────────────┘
 ```
@@ -155,7 +155,7 @@ vs. 4–8 weeks for custom fabrication. **~1,000 € cheaper.**
 | Brake               | 24 V power-off electromagnetic     |
 | Controller          | Nanotec C5-E or CL86T-V4.1        |
 | Speed (est.)        | ~60 mm/s (at 40:1, 600 rpm motor)  |
-| Pull-out force      | ~2.0–2.6 kN (1:1 chain, 90 Nm nom) |
+| Allowable pull force | 4.5 kN (chain working load)       |
 
 ### Safety Features
 
@@ -197,7 +197,7 @@ vs. 4–8 weeks for custom fabrication. **~1,000 € cheaper.**
 
 ## Control System
 
-- **PLC/Controller:** CONTROLLINO or Arduino Opta (industrial, Arduino-compatible)
+- **PLC/Controller:** WAGO PFC200 XTR (Option A). RevPi Connect 4 is Option B.
 - **Hub driver:** Nanotec C5-E-2-09 or Leadshine CL86T-V4.1
 - **Sonic VFD:** compact frequency inverter (230V class)
 - **Inputs:** limit switches, current sensors, emergency stop, mode selector
@@ -206,7 +206,7 @@ vs. 4–8 weeks for custom fabrication. **~1,000 € cheaper.**
 
 ### Operating Modes
 
-1. **DT325 Mode** — sonic at 90–100 Hz, full stroke, auto-depth-stop
+1. **Casing mode** — sonic at 90–100 Hz, full stroke, auto-depth-stop
 2. **Auger Mode** — sonic at 110–120 Hz, rotation enabled, for 30 mm nut auger
 3. **Manual** — joystick up/down, sonic on/off
 
@@ -297,7 +297,7 @@ python -m cad.tools.cli plm-sync
 
 ### Equipment References
 
-- [Geoprobe DT325 System](https://geoprobe.com/) — DT325 probe rods, cutting shoes, liners
+- [Geoprobe](https://geoprobe.com/) — 3.25 in probe rods and cutting shoes. Liners are not used.
 - [OLI Vibrators MVE-HF](https://www.olivibra.com/) — high-frequency industrial vibration motors
 - [Neugart PLPE Gearboxes](https://www.neugart.com/) — precision planetary gearboxes
 - [Nanotec NEMA 42 Steppers](https://www.nanotec.com/) — hybrid stepper motors

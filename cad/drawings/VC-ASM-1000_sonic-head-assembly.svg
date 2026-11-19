@@ -16,6 +16,7 @@
 <text x="20" y="68.00000000000001" font-size="2.8" font-family="sans-serif">6      VC-SH-1600     A    4    Rubber isolator M12</text>
 <text x="20" y="72.20000000000002" font-size="2.8" font-family="sans-serif">7      VC-SH-1700     A    2    Motor cable shielded</text>
 <text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-SH-1800     A    1    Fastener kit, sonic head</text>
+<text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-SH-1900     A    1    Vibro head guard</text>
 <text x="20" y="244" font-size="3" font-family="sans-serif">Schematic only. Component positions that are not dimensioned in the design documents are not drawn.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>

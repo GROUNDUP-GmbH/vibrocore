@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="420mm" height="297mm" viewBox="0 0 420.0 297.0">
-<title>VC-KIT-6000 DT325 sampling kit</title>
+<title>VC-SP-7620 Split carrier half A</title>
 <rect width="100%" height="100%" fill="#fff"/>
 <rect x="10" y="10" width="400" height="277" fill="none" stroke="#111" stroke-width="0.6"/>
 <rect x="14" y="14" width="392" height="269" fill="none" stroke="#111" stroke-width="0.25"/>
 <rect x="262" y="248" width="144" height="35" fill="none" stroke="#111" stroke-width="0.4"/>
 <text x="18" y="22" font-size="3.2" font-family="sans-serif">ISO 7200 title block · ISO 5457 A3 · not released for manufacture</text>
-<text x="20" y="36" font-size="4" font-family="sans-serif" font-weight="700">Parts list (same item numbers as the OdooPLM EBOM itemnum)</text>
-<text x="20" y="42" font-size="2.8" font-family="sans-serif">Item  Part number   Rev  Qty  Name</text>
-<text x="20" y="47" font-size="2.8" font-family="sans-serif">1      VC-GP-7100     A    2    DT325 probe rod pair</text>
-<text x="20" y="51.2" font-size="2.8" font-family="sans-serif">2      VC-GP-7200     A    4    DT325 cutting shoe</text>
-<text x="20" y="55.400000000000006" font-size="2.8" font-family="sans-serif">3      VC-GP-7300     A    1    Drive cap GH60</text>
-<text x="20" y="59.60000000000001" font-size="2.8" font-family="sans-serif">4      VC-GP-7400     A    50   Core liner 3.25 inch</text>
-<text x="20" y="244" font-size="3" font-family="sans-serif">Schematic only. Component positions that are not dimensioned in the design documents are not drawn.</text>
+<text x="20" y="40" font-size="4" font-family="sans-serif" font-weight="700">PLACEHOLDER study model. Do not manufacture.</text>
+<text x="20" y="48" font-size="3.2" font-family="sans-serif">Side A. Open tubes, end to end. No cap in the pocket.</text>
+<text x="20" y="56" font-size="3.2" font-family="sans-serif">Casing ID 66.675 mm. Placeholder tube OD 30 mm.</text>
+<text x="20" y="64" font-size="3.2" font-family="sans-serif">Placeholder stack 6 x 100 mm = 600 mm.</text>
+<text x="20" y="40" font-size="3" font-family="sans-serif">Fidelity: partial. Source: docs/engineering/SAMPLING.md.</text>
+<text x="20" y="44.5" font-size="3" font-family="sans-serif">Material (engineering_material): TBD.</text>
+<text x="20" y="49.0" font-size="3" font-family="sans-serif">TODO: Tube outside diameter is TBD. Confirm it with RadicleLab. The geometry value is a placeholder.</text>
+<text x="20" y="53.5" font-size="3" font-family="sans-serif">TODO: Tube length is TBD. Confirm it with RadicleLab. The geometry value is a placeholder.</text>
+<text x="20" y="58.0" font-size="3" font-family="sans-serif">TODO: Material is TBD.</text>
+<text x="20" y="62.5" font-size="3" font-family="sans-serif">TODO: Fastener positions are TBD.</text>
+<text x="20" y="67.0" font-size="3" font-family="sans-serif">TODO: Rib depth on the tube is unknown and is not in the solid.</text>
+<text x="20" y="71.5" font-size="3" font-family="sans-serif">TODO: Usable length inside the casing threads is unknown.</text>
+<text x="20" y="76.0" font-size="3" font-family="sans-serif">Draft. The tubes and the push-on caps are lab consumables and are not BOM lines. A photo shows orange plastic tubes, a ribbed outside and a </text>
+<text x="20" y="80.5" font-size="3" font-family="sans-serif">General tolerances: TODO. No tolerance class is specified in the design documents.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>
 <text x="268" y="278.2" font-size="2.4" font-family="sans-serif">Document title</text>
-<text x="332" y="278.2" font-size="2.6" font-family="sans-serif" font-weight="700">DT325 sampling kit</text>
+<text x="332" y="278.2" font-size="2.6" font-family="sans-serif" font-weight="700">Split carrier half A</text>
 <text x="268" y="282.4" font-size="2.4" font-family="sans-serif">Document type</text>
-<text x="332" y="282.4" font-size="2.6" font-family="sans-serif" font-weight="700">assembly drawing</text>
+<text x="332" y="282.4" font-size="2.6" font-family="sans-serif" font-weight="700">part drawing</text>
 <text x="268" y="286.59999999999997" font-size="2.4" font-family="sans-serif">Document status</text>
 <text x="332" y="286.59999999999997" font-size="2.6" font-family="sans-serif" font-weight="700">preliminary</text>
 <text x="268" y="290.79999999999995" font-size="2.4" font-family="sans-serif">Identification number</text>
-<text x="332" y="290.79999999999995" font-size="2.6" font-family="sans-serif" font-weight="700">VC-KIT-6000</text>
+<text x="332" y="290.79999999999995" font-size="2.6" font-family="sans-serif" font-weight="700">VC-SP-7620</text>
 <text x="268" y="294.99999999999994" font-size="2.4" font-family="sans-serif">Revision index / letter</text>
 <text x="332" y="294.99999999999994" font-size="2.6" font-family="sans-serif" font-weight="700">0 / A</text>
 <text x="268" y="299.19999999999993" font-size="2.4" font-family="sans-serif">Creator</text>

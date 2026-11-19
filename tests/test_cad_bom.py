@@ -23,18 +23,22 @@ def test_bom_rollups_match_published_lines():
         "VC-ASM-2000": (1535, 2490),
         # V1.1 frame excludes obsolete gas-spring tilt VC-FR-4700.
         "VC-ASM-3000": (440, 730),
-        # V1.1 power uses SDR-120-24 (40-70) instead of DDR-60D-24 (20-40).
-        "VC-ASM-4000": (2735, 2920),
+        # SDR-480-48 has no verified EUR price, so the old 80-140 band is not in the rollup.
+        "VC-ASM-4000": (2655, 2780),
         # V1.1 control has qty 2 of 750-430 and 750-530.
-        "VC-ASM-5000": (1635, 2600),
+        # The second SE050 line, the 9 V converter and the old enclosure price are out.
+        "VC-ASM-5000": (1565, 2460),
         "VC-ASM-8000": (1259, 2300),
-        "VC-KIT-6000": (1250, 2100),
         "VC-KIT-7000": (2020, 2040),
     }
     for number, (low, high) in expected.items():
         assert bom.rollup(number, "low") == low
         assert bom.rollup(number, "high") == high
-    assert bom.rollup("VC-ASM-0000", "low") == 1185 + 1535 + 440 + 2735 + 1635 + 1259
+    # Two rods, four shoes and one O-ring pack from offer 26100096.
+    assert bom.rollup("VC-KIT-6000", "low") == bom.rollup("VC-KIT-6000", "high")
+    assert abs(bom.rollup("VC-KIT-6000", "low") - (2 * 389.99 + 4 * 300.78 + 24.75)) < 1e-6
+    assert bom.rollup("VC-ASM-0000", "low") == 1185 + 1535 + 440 + 2655 + 1565 + 1259
+    assert bom.rollup("VC-ASM-0000", "high") == 1900 + 2490 + 730 + 2780 + 2460 + 2300
 
 
 def test_revision_letters_follow_odooplm_index():

@@ -97,8 +97,8 @@ core imaging. See `docs/engineering/BOM.md §8` for BOM and cost details.
        └──────┬──────┘
               │ threaded adapter
        ┌──────▼──────────────┐
-       │ DT325 Core Barrel   │
-       │ 3.25″ × 48″ rod     │
+       │ 3.25 in casing      │
+       │ rod 201446 x 48 in  │
        │ + cutting shoe      │
        └─────────────────────┘
 ```
@@ -191,16 +191,17 @@ RPi 4 2GB (Core Scanner, autonomous)  [V1.1]
         │
         ├── MQTT subscribe: vibrocore/cycle/+ (receive cycle_id after drilling)
         │
-        │   ⚠ SAMPLE WORKFLOW: intact sealed liner → scanner cradle → lab
-        │   Liner is NEVER split. Bulk density sample goes to lab directly.
+        │   SAMPLE WORKFLOW: open tubes stay in the casing during driving.
+        │   Caps go on after extraction. Tubes are a lab consumable, not a BOM line.
+        │   The cradle opening follows the tube OD. That OD is TBD. See SAMPLING.md.
         │
         ├── Stepper control (NEMA 17 + A4988 via GPIO)
-        │   Sled at 5 mm/s over intact polycarbonate liner in V-cradle
-        │   Frame trigger every 200 steps ≈ 1 mm → ~1,200 frames / core
+        │   Sled over the tube in the V-cradle
+        │   Do not assume a clear polycarbonate wall
         │
         ├── RPi HQ Camera (12.3 MP, 5000K CRI≥97 LED at 45°)
-        │   Photos through transparent liner → 1,200 frames, 85% overlap
-        │   Munsell tile at cradle start → liner color correction (ΔE < 2)
+        │   Through-wall colour correction is not confirmed
+        │   Munsell tile stays available for a later calibration
         │
         ├── OpenCV linear mosaic stitching (1D, no feature matching)
         │   Output: ~82mm × 1,200mm composite JPEG at ~0.05mm/pixel

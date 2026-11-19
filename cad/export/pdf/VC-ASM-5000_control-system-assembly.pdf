@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 1415 >>
+<< /Length 1406 >>
 stream
 BT
 /F1 11 Tf
@@ -35,21 +35,21 @@ T*
 T*
 (9  VC-CT-6220  rev A  qty 1  Safety relay) Tj
 T*
-(10  VC-CT-6300  rev A  qty 1  Control enclosure) Tj
+(10  VC-CT-6230  rev A  qty 1  Warning beacon) Tj
 T*
-(11  VC-CT-6400  rev A  qty 1  RDDL trust wallet) Tj
+(11  VC-CT-6240  rev A  qty 1  Operator tablet) Tj
 T*
-(12  VC-CT-6410  rev A  qty 1  SE050 breakout) Tj
+(12  VC-CT-6300  rev A  qty 1  Control enclosure) Tj
 T*
-(13  VC-CT-6500  rev A  qty 1  GPS antenna u-blox ANN-MB) Tj
+(13  VC-CT-6400  rev A  qty 1  RDDL trust wallet) Tj
 T*
-(14  VC-CT-6510  rev A  qty 1  GPS receiver u-blox ZED-F9P) Tj
+(14  VC-CT-6500  rev A  qty 1  GPS antenna u-blox ANN-MB) Tj
 T*
-(15  VC-CT-6600  rev A  qty 1  Teltonika RUT241) Tj
+(15  VC-CT-6510  rev A  qty 1  GPS receiver u-blox ZED-F9P) Tj
 T*
-(16  VC-CT-6610  rev A  qty 1  LTE SIM data plan) Tj
+(16  VC-CT-6600  rev A  qty 1  Teltonika RUT241) Tj
 T*
-(17  VC-CT-6620  rev A  qty 1  DC converter 24 V to 9 V) Tj
+(17  VC-CT-6610  rev A  qty 1  LTE SIM data plan) Tj
 T*
 (18  VC-CT-6700  rev A  qty 1  Wiring harness) Tj
 T*
@@ -82,8 +82,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000001715 00000 n 
+0000001706 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-1785
+1776
 %%EOF

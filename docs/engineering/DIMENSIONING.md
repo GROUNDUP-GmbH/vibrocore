@@ -8,9 +8,9 @@ and OLI MVE 400/6-HF rated data.
 | Parameter                  | Symbol | Target Value      | Source / Justification               |
 |----------------------------|--------|-------------------|--------------------------------------|
 | Sampling depth             | d      | 1.0 m             | VM0042 minimum 0–30cm; we go deeper  |
-| Core tube OD               | D_t    | 82.55 mm (3.25″) | Geoprobe DT325                       |
-| Core tube length           | L_t    | 1,219 mm (48″)   | Geoprobe DT325 rod                   |
-| Core tube mass (per pair)  | m_t    | 35.4 kg           | Geoprobe PN 201446 (rod pair)        |
+| Casing OD                  | D_t    | 82.55 mm (3.25 in) | Geoprobe rod 201446                 |
+| Casing length              | L_t    | 1,219.2 mm (48 in) | 48 x 25.4 mm                        |
+| Casing mass (one rod)      | m_t    | 17.7 kg           | Offer 26100096, one rod 201446       |
 | Operating speed            | n      | 6,000 rpm         | OLI rated, via VFD                   |
 | Vibration frequency        | f      | 100 Hz            | = 6,000 rpm / 60                     |
 | Peak axial force (pair)    | F_peak | ~8.0 kN           | 2 × 408 kgf OLI rated               |
@@ -108,7 +108,7 @@ Fasteners:              0.5 kg
 ─────────────────────────────
 Total vibrating mass:  42.0 kg
 
-With DT325 rod (in soil): 42.0 + 35.4 + 1.5 = 78.9 kg
+With one casing rod (in soil): 42.0 + 17.7 + 1.5 = 61.2 kg
 ```
 
 ### 3.4 Plate Natural Frequency (Bending)
@@ -271,28 +271,26 @@ Instagrid ONE max: 2.1 kWh → sufficient for ~72 cores per charge
 V2 (OLI) uses ~48% less energy per cycle vs. V1 (custom 3 kW motor).
 ```
 
-## 7. Hub System Forces (Unchanged from V1)
+## 7. Hub System Forces
 
-### 7.1 Available Force
+The allowable pull force is **4.5 kN**.
+Use [PULL_FORCE.md](PULL_FORCE.md).
+Do not use 14.3 kN.
 
-```
-NEMA 42 motor:        ~15 Nm
-Gearbox (PLPE120):    40:1, η = 90%
-Output torque:         15 × 40 × 0.90 = 540 Nm
+### 7.1 Allowable pull force
 
-Sprocket (15T, 10B-2): R = 37.9 mm
-Chain force:           540 / 0.0379 = 14,250 N ≈ 14.3 kN
-```
+The chain working load sets the allowable pull force at 4.5 kN.
+The gearbox nominal tension is 5.80 kN and is not the limit.
 
 ### 7.2 Required Forces
 
 | Operation            | Force Needed | Notes                              |
 |----------------------|-------------|------------------------------------|
 | Push-in (vibration ON) | 0.5–1.5 kN | Vibration does most of the work   |
-| Pull-out             | 2.0–4.0 kN  | Full friction, no vibration        |
+| Pull-out (required)  | 2.0–4.0 kN  | Process need. Not the drive capacity. |
 | Head weight hold     | ~0.4 kN     | Static (42 kg head assembly)       |
 
-Safety factor: 14.3 / 4.0 = **3.6×** ✓
+Margin: 4.5 / 4.0 = 1.13. See PULL_FORCE.md.
 
 ### 7.3 Hub Speed
 
@@ -343,7 +341,7 @@ V2 eliminates this concern entirely.*
 | Brake                       | 24V power-off EM, 15 Nm           | EU              |
 | Frame profiles (2×)         | mk 2004, 50×100×1500 mm           | DE              |
 | Linear guides (2×)          | Hiwin HGR20, 1300 mm               | TW/EU           |
-| PLC                         | CONTROLLINO MAXI / Arduino Opta    | AT/IT           |
+| PLC                         | WAGO PFC200 XTR (Option A)         | DE              |
 
 ---
 

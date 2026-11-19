@@ -9,6 +9,7 @@ vibrocore.categ_lift,Lift,vibrocore.categ_root
 vibrocore.categ_penetrometer,Penetrometer,vibrocore.categ_root
 vibrocore.categ_positioning,Positioning,vibrocore.categ_root
 vibrocore.categ_power,Power,vibrocore.categ_root
+vibrocore.categ_safety,Safety,vibrocore.categ_root
 vibrocore.categ_sampling,Sampling,vibrocore.categ_root
 vibrocore.categ_sonic_head,Sonic Head,vibrocore.categ_root
 vibrocore.categ_tilt,Tilt,vibrocore.categ_root

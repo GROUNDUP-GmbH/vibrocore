@@ -23,6 +23,9 @@
 <text x="20" y="97.40000000000003" font-size="2.8" font-family="sans-serif">13     VC-HB-3110     A    4    Linear carriage HGH20</text>
 <text x="20" y="101.60000000000004" font-size="2.8" font-family="sans-serif">14     VC-HB-3200     A    1    Carriage plate</text>
 <text x="20" y="105.80000000000004" font-size="2.8" font-family="sans-serif">15     VC-HB-3300     A    1    Fastener kit, hub</text>
+<text x="20" y="110.00000000000004" font-size="2.8" font-family="sans-serif">16     VC-HB-3400     A    1    Drag chain</text>
+<text x="20" y="114.20000000000005" font-size="2.8" font-family="sans-serif">17     VC-HB-3410     A    1    Chain-shaft encoder 1000 ppr</text>
+<text x="20" y="118.40000000000005" font-size="2.8" font-family="sans-serif">18     VC-HB-3420     A    1    Chain drive guard</text>
 <text x="20" y="244" font-size="3" font-family="sans-serif">Schematic only. Component positions that are not dimensioned in the design documents are not drawn.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>
