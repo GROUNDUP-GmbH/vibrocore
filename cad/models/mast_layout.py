@@ -67,9 +67,10 @@ CARRIAGE_PLATE_THICKNESS_MM = 10.0
 RAIL_LENGTH_MM = 1300.0
 FIRMWARE_STROKE_MM = 1300.0
 
-# Assumption from SONIC_HEAD.md: the shaft is perpendicular to the rod, so the
-# published 175 mm height is axial. Set this false to drop that height from the head.
-MOTOR_HEIGHT_IN_AXIAL_STACK = True
+# The shafts stay perpendicular to the rod. The motors sit left and right of
+# the rod, so the 175 mm envelope height is not a term in the axial head.
+# Set this true only to compare the older stacked-motor chain.
+MOTOR_HEIGHT_IN_AXIAL_STACK = False
 
 # --- TBD placeholders. Not measurements. Change these only when a length is known.
 
@@ -91,9 +92,40 @@ COLUMN_FLANGE_THICKNESS_MM = 12.0
 PROFILE_SPACING_MM = 300.0
 # Envelope diameter of VC-SH-1500. TBD. The solid is not the thread.
 ADAPTER_OD_MM = 50.0
+# Documented minimum. SONIC_HEAD.md. The layout pitch below is not this minimum.
+MOTOR_CENTRE_DISTANCE_MIN_MM = 170.0
+# TBD pitch. Both 154 mm motor widths stay on the 420 mm plate. Not a measurement.
+MOTOR_CENTRE_DISTANCE_MM = max(
+    MOTOR_CENTRE_DISTANCE_MIN_MM,
+    VIBRATING_PLATE_LENGTH_MM - MOTOR_WIDTH_MM,
+)
+# TBD. Lateral gap from each motor envelope to the carriage block.
+MOTOR_TO_CARRIAGE_GAP_MM = 11.0
 # Plan size of the carriage block. TBD. Only the height is in the chain.
-CARRIAGE_WIDTH_MM = 160.0
+# The width is the gap between the motor envelopes minus the two lateral gaps.
+CARRIAGE_WIDTH_MM = (
+    MOTOR_CENTRE_DISTANCE_MM - MOTOR_WIDTH_MM - 2.0 * MOTOR_TO_CARRIAGE_GAP_MM
+)
 CARRIAGE_DEPTH_MM = 120.0
+# VC-SH-1600. Free height and diameter are unknown. TBD.
+# The diameter placeholder fits in the strip beside the 255 mm motor on the 300 mm plate.
+ISOLATOR_FREE_HEIGHT_MM = 40.0
+ISOLATOR_DIAMETER_MM = 16.0
+ISOLATOR_COUNT = 4
+# VC-HB-3100. The section is not in the repository. Size 20 is only the series name. TBD.
+RAIL_SECTION_WIDTH_MM = 20.0
+RAIL_SECTION_HEIGHT_MM = 20.0
+# Distance from the bottom of the profile to the bottom of the rail. TBD.
+RAIL_BOTTOM_OFFSET_MM = 100.0
+# VC-SH-1302 weld position along the plate length. TBD.
+# The ribs hang under the plate and must stay outside the top plate.
+RIB_CENTRE_X_MM = 170.0
+# Guide bores are not located. The layout cuts a centred hole. TBD radial clearance.
+SHOE_PASSAGE_RADIAL_CLEARANCE_MM = 1.0
+COLUMN_PASSAGE_RADIAL_CLEARANCE_MM = 5.0
+# Rod axis on the plates. TBD. Zero is the plate centre. The bore is not located.
+STRING_AXIS_X_MM = 0.0
+STRING_AXIS_Y_MM = 0.0
 # Ground datum in the STEP file. Not a part. Not in the height chain.
 GROUND_DATUM_THICKNESS_MM = 0.5
 GROUND_DATUM_LENGTH_MM = 420.0
@@ -132,6 +164,63 @@ PLACEHOLDERS: dict[str, tuple[float, str]] = {
         ADAPTER_OD_MM,
         "TBD. Outside diameter of VC-SH-1500. The layout cylinder is an envelope, not a thread.",
     ),
+    "motor_centre_distance_mm": (
+        MOTOR_CENTRE_DISTANCE_MM,
+        "TBD. Layout pitch of the two motors. The documented minimum is 170 mm. "
+        "This pitch keeps both envelopes on the 420 mm plate.",
+    ),
+    "motor_to_carriage_gap_mm": (
+        MOTOR_TO_CARRIAGE_GAP_MM,
+        "TBD. Lateral gap from each motor envelope to the carriage block.",
+    ),
+    "carriage_width_mm": (
+        CARRIAGE_WIDTH_MM,
+        "TBD. Carriage width. It is the motor gap minus the two lateral gaps. Not a measured plate.",
+    ),
+    "carriage_depth_mm": (
+        CARRIAGE_DEPTH_MM,
+        "TBD. Carriage depth. Plan size only. Not a measured plate.",
+    ),
+    "isolator_free_height_mm": (
+        ISOLATOR_FREE_HEIGHT_MM,
+        "TBD. Free height of VC-SH-1600. Not in the height chain. Not a catalogue height.",
+    ),
+    "isolator_diameter_mm": (
+        ISOLATOR_DIAMETER_MM,
+        "TBD. Diameter of VC-SH-1600. Placeholder sized to the strip beside the motor envelope.",
+    ),
+    "rail_section_width_mm": (
+        RAIL_SECTION_WIDTH_MM,
+        "TBD. VC-HB-3100 section width. Size 20 is the series name, not a measured section.",
+    ),
+    "rail_section_height_mm": (
+        RAIL_SECTION_HEIGHT_MM,
+        "TBD. VC-HB-3100 section height. The catalogue section is not in the repository.",
+    ),
+    "rail_bottom_offset_mm": (
+        RAIL_BOTTOM_OFFSET_MM,
+        "TBD. Distance from the bottom of the profile to the bottom of the 1300 mm rail.",
+    ),
+    "rib_centre_x_mm": (
+        RIB_CENTRE_X_MM,
+        "TBD. Weld position of VC-SH-1302 along the plate length, from the rod axis.",
+    ),
+    "shoe_passage_radial_clearance_mm": (
+        SHOE_PASSAGE_RADIAL_CLEARANCE_MM,
+        "TBD. Radial clearance of the layout bore in VC-FR-4300 around the shoe.",
+    ),
+    "column_passage_radial_clearance_mm": (
+        COLUMN_PASSAGE_RADIAL_CLEARANCE_MM,
+        "TBD. Radial clearance of the layout bore in VC-FR-4400 around the column.",
+    ),
+    "string_axis_x_mm": (
+        STRING_AXIS_X_MM,
+        "TBD. Rod axis X on the plates. The guide bore is not located. Zero is the plate centre.",
+    ),
+    "string_axis_y_mm": (
+        STRING_AXIS_Y_MM,
+        "TBD. Rod axis Y on the plates. The guide bore is not located. Zero is the plate centre.",
+    ),
 }
 
 
@@ -148,7 +237,12 @@ def _mm(value: float) -> float:
 
 
 def head_length_mm(*, include_motor: bool | None = None, zero_placeholders: bool = False) -> float:
-    """Axial head from the bottom of the column shaft to the top of the motor envelope."""
+    """Axial head from the bottom of the column shaft to the top of the vibrating plate.
+
+    The motor height is included only when include_motor is true, or when the
+    module flag MOTOR_HEIGHT_IN_AXIAL_STACK is true. The assembly leaves that
+    flag false and places the motors left and right of the rod.
+    """
     use_motor = MOTOR_HEIGHT_IN_AXIAL_STACK if include_motor is None else include_motor
     flange = 0.0 if zero_placeholders else COLUMN_FLANGE_THICKNESS_MM
     motor = MOTOR_HEIGHT_MM if use_motor else 0.0
@@ -338,8 +432,7 @@ def layout_shape(bom=None):
     )
     cursor = _mm(cursor + VIBRATING_PLATE_THICKNESS_MM)
     if MOTOR_HEIGHT_IN_AXIAL_STACK:
-        # One motor envelope shows the axial height. The second motor is not placed.
-        # The centre distance is only a minimum of 170 mm.
+        # Comparison only. The machine assembly places both motors left and right.
         add(
             "VC-SH-1100",
             Pos(0, 0, cursor + MOTOR_HEIGHT_MM / 2.0)

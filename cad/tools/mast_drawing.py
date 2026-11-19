@@ -66,11 +66,12 @@ def chain_lines() -> list[str]:
             f"Mast profile: {MAST_PROFILE_LENGTH_MM:.1f} mm. Length unchanged.",
             f"Deficit against profile: {deficit_vs_profile_mm():.1f} mm.",
             f"Documented lengths alone, TBD set to 0: {documented_axial_mm():.1f} mm.",
-            f"Deficit of documented lengths against the profile: {documented_axial_mm() - MAST_PROFILE_LENGTH_MM:.1f} mm.",
+            f"Documented lengths minus the profile: {documented_axial_mm() - MAST_PROFILE_LENGTH_MM:.1f} mm.",
             f"Plate opening assumption: {plate_opening_mm():.1f} mm. SAMPLING remainder: {sampling_remainder_mm():.1f} mm.",
-            "The SAMPLING remainder is not this chain. It omits motor height, carriage, shoe, adapter and margins.",
-            f"Head uses column shaft {COLUMN_SHAFT_LENGTH_MM:.0f} mm, plate {VIBRATING_PLATE_THICKNESS_MM:.0f} mm, "
-            f"motor height {MOTOR_HEIGHT_MM:.0f} mm, plus the flange placeholder.",
+            "The SAMPLING remainder is not this chain. It omits carriage, shoe, adapter and margins.",
+            f"Head uses column shaft {COLUMN_SHAFT_LENGTH_MM:.0f} mm and plate {VIBRATING_PLATE_THICKNESS_MM:.0f} mm, "
+            "plus the flange placeholder.",
+            f"Motor height {MOTOR_HEIGHT_MM:.0f} mm is not in the head. The motors sit left and right of the rod.",
             f"Casing OD {CASING_OD_MM:.2f} mm. Casing ID {CASING_ID_MM:.3f} mm. Shoe OD {SHOE_OD_MM:.2f} mm.",
             "Dashed segments are TBD. Do not manufacture from this sheet.",
         ]

@@ -15,9 +15,11 @@ import sys
 import tempfile
 from pathlib import Path
 
+from cad.models.machine_assembly import RENDER_DIR, export_machine_assembly
 from cad.models.mast_layout import LAYOUT_DIR, export_mast_layout
 from cad.tools.bom import ROOT, load_bom, modelled_parts
 from cad.tools.drawings import export_drawings
+from cad.tools import geometry as geometry_mod
 from cad.tools.geometry import export_step_files
 from cad.tools.odoo_export import export_odoo
 
@@ -30,6 +32,7 @@ EXPORT_ROOTS = [
     ROOT / "cad" / "export" / "geometry.json",
     ROOT / "cad" / "OPEN_POINTS.md",
     LAYOUT_DIR,
+    RENDER_DIR,
 ]
 
 
@@ -79,6 +82,7 @@ def export_all(bom=None) -> None:
     export_odoo(bom)
     export_drawings(bom)
     export_step_files(bom)
+    export_machine_assembly(bom, geometry_mod.STEP_DIR, RENDER_DIR)
     export_mast_layout(bom)
     write_open_points(bom)
 
@@ -114,6 +118,7 @@ def check() -> int:
             export_odoo(bom)
             export_drawings(bom)
             export_step_files(bom)
+            export_machine_assembly(bom, geometry.STEP_DIR, root / "renders")
             export_mast_layout(bom, destination=root / "layout")
             write_open_points(bom, root / "OPEN_POINTS.md")
         finally:
@@ -133,6 +138,7 @@ def check() -> int:
             (root / "geometry.json", originals["json"]),
             (root / "OPEN_POINTS.md", ROOT / "cad" / "OPEN_POINTS.md"),
             (root / "layout", LAYOUT_DIR),
+            (root / "renders", RENDER_DIR),
         ]
         mismatches: list[str] = []
         for generated, committed in pairs:
