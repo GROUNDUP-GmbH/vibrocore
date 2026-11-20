@@ -62,13 +62,13 @@ The SDR-120-24, part VC-PW-5310, feeds only S200 terminal X124.
 The brake driver is inside the S200.
 The brake coil stays on X108.
 There is no second holding means.
-The general 24 V supply is an SDR-480-24-size slot, part VC-PW-5210.
+The general 24 V supply is an SDR-480-24-size slot, part VC-PW-5320.
 Both 0 V rails meet at terminal X1 pin 4.
 W1 is the only bond from 0 V to PE.
 Confirm that bond in the S200 PTI manual.
 Remove W1 if that manual forbids the bond.
-VC-PW-5200, the 48 V supply, is not connected.
-VC-PW-5400 is not connected.
+There is no 48 V rail.
+VC-PW-5200 and VC-PW-5400 are obsolete.
 The rotation drive has its own 2 A fuse on the general rail.
 
 ## Hub drive

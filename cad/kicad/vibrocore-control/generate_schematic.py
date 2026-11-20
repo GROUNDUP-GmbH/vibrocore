@@ -266,7 +266,7 @@ def build_sheets() -> list[Sheet]:
         "Both 0 V rails meet at X1:4. W1 is the only bond to PE.",
         "Confirm that bond in the S200 PTI manual.",
         "SDR-120-24 feeds only S200 X124. The brake driver is inside the drive.",
-        "VC-PW-5200, the 48 V supply, is not on this drawing.",
+        "There is no 48 V rail. VC-PW-5200 and VC-PW-5400 are obsolete.",
     ]))
     power.devs = [
         dev("G0", "SRC", 40, 42, "VC-PW-5100 Instagrid", **{"1": "100_L", "2": "101_N", "3": "102_PE"}),
@@ -282,7 +282,7 @@ def build_sheets() -> list[Sheet]:
         dev("PF1", "FLAG", 175, 145, "24V_S", **{"1": "201_24S"}),
         dev("W1", "BOND", 220, 150, "single 0V-PE bond", **{"1": "001_0V", "2": "102_PE"}),
         dev("X1", "X1", 305, 150, "mains 0V PE", **X1),
-        dev("G2", "PSU_C", 40, 188, "VC-PW-5210 SDR-480-24 slot", **{"1": "170_L", "2": "171_N", "3": "102_PE", "4": "210_24C", "5": "001_0V"}),
+        dev("G2", "PSU_C", 40, 188, "VC-PW-5320 SDR-480-24 slot", **{"1": "170_L", "2": "171_N", "3": "102_PE", "4": "210_24C", "5": "001_0V"}),
         dev("F24", "FUSE", 120, 185, "VC-PW-5810 20A", **{"1": "210_24C", "2": "211_24C"}),
         dev("PF2", "FLAG", 175, 185, "24V_C", **{"1": "211_24C"}),
     ]
