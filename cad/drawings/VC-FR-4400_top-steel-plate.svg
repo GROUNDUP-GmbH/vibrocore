@@ -17,7 +17,9 @@
 <text x="20" y="44.5" font-size="3" font-family="sans-serif">Material (engineering_material): S355.</text>
 <text x="20" y="49.0" font-size="3" font-family="sans-serif">Mass: 5.652 kg. Calculated from the blank at 7850 kg/m3.</text>
 <text x="20" y="53.5" font-size="3" font-family="sans-serif">TODO: Idle-sprocket mount and profile bolt pattern.</text>
-<text x="20" y="58.0" font-size="3" font-family="sans-serif">General tolerances: TODO. No tolerance class is specified in the design documents.</text>
+<text x="20" y="58.0" font-size="3" font-family="sans-serif">TODO: Not fitted in the current machine pose. The idler bearing blocks sit on the profile ends. The blank stays in the BOM.</text>
+<text x="20" y="62.5" font-size="3" font-family="sans-serif">The machine pose does not mount this plate. Keep the line so the BOM.md quantity stays.</text>
+<text x="20" y="67.0" font-size="3" font-family="sans-serif">General tolerances: TODO. No tolerance class is specified in the design documents.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>
 <text x="268" y="278.2" font-size="2.4" font-family="sans-serif">Document title</text>

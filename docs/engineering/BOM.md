@@ -26,9 +26,9 @@ complexity reduction vs. V1 custom design.*
 
 | # | Component               | Spec                              | Qty | Est. €   | Supplier / Source          |
 |---|-------------------------|-----------------------------------|-----|----------|----------------------------|
-|17 | NEMA 42 stepper motor   | CL, 20 Nm, 6A, encoder           |   1 |  250–400 | Nanotec (DE) / Leadshine   |
-|18 | Planetary gearbox       | PLPE120-040, 40:1                 |   1 |  600–900 | Neugart (DE)               |
-|19 | Stepper driver          | CL86T-V4.1 or C5-E               |   1 |   80–150 | Nanotec / Leadshine (EU)   |
+|17 | Servo motor 1FL2104     | 3.2 Nm, 1 kW, brake, encoder |   1 |  250–400 | Siemens. Band is not a quote. |
+|18 | Planetary gearbox       | PLE120-040, 7.65 kg, article 100460948 |   1 |  600–900 | Neugart. Band is not a quote. |
+|19 | SINAMICS S200           | 6SL5510-1BB11-0AA0, cabinet      |   1 |   80–150 | Siemens. Band is not a quote. |
 |20 | Elastomer coupling      | R+W EKH or KTR ROTEX 28          |   1 |   60–100 | R+W (DE) / KTR (DE)       |
 |21 | Drive shaft             | Ø25–30 mm, keyed                  |   1 |   30–50  | Custom / standard (EU)     |
 |22 | Pillow block UCP 206    | Self-aligning, Ø30 bore           |   2 |   30–50  | SKF / Schaeffler (EU)      |
@@ -36,13 +36,13 @@ complexity reduction vs. V1 custom design.*
 |24 | Sprocket 10B-2 15T      | Taper-lock, drive                 |   1 |   25–40  | z24.de / ETKF (DE)         |
 |25 | Sprocket 10B-2 15T      | Bearing-mounted, idle             |   1 |   30–50  | z24.de / ETKF (DE)         |
 |26 | Chain tensioner          | Spring-type or adjustable         |   1 |   20–40  | Standard (EU)              |
-|27 | Power-off brake         | 24V, 15 Nm, spring-applied        |   1 |  100–180 | Kendrion / Mayr (DE)       |
+|27 | Power-off brake         | Obsolete. Motor brake is used.    |   0 |  100–180 | History only. Not in the rollup. |
 |28 | Linear guide rail HGR20 | 1,300 mm length                   |   2 |  100–180 | Hiwin / Bosch Rexroth      |
 |29 | Linear slider HGH20     | Ball bearing type                  |   4 |   80–140 | Hiwin / Bosch Rexroth      |
 |30 | Carriage plate          | 10 mm steel, machined             |   1 |   80–120 | Custom (EU)                |
 |31 | Fasteners (hub)         | M6–M12, various                   |   1 |   20–40  | Würth / Bossard (EU)       |
 
-**Hub System Subtotal: ~1,535–2,490 €**
+**Hub System Subtotal: ~1,435–2,310 €**
 
 ## 3. Frame & Mounting
 
@@ -427,12 +427,12 @@ Do not add the §8e I/O cost again. Those modules are already inside VC-ASM-5000
 | Subsystem             | Low Est. (€) | High Est. (€) | Notes                              |
 |-----------------------|-------------|---------------|------------------------------------|
 | Sonic head VC-ASM-1000 | 1,185 | 1,900 | YAML rollup |
-| Hub VC-ASM-2000 | 1,535 | 2,490 | YAML rollup. New unpriced lines do not change it. |
+| Hub VC-ASM-2000 | 1,435 | 2,310 | YAML rollup. The obsolete brake is not included. |
 | Frame VC-ASM-3000 | 440 | 730 | Live lines. The obsolete gas spring is not included. |
 | Power VC-ASM-4000 | 2,655 | 2,780 | Includes Instagrid at EUR 2,500. Supply price is unknown. |
 | Control VC-ASM-5000 | 1,565 | 2,460 | Option A. SE050 and the 9 V converter are not included. |
 | Field VC-ASM-8000 | 1,259 | 2,300 | Lift, tilt, penetrometer, scanner. |
-| **Machine VC-ASM-0000** | **8,639** | **12,660** | Sum of the six rollups above. |
+| **Machine VC-ASM-0000** | **8,539** | **12,480** | Sum of the six rollups above. |
 | Casing kit VC-KIT-6000 | 2,007.85 | 2,007.85 | Offer prices. Half-shell price is unknown. |
 | Positioning kit VC-KIT-7000 | 2,020 | 2,040 | viDoc plus WLAN bridge. |
 

@@ -16,7 +16,7 @@
 <text x="20" y="40" font-size="3" font-family="sans-serif">Fidelity: partial. Source: docs/engineering/BOM.md#3.</text>
 <text x="20" y="44.5" font-size="3" font-family="sans-serif">Material (engineering_material): S355.</text>
 <text x="20" y="49.0" font-size="3" font-family="sans-serif">Mass: 14.13 kg. Calculated from the blank at 7850 kg/m3. Holes will reduce it.</text>
-<text x="20" y="53.5" font-size="3" font-family="sans-serif">TODO: Rod-guide bore position, NEMA 42 mount, profile feet and UTV holes.</text>
+<text x="20" y="53.5" font-size="3" font-family="sans-serif">TODO: Profile feet and UTV holes. The 83 mm bore is a draft assembly cut for casing VC-GP-7100.</text>
 <text x="20" y="58.0" font-size="3" font-family="sans-serif">General tolerances: TODO. No tolerance class is specified in the design documents.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>

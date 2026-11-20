@@ -113,15 +113,15 @@ ISOLATOR_FREE_HEIGHT_MM = 40.0
 ISOLATOR_DIAMETER_MM = 16.0
 ISOLATOR_COUNT = 4
 # VC-HB-3100. Hiwin HGR20R published section. WR is the width. HR is the height.
-# The vendor STEP needs the Hiwin configurator. The solid is the rectangular envelope.
+# The STEP mounting face is the profile front face. See cad/vendor/VC-HB-3100/SOURCE.md.
 RAIL_SECTION_WIDTH_MM = 20.0
 RAIL_SECTION_HEIGHT_MM = 17.5
-# VC-HB-3110. Hiwin HGH20CA published block.
-# H is the height from the rail mounting face. W is the width. L is the length.
-# The vendor STEP needs the Hiwin product page. The solid is an envelope with a rail channel.
+# VC-HB-3110. Hiwin HGH20CAZ0H. H is the height from the rail mounting face.
+# W is the width. The length is the STEP solid, including the end seals.
+# The mounting-hole centre is 5.3 mm from that solid centre. See SOURCE.md.
 RUNNER_HEIGHT_MM = 30.0
 RUNNER_WIDTH_MM = 44.0
-RUNNER_LENGTH_MM = 77.5
+RUNNER_LENGTH_MM = 90.4
 RUNNER_COUNT = 4
 # TBD. Centre distance of the two blocks on one rail. Not in the BOM.
 RUNNER_PITCH_MM = 200.0
@@ -129,9 +129,25 @@ RUNNER_PITCH_MM = 200.0
 GUIDED_TRAVEL_MM = round(RAIL_LENGTH_MM - RUNNER_PITCH_MM - RUNNER_LENGTH_MM, 1)
 # Start pose. Zero is the lower end of travel. The start value is the top of travel.
 STROKE_POSITION_MM = GUIDED_TRAVEL_MM
-# TBD. Gap from the carriage plate to the rear face of the vibrating plate.
-# Large enough that the rear rib stays in front of the bottom plate at the lower end of travel.
-HEAD_FRONT_GAP_MM = 90.0
+# Draft. Gap from the carriage plate to the rear face of the motors.
+# The vibrating plate rear is flush with that face, so the rod sits close to the rails.
+HEAD_FRONT_GAP_MM = 10.0
+# The 400 mm bottom-plate blank stays. Its rear face is flush with the profile rear faces.
+# The volume behind those faces is reserved for the machine tilt mechanism.
+BOTTOM_PLATE_REAR_OVERHANG_MM = 0.0
+# VC-FR-4500 closed bore. It guides the 82.55 mm casing VC-GP-7100, not the column.
+CASING_GUIDE_BORE_DIAMETER_MM = 83.0
+# The chain axis is the mast mid-plane (X = 0), in the gap between the uprights.
+# The lift motor sits above the bottom plate, outside the head sweep on the drive side.
+# The brake body is flush with the profile rear face and does not enter the tilt zone.
+CHAIN_AXIS_X_MM = 0.0
+# Draft sheet for the frame gussets. Not a shop measurement.
+GUSSET_SHEET_THICKNESS_MM = 4.0
+GUSSET_HEIGHT_MM = 80.0
+# Draft sizes for the vibration-motor bracket VC-SH-1350. See CARRIAGE-BRACKET.md.
+BRACKET_GUSSET_THICKNESS_MM = 8.0
+BRACKET_GUSSET_HEIGHT_MM = 80.0
+BRACKET_BOLT_PITCH_Z_MM = 160.0
 # Yaw of each profile about its own vertical axis. The 100 mm side then lies along X.
 PROFILE_YAW_DEG = 90.0
 # Distance from the bottom of the profile to the bottom of the rail. TBD.
@@ -142,16 +158,17 @@ SPROCKET_PITCH_RADIUS_MM = 37.9
 # iwis 10B-2, 15 teeth. Tip diameter and overall length from the published product page.
 SPROCKET_TIP_DIAMETER_MM = 83.0
 SPROCKET_WIDTH_MM = 40.0
-# Neugart PLPE120, ratio 40, two stages. L1 is the published minimum total length.
-# The input flange can be longer. This envelope is that minimum.
-GEARBOX_HOUSING_DIAMETER_MM = 120.0
-GEARBOX_LENGTH_MM = 219.5
-# NEMA 42 frame is documented. The body length is not. TBD.
-NEMA42_FRAME_MM = 110.0
-NEMA42_BODY_LENGTH_MM = 180.0
-# Brake envelope. The catalogue number is unknown. TBD.
-BRAKE_LENGTH_MM = 40.0
-# Coupling envelope. The bore pair is unknown. TBD.
+# Neugart PLE120-040, article 100460948. The vendor solid matches these sizes.
+# 204 mm is the input adapter 47.5 mm, the housing 101.5 mm and the output shaft 55 mm.
+GEARBOX_FLANGE_MM = 115.0
+GEARBOX_LENGTH_MM = 204.0
+# Output shaft, from the output flange face to the tip. It is inside the 204 mm.
+OUTPUT_SHAFT_LENGTH_MM = 55.0
+# Siemens 1FL2104-4AG11-1MC0. Datasheet flange AB and overall length LB.
+# The Ø19 x 40 mm shaft enters the gearbox and is not a second solid.
+SERVO_FLANGE_MM = 81.0
+SERVO_BODY_LENGTH_MM = 186.6
+# Fallback coupling envelope. The placed solid is the ROTEX 28 STEP set. TBD when those files are absent.
 COUPLING_DIAMETER_MM = 65.0
 COUPLING_LENGTH_MM = 50.0
 # Shaft diameter at the top of the 25-30 mm range. It matches the UCP 206 bore.
@@ -237,11 +254,11 @@ PLACEHOLDERS: dict[str, tuple[float, str]] = {
     ),
     "rail_section_width_mm": (
         RAIL_SECTION_WIDTH_MM,
-        "Hiwin HGR20R published rail width WR. The STEP file was not downloaded. The solid is the envelope.",
+        "Hiwin HGR20R published rail width WR. The STEP mounting face sits on the profile.",
     ),
     "rail_section_height_mm": (
         RAIL_SECTION_HEIGHT_MM,
-        "Hiwin HGR20R published rail height HR. The STEP file was not downloaded. The solid is the envelope.",
+        "Hiwin HGR20R published rail height HR. The STEP mounting face sits on the profile.",
     ),
     "runner_pitch_mm": (
         RUNNER_PITCH_MM,
@@ -249,24 +266,36 @@ PLACEHOLDERS: dict[str, tuple[float, str]] = {
     ),
     "head_front_gap_mm": (
         HEAD_FRONT_GAP_MM,
-        "TBD. Gap from the carriage plate to the rear face of the vibrating plate. "
-        "It keeps the rear rib in front of the bottom plate at the lower end of travel.",
+        "TBD. Draft gap from the carriage plate to the rear face of the motors. "
+        "The plate rear is flush with that face.",
     ),
-    "nema42_body_length_mm": (
-        NEMA42_BODY_LENGTH_MM,
-        "TBD. NEMA 42 body length. The 110 mm frame is documented. The catalogue number is not chosen.",
+    "bottom_plate_rear_overhang_mm": (
+        BOTTOM_PLATE_REAR_OVERHANG_MM,
+        "TBD. Draft rear overhang of the 400 mm bottom plate. Zero keeps the rear face flush with the profiles.",
     ),
-    "brake_length_mm": (
-        BRAKE_LENGTH_MM,
-        "TBD. Envelope length of VC-HB-3000. The catalogue number is unknown.",
+    "gusset_sheet_thickness_mm": (
+        GUSSET_SHEET_THICKNESS_MM,
+        "TBD. Draft thickness of the bent frame gussets. Not a shop measurement.",
+    ),
+    "bracket_gusset_thickness_mm": (
+        BRACKET_GUSSET_THICKNESS_MM,
+        "TBD. Draft thickness of the vibration-motor bracket gussets. See CARRIAGE-BRACKET.md.",
+    ),
+    "bracket_gusset_height_mm": (
+        BRACKET_GUSSET_HEIGHT_MM,
+        "TBD. Draft height of the vibration-motor bracket gussets. See CARRIAGE-BRACKET.md.",
+    ),
+    "servo_body_length_mm": (
+        SERVO_BODY_LENGTH_MM,
+        "Siemens 1FL2104 overall length LB. The envelope is that square prism. No STEP yet.",
     ),
     "coupling_diameter_mm": (
         COUPLING_DIAMETER_MM,
-        "TBD. Envelope diameter of VC-HB-2400. The bore pair is unknown.",
+        "TBD. Fallback envelope diameter of VC-HB-2400 when no STEP is present.",
     ),
     "coupling_length_mm": (
         COUPLING_LENGTH_MM,
-        "TBD. Envelope length of VC-HB-2400. The bore pair is unknown.",
+        "TBD. Fallback envelope length of VC-HB-2400 when no STEP is present.",
     ),
     "pillow_length_mm": (
         PILLOW_LENGTH_MM,

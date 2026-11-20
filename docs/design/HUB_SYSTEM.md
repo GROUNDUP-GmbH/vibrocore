@@ -32,7 +32,7 @@ The hub system provides controlled **vertical linear motion** for:
     │  Lower sprocket   │
     │     ↑              │
     │  GEARBOX + MOTOR  │
-    │  (NEMA 42 + PLPE) │
+    │  (1FL2104 + PLE)  │
     └──────────────────┘
     BOTTOM OF MAST (Steel base plate)
 ```
@@ -48,35 +48,39 @@ The hub system provides controlled **vertical linear motion** for:
 
 ## 3. Motor & Drive Train
 
-### 3.1 NEMA 42 Closed-Loop Stepper
+### 3.1 Siemens 1FL2104 servo
 
 | Parameter              | Value                              |
 |------------------------|------------------------------------|
-| Frame size             | NEMA 42 (110×110 mm)              |
-| Holding torque         | 12–20 Nm (depending on model)      |
-| Rated current          | 6–8 A per phase                    |
-| Voltage                | 48–80 VDC (from battery or PSU)    |
-| Encoder                | 1000-line incremental (built-in)   |
-| Shaft                  | 19 mm with keyway                  |
-| Mass                   | ~6–8 kg                            |
+| Type                   | 1FL2104-4AG11-1MC0                 |
+| Rated / maximum torque | 3.2 Nm / 10.8 Nm                   |
+| Rated speed / power    | 3000 rpm / 1 kW                    |
+| Supply                 | 230 V 1~ with SINAMICS S200        |
+| Drive                  | 6SL5510-1BB11-0AA0, cabinet item   |
+| Encoder                | Absolute multiturn                 |
+| Shaft                  | 19 mm × 40 mm, with key            |
+| Flange                 | 81 mm square, centering 70 mm      |
+| Holding brake          | 3.3 Nm, built into the motor       |
+| Mass                   | about 4.1 kg                       |
 
-**Recommended models (EU-available):**
-- Nanotec ST11018 series (Germany)
-- Leadshine CS-M series + HBS86H driver
-- StepperOnline 110HS / CL86T-V4.1 driver
+The sizing and the torque limit are in [LIFT-DRIVE-SIZING.md](../engineering/LIFT-DRIVE-SIZING.md).
 
 ### 3.2 Planetary Gearbox
 
 | Parameter              | Value                              |
 |------------------------|------------------------------------|
-| Model                  | Neugart PLPE120                    |
-| Ratio                  | 40:1                               |
-| Nominal output torque  | 220 Nm                             |
-| Emergency torque       | 360 Nm                             |
-| Max input speed        | 4,000 rpm                          |
-| Output shaft           | 32 mm with keyway                  |
-| Backlash               | < 8 arcmin                         |
-| Mass                   | ~8 kg                              |
+| Model                  | Neugart PLE120, i = 40             |
+| Article                | 100460948                          |
+| Type code              | PLE120-040-SSSA3AF-Z19/40/70/90/B5/M6 |
+| Continuous torque T2D  | 195 Nm                             |
+| Cyclic torque T2Z      | 230 Nm                             |
+| Maximum torque T2max   | 365 Nm                             |
+| Emergency stop T2Stop  | 500 Nm                             |
+| Output shaft           | Ø25 h7 × 55 mm, key 8×7×40         |
+| Output pilot           | Ø80 h7                             |
+| Housing / flange edge  | 115 mm square                      |
+| Total length           | 204 mm (47.5 + 101.5 + 55)         |
+| Mass                   | 7.65 kg                            |
 
 ### 3.3 Chain Drive
 
@@ -166,20 +170,27 @@ and retraction (full speed acceptable).
 
 ## 6. Brake System
 
-A **power-off electromagnetic brake** holds the carriage when:
-- The motor is de-energised (gravity hold)
-- Emergency stop is activated
-- The system is in standby
+The holding brake is the brake built into the Siemens motor.
+VC-HB-3000 is obsolete and is not in the machine.
 
 | Parameter          | Value                              |
 |--------------------|------------------------------------|
-| Type               | 24 VDC spring-applied, EM release  |
-| Holding torque     | > 15 Nm (on motor shaft)           |
-| Mounting           | Between motor and gearbox          |
-| Control            | Relay, released when motor enabled |
+| Type               | 24 V DC spring-applied, in the motor |
+| Holding torque     | 3.3 Nm on the motor shaft          |
+| At the gearbox output, i = 40 | 132 Nm                    |
+| Chain force        | about 3.5 kN                       |
+| Control            | SINAMICS S200 brake output         |
 
-At 40:1 gearbox ratio, 15 Nm on motor shaft = 600 Nm effective = ~15.8 kN chain force.
-This exceeds any static or dynamic load, ensuring the carriage cannot slip.
+A separate 16 Nm brake would put 640 Nm on the gearbox output.
+PLE120 T2Stop at this ratio is 500 Nm.
+That brake can exceed the gearbox stop torque.
+Do not fit it.
+
+The 3.3 Nm brake holds the weight with margin.
+It does not hold the full pull-out force.
+If power fails during pull-out, the carriage can slide down onto the casing.
+The load then moves toward the ground.
+That case is a risk-assessment item. See LIFT-DRIVE-SIZING.md.
 
 ## 7. Sensors & Safety
 
@@ -260,4 +271,4 @@ redundant obstacle detection.
 
 ---
 
-*References: Neugart PLPE120 datasheet, DIN 8187 (10B chains), Nanotec C5-E manual*
+*References: docs/engineering/LIFT-DRIVE-SIZING.md, Neugart PLE catalogue 2026-10, Siemens 1FL2104 datasheet, DIN 8187 (10B chains)*

@@ -808,6 +808,145 @@ parts:
   - mk 2004 slot geometry is not in the repository. The solid is the outer envelope only and is not a
     machining model.
   - Alloy and the exact mk order code.
+  - Cut length of the drive-side upright. The purchased length stays 1500 mm. The pose starts that tube
+    above the gearbox.
+- part_number: VC-FR-4150
+  name: Bottom frame gusset
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Draft bent S355 sheet, 4 mm. Ties the two profiles above the bottom plate. Bolted with T-slot nuts.
+  legacy_ref: draft-fr-4150
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
+- part_number: VC-FR-4160
+  name: Top frame gusset
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Draft bent S355 sheet, 4 mm. Ties the two profiles near the top. Bolted with T-slot nuts.
+  legacy_ref: draft-fr-4160
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
+- part_number: VC-FR-4170
+  name: Mid frame gusset
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Draft bent S355 sheet, 4 mm. Ties the two profiles at mid height. Bolted with T-slot nuts.
+  legacy_ref: draft-fr-4170
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
+- part_number: VC-FR-4180
+  name: Drive crossbar mk 2004
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: frame
+  category: Frame
+  spec: mk 2004 profile, 50 x 100 mm, cut to the clear span between the upright inner faces. The uprights
+    VC-FR-4100 stay 1500 mm. At the 300 mm pitch the cut length is 250 mm.
+  legacy_ref: draft-fr-4180
+  supplier_id: mk
+  unknowns:
+  - Final cut length follows the profile pitch. The 300 mm pitch is TBD. Not in BOM.md v1.
+  notes: Draft. Cut this bar to length. Do not change the purchased 1500 mm uprights to hide the height deficit.
+- part_number: VC-FR-4182
+  name: Gearbox flange
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Draft horizontal S355 plate. Sits on the bottom plate on the drive side and runs out under the
+    gearbox. It does not cross the mast centre. The gearbox housing rests on it.
+  legacy_ref: draft-fr-4182
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Thickness, outline and the bolt pattern. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
+- part_number: VC-FR-4185
+  name: Lower front stiffener
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Draft S355 sheet, 4 mm. Bolts across the profile front faces in the lower bay. Stops under the
+    carriage so the sheet stays clear at stroke 0.
+  legacy_ref: draft-fr-4185
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
+- part_number: VC-FR-4186
+  name: Lower rear stiffener
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Draft S355 sheet, 4 mm. Bolts across the profile rear faces in the lower bay, up to the short
+    upright. The sheet is 4 mm behind the rear face. The tilt mechanism must clear it.
+  legacy_ref: draft-fr-4186
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
+- part_number: VC-FR-4190
+  name: Front top stiffener
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Draft S355 sheet, 4 mm. Bolts to both profile front faces above the rails. Replaces the stiffness of the top plate.
+  legacy_ref: draft-fr-4190
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
+- part_number: VC-FR-4195
+  name: Rear top stiffener
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Draft S355 sheet, 4 mm. Bolts to both profile rear faces above the rails. The sheet is 4 mm behind the rear face. The tilt mechanism must clear it.
+  legacy_ref: draft-fr-4195
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
 - part_number: VC-FR-4200
   name: Profile connector
   revision_index: 0
@@ -829,7 +968,7 @@ parts:
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: S355 blank 400 x 300 x 15 mm. Rod guide, motor mount and profile seats are not yet located.
+  spec: S355 blank 400 x 300 x 15 mm. The assembly cuts an 83 mm bore at the rod axis. The blank size is unchanged.
   legacy_ref: '3.34'
   estimate_eur_low: 80
   estimate_eur_high: 120
@@ -846,7 +985,7 @@ parts:
     fidelity: partial
     source: docs/engineering/BOM.md#3
   unknowns:
-  - Rod-guide bore position, NEMA 42 mount, profile feet and UTV holes.
+  - Profile feet and UTV holes. The 83 mm bore is a draft assembly cut for casing VC-GP-7100.
 - part_number: VC-FR-4400
   name: Top steel plate
   revision_index: 0
@@ -872,6 +1011,8 @@ parts:
     source: docs/engineering/BOM.md#3
   unknowns:
   - Idle-sprocket mount and profile bolt pattern.
+  - Not fitted in the current machine pose. The idler bearing blocks sit on the profile ends. The blank stays in the BOM.
+  notes: The machine pose does not mount this plate. Keep the line so the BOM.md quantity stays.
 - part_number: VC-FR-4500
   name: Rod guide bushing
   revision_index: 0
@@ -889,6 +1030,7 @@ parts:
   unknowns:
   - Length, flange and housing diameter.
   - The latch or the screws that close the two halves are not selected.
+  - Deferred by Stefan, 2026-11-19. Proposal only, a split or removable guide bushing so the 87.63 mm shoe can pass the closed 83 mm bore, then the bushing closes on the 82.55 mm casing. The bore diameter stays 83 mm.
 - part_number: VC-FR-4600
   name: UTV mounting bracket
   revision_index: 0
@@ -1062,49 +1204,78 @@ parts:
     only and is not in any rollup. Geoprobe lists "DT325 Retainer HD" and notes "No O-ring"
     (https://geoprobe.com/tooling/dt325-soil-sampling-system/mn208472). Do not buy it.'
 - part_number: VC-HB-2100
-  name: NEMA 42 closed-loop stepper
+  name: Servo motor 1FL2104
   revision_index: 0
   revision_letter: A
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: NEMA 42, closed loop, about 20 Nm, 6 A, incremental encoder, 19 mm keyed shaft.
+  spec: Siemens 1FL2104-4AG11-1MC0. 3.2 Nm rated, 10.8 Nm maximum, 3000 rpm, 1 kW, 230 V.
+    Shaft 19 x 40 mm. Flange 81 mm square, centering 70 mm, pitch circle 90 mm, B5, M6 holes.
+    Integrated 3.3 Nm holding brake. Multiturn absolute encoder. About 4.1 kg. Overall length 186.6 mm.
   legacy_ref: '2.17'
+  manufacturer_pn: 1FL2104-4AG11-1MC0
   estimate_eur_low: 250
   estimate_eur_high: 400
-  notes: 'Candidates: Nanotec, Leadshine. Mass is published as about 6-8 kg, so no single mass is stored.'
+  notes: 'Approved 2026-11-20. See docs/engineering/LIFT-DRIVE-SIZING.md. The envelope uses the datasheet
+    flange and the overall length. No vendor STEP yet. The Nanotec file is not loaded. The 250-400 EUR
+    band is the previous placeholder. It is not a Siemens quote. See cad/vendor/VC-HB-2100/SOURCE.md.'
   unknowns:
-  - Exact catalogue number, body length and mass.
+  - Vendor STEP is not in the repository. The shaft is inside the gearbox envelope and is not a second solid.
+- part_number: VC-HB-2110
+  name: Lift motor bracket
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: hub
+  category: Hub
+  spec: Draft steel shelf. Holds the Siemens servo above the bottom plate. The motor axis is parallel
+    to the sprocket shaft. The gear teeth that drop the drive onto the chain shaft are not selected.
+    Nothing enters the reserved volume behind the rear faces.
+  legacy_ref: draft-hb-2110
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Plate thickness, bolt size and weld sizes. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
 - part_number: VC-HB-2200
-  name: Planetary gearbox PLPE120-040
+  name: Planetary gearbox PLE120-040
   revision_index: 0
   revision_letter: A
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: Neugart PLPE120, ratio 40:1, output shaft 32 mm with keyway.
+  spec: Neugart PLE120, ratio 40, type PLE120-040-SSSA3AF-Z19/40/70/90/B5/M6, article 100460948.
+    Square 115 mm. Length 204 mm (adapter 47.5, housing 101.5, shaft 55). Output shaft 25 h7 x 55 mm,
+    key DIN 6885-A-8x7x40. Pilot 80 h7. Mass 7.65 kg.
   legacy_ref: '2.18'
-  manufacturer_pn: PLPE120-040
+  manufacturer_pn: PLE120-040-SSSA3AF-Z19/40/70/90/B5/M6
   supplier_id: neugart
+  mass_kg: 7.65
+  mass_note: Nameplate mass of article 100460948, from the Neugart CAD data sheet received 2026-11-20.
   estimate_eur_low: 600
   estimate_eur_high: 900
-  unknowns:
-  - Input flange code for the selected NEMA 42 motor.
+  notes: 'Approved 2026-11-20. The vendor STEP is in cad/vendor/VC-HB-2200. The 2D PDF and the DXF are
+    not in the repository. The 600-900 EUR band is the previous placeholder. It is not a Neugart quote.
+    See docs/engineering/LIFT-DRIVE-SIZING.md.'
 - part_number: VC-HB-2300
-  name: Closed-loop stepper driver
+  name: SINAMICS S200 servo drive
   revision_index: 0
   revision_letter: A
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: Leadshine CL86T-V4.1 or Nanotec C5-E. Modbus / CiA 402 to the PFC200.
+  spec: Cabinet item. SINAMICS S200, 1 kW, 200 to 240 V, order 6SL5510-1BB11-0AA0. Pulse train.
+    STO and holding-brake control. Not in the machine pose.
   legacy_ref: '2.19'
+  manufacturer_pn: 6SL5510-1BB11-0AA0
   estimate_eur_low: 80
   estimate_eur_high: 150
-  notes: CONTROL_SYSTEM.md draws the Nanotec C5-E. BOM.md leaves both candidates. Installed in the control
-    enclosure.
+  notes: 'Approved 2026-11-20. Replaces the stepper driver. Installed in the control enclosure.
+    The 80-150 EUR band is the previous placeholder. It is not a Siemens quote.'
   unknowns:
-  - Final driver, and therefore the connector and the encoder interface.
+  - PROFINET order 6SL5510-1BB11-0AF0 if the PLC does not use pulse and direction. The price is not a quote.
 - part_number: VC-HB-2400
   name: Elastomer coupling
   revision_index: 0
@@ -1112,12 +1283,14 @@ parts:
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: R+W EKH or KTR ROTEX 28, torque only, between gearbox and drive shaft.
+  spec: KTR ROTEX 28, torque only, between gearbox and drive shaft.
   legacy_ref: '2.20'
   estimate_eur_low: 60
   estimate_eur_high: 100
+  notes: 'The STEP set is a 32H7 hub with keyway, an unbored hub and a 92 Sh-A spider. See
+    cad/vendor/VC-HB-2400/SOURCE.md.'
   unknowns:
-  - Bore pair. Gearbox output is 32 mm; the drive shaft is not frozen.
+  - Gearbox output is Ø25 mm. The STEP hub is 32H7, so the bore is not a fit. The hub is seated on the journal. The chain-side hub is unbored.
 - part_number: VC-HB-2500
   name: Hub drive shaft
   revision_index: 0
@@ -1169,7 +1342,8 @@ parts:
   legacy_ref: '2.24'
   estimate_eur_low: 25
   estimate_eur_high: 40
-  notes: z24.de or ETKF. Pitch radius used in the force calculation is 37.9 mm.
+  notes: 'G&G 501-302-0515, 10B-2 15 teeth, taper bush 1210. The STEP is in cad/vendor/VC-HB-2800.
+    Pitch radius used in the force calculation is 37.9 mm. The idler VC-HB-2810 reuses this solid.'
 - part_number: VC-HB-2810
   name: Sprocket 10B-2 15T idle
   revision_index: 0
@@ -1181,6 +1355,38 @@ parts:
   legacy_ref: '2.25'
   estimate_eur_low: 30
   estimate_eur_high: 50
+  notes: Same G&G 501-302-0515 solid as VC-HB-2800. No second STEP file. See cad/vendor/VC-HB-2810/SOURCE.md.
+- part_number: VC-HB-2820
+  name: Idler shaft
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: hub
+  category: Hub
+  spec: Draft keyed shaft, diameter 30 mm. It sits on top of the profile ends, on the mast mid-plane.
+  legacy_ref: draft-hb-2820
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Key size and the bearing catalogue number. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
+- part_number: VC-HB-2830
+  name: Idler bearing bracket
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: hub
+  category: Hub
+  spec: Draft bracket, two pieces. Slotted bearing seat and a tension screw land. Bolts to the top of
+    each profile end. Seat sized for a 30 mm bore.
+  legacy_ref: draft-hb-2830
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Bearing catalogue number, slot length and bolt size. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
 - part_number: VC-HB-2900
   name: Chain tensioner
   revision_index: 0
@@ -1201,13 +1407,17 @@ parts:
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: Spring-applied electromagnetic brake, 24 V, holding torque above 15 Nm, between motor and gearbox.
+  spec: Obsolete. Kendrion INTORQ BFK457-10, 16 Nm. Not in the machine pose.
   legacy_ref: '2.27'
   estimate_eur_low: 100
   estimate_eur_high: 180
-  notes: Kendrion or Mayr.
+  lifecycle: obsolete
+  notes: 'Obsolete 2026-11-20. 16 Nm times the ratio 40 is 640 Nm at the gearbox output. PLE120 T2Stop
+    at i=40 is 500 Nm. The brake can exceed that stop torque. The Siemens motor holding brake is used
+    instead. The STEP is not loaded. The price is history and is not in the rollup.
+    See docs/engineering/LIFT-DRIVE-SIZING.md and cad/vendor/VC-HB-3000/SOURCE.md.'
   unknowns:
-  - Catalogue number and the matching shaft bore.
+  - Obsolete. Do not buy. The motor holding brake replaces this part.
 - part_number: VC-HB-3100
   name: Linear guide rail HGR20
   revision_index: 0
@@ -1219,7 +1429,8 @@ parts:
   legacy_ref: '2.28'
   estimate_eur_low: 50
   estimate_eur_high: 90
-  notes: Hiwin or Bosch Rexroth. HGR20 is the Hiwin designation used in BOM.md.
+  notes: 'HIWIN HGR20R1300H. The STEP is in cad/vendor/VC-HB-3100. The mounting face sits on the profile.
+    Bolt pitch is 60 mm. See SOURCE.md.'
 - part_number: VC-HB-3110
   name: Linear carriage HGH20
   revision_index: 0
@@ -1227,10 +1438,12 @@ parts:
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: Ball-type carriage for the size-20 rail. Four carriages.
+  spec: HIWIN HGH20CAZ0H ball carriage for the size-20 rail. Four carriages. Overall length 90.4 mm.
   legacy_ref: '2.29'
   estimate_eur_low: 20
   estimate_eur_high: 35
+  notes: 'The STEP is in cad/vendor/VC-HB-3110. The block top is 30 mm from the rail mounting face.
+    See SOURCE.md.'
 - part_number: VC-HB-3200
   name: Carriage plate
   revision_index: 0
@@ -1761,6 +1974,22 @@ parts:
     source: docs/engineering/DIMENSIONING.md#3.1
   unknowns:
   - Weld position on the plate.
+- part_number: VC-SH-1350
+  name: Vibration motor bracket
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: sonic_head
+  category: Sonic Head
+  spec: Draft S355 bracket. Two 8 mm gussets, 80 mm high, and four M12 bolts into the carriage plate.
+    Sized for pull-out. See docs/engineering/CARRIAGE-BRACKET.md.
+  legacy_ref: draft-sh-1350
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  unknowns:
+  - Released plate thickness and the fatigue case. Not in BOM.md v1.
+  notes: Draft. Made part. Do not manufacture from this revision.
 - part_number: VC-SH-1400
   name: Center column
   revision_index: 0
@@ -1967,6 +2196,7 @@ boms:
   - {part_number: VC-SH-1100, qty: 2}
   - {part_number: VC-SH-1200, qty: 1}
   - {part_number: VC-SH-1300, qty: 1}
+  - {part_number: VC-SH-1350, qty: 1}
   - {part_number: VC-SH-1400, qty: 1}
   - {part_number: VC-SH-1500, qty: 1}
   - {part_number: VC-SH-1600, qty: 4}
@@ -1977,6 +2207,7 @@ boms:
   mrp_type: normal
   lines:
   - {part_number: VC-HB-2100, qty: 1}
+  - {part_number: VC-HB-2110, qty: 1}
   - {part_number: VC-HB-2200, qty: 1}
   - {part_number: VC-HB-2300, qty: 1}
   - {part_number: VC-HB-2400, qty: 1}
@@ -1985,8 +2216,9 @@ boms:
   - {part_number: VC-HB-2700, qty: 1}
   - {part_number: VC-HB-2800, qty: 1}
   - {part_number: VC-HB-2810, qty: 1}
+  - {part_number: VC-HB-2820, qty: 1}
+  - {part_number: VC-HB-2830, qty: 2}
   - {part_number: VC-HB-2900, qty: 1}
-  - {part_number: VC-HB-3000, qty: 1}
   - {part_number: VC-HB-3100, qty: 2}
   - {part_number: VC-HB-3110, qty: 4}
   - {part_number: VC-HB-3200, qty: 1}
@@ -1998,6 +2230,15 @@ boms:
   mrp_type: normal
   lines:
   - {part_number: VC-FR-4100, qty: 2}
+  - {part_number: VC-FR-4150, qty: 1}
+  - {part_number: VC-FR-4160, qty: 1}
+  - {part_number: VC-FR-4170, qty: 1}
+  - {part_number: VC-FR-4180, qty: 1}
+  - {part_number: VC-FR-4182, qty: 1}
+  - {part_number: VC-FR-4185, qty: 1}
+  - {part_number: VC-FR-4186, qty: 1}
+  - {part_number: VC-FR-4190, qty: 1}
+  - {part_number: VC-FR-4195, qty: 1}
   - {part_number: VC-FR-4200, qty: 8}
   - {part_number: VC-FR-4300, qty: 1}
   - {part_number: VC-FR-4400, qty: 1}

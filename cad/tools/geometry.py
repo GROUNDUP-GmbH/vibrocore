@@ -15,6 +15,7 @@ from cad.tools.bom import ROOT, BillOfMaterials, Part, modelled_parts
 
 STEP_DIR = ROOT / "cad" / "export" / "step"
 GEOMETRY_JSON = ROOT / "cad" / "export" / "geometry.json"
+VENDOR_DIR = ROOT / "cad" / "vendor"
 
 
 def shape_for(part: Part):
@@ -112,6 +113,75 @@ def _freeze_step_header(path: Path, part_number: str, baseline_date: str) -> Non
     if frozen == text:
         raise ValueError(f"{path} has no FILE_NAME timestamp to pin")
     path.write_text(frozen, encoding="utf-8")
+
+
+def vendor_step_path(part_id: str) -> Path | None:
+    """First STEP file in cad/vendor/<part-id>/, or None when the folder is empty."""
+    folder = VENDOR_DIR / part_id
+    if not folder.is_dir():
+        return None
+    matches = sorted(
+        path
+        for path in folder.iterdir()
+        if path.is_file() and path.suffix.lower() in {".step", ".stp"}
+    )
+    return matches[0] if matches else None
+
+
+def import_step_solid(path):
+    """First solid or compound in a STEP file."""
+    from build123d import import_step
+
+    loaded = import_step(str(path))
+    if loaded is None:
+        raise ValueError(f"{path} did not contain a solid")
+    return loaded[0] if isinstance(loaded, (list, tuple)) else loaded
+
+
+def _without_empty(shape, path: Path):
+    """Drop the empty datum compound a manufacturer STEP often carries.
+
+    A later fuse of that empty shape raises Null TopoDS_Shape.
+    """
+    from build123d import Compound
+
+    solids = [item for item in shape.solids() if abs(float(item.volume)) > 1.0] if hasattr(shape, "solids") else []
+    if not solids:
+        if abs(float(shape.volume)) <= 1.0:
+            raise ValueError(f"{path} did not contain a solid")
+        return shape
+    if len(solids) == 1:
+        return solids[0]
+    return Compound(children=solids)
+
+
+def load_vendor_shape(part_id: str, filename: str | None = None, *, recenter: bool = True):
+    """Vendor solid, or None when that STEP is absent.
+
+    The default recenters the bounding box and keeps the file axes.
+    The assembly rotates that solid onto the envelope axis.
+    The rotation and any extra origin shift are in cad/vendor/<part-id>/SOURCE.md.
+    Pass filename when one part is several STEP files.
+    Pass recenter=False when the file origin is a mating face, not the box centre.
+    A missing file is not an error. The caller keeps the envelope.
+    """
+    folder = VENDOR_DIR / part_id
+    if filename is None:
+        path = vendor_step_path(part_id)
+    else:
+        path = folder / filename
+        if not path.is_file():
+            path = None
+    if path is None:
+        return None
+    from build123d import Pos
+
+    solid = _without_empty(import_step_solid(path), path)
+    if recenter:
+        center = solid.bounding_box().center()
+        solid = Pos(-float(center.X), -float(center.Y), -float(center.Z)) * solid
+    solid.label = part_id
+    return solid
 
 
 def read_step_bbox_mm(path: Path) -> tuple[float, float, float]:
