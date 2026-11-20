@@ -105,6 +105,24 @@ def oriented_gearbox():
     return Rot(0, 0, 90) * loaded
 
 
+def oriented_pillow():
+    """SKF SYJ 30 TF. Bore along Y. Base at local Z = -42.9 mm. Shaft axis at Z = 0.
+
+    The 3Dfindit file has the bore on file X and the 165 mm foot on file Z.
+    The base is the plane file Y = -42.9 mm. The shaft axis is the file origin.
+    Rot(90, 0, 0) stands the base down. Rot(0, 0, 90) then lays the bore on Y.
+    The file origin is the bore, so the solid is not recentered.
+    A file that is not this housing returns None.
+    """
+    loaded = load_vendor_shape("VC-HB-2600", recenter=False)
+    if loaded is None:
+        return None
+    size = loaded.bounding_box().size
+    if abs(float(size.Z) - 165.0) > 1.0 or abs(float(size.Y) - 82.5) > 1.0:
+        return None
+    return Rot(0, 0, 90) * Rot(90, 0, 0) * loaded
+
+
 def oriented_sprocket():
     """G&G 10B-2 sprocket. The file axis is Z. The chain shaft is Y.
 

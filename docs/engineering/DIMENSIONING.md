@@ -204,7 +204,7 @@ Hub drive shaft bearings — same as V1:
 
 | Position             | Type        | Designation    | Notes                    |
 |----------------------|-------------|----------------|--------------------------|
-| Hub drive shaft (2)  | Self-align  | UCP 206        | Pillow block, 30mm bore  |
+| Hub shaft (2)        | Self-align  | SKF SYJ 30 TF  | Pillow block, 30 mm bore |
 | Hub idle sprocket    | Deep groove | 6205-2RS       | 25×52×15 mm              |
 
 *Note: Sonic head bearings are now INTERNAL to OLI motors — no external

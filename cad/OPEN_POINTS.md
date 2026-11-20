@@ -28,7 +28,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-ASM-1000` Sonic head assembly: Motor centre distance is only a minimum of 170 mm. It is not a frozen pitch, so the motors are not placed in the 3D model.
 - `VC-ASM-1000` Sonic head assembly: Isolator coordinates are not given.
 - `VC-ASM-2000` Hub system assembly: Carriage plate length and width are not given, only the 10 mm thickness.
-- `VC-ASM-2000` Hub system assembly: Drive-shaft length is not given. Diameter is published as a range, 25-30 mm.
+- `VC-ASM-2000` Hub system assembly: The SYJ 30 TF bore is Ø30. The gearbox output is Ø25 h7. The ROTEX hub is 32H7.
 - `VC-ASM-3000` Frame assembly: Profile connector types are not identified beyond mk standard corners or T-slot nuts.
 - `VC-ASM-3000` Frame assembly: Stabiliser feet have no selected order codes.
 - `VC-ASM-4000` Power system assembly: no solid. Dimensions were not complete enough to model.
@@ -119,8 +119,8 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-HB-2200` Planetary gearbox PLE120-040: Input adapter of article 100460948 was configured for 1FL2104-4AG10. Re-check it for the current oil seal and for successor 1FL2104-4BG. The STEP recess is 4.4 mm deep and has no keyway.
 - `VC-HB-2200` Planetary gearbox PLE120-040: The chain sprocket sits on the output shaft. Check the radial load against the Neugart catalogue.
 - `VC-HB-2300` SINAMICS S200 servo drive: PROFINET order 6SL5510-1BB11-0AF0 if the PLC does not use pulse and direction. The price is not a quote.
-- `VC-HB-2500` Hub drive shaft: Not placed. The sprocket sits on the gearbox output shaft.
-- `VC-HB-2600` Pillow block UCP 206: Not placed. The idler uses VC-HB-2830.
+- `VC-HB-2500` Chain bearing shaft: This shaft does not drive the chain. The sprocket stays on the Ø25 gearbox shaft.
+- `VC-HB-2600` Pillow block SYJ 30 TF: Bore is Ø30. The gearbox output is Ø25 h7 and the ROTEX hub is 32H7. This bearing fits neither.
 - `VC-HB-2700` Duplex chain 10B-2: Purchase length 3.2 m stays a placeholder until the lift height is decided.
 - `VC-HB-2700` Duplex chain 10B-2: Breaking load is not stated by G&G. Do not assign a value.
 - `VC-HB-2800` Sprocket 10B-2 15T drive: Finish taper bush 1210 to Ø25 h7 for the output shaft and the 8x7x40 key. Not in BOM.md v1.

@@ -6,6 +6,8 @@ Connecting link: 600-302-0001.
 Type: 10B-2 duplex roller chain.
 
 G&G publishes no chain CAD. There is no STEP file in this folder.
+Do not put the SKF SYJ 30 TF file here. That bearing is VC-HB-2600.
+A STEP in this folder would replace the chain solid.
 The placed solid is parametric. See `cad/models/roller_chain.py`.
 The section is ISO 606:
 - Pitch 15.875 mm.

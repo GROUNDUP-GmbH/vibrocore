@@ -186,9 +186,9 @@ These visual stand-ins are not in the height sum.
 | chain_transverse_pitch_mm | 16.59 mm | ISO 606 duplex transverse pitch. |
 | coupling_diameter_mm | 65 mm | Fallback envelope of VC-HB-2400 when no STEP is present. |
 | coupling_length_mm | 50 mm | Fallback envelope of VC-HB-2400 when no STEP is present. |
-| pillow_length_mm | 30 mm | UCP 206 envelope along the shaft. The 30 mm bore is selected. |
-| pillow_width_mm | 70 mm | UCP 206 envelope. The housing outline was not downloaded. |
-| pillow_height_mm | 45 mm | UCP 206 envelope. The housing outline was not downloaded. |
+| pillow_length_mm | 43.2 mm | SYJ 30 TF along the shaft. Catalogue base width A is 42 mm. |
+| pillow_width_mm | 165 mm | SYJ 30 TF foot length L. Bolt spacing J is 118 mm. |
+| pillow_height_mm | 82.5 mm | SYJ 30 TF overall height. Catalogue H is 82 mm. Centre height is 42.9 mm. |
 | chain_section_x_mm | 16 mm | Old envelope thickness. The placed chain uses the 10.16 mm roller. |
 | chain_section_y_mm | 32 mm | Old envelope width. The placed rows use 9.65 mm and a 16.59 mm transverse pitch. |
 | rail_bottom_offset_mm | 100 mm | From the bottom of the profile to the bottom of the rail. |
@@ -309,12 +309,20 @@ Its lower rail also sits on the bottom plate.
 VC-FR-4184 anchors the input end of the gearbox.
 It meets the plate, clears the housing, and lands on the bottom plate.
 The input face stays clear. The motor bolts on after that anchor.
+Two SKF SYJ 30 TF housings sit beside the gearbox, on a Ø30 shaft.
+The bore does not fit the Ø25 output and it does not fit the 32H7 coupling hub.
+The shaft does not carry the sprocket.
+The axis is at X = 44 mm and Z = 57.9 mm, so the 165 mm foot stays in front of X = −50 mm.
+The outboard sole sits on a seat in VC-FR-4183. Two M12 holes pass that seat.
+The inboard sole sits on the bottom plate. Two M12 holes pass that plate.
+The sole is the plane Z = 15 mm. The housing top is at Z = 97.5 mm, under the carriage web at Z = 105 mm.
 The drive-side upright is cut short.
 It starts above the gearbox, at Z = 139 mm, and still reaches the same top as the other upright.
 The idle-side upright stays 1500 mm.
 The purchased length of VC-FR-4100 stays 1500 mm.
 VC-FR-4185 is a 4 mm sheet on the front face of the lower bay.
 It stops under the carriage, because at stroke 0 the carriage web is at Z = 105 mm.
+A window on the drive side clears the two bearing housings and the Ø30 shaft.
 VC-FR-4186 is the matching rear sheet.
 The carriage arm stays in front of the rail and meets the chain outboard of the profile.
 A cut mk 2004 bar, VC-FR-4180, spans the clear gap between the inner faces.
@@ -358,7 +366,7 @@ The drive sprocket sits on the output shaft.
 A missing file keeps the catalogue envelope.
 The mk 2004 uprights and the drive crossbar use the 3Dfindit extrusion.
 The 10B-2 chain is an ISO 606 section. G&G publishes no chain CAD.
-The UCP 206 blocks and the OLI MVE motors stay envelopes.
+VC-HB-2600 is the SKF SYJ 30 TF solid. The OLI MVE motors stay envelopes.
 
 The vibrating plate bottom is at the same height as the lower guide block.
 The plate does not hang below the carriage.

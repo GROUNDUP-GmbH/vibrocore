@@ -188,7 +188,7 @@ parts:
   legacy_ref: '2'
   unknowns:
   - Carriage plate length and width are not given, only the 10 mm thickness.
-  - Drive-shaft length is not given. Diameter is published as a range, 25-30 mm.
+  - The SYJ 30 TF bore is Ø30. The gearbox output is Ø25 h7. The ROTEX hub is 32H7.
 - part_number: VC-ASM-3000
   name: Frame assembly
   revision_index: 0
@@ -900,13 +900,14 @@ parts:
   category: Frame
   spec: S355 side frame on the drive side. A pad with four Ø9 mm holes bolts to the drive-side mk 2004.
     Two rails are welded to the mount plate VC-FR-4182 and to that pad. The lower rail also sits on
-    the bottom plate.
+    the bottom plate. A horizontal seat, top at Z = 15 mm, carries the outboard SKF SYJ 30 TF.
+    Two Ø13 mm holes take M12 bolts through that foot.
   legacy_ref: draft-fr-4183
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  mass_kg: 0.68
-  mass_note: Solid volume at 7850 kg/m3.
+  mass_kg: 1.47
+  mass_note: Solid volume at 7850 kg/m3. The seat under the outboard bearing is included.
   unknowns:
   - Bolt grade and the T-slot nuts in the mk 2004. Not in BOM.md v1.
   notes: Draft. Made part. Welded and bolted to VC-FR-4182. Do not manufacture from this revision.
@@ -918,14 +919,15 @@ parts:
   subsystem: frame
   category: Frame
   spec: S355 anchor at the gearbox input end. A cheek and a beam meet the mount plate on the gearbox
-    side of the output flange. A strap clears the housing top. A link runs around the plate onto the
-    bottom plate. The input face stays clear for the motor.
+    side of the output flange. A strap clears the housing top. A link runs around the plate and stops
+    at the bearing seat on VC-FR-4183. The seat lands on the bottom plate. The input face stays clear
+    for the motor.
   legacy_ref: draft-fr-4184
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  mass_kg: 3.14
-  mass_note: Solid volume at 7850 kg/m3.
+  mass_kg: 3.02
+  mass_note: Solid volume at 7850 kg/m3. The link stops at the bearing seat.
   unknowns:
   - Weld size where the anchor meets VC-FR-4182. Not in BOM.md v1.
   notes: Draft. Made part. Fit this anchor before the motor. Do not manufacture from this revision.
@@ -937,7 +939,8 @@ parts:
   subsystem: frame
   category: Frame
   spec: Draft S355 sheet, 4 mm. Bolts across the profile front faces in the lower bay. Stops under the
-    carriage so the sheet stays clear at stroke 0.
+    carriage so the sheet stays clear at stroke 0. A window on the drive side clears the two SYJ 30 TF
+    housings and the Ø30 shaft.
   legacy_ref: draft-fr-4185
   supplier_id: custom_eu
   material: S355
@@ -1336,34 +1339,44 @@ parts:
   notes: 'Not in this pose. The STEP set is a 32H7 hub with keyway, an unbored hub and a 92 Sh-A spider.
     See cad/vendor/VC-HB-2400/SOURCE.md.'
 - part_number: VC-HB-2500
-  name: Hub drive shaft
+  name: Chain bearing shaft
   revision_index: 0
   revision_letter: A
   supply: subcontract
   subsystem: hub
   category: Hub
-  spec: Not placed. The drive sprocket sits on the gearbox output shaft, Ø25 h7 by 55 mm.
+  spec: Ø30 mm shaft for two SKF SYJ 30 TF bearings. It does not carry the sprocket. The sprocket stays
+    on the gearbox output, Ø25 h7 by 55 mm.
   legacy_ref: '2.21'
   estimate_eur_low: 30
   estimate_eur_high: 50
   supplier_id: custom_eu
+  material: steel
+  mass_kg: 0.60
+  mass_note: Ø30 mm by 108.7 mm, at 7850 kg/m3. The solid is 0.2 mm under the bore.
   unknowns:
-  - Not placed. The sprocket sits on the gearbox output shaft.
-  notes: Not in this pose. Do not manufacture from this revision.
+  - This shaft does not drive the chain. The sprocket stays on the Ø25 gearbox shaft.
+  notes: Draft. The modeled diameter is 29.6 mm so the bore and the shaft do not share a volume.
+    The grub screw is M6 x 0.75 at 4 Nm. Do not manufacture from this revision.
 - part_number: VC-HB-2600
-  name: Pillow block UCP 206
+  name: Pillow block SYJ 30 TF
   revision_index: 0
   revision_letter: A
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: Not placed. The drive sprocket sits on the gearbox output. There is no separate drive shaft.
+  spec: SKF SYJ 30 TF. Housing SYJ 506. Insert YAR 206-2F. Bore 30 mm. Centre height 42.9 mm. Foot
+    length 165 mm. Bolt spacing J 118 mm, slots 24 mm by 17 mm. Two M12 bolts per housing. Grub screw
+    M6 x 0.75 at 4 Nm. C 19.5 kN. C0 11.2 kN. Mass 1.1 kg.
   legacy_ref: '2.22'
+  manufacturer_pn: SYJ 30 TF
   estimate_eur_low: 15
   estimate_eur_high: 25
+  mass_kg: 1.1
+  mass_note: SKF catalogue mass. The 15-25 EUR band is the previous placeholder. It is not an SKF quote.
   unknowns:
-  - Not placed. The idler uses VC-HB-2830.
-  notes: Not in this pose. SKF or Schaeffler. The idler uses VC-HB-2830, not this pillow block.
+  - Bore is Ø30. The gearbox output is Ø25 h7 and the ROTEX hub is 32H7. This bearing fits neither.
+  notes: 'The vendor STEP is in cad/vendor/VC-HB-2600. See SOURCE.md. The idler still uses VC-HB-2830.'
 - part_number: VC-HB-2700
   name: Duplex chain 10B-2
   revision_index: 0
@@ -2268,6 +2281,8 @@ boms:
   - {part_number: VC-HB-2100, qty: 1}
   - {part_number: VC-HB-2200, qty: 1}
   - {part_number: VC-HB-2300, qty: 1}
+  - {part_number: VC-HB-2500, qty: 1}
+  - {part_number: VC-HB-2600, qty: 2}
   - {part_number: VC-HB-2700, qty: 1}
   - {part_number: VC-HB-2800, qty: 1}
   - {part_number: VC-HB-2810, qty: 1}

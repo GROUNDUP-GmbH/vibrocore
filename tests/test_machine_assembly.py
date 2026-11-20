@@ -56,6 +56,8 @@ PART_NUMBERS = (
     "VC-FR-4300",
     "VC-HB-2100",
     "VC-HB-2200",
+    "VC-HB-2500",
+    "VC-HB-2600",
     "VC-HB-2700",
     "VC-HB-2800",
     "VC-HB-2810",
@@ -153,6 +155,19 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
     assert float(sprocket_box.max.Y) < float(gearbox.shape.bounding_box().max.Y)
     assert abs(float(sprocket_box.center().X) - float(gearbox.shape.bounding_box().center().X)) < 0.5
     assert abs(float(sprocket_box.center().Z) - float(gearbox.shape.bounding_box().center().Z)) < 0.5
+    bearings = [item for item in parts if item.name.startswith("VC-HB-2600")]
+    assert len(bearings) == 2
+    shaft = next(item for item in parts if item.name == "VC-HB-2500")
+    shaft_box = shaft.shape.bounding_box()
+    for item in bearings:
+        foot = item.shape.bounding_box()
+        assert abs(float(foot.min.Z) - 15.0) < 0.05
+        assert float(foot.max.Z) < 105.0
+        assert abs(float(foot.center().X) - float(shaft_box.center().X)) < 0.5
+        assert abs(float(shaft_box.center().Z) - (float(foot.min.Z) + 42.9)) < 0.05
+    assert abs(float(shaft_box.center().X) - float(gearbox.shape.bounding_box().center().X)) > 20.0
+    assert bom.part("VC-HB-2600").manufacturer_pn == "SYJ 30 TF"
+    assert bom.part("VC-HB-2600").mass_kg == 1.1
     assert bom.part("VC-HB-2200").mass_kg == 7.65
     assert report["guided_travel_mm"] == 1009.6
     assert report["stroke_position_mm"] == 1009.6

@@ -175,12 +175,16 @@ PROFILE_SLOT_WIDTH_MM = 10.10
 # Fallback coupling envelope. The placed solid is the ROTEX 28 STEP set. TBD when those files are absent.
 COUPLING_DIAMETER_MM = 65.0
 COUPLING_LENGTH_MM = 50.0
-# Shaft diameter at the top of the 25-30 mm range. It matches the UCP 206 bore.
+# Shaft diameter at the top of the 25-30 mm range. It matches the SYJ 30 TF bore.
+# The gearbox output is Ø25 h7. The ROTEX hub is 32H7. Neither fits this bore.
 SHAFT_DIAMETER_MM = 30.0
-# Pillow-block envelope. TBD. The bore is the 30 mm UCP 206 bore.
-PILLOW_LENGTH_MM = 30.0
-PILLOW_WIDTH_MM = 70.0
-PILLOW_HEIGHT_MM = 45.0
+# SKF SYJ 30 TF. Measured on the 3Dfindit STEP. Catalogue values are in SOURCE.md.
+# Length is along the shaft. Width is the foot. Height is the overall housing.
+PILLOW_CENTER_HEIGHT_MM = 42.9
+PILLOW_LENGTH_MM = 43.2
+PILLOW_WIDTH_MM = 165.0
+PILLOW_HEIGHT_MM = 82.5
+PILLOW_BOLT_SPAN_MM = 118.0
 # Old strand envelope. The placed chain uses the ISO 606 section below.
 CHAIN_SECTION_X_MM = 16.0
 CHAIN_SECTION_Y_MM = 32.0
@@ -308,15 +312,15 @@ PLACEHOLDERS: dict[str, tuple[float, str]] = {
     ),
     "pillow_length_mm": (
         PILLOW_LENGTH_MM,
-        "TBD. Envelope length of UCP 206 along the shaft. The 30 mm bore is the selected size.",
+        "SYJ 30 TF along the shaft. Catalogue base width A is 42 mm. The STEP bounding box is 43.2 mm.",
     ),
     "pillow_width_mm": (
         PILLOW_WIDTH_MM,
-        "TBD. Envelope width of UCP 206. The housing outline was not downloaded.",
+        "SYJ 30 TF foot length L. Bolt spacing J is 118 mm.",
     ),
     "pillow_height_mm": (
         PILLOW_HEIGHT_MM,
-        "TBD. Envelope height of UCP 206. The housing outline was not downloaded.",
+        "SYJ 30 TF overall height. Catalogue H is 82 mm. Centre height H1 is 42.9 mm.",
     ),
     "chain_section_x_mm": (
         CHAIN_SECTION_X_MM,

@@ -104,9 +104,15 @@ The sizing and the torque limit are in [LIFT-DRIVE-SIZING.md](../engineering/LIF
 The drive sprocket sits on the PLE120 output shaft.
 The shaft is Ø25 h7 by 55 mm, with key DIN 6885-A-8×7×40.
 The taper bush 1210 is finished to that bore.
-There is no separate drive shaft and no coupling in this pose.
+There is no coupling in this pose.
 The chain radial load goes into the gearbox output bearing.
 Check that load against the Neugart catalogue. It is an open point.
+
+Two SKF SYJ 30 TF bearings sit beside the gearbox.
+The bore is Ø30 mm. It does not fit the Ø25 output and it does not fit the 32H7 hub.
+VC-HB-2500 is a Ø30 shaft in those bearings. It does not carry the sprocket.
+The outboard foot bolts through the side-frame seat. The inboard foot bolts through the bottom plate.
+The bolts are M12. The slots are 24 mm by 17 mm.
 
 | Parameter              | Value                              |
 |------------------------|------------------------------------|
@@ -114,6 +120,8 @@ Check that load against the Neugart catalogue. It is an open point.
 | Key                    | DIN 6885-A-8×7×40                  |
 | Sprocket mount         | Taper bush 1210, bored to Ø25 mm   |
 | Coupling               | Not placed                         |
+| Chain bearings         | Two SKF SYJ 30 TF, M12             |
+| Bearing shaft          | Ø30 mm. It does not carry the sprocket. |
 
 ## 4. Force Analysis
 

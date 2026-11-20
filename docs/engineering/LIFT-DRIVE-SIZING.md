@@ -135,6 +135,13 @@ VC-FR-4184 anchors the input end and lands on the bottom plate.
 The motor bolts to the input face after that anchor.
 The input face stays clear.
 
+Two SKF SYJ 30 TF bearings sit beside this train.
+The bore is Ø30 mm. The gearbox shaft is Ø25 h7. The ROTEX hub is 32H7.
+Neither fits the bore. The bearings carry a separate Ø30 shaft.
+That shaft does not carry the sprocket.
+Each foot takes two M12 bolts. The slot is 17 mm wide, so M12 leaves the J adjustment.
+The catalogue bolt is 14 mm. That shank also passes the slot.
+
 ## 7. Sources
 
 1. Siemens datasheet 1FL2104-4AG11-1MC0, generated 2026-11-20.
