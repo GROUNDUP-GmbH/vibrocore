@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 592 >>
+<< /Length 677 >>
 stream
 BT
 /F1 11 Tf
@@ -21,9 +21,11 @@ T*
 T*
 (Source: docs/engineering/BOM.md#3) Tj
 T*
-(Box 400 x 400 x 15 mm) Tj
+(Box 200 x 466.6 x 15 mm) Tj
 T*
-(TODO: Profile feet and UTV holes. The 83 mm bore is a draft assembly cut for casing VC-GP-7100.) Tj
+(TODO: The approved 200 mm plate ends at X = 100 mm. The rod axis is at X = 227.5 mm, so the Ø83 guide bore is not in this plate.) Tj
+T*
+(TODO: UTV holes are not in this revision.) Tj
 T*
 (Owner: Ground UP GmbH) Tj
 T*
@@ -54,8 +56,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000000891 00000 n 
+0000000976 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-961
+1046
 %%EOF

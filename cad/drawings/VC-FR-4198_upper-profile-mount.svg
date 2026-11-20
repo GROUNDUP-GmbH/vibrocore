@@ -15,7 +15,7 @@
 <text x="210" y="147.6" font-size="3.4" font-family="sans-serif">8 mm thick</text>
 <text x="20" y="40" font-size="3" font-family="sans-serif">Fidelity: envelope. Source: docs/engineering/MAST-LAYOUT.md.</text>
 <text x="20" y="44.5" font-size="3" font-family="sans-serif">Material (engineering_material): S355.</text>
-<text x="20" y="49.0" font-size="3" font-family="sans-serif">Mass: 1.195 kg. Solid volume at 7850 kg/m3. The two slot holes are already cut.</text>
+<text x="20" y="49.0" font-size="3" font-family="sans-serif">Mass: 1.271 kg. Solid volume at 7850 kg/m3. The bridge spans the 366.6 mm pitch. The slot holes are cut.</text>
 <text x="20" y="53.5" font-size="3" font-family="sans-serif">Draft. Made part. The bridge stays behind the rear chain strand. Do not manufacture from this revision.</text>
 <text x="20" y="58.0" font-size="3" font-family="sans-serif">General tolerances: TODO. No tolerance class is specified in the design documents.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>

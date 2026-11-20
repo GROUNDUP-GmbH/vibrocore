@@ -1,10 +1,10 @@
 """ISO 606 10B-2 duplex chain as one closed loop.
 
-G&G, iwis, Renold and Rexnord do not offer a free STEP of this chain
-without an account. The links are built here from ISO 606.
-Pitch 15.875 mm. Roller diameter 10.16 mm. Inner width 9.65 mm.
-Transverse pitch 16.59 mm. Plate height 14.7 mm. Plate thickness 1.6 mm.
-Pin diameter 5.08 mm. These plate and pin sizes are the usual 10B values.
+The link solids come from the McMaster-Carr 6027K851 STEP, one foot of
+6027K13. One inner link and one outer link are the repeat unit. The file
+pitch is 15.88 mm. The second pin is placed 15.875 mm from the first, so
+the path pitch is exact. The plate hole stays 0.005 mm long. The same two
+solids are instanced on the closed path. They are not scaled.
 
 The vendor sprocket already has 15 tooth gaps. Rollers sit in those gaps
 on the ISO pitch circle. The idler is turned by 12 degrees so the straight
@@ -151,8 +151,8 @@ def _place(link, start, end):
     return Pos(mid[0], mid[1], mid[2]) * Rot(0.0, -theta, 0.0) * link
 
 
-def duplex_chain(z_drive: float, z_idler: float, axis_x: float, axis_y: float = 0.0):
-    """One closed loop. World axes. Z is up. Rollers sit in the tooth gaps."""
+def chain_path(z_drive: float, z_idler: float, axis_x: float, axis_y: float = 0.0):
+    """Roller centres of one closed loop. The last point joins the first."""
     drive = [_point(deg, z_drive, axis_x, axis_y) for deg in _gap_angles(0.0, upper=False)]
     idle = [_point(deg, z_idler, axis_x, axis_y) for deg in _gap_angles(IDLER_TURN_DEG, upper=True)]
     span = idle[0][2] - drive[-1][2]
@@ -164,12 +164,129 @@ def duplex_chain(z_drive: float, z_idler: float, axis_x: float, axis_y: float = 
     path = drive + rear + idle + front
     if len(path) % 2:
         raise ValueError("closed chain needs an even number of links")
-    inner = _link(True)
-    outer = _link(False)
-    pieces = []
+    return path
+
+
+def _mcmaster_templates():
+    """Inner link and outer link. Pitch runs along local X from 0 to 15.875 mm."""
+    cached = _LINK.get("mcmaster")
+    if cached is not None:
+        return cached
+    from pathlib import Path
+
+    from OCP.BRepGProp import BRepGProp
+    from OCP.GProp import GProp_GProps
+    from OCP.TopAbs import TopAbs_SOLID
+    from OCP.TopExp import TopExp_Explorer
+    from build123d import Compound, Shape, import_step
+
+    from cad.tools.geometry import VENDOR_DIR
+
+    path = Path(VENDOR_DIR) / "VC-HB-2700" / "mcmaster" / "6027K851_Roller-Chain.STEP"
+    if not path.is_file():
+        return None
+    raw = import_step(str(path))
+    inner_plates = []
+    outer_plates = []
+    rollers = []
+    pin = None
+    explorer = TopExp_Explorer(raw.wrapped, TopAbs_SOLID)
+    while explorer.More():
+        solid = explorer.Current()
+        props = GProp_GProps()
+        BRepGProp.VolumeProperties_s(solid, props)
+        centre = props.CentreOfMass()
+        volume = round(props.Mass())
+        shape = Shape.cast(solid)
+        if volume == 503 and abs(centre.X()) < 0.1:
+            inner_plates.append(shape)
+        elif volume == 503 and abs(centre.X() - 15.88) < 0.1:
+            outer_plates.append(shape)
+        elif volume in (451, 181) and abs(centre.X() + 7.94) < 0.05:
+            rollers.append(shape)
+        elif volume == 714 and abs(centre.X() - 7.94) < 0.05 and pin is None:
+            pin = shape
+        explorer.Next()
+    if len(inner_plates) != 4 or len(outer_plates) != 4 or len(rollers) != 4 or pin is None:
+        raise ValueError("McMaster 10B-2 link solids were not found")
+
+    def shift(shape, dx: float):
+        # File X is the chain. File Z is the width, centred at -8.125. File Y is the height.
+        return Pos(dx, 8.125, 0.0) * Rot(-90, 0, 0) * shape
+
+    # The file pitch is 15.88 mm. The second pin is placed at 15.875 mm.
+    # A scale would turn the circles into splines and make every collision slow.
+    inner = Compound(
+        children=[shift(shape, 7.94) for shape in inner_plates]
+        + [shift(shape, 7.94) for shape in rollers]
+        + [shift(shape, 7.94 + CHAIN_PITCH_MM) for shape in rollers]
+    )
+    outer = Compound(
+        children=[shift(shape, -7.94) for shape in outer_plates]
+        + [shift(pin, -7.94), shift(pin, -7.94 + CHAIN_PITCH_MM)]
+    )
+
+    def fuse_link(shape):
+        solids = list(shape.solids())
+        if len(solids) < 2:
+            return shape
+        fused = solids[0]
+        for piece in solids[1:]:
+            fused = fused + piece
+        return fused
+
+    inner = fuse_link(inner)
+    outer = fuse_link(outer)
+    _LINK["mcmaster"] = (inner, outer)
+    return _LINK["mcmaster"]
+
+
+def _place_pitch(link, start, end):
+    """Put local X = 0 at start and local X = pitch at end. Width stays on Y."""
+    dx = end[0] - start[0]
+    dy = end[1] - start[1]
+    dz = end[2] - start[2]
+    if abs(dy) > 0.01:
+        raise ValueError("chain chord leaves the pitch plane")
+    phi = math.degrees(math.atan2(-dz, dx))
+    return Pos(start[0], start[1], start[2]) * Rot(0.0, phi, 0.0) * link
+
+
+def duplex_chain(z_drive: float, z_idler: float, axis_x: float, axis_y: float = 0.0):
+    """One closed loop. World axes. Z is up. Rollers sit in the tooth gaps."""
+    path = chain_path(z_drive, z_idler, axis_x, axis_y)
+    templates = _mcmaster_templates()
+    if templates is None:
+        inner = _link(True)
+        outer = _link(False)
+        pieces = []
+        for index in range(len(path)):
+            start = path[index]
+            end = path[(index + 1) % len(path)]
+            link = inner if index % 2 == 0 else outer
+            pieces.append(_place(link, start, end))
+        return Compound(children=pieces)
+    inner, outer = templates
+    # Moved copies share the link body. A deep copy of every link is too large.
+    from OCP.BRep import BRep_Builder
+    from OCP.TopLoc import TopLoc_Location
+    from OCP.TopoDS import TopoDS_Compound
+    from OCP.gp import gp_Ax1, gp_Dir, gp_Pnt, gp_Trsf, gp_Vec
+    from build123d import Shape
+
+    builder = BRep_Builder()
+    compound = TopoDS_Compound()
+    builder.MakeCompound(compound)
+    bases = (inner.wrapped, outer.wrapped)
     for index in range(len(path)):
         start = path[index]
         end = path[(index + 1) % len(path)]
-        link = inner if index % 2 == 0 else outer
-        pieces.append(_place(link, start, end))
-    return Compound(children=pieces)
+        dx = end[0] - start[0]
+        dz = end[2] - start[2]
+        turn = gp_Trsf()
+        turn.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(0, 1, 0)), math.atan2(-dz, dx))
+        move = gp_Trsf()
+        move.SetTranslation(gp_Vec(start[0], start[1], start[2]))
+        located = bases[index % 2].Moved(TopLoc_Location(move.Multiplied(turn)))
+        builder.Add(compound, located)
+    return Shape.cast(compound)

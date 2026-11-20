@@ -119,31 +119,35 @@ The current STEP oil seal extends about 8 mm. The gearbox recess is 4.4 mm deep 
 
 ## 6. Mount
 
-VC-FR-4187 is one welded S355 frame. VC-FR-4182, VC-FR-4183 and VC-FR-4184 are obsolete.
-Fillet weld a5 is the separate solid VC-FR-4188.
+VC-FR-4187 is one welded S355 frame. VC-FR-4182, VC-FR-4183, VC-FR-4184 and VC-FR-4188 are obsolete.
+The pads and the feet are in the weldment. There is no separate weld solid.
 The profile joints and the bottom-plate joints stay bolted. VC-FR-4186 stays a bolted sheet.
 Four ISO 4762 M6x20 screws hold the flange.
 They sit on the Ø100 mm circle, on the diagonals, and they pass through the STEP holes.
-The plate is 8 mm. Those holes are about 16 mm deep. The engagement is 12 mm.
+The concept sketch shows a 90 mm circle. The model follows the STEP.
+The plate is 8 mm. The screws enter from the inside of the frame.
 The output pilot is Ø80 mm. The plate bore is Ø86 mm.
-Remove the cover VC-FR-4192 to reach the coupling and the motor-flange screws.
+The gearbox and the motor hang from that plate. No bracket supports the overhang.
+Remove one guard, VC-FR-4191 or VC-FR-4192, to reach the coupling.
 The motor uses four ISO 4762 M6x16 screws. The flange is 6.4 mm. The thread engagement is 9.6 mm.
 The clamp-screw size and the tightening torque are TBD.
-Four M8x20 screws hold each upright. The bearing bolts are M12x35 into the beam.
+Six M8x20 screws hold the short profile to the tab. Six M8x20 screws hold the long profile to the cheek.
+The bearing bolts are M12x50. The nuts are under the hanging feet.
 
 T2max is 365 Nm.
-Each bolt sees 365000 N·mm / (4 × 50 mm) = 1825 N.
+Each flange bolt sees 365000 N·mm / (4 × 50 mm) = 1825 N.
 An M6-8.8 proof load is about 11.6 kN. The bolts are inside that load.
+The STEP holes are on a 50 mm radius. A 45 mm radius would raise this load.
 
 The chain shaft is Ø30 mm, C45, between the two bearings.
-The placed centres are 92.7 mm apart. The sprocket is centred. The shaft solid is 187.4 mm long.
-The bending moment is 5800 N × 92.7 mm / 4 = 134415 N·mm.
+The placed centres are 83.4 mm apart. The sprocket is centred. The shaft solid is 162.6 mm long.
+The bending moment is 5800 N × 83.4 mm / 4 = 120930 N·mm.
 The full section modulus is 2651 mm³. With one DIN 6885 keyway, 8 mm by 4 mm, it is about 2290 mm³.
-Bending stress is 50.7 MPa on the full section and 58.7 MPa with the keyway.
+Bending stress is 45.6 MPa on the full section and 52.8 MPa with the keyway.
 Torsion at T2max 365 Nm is 68.8 MPa on the full section. The keyway raises that torsion to 79.7 MPa.
-Von Mises stress is 130 MPa on the full section and 150 MPa with the keyway.
+Von Mises stress is 128 MPa on the full section and 148 MPa with the keyway.
 EN 10083-2 gives C45E, normalized, 16 mm to 100 mm, a minimum yield of 305 MPa.
-The safety factor is 2.35 on the full section and 2.03 with the keyway.
+The safety factor is 2.38 on the full section and 2.06 with the keyway.
 The chain torque at 5.8 kN and 37.9 mm is 220 Nm. That case is lower.
 The modelled shaft is Ø29.6 mm, 0.2 mm under the bore. This stress uses the design diameter Ø30 mm.
 A quenched shaft is stronger than this normalized figure.
@@ -151,12 +155,11 @@ A quenched shaft is stronger than this normalized figure.
 Each SYJ 30 TF sees 2.9 kN. C0 is 11.2 kN, so the static safety factor is 3.86.
 C is 19.5 kN. No pretension is included. Pretension would raise both loads.
 Each foot takes two M12 bolts. The slot is 17 mm wide, so M12 leaves the J adjustment.
+The housings hang under the beam. The sole is above the shaft.
 
-The specified ROTEX 28 spider is 64 Sh-D. KTR lists TKmax 400 Nm for that spider. That covers T2max 365 Nm.
-The public STEP file is still the 92 Sh-A article 020281000045. Size 28 uses one envelope. The compound is the hardness.
-Purchase hubs are Ø25H7 020285102500 and Ø30 020285103000.
-The public gearbox hub is 32H7. A sleeve inside that bore leaves Ø25.4 mm for the Ø25 journal.
-The chain-side hub is opened to Ø30.4 mm.
+The coupling is G&G 591-301-0018. It is rated 380 Nm. That covers T2max 365 Nm.
+The pilot bore is 14 mm. The purchase finish is 25H7 and 30H7.
+The model opens the gearbox half to Ø25.4 mm and the shaft half to Ø30.4 mm.
 
 ## 7. Sources
 
@@ -175,4 +178,4 @@ The chain-side hub is opened to Ø30.4 mm.
 7. Siemens document 110005040. S200 PN / 1FL2 operating instructions, 06/2026.
 8. Neugart PLE operating instructions PLE_2026_05_EN.pdf. PLE120 Fr max 2000 N, Fa max 3800 N, MK max 115 Nm.
 9. EN 10083-2. C45E normalized, 16 mm to 100 mm, Re min 305 MPa.
-10. KTR ROTEX catalogue, size 28. 92 Sh-A TKmax 190 Nm. 64 Sh-D TKmax 400 Nm.
+10. G&G chain coupling 591-301-0018. Rated 380 Nm. Pilot bore 14 mm. Overall length 68 mm.

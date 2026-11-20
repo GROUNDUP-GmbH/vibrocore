@@ -9,19 +9,19 @@
 <text x="20" y="36" font-size="4" font-family="sans-serif" font-weight="700">Parts list (same item numbers as the OdooPLM EBOM itemnum)</text>
 <text x="20" y="42" font-size="2.8" font-family="sans-serif">Item  Part number   Rev  Qty  Name</text>
 <text x="20" y="47" font-size="2.8" font-family="sans-serif">1      VC-FR-4100     A    2    Aluminium profile 50x100x1500</text>
-<text x="20" y="51.2" font-size="2.8" font-family="sans-serif">2      VC-FR-4120     A    14   mk T-slot nut M8</text>
-<text x="20" y="55.400000000000006" font-size="2.8" font-family="sans-serif">3      VC-FR-4121     A    14   mk cylinder screw M8</text>
+<text x="20" y="51.2" font-size="2.8" font-family="sans-serif">2      VC-FR-4120     A    18   mk T-slot nut M8</text>
+<text x="20" y="55.400000000000006" font-size="2.8" font-family="sans-serif">3      VC-FR-4121     A    18   mk cylinder screw M8</text>
 <text x="20" y="59.60000000000001" font-size="2.8" font-family="sans-serif">4      VC-FR-4125     A    4    Cylinder screw M6x20</text>
-<text x="20" y="63.80000000000001" font-size="2.8" font-family="sans-serif">5      VC-FR-4131     A    8    Washer M8</text>
-<text x="20" y="68.00000000000001" font-size="2.8" font-family="sans-serif">6      VC-FR-4132     A    4    Hex screw M12x35</text>
+<text x="20" y="63.80000000000001" font-size="2.8" font-family="sans-serif">5      VC-FR-4131     A    12   Washer M8</text>
+<text x="20" y="68.00000000000001" font-size="2.8" font-family="sans-serif">6      VC-FR-4132     A    4    Hex screw M12x50</text>
 <text x="20" y="72.20000000000002" font-size="2.8" font-family="sans-serif">7      VC-FR-4133     A    4    Washer M12</text>
-<text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-FR-4134     A    4    Cylinder screw M6x20 guard</text>
-<text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-FR-4135     A    4    Cylinder screw M5x16 cover</text>
-<text x="20" y="84.80000000000003" font-size="2.8" font-family="sans-serif">10     VC-FR-4185     A    1    Lower front stiffener</text>
-<text x="20" y="89.00000000000003" font-size="2.8" font-family="sans-serif">11     VC-FR-4187     A    1    Welded lower drive frame</text>
-<text x="20" y="93.20000000000003" font-size="2.8" font-family="sans-serif">12     VC-FR-4188     A    1    Drive frame fillet welds</text>
-<text x="20" y="97.40000000000003" font-size="2.8" font-family="sans-serif">13     VC-FR-4191     A    1    Sprocket side guards</text>
-<text x="20" y="101.60000000000004" font-size="2.8" font-family="sans-serif">14     VC-FR-4192     A    1    Drive cover</text>
+<text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-FR-4135     A    12   Cylinder screw M5 guard</text>
+<text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-FR-4136     A    6    Hex screw M10x30</text>
+<text x="20" y="84.80000000000003" font-size="2.8" font-family="sans-serif">10     VC-FR-4138     A    4    Hex nut M12</text>
+<text x="20" y="89.00000000000003" font-size="2.8" font-family="sans-serif">11     VC-FR-4185     A    1    Lower front stiffener</text>
+<text x="20" y="93.20000000000003" font-size="2.8" font-family="sans-serif">12     VC-FR-4187     A    1    Welded lower drive frame</text>
+<text x="20" y="97.40000000000003" font-size="2.8" font-family="sans-serif">13     VC-FR-4191     A    1    Front drive guard</text>
+<text x="20" y="101.60000000000004" font-size="2.8" font-family="sans-serif">14     VC-FR-4192     A    1    Rear drive guard</text>
 <text x="20" y="105.80000000000004" font-size="2.8" font-family="sans-serif">15     VC-FR-4186     A    1    Lower rear stiffener</text>
 <text x="20" y="110.00000000000004" font-size="2.8" font-family="sans-serif">16     VC-FR-4190     A    1    Front top stiffener</text>
 <text x="20" y="114.20000000000005" font-size="2.8" font-family="sans-serif">17     VC-FR-4195     A    1    Rear top stiffener</text>

@@ -32,14 +32,16 @@ MAST_PROFILE_DEPTH_MM = 100.0
 MAST_PROFILE_COUNT = 2
 
 # VC-FR-4300 and VC-FR-4400.
-BOTTOM_PLATE_LENGTH_MM = 400.0
-# The plate projects 25 mm past each profile outer face.
-# Outer face is at ±175 mm. Half width is 175 + 25 = 200 mm.
+# Approved 2026-11-20. 200 mm along X, centred on the profile depth.
+# 466.6 mm along Y. Each profile outer face has 25 mm of plate beyond it.
+# Outer face is at ±208.3 mm. Half width is 208.3 + 25 = 233.3 mm.
+BOTTOM_PLATE_LENGTH_MM = 200.0
 BOTTOM_PLATE_SIDE_OVERHANG_MM = 25.0
-BOTTOM_PLATE_WIDTH_MM = 400.0
+BOTTOM_PLATE_WIDTH_MM = 466.6
 BOTTOM_PLATE_THICKNESS_MM = 15.0
-TOP_PLATE_LENGTH_MM = 300.0
-TOP_PLATE_WIDTH_MM = 200.0
+# Same plan as the bottom plate. The chain centre is the midpoint of this span.
+TOP_PLATE_LENGTH_MM = 200.0
+TOP_PLATE_WIDTH_MM = 466.6
 TOP_PLATE_THICKNESS_MM = 12.0
 
 # VC-GP-7100. 48 in x 25.4 mm = 1219.2 mm. 3.25 in and 2.625 in.
@@ -92,7 +94,8 @@ COLUMN_FLANGE_THICKNESS_MM = 12.0
 
 # Visual stand-ins. They are not terms in the height chain.
 # Centre distance of the two profiles. TBD. Do not read a clearance from this pitch.
-PROFILE_SPACING_MM = 300.0
+# Approved 2026-11-20. Inner faces are at Y = ±158.3 mm. The chain is at Y = 0.
+PROFILE_SPACING_MM = 366.6
 # Envelope diameter of VC-SH-1500. TBD. The solid is not the thread.
 ADAPTER_OD_MM = 50.0
 # Documented minimum. SONIC_HEAD.md. The layout pitch below is not this minimum.
@@ -135,8 +138,8 @@ STROKE_POSITION_MM = GUIDED_TRAVEL_MM
 # Draft. Gap from the carriage plate to the rear face of the motors.
 # The vibrating plate rear is flush with that face, so the rod sits close to the rails.
 HEAD_FRONT_GAP_MM = 10.0
-# The 400 mm bottom-plate blank stays. Its rear face is flush with the profile rear faces.
-# The volume behind those faces is reserved for the machine tilt mechanism.
+# The approved plate is 200 mm deep and centred on the profiles. It enters the tilt volume.
+# This overhang is no longer added. The centre is X = 0.
 BOTTOM_PLATE_REAR_OVERHANG_MM = 0.0
 # VC-FR-4500 closed bore. It guides the 82.55 mm casing VC-GP-7100, not the column.
 CASING_GUIDE_BORE_DIAMETER_MM = 83.0
@@ -287,7 +290,7 @@ PLACEHOLDERS: dict[str, tuple[float, str]] = {
     ),
     "bottom_plate_rear_overhang_mm": (
         BOTTOM_PLATE_REAR_OVERHANG_MM,
-        "TBD. Draft rear overhang of the 400 mm bottom plate. Zero keeps the rear face flush with the profiles.",
+        "The 200 mm plate is centred. This overhang is not added. The plate enters the tilt volume.",
     ),
     "gusset_sheet_thickness_mm": (
         GUSSET_SHEET_THICKNESS_MM,

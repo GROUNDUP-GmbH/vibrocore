@@ -20,10 +20,10 @@ def test_bom_rollups_match_published_lines():
     bom = load_bom()
     expected = {
         "VC-ASM-1000": (1185, 1900),
-        # The ROTEX coupling is placed. The obsolete brake is not.
-        "VC-ASM-2000": (1441, 2316),
+        # The G&G coupling has no price. The obsolete brake is not included.
+        "VC-ASM-2000": (1381, 2216),
         # Gussets are obsolete. The mk slot hardware is in this rollup.
-        "VC-ASM-3000": (496, 800),
+        "VC-ASM-3000": (522, 830),
         # SDR-480-48 has no verified EUR price, so the old 80-140 band is not in the rollup.
         "VC-ASM-4000": (2655, 2780),
         # V1.1 control has qty 2 of 750-430 and 750-530.
@@ -38,8 +38,8 @@ def test_bom_rollups_match_published_lines():
     # Two rods, four shoes and one O-ring pack from offer 26100096.
     assert bom.rollup("VC-KIT-6000", "low") == bom.rollup("VC-KIT-6000", "high")
     assert abs(bom.rollup("VC-KIT-6000", "low") - (2 * 389.99 + 4 * 300.78 + 24.75)) < 1e-6
-    assert bom.rollup("VC-ASM-0000", "low") == 1185 + 1441 + 496 + 2655 + 1565 + 1259
-    assert bom.rollup("VC-ASM-0000", "high") == 1900 + 2316 + 800 + 2780 + 2460 + 2300
+    assert bom.rollup("VC-ASM-0000", "low") == 1185 + 1381 + 522 + 2655 + 1565 + 1259
+    assert bom.rollup("VC-ASM-0000", "high") == 1900 + 2216 + 830 + 2780 + 2460 + 2300
 
 
 def test_revision_letters_follow_odooplm_index():

@@ -125,7 +125,7 @@ def test_layout_step_is_not_a_part_and_matches_the_stack():
     assert stack_top == 1721.2
     assert carriage == 80.0
     assert abs(size[0] - 420.0) < 0.05
-    assert abs(size[1] - 400.0) < 0.05
+    assert abs(size[1] - 466.6) < 0.05
     assert abs(size[2] - (stack_top + 0.5)) < 0.05
     header = (LAYOUT_DIR / "mast-stack.step").read_text(encoding="utf-8")
     assert "FILE_NAME('MAST-LAYOUT','2026-11-19T00:00:00'" in header

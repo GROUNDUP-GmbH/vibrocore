@@ -184,6 +184,27 @@ def _seat_gaps(solid):
     return seated
 
 
+def oriented_chain_coupling():
+    """G&G 591-301-0018. Axis along Y. Gearbox hub faces -Y.
+
+    The file is one solid. The bore is file Z, length 68 mm, centred.
+    Rot(-90, 0, 0) lays that axis on Y. The pilot bore is Ø14 mm.
+    The gearbox half is opened to Ø25.4 mm. The shaft half is opened to Ø30.4 mm.
+    The purchase finish is 25H7 and 30H7. This cut is the study clearance.
+    """
+    loaded = load_vendor_shape("VC-HB-2410", recenter=False)
+    if loaded is None:
+        return None
+    from build123d import Box, Cylinder, Pos
+
+    turned = Rot(-90, 0, 0) * loaded
+    gear_bore = Pos(0.0, -18.0, 0.0) * (Rot(90, 0, 0) * Cylinder(12.7, 40.0))
+    shaft_bore = Pos(0.0, 18.0, 0.0) * (Rot(90, 0, 0) * Cylinder(15.2, 40.0))
+    # The PLE120 key stands on +X and reaches X = 15.5 mm. Open a seat for it.
+    keyway = Pos(14.0, -18.0, 0.0) * Box(10.0, 44.0, 8.0)
+    return turned - gear_bore - shaft_bore - keyway
+
+
 def oriented_coupling():
     """ROTEX 28. The 32H7 hub faces -Y, toward the gearbox.
 

@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 1700 >>
+<< /Length 1702 >>
 stream
 BT
 /F1 11 Tf
@@ -29,7 +29,7 @@ T*
 T*
 (6  VC-HB-2300  rev A  qty 1  SINAMICS S200 servo drive) Tj
 T*
-(7  VC-HB-2400  rev A  qty 1  Elastomer coupling) Tj
+(7  VC-HB-2410  rev A  qty 1  Chain coupling 10B-2) Tj
 T*
 (8  VC-HB-2500  rev A  qty 1  Chain bearing shaft) Tj
 T*
@@ -90,8 +90,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000002000 00000 n 
+0000002002 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-2070
+2072
 %%EOF

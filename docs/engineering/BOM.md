@@ -29,7 +29,7 @@ complexity reduction vs. V1 custom design.*
 |17 | Servo motor 1FL2104     | 3.2 Nm, 1 kW, brake, encoder |   1 |  250–400 | Siemens. Band is not a quote. |
 |18 | Planetary gearbox       | PLE120-040, 7.65 kg, article 100460948 |   1 |  600–900 | Neugart. Band is not a quote. |
 |19 | SINAMICS S200           | 6SL5510-1BB11-0AA0, cabinet      |   1 |   80–150 | Siemens. Band is not a quote. |
-|20 | Elastomer coupling      | ROTEX 28, placed between gearbox and Ø30 shaft. |   1 |   60–100 | KTR. Band is not a quote. |
+|20 | Chain coupling          | G&G 591-301-0018, 380 Nm, L 68. Price unknown. |   1 | unknown | G&G. Not in the rollup. |
 |21 | Chain bearing shaft     | Ø30 mm C45. Carries the sprocket between two SYJ 30 TF. |   1 |   30–50  | Custom (EU)                |
 |22 | Pillow block SYJ 30 TF  | SKF, bore 30 mm, two M12, 1.1 kg |   2 |   30–50  | SKF. Band is not a quote. |
 |23 | Chain 10B-2 duplex      | G&G 600-302-0000, 3.2 m placeholder |   1 |   30–50  | G&G                        |
@@ -42,7 +42,7 @@ complexity reduction vs. V1 custom design.*
 |30 | Carriage plate          | 10 mm steel, machined             |   1 |   80–120 | Custom (EU)                |
 |31 | Fasteners (hub)         | M6–M12, various                   |   1 |   20–40  | Würth / Bossard (EU)       |
 
-**Hub System Subtotal: ~1,441–2,316 €**
+**Hub System Subtotal: ~1,381–2,216 €** The G&G coupling has no price, so it is not in this sum.
 
 ## 3. Frame & Mounting
 
@@ -50,15 +50,15 @@ complexity reduction vs. V1 custom design.*
 |---|-------------------------|-----------------------------------|-----|----------|----------------------------|
 |32 | Al profile 50×100       | mk 2004, 51.04.2004, 1,500 mm, 7.275 kg |   2 |  120–180 | mk Technology (DE)         |
 |33 | Profile connectors      | mk standard corners/T-slot        |   8 |   40–80  | mk Technology (DE)         |
-|34 | Bottom steel plate      | S355, 400×400×15 mm, machined     |   1 |   80–120 | Custom (EU)                |
-|35 | Top steel plate         | S355, 300×200×12 mm, machined     |   1 |   50–80  | Custom (EU)                |
+|34 | Bottom steel plate      | S355, 200×466.6×15 mm, bolted     |   1 |   80–120 | Custom (EU)                |
+|35 | Top steel plate         | S355, 200×466.6×12 mm, not fitted |   1 |   50–80  | Custom (EU)                |
 |36 | Rod guide bushing       | Split bushing. Closed bore 83 mm. Open it to pass the 87.63 mm shoe. | 1 | 20–40 | Custom (EU) |
 |37 | UTV mounting brackets   | Steel, welded/bolted              |   4 |   60–100 | Custom (EU)                |
 |38 | Tilt mechanism (obsolete) | Hinge + gas strut + lock — **obsolete for V1.1**; use electric tilt §8b #73–75 | 0 |  100–180 | Alternative only (EU)   |
 |39 | Stabiliser feet         | Adjustable screw jacks            |   4 |   40–80  | Standard (EU)              |
 |40 | Fasteners (frame)       | M8–M16, various                   |   1 |   30–50  | Würth / Bossard (EU)       |
 
-**Frame Subtotal (V1.1 live lines, without #38): ~496–800 €.** The rollup includes fourteen Lasche 1 nuts, fourteen M8 screws, eight M8 washers, four M12x35 screws, four M12 washers, four M6x20 flange screws, four M6x20 guard screws and four M5x16 cover screws. The bent plate, the bearing flats and the stiffener angle are obsolete and are not included.
+**Frame Subtotal (V1.1 live lines, without #38): ~522–830 €.** The rollup includes eighteen Lasche 1 nuts, eighteen M8 screws, twelve M8 washers, four M12x50 screws, four M12 washers, four M12 nuts, six M10x30 screws, four M6x20 flange screws and twelve M5 guard screws. The bent plate, the bearing flats, the stiffener angle and the separate weld solid are obsolete and are not included.
 
 > **#38 vs §8b:** V1.1 firmware drives the electric tilt actuator (`FB_TiltControl`).
 > The gas-spring / hinge line #38 is retained as an obsolete alternative only and is
@@ -428,12 +428,12 @@ Do not add the §8e I/O cost again. Those modules are already inside VC-ASM-5000
 | Subsystem             | Low Est. (€) | High Est. (€) | Notes                              |
 |-----------------------|-------------|---------------|------------------------------------|
 | Sonic head VC-ASM-1000 | 1,185 | 1,900 | YAML rollup |
-| Hub VC-ASM-2000 | 1,441 | 2,316 | YAML rollup. The ROTEX coupling is included. The obsolete brake is not. |
-| Frame VC-ASM-3000 | 496 | 800 | Live lines. The bent plate, the flats, the angle and the gas spring are not included. |
+| Hub VC-ASM-2000 | 1,381 | 2,216 | YAML rollup. The G&G coupling has no price. The obsolete brake is not included. |
+| Frame VC-ASM-3000 | 522 | 830 | Live lines. The bent plate, the flats, the angle and the gas spring are not included. |
 | Power VC-ASM-4000 | 2,655 | 2,780 | Includes Instagrid at EUR 2,500. Supply price is unknown. |
 | Control VC-ASM-5000 | 1,565 | 2,460 | Option A. SE050 and the 9 V converter are not included. |
 | Field VC-ASM-8000 | 1,259 | 2,300 | Lift, tilt, penetrometer, scanner. |
-| **Machine VC-ASM-0000** | **8,601** | **12,556** | Sum of the six rollups above. |
+| **Machine VC-ASM-0000** | **8,567** | **12,486** | Sum of the six rollups above. |
 | Casing kit VC-KIT-6000 | 2,007.85 | 2,007.85 | Offer prices. Half-shell price is unknown. |
 | Positioning kit VC-KIT-7000 | 2,020 | 2,040 | viDoc plus WLAN bridge. |
 

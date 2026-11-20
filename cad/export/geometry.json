@@ -115,7 +115,7 @@
     "bbox_mm": {
       "x": 5.0,
       "y": 5.0,
-      "z": 16.0
+      "z": 12.0
     },
     "engineering_revision": 0,
     "fidelity": "envelope",
@@ -123,6 +123,20 @@
     "part_number": "VC-FR-4135",
     "source": "docs/engineering/MAST-LAYOUT.md",
     "step": "cad/export/step/VC-FR-4135.step",
+    "unknowns": []
+  },
+  {
+    "bbox_mm": {
+      "x": 10.0,
+      "y": 10.0,
+      "z": 30.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "envelope",
+    "kind": "cylinder",
+    "part_number": "VC-FR-4136",
+    "source": "docs/engineering/MAST-LAYOUT.md",
+    "step": "cad/export/step/VC-FR-4136.step",
     "unknowns": []
   },
   {
@@ -141,8 +155,8 @@
   },
   {
     "bbox_mm": {
-      "x": 400.0,
-      "y": 400.0,
+      "x": 200.0,
+      "y": 466.6,
       "z": 15.0
     },
     "engineering_revision": 0,
@@ -152,13 +166,14 @@
     "source": "docs/engineering/BOM.md#3",
     "step": "cad/export/step/VC-FR-4300.step",
     "unknowns": [
-      "Profile feet and UTV holes. The 83 mm bore is a draft assembly cut for casing VC-GP-7100."
+      "The approved 200 mm plate ends at X = 100 mm. The rod axis is at X = 227.5 mm, so the \u00d883 guide bore is not in this plate.",
+      "UTV holes are not in this revision."
     ]
   },
   {
     "bbox_mm": {
-      "x": 300.0,
-      "y": 200.0,
+      "x": 200.0,
+      "y": 466.6,
       "z": 12.0
     },
     "engineering_revision": 0,

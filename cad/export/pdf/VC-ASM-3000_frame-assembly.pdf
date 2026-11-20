@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 1848 >>
+<< /Length 1826 >>
 stream
 BT
 /F1 11 Tf
@@ -19,31 +19,31 @@ BT
 T*
 (1  VC-FR-4100  rev A  qty 2  Aluminium profile 50x100x1500) Tj
 T*
-(2  VC-FR-4120  rev A  qty 14  mk T-slot nut M8) Tj
+(2  VC-FR-4120  rev A  qty 18  mk T-slot nut M8) Tj
 T*
-(3  VC-FR-4121  rev A  qty 14  mk cylinder screw M8) Tj
+(3  VC-FR-4121  rev A  qty 18  mk cylinder screw M8) Tj
 T*
 (4  VC-FR-4125  rev A  qty 4  Cylinder screw M6x20) Tj
 T*
-(5  VC-FR-4131  rev A  qty 8  Washer M8) Tj
+(5  VC-FR-4131  rev A  qty 12  Washer M8) Tj
 T*
-(6  VC-FR-4132  rev A  qty 4  Hex screw M12x35) Tj
+(6  VC-FR-4132  rev A  qty 4  Hex screw M12x50) Tj
 T*
 (7  VC-FR-4133  rev A  qty 4  Washer M12) Tj
 T*
-(8  VC-FR-4134  rev A  qty 4  Cylinder screw M6x20 guard) Tj
+(8  VC-FR-4135  rev A  qty 12  Cylinder screw M5 guard) Tj
 T*
-(9  VC-FR-4135  rev A  qty 4  Cylinder screw M5x16 cover) Tj
+(9  VC-FR-4136  rev A  qty 6  Hex screw M10x30) Tj
 T*
-(10  VC-FR-4185  rev A  qty 1  Lower front stiffener) Tj
+(10  VC-FR-4138  rev A  qty 4  Hex nut M12) Tj
 T*
-(11  VC-FR-4187  rev A  qty 1  Welded lower drive frame) Tj
+(11  VC-FR-4185  rev A  qty 1  Lower front stiffener) Tj
 T*
-(12  VC-FR-4188  rev A  qty 1  Drive frame fillet welds) Tj
+(12  VC-FR-4187  rev A  qty 1  Welded lower drive frame) Tj
 T*
-(13  VC-FR-4191  rev A  qty 1  Sprocket side guards) Tj
+(13  VC-FR-4191  rev A  qty 1  Front drive guard) Tj
 T*
-(14  VC-FR-4192  rev A  qty 1  Drive cover) Tj
+(14  VC-FR-4192  rev A  qty 1  Rear drive guard) Tj
 T*
 (15  VC-FR-4186  rev A  qty 1  Lower rear stiffener) Tj
 T*
@@ -96,8 +96,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000002148 00000 n 
+0000002126 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-2218
+2196
 %%EOF

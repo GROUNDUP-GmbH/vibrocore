@@ -1,22 +1,30 @@
 # VC-HB-2700
 
-Manufacturer: G&G.
-Chain: 600-302-0000.
-Connecting link: 600-302-0001.
-Type: 10B-2 duplex roller chain.
+Purchased chain: G&G 600-302-0000, 10B-2, with connecting link 600-302-0001.
+G&G publishes no chain CAD.
 
-G&G publishes no chain CAD. There is no STEP file in this folder.
-Do not put the SKF SYJ 30 TF file here. That bearing is VC-HB-2600.
-A STEP in this folder would replace the chain solid.
-The placed solid is parametric. See `cad/models/roller_chain.py`.
-The section is ISO 606:
-- Pitch 15.875 mm.
-- Roller diameter 10.16 mm.
-- Inner width 9.65 mm.
-- Transverse pitch 16.59 mm.
+The placed links are the McMaster-Carr solid of ISO 10B-2 chain.
+Part 6027K13. CAD file 6027K851, one foot.
+File: `mcmaster/6027K851_Roller-Chain.STEP`.
+The file is not in the part-folder root. A STEP there would replace the whole loop.
 
-The strands sit on the pitch radius of the G&G sprockets.
-They stop clear of the tooth tip.
-The wrap is a shell outside that tip. It is not a meshed link.
+| Item | Value |
+|---|---|
+| File pitch | 15.88 mm |
+| Used pitch | 15.875 mm |
+| Roller diameter in the file | 11.0 mm |
+| Roller width | 9.65 mm |
+| Pin diameter | 5.08 mm |
+| Solids in the file | 152 |
+
+Downloaded: 2026-11-20, 17:53 Europe/Vienna.
+Page: https://www.mcmaster.com/6027K13/
+Terms: McMaster-Carr CAD is free for design use with McMaster products. McMaster disclaims accuracy. The chain that is purchased is the G&G chain. This file is the CAD source only.
+
+One inner link and one outer link are the repeat unit.
+The second pin of each link is placed at 15.875 mm.
+The file plates still span 15.88 mm. The difference is 0.005 mm.
+The same two bodies are instanced on the closed path.
+The path wraps the lower sprocket and both strands up to the upper idler.
+G&G does not state a breaking load. Do not use a substitute value.
 The purchase length 3.2 m is a placeholder until the lift height is decided.
-G&G does not state a breaking load for this chain. Do not use a substitute value.

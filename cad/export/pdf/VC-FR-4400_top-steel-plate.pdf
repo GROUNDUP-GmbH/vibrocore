@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 677 >>
+<< /Length 679 >>
 stream
 BT
 /F1 11 Tf
@@ -21,7 +21,7 @@ T*
 T*
 (Source: docs/engineering/BOM.md#3) Tj
 T*
-(Box 300 x 200 x 12 mm) Tj
+(Box 200 x 466.6 x 12 mm) Tj
 T*
 (TODO: Idle-sprocket mount and profile bolt pattern.) Tj
 T*
@@ -56,8 +56,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000000976 00000 n 
+0000000978 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-1046
+1048
 %%EOF

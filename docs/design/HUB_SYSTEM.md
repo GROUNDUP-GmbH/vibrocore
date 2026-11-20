@@ -102,24 +102,23 @@ The sizing and the torque limit are in [LIFT-DRIVE-SIZING.md](../engineering/LIF
 ### 3.4 Drive sprocket between two bearings
 
 The drive sprocket sits on a Ø30 mm C45 shaft, between two SKF SYJ 30 TF bearings.
-A ROTEX 28 coupling joins that shaft to the PLE120 output.
+A G&G 591-301-0018 chain coupling joins that shaft to the PLE120 output.
 The gearbox shaft is Ø25 h7 by 55 mm. It does not carry the sprocket.
 The chain radial load is 5.8 kN. The PLE120 Fr max is 2000 N, so the sprocket must not load that shaft.
 The numbers are in [LIFT-DRIVE-SIZING.md](../engineering/LIFT-DRIVE-SIZING.md).
 No pretension is stated. The bearing load is half of the pull when the sprocket is centred.
 
-The bearing feet bolt to the beam of the welded frame VC-FR-4187. The bolts are M12x35 and thread into the beam.
-The gearbox flange bolts to the 8 mm flange plate of that frame.
-Fillet welds a5 are the separate solid VC-FR-4188.
-VC-FR-4182, VC-FR-4183 and VC-FR-4184 are obsolete.
-The welds stop at the plate. The profile joints and the bottom-plate joints stay bolted.
+The housings hang under the beam of the welded frame VC-FR-4187. The bolts are M12x50. The nuts are under the feet.
+The gearbox flange bolts to the outer face of the left plate.
+VC-FR-4182, VC-FR-4183, VC-FR-4184 and VC-FR-4188 are obsolete.
+The profile joints and the bottom-plate joints stay bolted.
 
 | Parameter              | Value                              |
 |------------------------|------------------------------------|
 | Gearbox shaft          | Ø25 h7 × 55 mm, torque only        |
 | Chain shaft            | Ø30 mm C45, key 8 × 7              |
 | Sprocket mount         | On the Ø30 shaft, between the bearings |
-| Coupling               | ROTEX 28, hubs 25/30               |
+| Coupling               | G&G 591-301-0018, 380 Nm, L 68     |
 | Chain bearings         | Two SKF SYJ 30 TF, M12             |
 | Bearing load           | 2.9 kN each, C0 11.2 kN            |
 

@@ -14,7 +14,7 @@
 <circle cx="250" cy="167.0" r="12.00" fill="none" stroke="#111" stroke-width="0.5"/>
 <text x="20" y="40" font-size="3" font-family="sans-serif">Fidelity: envelope. Source: docs/engineering/MAST-LAYOUT.md.</text>
 <text x="20" y="44.5" font-size="3" font-family="sans-serif">Mass: 0.01 kg. Placeholder per screw.</text>
-<text x="20" y="49.0" font-size="3" font-family="sans-serif">Standard fastener. Property class is an open point.</text>
+<text x="20" y="49.0" font-size="3" font-family="sans-serif">Obsolete. The guards use M5 screws VC-FR-4135. Do not place this screw.</text>
 <text x="20" y="53.5" font-size="3" font-family="sans-serif">General tolerances: TODO. No tolerance class is specified in the design documents.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>

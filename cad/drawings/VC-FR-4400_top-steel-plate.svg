@@ -7,15 +7,15 @@
 <rect x="262" y="248" width="144" height="35" fill="none" stroke="#111" stroke-width="0.4"/>
 <text x="18" y="22" font-size="3.2" font-family="sans-serif">ISO 7200 title block · ISO 5457 A3 · not released for manufacture</text>
 <text x="20" y="118" font-size="3.2" font-family="sans-serif">Top view (X–Y), scale fitted</text>
-<rect x="30" y="130" width="90.00" height="60.00" fill="none" stroke="#111" stroke-width="0.5"/>
-<text x="30" y="194.0" font-size="3.4" font-family="sans-serif">300 mm</text>
-<text x="124.0" y="160.0" font-size="3.4" font-family="sans-serif">200 mm</text>
+<rect x="30" y="130" width="30.00" height="70.00" fill="none" stroke="#111" stroke-width="0.5"/>
+<text x="30" y="204.0" font-size="3.4" font-family="sans-serif">200 mm</text>
+<text x="64.0" y="165.0" font-size="3.4" font-family="sans-serif">466.6 mm</text>
 <text x="200" y="118" font-size="3.2" font-family="sans-serif">Front view (X–Z), first angle</text>
-<rect x="210" y="140" width="90.00" height="3.60" fill="none" stroke="#111" stroke-width="0.5"/>
-<text x="210" y="149.6" font-size="3.4" font-family="sans-serif">12 mm thick</text>
+<rect x="210" y="140" width="30.00" height="1.80" fill="none" stroke="#111" stroke-width="0.5"/>
+<text x="210" y="147.8" font-size="3.4" font-family="sans-serif">12 mm thick</text>
 <text x="20" y="40" font-size="3" font-family="sans-serif">Fidelity: partial. Source: docs/engineering/BOM.md#3.</text>
 <text x="20" y="44.5" font-size="3" font-family="sans-serif">Material (engineering_material): S355.</text>
-<text x="20" y="49.0" font-size="3" font-family="sans-serif">Mass: 5.652 kg. Calculated from the blank at 7850 kg/m3.</text>
+<text x="20" y="49.0" font-size="3" font-family="sans-serif">Mass: 8.791 kg. Calculated from the 200 x 466.6 x 12 mm blank at 7850 kg/m3.</text>
 <text x="20" y="53.5" font-size="3" font-family="sans-serif">TODO: Idle-sprocket mount and profile bolt pattern.</text>
 <text x="20" y="58.0" font-size="3" font-family="sans-serif">TODO: Not fitted in the current machine pose. The idler bearing blocks sit on the profile ends. The blank stays in the BOM.</text>
 <text x="20" y="62.5" font-size="3" font-family="sans-serif">The machine pose does not mount this plate. Keep the line so the BOM.md quantity stays.</text>

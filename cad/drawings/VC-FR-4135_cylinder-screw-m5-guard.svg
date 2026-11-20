@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="420mm" height="297mm" viewBox="0 0 420.0 297.0">
-<title>VC-FR-4135 Cylinder screw M5x16 cover</title>
+<title>VC-FR-4135 Cylinder screw M5 guard</title>
 <rect width="100%" height="100%" fill="#fff"/>
 <rect x="10" y="10" width="400" height="277" fill="none" stroke="#111" stroke-width="0.6"/>
 <rect x="14" y="14" width="392" height="269" fill="none" stroke="#111" stroke-width="0.25"/>
 <rect x="262" y="248" width="144" height="35" fill="none" stroke="#111" stroke-width="0.4"/>
 <text x="18" y="22" font-size="3.2" font-family="sans-serif">ISO 7200 title block · ISO 5457 A3 · not released for manufacture</text>
 <text x="20" y="120" font-size="3.2" font-family="sans-serif">Front view, shaft axis horizontal</text>
-<rect x="30" y="140" width="80.00" height="25.00" fill="none" stroke="#111" stroke-width="0.5"/>
-<text x="30" y="173.0" font-size="3.4" font-family="sans-serif">16 mm</text>
-<text x="116.0" y="152.5" font-size="3.4" font-family="sans-serif">Ø 5 mm</text>
+<rect x="30" y="140" width="80.00" height="33.33" fill="none" stroke="#111" stroke-width="0.5"/>
+<text x="30" y="181.3" font-size="3.4" font-family="sans-serif">12 mm</text>
+<text x="116.0" y="156.7" font-size="3.4" font-family="sans-serif">Ø 5 mm</text>
 <text x="200" y="120" font-size="3.2" font-family="sans-serif">End view</text>
-<circle cx="250" cy="167.5" r="12.50" fill="none" stroke="#111" stroke-width="0.5"/>
+<circle cx="250" cy="171.7" r="16.67" fill="none" stroke="#111" stroke-width="0.5"/>
 <text x="20" y="40" font-size="3" font-family="sans-serif">Fidelity: envelope. Source: docs/engineering/MAST-LAYOUT.md.</text>
 <text x="20" y="44.5" font-size="3" font-family="sans-serif">Mass: 0.004 kg. Placeholder per screw.</text>
 <text x="20" y="49.0" font-size="3" font-family="sans-serif">Standard fastener. Property class is an open point.</text>
@@ -19,7 +19,7 @@
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>
 <text x="268" y="278.2" font-size="2.4" font-family="sans-serif">Document title</text>
-<text x="332" y="278.2" font-size="2.6" font-family="sans-serif" font-weight="700">Cylinder screw M5x16 cover</text>
+<text x="332" y="278.2" font-size="2.6" font-family="sans-serif" font-weight="700">Cylinder screw M5 guard</text>
 <text x="268" y="282.4" font-size="2.4" font-family="sans-serif">Document type</text>
 <text x="332" y="282.4" font-size="2.6" font-family="sans-serif" font-weight="700">part drawing</text>
 <text x="268" y="286.59999999999997" font-size="2.4" font-family="sans-serif">Document status</text>

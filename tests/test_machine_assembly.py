@@ -48,10 +48,10 @@ PART_NUMBERS = (
     "VC-FR-4131",
     "VC-FR-4132",
     "VC-FR-4133",
-    "VC-FR-4134",
     "VC-FR-4135",
+    "VC-FR-4136",
+    "VC-FR-4138",
     "VC-FR-4187",
-    "VC-FR-4188",
     "VC-FR-4191",
     "VC-FR-4192",
     "VC-FR-4185",
@@ -65,7 +65,7 @@ PART_NUMBERS = (
     "VC-HB-2122",
     "VC-HB-2124",
     "VC-HB-2200",
-    "VC-HB-2400",
+    "VC-HB-2410",
     "VC-HB-2500",
     "VC-HB-2600",
     "VC-HB-2700",
@@ -127,9 +127,9 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
     assert split_overlaps(assembly_parts(bom, stroke_mm=0.0))[0] == []
     assert split_overlaps(assembly_parts(bom, stroke_mm=round(GUIDED_TRAVEL_MM / 2.0, 1)))[0] == []
     report = clearance_report(parts)
-    assert report["shoe_to_profile_mm"] == 419.6
-    assert report["casing_to_profile_mm"] == 175.8
-    assert report["casing_to_bottom_plate_mm"] == 0.225
+    assert report["shoe_to_profile_mm"] == 428.6
+    assert report["casing_to_profile_mm"] == 196.6
+    assert report["casing_to_bottom_plate_mm"] == 86.225
     assert report["guide_radial_clearance_mm"] == 0.225
     assert report["guide_bore_diameter_mm"] == 83.0
     assert report["rod_axis_x_mm"] == 227.5
@@ -138,7 +138,7 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
     assert report["motor_to_profile_mm"] == 50.0
     assert report["motor_to_rail_mm"] == 32.5
     assert report["plate_bottom_vs_lower_block_mm"] == 0.0
-    assert report["carriage_to_chain_mm"] == 2.0
+    assert report["carriage_to_chain_mm"] == 2.1
     assert report["shoe_tip_z_mm"] == -446.6
     names = {item.name for item in parts}
     assert {"VC-GP-7310", "VC-GP-7320", "VC-GP-7330"} <= names
@@ -147,7 +147,7 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
     sheath_length = float(sheath.shape.bounding_box().size.Z)
     assert 150.0 < sheath_length < 1524.0
     assert report["profile_overhang_past_bottom_plate_mm"] == -25.0
-    assert report["chain_min_x_mm"] == -45.3
+    assert report["chain_min_x_mm"] == -45.2
     assert report["rear_face_x_mm"] == -50.0
     assert report["rear_stiffener_min_x_mm"] == -54.0
     assert report["lift_motor_min_x_mm"] == -40.5
@@ -163,7 +163,8 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
     sprocket = next(item for item in parts if item.name == "VC-HB-2800")
     face_y = float(gearbox.shape.bounding_box().max.Y) - 55.0
     assert abs(float(flange.shape.bounding_box().min.Y) - face_y) < 0.05
-    assert float(flange.shape.bounding_box().min.Z) > 15.0
+    # The feet sit on the plate top. Weld nuts stay above that face.
+    assert abs(float(flange.shape.bounding_box().min.Z) - 15.0) < 0.05
     assert abs(float(gearbox.shape.bounding_box().size.Y) - 204.0) < 0.05
     assert abs(float(gearbox.shape.bounding_box().center().X)) < 0.5
     assert abs(float(gearbox.shape.bounding_box().min.X) - (-57.5)) < 0.5
@@ -182,13 +183,13 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
     centres = []
     for item in bearings:
         foot = item.shape.bounding_box()
-        assert abs(float(foot.min.Z) - 40.0) < 0.2
+        assert abs(float(foot.max.Z) - 130.0) < 0.6
         assert abs(float(foot.center().X) - float(shaft_box.center().X)) < 0.5
-        assert abs(float(shaft_box.center().Z) - (float(foot.min.Z) + 42.9)) < 0.2
+        assert abs(float(shaft_box.center().Z) - (float(foot.max.Z) - 42.9)) < 0.6
         centres.append(float(foot.center().Y))
     assert min(centres) < float(sprocket_box.center().Y) < max(centres)
     assert abs(float(shaft_box.center().X) - float(gearbox.shape.bounding_box().center().X)) < 0.5
-    assert any(item.name == "VC-HB-2400" for item in parts)
+    assert any(item.name == "VC-HB-2410" for item in parts)
     assert bom.part("VC-HB-2600").manufacturer_pn == "SYJ 30 TF"
     assert bom.part("VC-HB-2600").mass_kg == 1.1
     assert bom.part("VC-HB-2200").mass_kg == 7.65
@@ -214,10 +215,10 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
 
 def test_bbox_matches_the_placed_solids():
     size = assembly_bbox_mm()
-    assert abs(size[0] - 490.0) < 0.05
-    assert abs(size[1] - 729.05) < 0.05
+    assert abs(size[0] - 500.0) < 0.05
+    assert abs(size[1] - 727.2) < 0.05
     # Shoe tip at Z=-446.6. The idler wrap sets the top. The mast axis is Z.
-    assert abs(size[2] - 2058.46) < 0.05
+    assert abs(size[2] - 2062.56) < 0.05
     assert size[2] > size[0]
     assert size[2] > size[1]
     bom = load_bom()

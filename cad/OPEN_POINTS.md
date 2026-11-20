@@ -85,8 +85,9 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-CT-6800` RevPi Connect 4: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6810` RevPi DIO module: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4131` Washer M8: no solid. Dimensions were not complete enough to model.
-- `VC-FR-4132` Hex screw M12x35: The SYJ foot thickness is not in the placed solid. 14 mm is an assumption.
+- `VC-FR-4132` Hex screw M12x50: The SYJ foot thickness is not in the placed solid. 14 mm is an assumption.
 - `VC-FR-4133` Washer M12: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4138` Hex nut M12: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4150` Bottom frame gusset: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4160` Top frame gusset: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4170` Mid frame gusset: no solid. Dimensions were not complete enough to model.
@@ -96,13 +97,16 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-FR-4184` Profile stiffener angle: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4185` Lower front stiffener: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4187` Welded lower drive frame: M6 property class on the flange screws. The study uses 8.8.
+- `VC-FR-4187` Welded lower drive frame: The concept sketch puts the flange screws on a 90 mm circle. The PLE120 STEP holes are on a 100 mm circle. This model follows the STEP.
+- `VC-FR-4187` Welded lower drive frame: The gearbox and the motor hang from the 8 mm plate. No bracket supports that overhang.
 - `VC-FR-4188` Drive frame fillet welds: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4190` Front top stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
-- `VC-FR-4191` Sprocket side guards: no solid. Dimensions were not complete enough to model.
-- `VC-FR-4192` Drive cover: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4191` Front drive guard: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4192` Rear drive guard: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4195` Rear top stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4200` Profile connector: Which mk connector.
-- `VC-FR-4300` Bottom steel plate: Profile feet and UTV holes. The 83 mm bore is a draft assembly cut for casing VC-GP-7100.
+- `VC-FR-4300` Bottom steel plate: The approved 200 mm plate ends at X = 100 mm. The rod axis is at X = 227.5 mm, so the Ø83 guide bore is not in this plate.
+- `VC-FR-4300` Bottom steel plate: UTV holes are not in this revision.
 - `VC-FR-4400` Top steel plate: Idle-sprocket mount and profile bolt pattern.
 - `VC-FR-4400` Top steel plate: Not fitted in the current machine pose. The idler bearing blocks sit on the profile ends. The blank stays in the BOM.
 - `VC-FR-4500` Rod guide bushing: Length, flange and housing diameter.
@@ -130,7 +134,10 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-HB-2122` Gearbox clamp screw: Clamp-screw tightening torque is TBD. The same PDF is not in the repository.
 - `VC-HB-2124` Adapter access plug: Access-plug order code is TBD. The PLE manual PDF is not in cad/vendor/VC-HB-2200.
 - `VC-HB-2200` Planetary gearbox PLE120-040: Input adapter of article 100460948 was configured for 1FL2104-4AG10. Re-check it for the current oil seal and for successor 1FL2104-4BG. The STEP recess is 4.4 mm deep and has no keyway.
+- `VC-HB-2200` Planetary gearbox PLE120-040: The 115 mm body meets the drive-side rail. The placed solid has a local box cut so the envelopes clear. The purchased gearbox is not machined.
 - `VC-HB-2300` SINAMICS S200 servo drive: PROFINET order 6SL5510-1BB11-0AF0 if the PLC does not use pulse and direction. The price is not a quote.
+- `VC-HB-2410` Chain coupling 10B-2: Price. The band is not a G&G quote.
+- `VC-HB-2410` Chain coupling 10B-2: Bore finish 25H7 and 30H7. The model cut is clearance only.
 - `VC-HB-2500` Chain bearing shaft: no solid. Dimensions were not complete enough to model.
 - `VC-HB-2700` Duplex chain 10B-2: Purchase length 3.2 m stays a placeholder until the lift height is decided.
 - `VC-HB-2700` Duplex chain 10B-2: Breaking load is not stated by G&G. Do not assign a value.
@@ -225,7 +232,8 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-FR-4124` Hex nut M8: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4125` Cylinder screw M6x20: cylinder, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4134` Cylinder screw M6x20 guard: cylinder, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
-- `VC-FR-4135` Cylinder screw M5x16 cover: cylinder, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
+- `VC-FR-4135` Cylinder screw M5 guard: cylinder, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
+- `VC-FR-4136` Hex screw M10x30: cylinder, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4198` Upper profile mount: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4300` Bottom steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).
 - `VC-FR-4400` Top steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).
