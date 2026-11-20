@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 1406 >>
+<< /Length 1950 >>
 stream
 BT
 /F1 11 Tf
@@ -17,41 +17,59 @@ BT
 16 TL
 (VC-ASM-5000 Control system assembly  assembly, preliminary) Tj
 T*
+(Rittal AX 1181.000. IP66. Study model. Do not manufacture.) Tj
+T*
+(No chain-encoder gland. No 48 V rail. PNOZ s4 space is reserved.) Tj
+T*
+(Sealed capacity at 10 K: 125.8 W.) Tj
+T*
+(Closed heat: 118.7 W, 49.4 C.) Tj
+T*
+(SDR-480-24 ceiling: 149.3 W, 51.9 C.) Tj
+T*
+(Fan is not fitted. Machine 24 V rating, STO order and safety assessment are open.) Tj
+T*
 (1  VC-CT-6100  rev A  qty 1  WAGO PFC200 XTR) Tj
 T*
-(2  VC-CT-6110  rev A  qty 2  WAGO 750-430 XTR) Tj
+(2  VC-CT-6110  rev A  qty 2  WAGO 750-430/040-000) Tj
 T*
-(3  VC-CT-6120  rev A  qty 2  WAGO 750-530 XTR) Tj
+(3  VC-CT-6120  rev A  qty 2  WAGO 750-537/040-000) Tj
 T*
-(4  VC-CT-6130  rev A  qty 1  WAGO 750-637) Tj
+(4  VC-CT-6140  rev A  qty 1  WAGO 750-652) Tj
 T*
-(5  VC-CT-6140  rev A  qty 1  WAGO 750-826) Tj
+(5  VC-CT-6150  rev A  qty 1  WAGO 750-600) Tj
 T*
-(6  VC-CT-6150  rev A  qty 1  WAGO 750-600) Tj
+(6  VC-CT-6200  rev A  qty 2  Inductive limit switch) Tj
 T*
-(7  VC-CT-6200  rev A  qty 2  Inductive limit switch) Tj
+(7  VC-CT-6210  rev A  qty 1  Emergency stop) Tj
 T*
-(8  VC-CT-6210  rev A  qty 1  Emergency stop) Tj
+(8  VC-CT-6220  rev A  qty 1  Safety relay) Tj
 T*
-(9  VC-CT-6220  rev A  qty 1  Safety relay) Tj
+(9  VC-CT-6230  rev A  qty 1  Warning beacon) Tj
 T*
-(10  VC-CT-6230  rev A  qty 1  Warning beacon) Tj
+(10  VC-CT-6240  rev A  qty 1  Operator tablet) Tj
 T*
-(11  VC-CT-6240  rev A  qty 1  Operator tablet) Tj
+(11  VC-CT-6300  rev A  qty 1  Control enclosure) Tj
 T*
-(12  VC-CT-6300  rev A  qty 1  Control enclosure) Tj
+(12  VC-CT-6310  rev A  qty 1  EMC cable gland set) Tj
 T*
-(13  VC-CT-6400  rev A  qty 1  RDDL trust wallet) Tj
+(13  VC-CT-6330  rev A  qty 1  Frame mount kit) Tj
 T*
-(14  VC-CT-6500  rev A  qty 1  GPS antenna u-blox ANN-MB) Tj
+(14  VC-CT-6340  rev A  qty 1  Terminal and duct set) Tj
 T*
-(15  VC-CT-6510  rev A  qty 1  GPS receiver u-blox ZED-F9P) Tj
+(15  VC-CT-6350  rev A  qty 1  Bulkhead and vent set) Tj
 T*
-(16  VC-CT-6600  rev A  qty 1  Teltonika RUT241) Tj
+(16  VC-CT-6400  rev A  qty 1  RDDL trust wallet) Tj
 T*
-(17  VC-CT-6610  rev A  qty 1  LTE SIM data plan) Tj
+(17  VC-CT-6500  rev A  qty 1  GPS antenna u-blox ANN-MB) Tj
 T*
-(18  VC-CT-6700  rev A  qty 1  Wiring harness) Tj
+(18  VC-CT-6510  rev A  qty 1  GPS receiver u-blox ZED-F9P) Tj
+T*
+(19  VC-CT-6600  rev A  qty 1  Teltonika RUT241) Tj
+T*
+(20  VC-CT-6610  rev A  qty 1  LTE SIM data plan) Tj
+T*
+(21  VC-CT-6700  rev A  qty 1  Wiring harness) Tj
 T*
 (Owner: Ground UP GmbH) Tj
 T*
@@ -82,8 +100,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000001706 00000 n 
+0000002250 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-1776
+2320
 %%EOF

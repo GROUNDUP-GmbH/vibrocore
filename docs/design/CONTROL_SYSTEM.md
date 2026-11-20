@@ -12,9 +12,9 @@ The Vibrocore V1 control system is built around the **WAGO PFC200 XTR (750-8212)
          │ 230V AC                      │ 230V AC
          ▼                              ▼
   ┌─────────────┐                ┌──────────────────┐
-  │ Siemens V20 │ Modbus RTU     │  Mean Well        │
-  │    1.5 kW   │◄──────────────►│  SDR-480-48       │
-  │    VFD      │  RS-485        │  48V/10A DC PSU   │
+  │ Sonic inverter │ Modbus RTU  │  Two 24 V DIN supplies │
+  │  must have STO │◄───────────►│  SDR-120-24 dedicated │
+  │  order open    │  RS-485     │  plus an open 24 V slot │
   └──────┬──────┘ Slave addr 1   └────────┬──────────┘
          │ 3× AC                          │ 48V DC
          ▼                       ┌────────┴──────────┐

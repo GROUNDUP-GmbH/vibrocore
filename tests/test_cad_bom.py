@@ -23,11 +23,11 @@ def test_bom_rollups_match_published_lines():
         "VC-ASM-2000": (1435, 2310),
         # V1.1 frame excludes obsolete gas-spring tilt VC-FR-4700.
         "VC-ASM-3000": (440, 730),
-        # SDR-480-48 has no verified EUR price, so the old 80-140 band is not in the rollup.
-        "VC-ASM-4000": (2655, 2780),
-        # V1.1 control has qty 2 of 750-430 and 750-530.
-        # The second SE050 line, the 9 V converter and the old enclosure price are out.
-        "VC-ASM-5000": (1565, 2460),
+        # No 48 V rail. SDR-480-48 and the 48 V converter are obsolete and not in the rollup.
+        "VC-ASM-4000": (2640, 2750),
+        # V1.1 control has qty 2 of 750-430/040-000 and 750-537/040-000.
+        # The encoder module, the second SE050 line and the 9 V converter are out.
+        "VC-ASM-5000": (1465, 2310),
         "VC-ASM-8000": (1259, 2300),
         "VC-KIT-7000": (2020, 2040),
     }
@@ -37,8 +37,8 @@ def test_bom_rollups_match_published_lines():
     # Two rods, four shoes and one O-ring pack from offer 26100096.
     assert bom.rollup("VC-KIT-6000", "low") == bom.rollup("VC-KIT-6000", "high")
     assert abs(bom.rollup("VC-KIT-6000", "low") - (2 * 389.99 + 4 * 300.78 + 24.75)) < 1e-6
-    assert bom.rollup("VC-ASM-0000", "low") == 1185 + 1435 + 440 + 2655 + 1565 + 1259
-    assert bom.rollup("VC-ASM-0000", "high") == 1900 + 2310 + 730 + 2780 + 2460 + 2300
+    assert bom.rollup("VC-ASM-0000", "low") == 1185 + 1435 + 440 + 2640 + 1465 + 1259
+    assert bom.rollup("VC-ASM-0000", "high") == 1900 + 2310 + 730 + 2750 + 2310 + 2300
 
 
 def test_revision_letters_follow_odooplm_index():

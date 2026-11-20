@@ -377,8 +377,9 @@ database if you want the real server in the loop. The mocked tests in
 These change the BOM, so they belong in the YAML before another import, not as
 silent edits in Odoo:
 
-- The 48 V supply is closed. Order Mean Well SDR-480-48. Do not order SDR-75-48.
-  The EUR price is still unknown.
+- There is no 48 V rail. Do not order SDR-480-48 or SDR-75-48. VC-PW-5310 is the
+  dedicated SDR-120-24 for the S200 control supply and the brake. VC-PW-5320 is an
+  open 24 V slot the size of SDR-480-24.
 - Freeze the VFD, the stepper driver, the coupling, the brake and the
   isolator catalogue numbers. The YAML lists candidates and does not pick one
   where the source document doesn't.

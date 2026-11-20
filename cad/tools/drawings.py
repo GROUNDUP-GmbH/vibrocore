@@ -177,8 +177,67 @@ def _bom_table(part: Part, bom: BillOfMaterials) -> str:
     return "\n".join(lines)
 
 
+def _enclosure_notes() -> str:
+    from cad.models.electronics_enclosure import (
+        BOX_D_MM,
+        BOX_H_MM,
+        BOX_W_MM,
+        ORDER_CODE,
+        T3_MM,
+        effective_area_m2,
+        heat_total_w,
+        internal_c,
+        passive_watts,
+        rack_width_mm,
+    )
+
+    rows = [
+        f"Rittal AX {ORDER_CODE}. {BOX_W_MM:g} x {BOX_H_MM:g} x {BOX_D_MM:g} mm. IP66. T3 {T3_MM:g} mm.",
+        "Study model. Do not manufacture from this sheet.",
+        "No chain-encoder gland. No 48 V rail. Two 24 V slots. PNOZ s4 space is reserved.",
+        f"Option A rail {rack_width_mm():g} mm. Option B fits that rail.",
+        f"Sealed area {effective_area_m2():.3f} m2. Capacity at 10 K is {passive_watts(10):.1f} W.",
+        f"Closed heat {heat_total_w(include_machine_psu=False):.1f} W, about {internal_c(heat_total_w(include_machine_psu=False)):.1f} C.",
+        f"SDR-480-24 ceiling {heat_total_w(include_machine_psu=True):.1f} W, about {internal_c(heat_total_w(include_machine_psu=True)):.1f} C. Rating is open.",
+        "The fan is not fitted. STO inverter order and actuator current are open.",
+        "Mount on the idle-side mk 51.04 upright. Door faces the service side. Not in the machine pose.",
+    ]
+    lines = []
+    y = 32
+    for row in rows:
+        lines.append(f'<text x="20" y="{y}" font-size="2.7" font-family="sans-serif">{_esc(row)}</text>')
+        y += 3.6
+    return "\n".join(lines)
+
+
+def _enclosure_sheet(part: Part, bom: BillOfMaterials) -> str:
+    lines = [_enclosure_notes()]
+    y = 72
+    lines.append(
+        f'<text x="20" y="{y}" font-size="2.8" font-family="sans-serif">Item  Part number   Rev  Qty  Name</text>'
+    )
+    y += 4
+    for index, line in enumerate(bom.children(part.part_number), start=1):
+        child = bom.part(line.part_number)
+        qty = int(line.qty) if line.qty == int(line.qty) else line.qty
+        text = f"{index:<5}  {child.part_number:<14} {child.revision_letter:<3}  {qty:<4} {child.name}"
+        lines.append(
+            f'<text x="20" y="{y}" font-size="2.6" font-family="sans-serif">{_esc(text[:110])}</text>'
+        )
+        y += 3.5
+        if y > 242:
+            lines.append(
+                f'<text x="20" y="{y}" font-size="2.6" font-family="sans-serif">Further lines are in the CSV BOM.</text>'
+            )
+            break
+    return "\n".join(lines)
+
+
 def svg_for(part: Part, bom: BillOfMaterials) -> str:
-    if part.part_number in bom.assemblies:
+    if part.part_number == "VC-ASM-5000":
+        body = _enclosure_sheet(part, bom)
+        document_type = "assembly drawing"
+    elif part.part_number in bom.assemblies:
         body = _bom_table(part, bom)
         document_type = "assembly drawing"
     elif part.geometry and part.geometry["kind"] == "box":
@@ -210,7 +269,27 @@ def _pdf_escape(text: str) -> str:
 
 def pdf_for(part: Part, bom: BillOfMaterials) -> bytes:
     """Single-page A3 PDF with the same identification block as the SVG."""
-    if part.part_number in bom.assemblies:
+    if part.part_number == "VC-ASM-5000":
+        from cad.models.electronics_enclosure import (
+            ORDER_CODE,
+            heat_total_w,
+            internal_c,
+            passive_watts,
+        )
+
+        rows = [
+            f"{part.part_number} {part.name}  assembly, preliminary",
+            f"Rittal AX {ORDER_CODE}. IP66. Study model. Do not manufacture.",
+            "No chain-encoder gland. No 48 V rail. PNOZ s4 space is reserved.",
+            f"Sealed capacity at 10 K: {passive_watts(10):.1f} W.",
+            f"Closed heat: {heat_total_w(include_machine_psu=False):.1f} W, {internal_c(heat_total_w(include_machine_psu=False)):.1f} C.",
+            f"SDR-480-24 ceiling: {heat_total_w(include_machine_psu=True):.1f} W, {internal_c(heat_total_w(include_machine_psu=True)):.1f} C.",
+            "Fan is not fitted. Machine 24 V rating, STO order and safety assessment are open.",
+        ]
+        for index, line in enumerate(bom.children(part.part_number), start=1):
+            child = bom.part(line.part_number)
+            rows.append(f"{index}  {child.part_number}  rev {child.revision_letter}  qty {line.qty:g}  {child.name}")
+    elif part.part_number in bom.assemblies:
         rows = [f"{part.part_number} {part.name}  assembly, preliminary"]
         for index, line in enumerate(bom.children(part.part_number), start=1):
             child = bom.part(line.part_number)

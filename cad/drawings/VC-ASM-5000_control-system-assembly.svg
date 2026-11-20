@@ -6,27 +6,37 @@
 <rect x="14" y="14" width="392" height="269" fill="none" stroke="#111" stroke-width="0.25"/>
 <rect x="262" y="248" width="144" height="35" fill="none" stroke="#111" stroke-width="0.4"/>
 <text x="18" y="22" font-size="3.2" font-family="sans-serif">ISO 7200 title block · ISO 5457 A3 · not released for manufacture</text>
-<text x="20" y="36" font-size="4" font-family="sans-serif" font-weight="700">Parts list (same item numbers as the OdooPLM EBOM itemnum)</text>
-<text x="20" y="42" font-size="2.8" font-family="sans-serif">Item  Part number   Rev  Qty  Name</text>
-<text x="20" y="47" font-size="2.8" font-family="sans-serif">1      VC-CT-6100     A    1    WAGO PFC200 XTR</text>
-<text x="20" y="51.2" font-size="2.8" font-family="sans-serif">2      VC-CT-6110     A    2    WAGO 750-430 XTR</text>
-<text x="20" y="55.400000000000006" font-size="2.8" font-family="sans-serif">3      VC-CT-6120     A    2    WAGO 750-530 XTR</text>
-<text x="20" y="59.60000000000001" font-size="2.8" font-family="sans-serif">4      VC-CT-6130     A    1    WAGO 750-637</text>
-<text x="20" y="63.80000000000001" font-size="2.8" font-family="sans-serif">5      VC-CT-6140     A    1    WAGO 750-826</text>
-<text x="20" y="68.00000000000001" font-size="2.8" font-family="sans-serif">6      VC-CT-6150     A    1    WAGO 750-600</text>
-<text x="20" y="72.20000000000002" font-size="2.8" font-family="sans-serif">7      VC-CT-6200     A    2    Inductive limit switch</text>
-<text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-CT-6210     A    1    Emergency stop</text>
-<text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-CT-6220     A    1    Safety relay</text>
-<text x="20" y="84.80000000000003" font-size="2.8" font-family="sans-serif">10     VC-CT-6230     A    1    Warning beacon</text>
-<text x="20" y="89.00000000000003" font-size="2.8" font-family="sans-serif">11     VC-CT-6240     A    1    Operator tablet</text>
-<text x="20" y="93.20000000000003" font-size="2.8" font-family="sans-serif">12     VC-CT-6300     A    1    Control enclosure</text>
-<text x="20" y="97.40000000000003" font-size="2.8" font-family="sans-serif">13     VC-CT-6400     A    1    RDDL trust wallet</text>
-<text x="20" y="101.60000000000004" font-size="2.8" font-family="sans-serif">14     VC-CT-6500     A    1    GPS antenna u-blox ANN-MB</text>
-<text x="20" y="105.80000000000004" font-size="2.8" font-family="sans-serif">15     VC-CT-6510     A    1    GPS receiver u-blox ZED-F9P</text>
-<text x="20" y="110.00000000000004" font-size="2.8" font-family="sans-serif">16     VC-CT-6600     A    1    Teltonika RUT241</text>
-<text x="20" y="114.20000000000005" font-size="2.8" font-family="sans-serif">17     VC-CT-6610     A    1    LTE SIM data plan</text>
-<text x="20" y="118.40000000000005" font-size="2.8" font-family="sans-serif">18     VC-CT-6700     A    1    Wiring harness</text>
-<text x="20" y="244" font-size="3" font-family="sans-serif">Schematic only. Component positions that are not dimensioned in the design documents are not drawn.</text>
+<text x="20" y="32" font-size="2.7" font-family="sans-serif">Rittal AX 1181.000. 800 x 1000 x 400 mm. IP66. T3 287.5 mm.</text>
+<text x="20" y="35.6" font-size="2.7" font-family="sans-serif">Study model. Do not manufacture from this sheet.</text>
+<text x="20" y="39.2" font-size="2.7" font-family="sans-serif">No chain-encoder gland. No 48 V rail. Two 24 V slots. PNOZ s4 space is reserved.</text>
+<text x="20" y="42.800000000000004" font-size="2.7" font-family="sans-serif">Option A rail 150.6 mm. Option B fits that rail.</text>
+<text x="20" y="46.400000000000006" font-size="2.7" font-family="sans-serif">Sealed area 2.288 m2. Capacity at 10 K is 125.8 W.</text>
+<text x="20" y="50.00000000000001" font-size="2.7" font-family="sans-serif">Closed heat 118.7 W, about 49.4 C.</text>
+<text x="20" y="53.60000000000001" font-size="2.7" font-family="sans-serif">SDR-480-24 ceiling 149.3 W, about 51.9 C. Rating is open.</text>
+<text x="20" y="57.20000000000001" font-size="2.7" font-family="sans-serif">The fan is not fitted. STO inverter order and actuator current are open.</text>
+<text x="20" y="60.80000000000001" font-size="2.7" font-family="sans-serif">Mount on the idle-side mk 51.04 upright. Door faces the service side. Not in the machine pose.</text>
+<text x="20" y="72" font-size="2.8" font-family="sans-serif">Item  Part number   Rev  Qty  Name</text>
+<text x="20" y="76" font-size="2.6" font-family="sans-serif">1      VC-CT-6100     A    1    WAGO PFC200 XTR</text>
+<text x="20" y="79.5" font-size="2.6" font-family="sans-serif">2      VC-CT-6110     A    2    WAGO 750-430/040-000</text>
+<text x="20" y="83.0" font-size="2.6" font-family="sans-serif">3      VC-CT-6120     A    2    WAGO 750-537/040-000</text>
+<text x="20" y="86.5" font-size="2.6" font-family="sans-serif">4      VC-CT-6140     A    1    WAGO 750-652</text>
+<text x="20" y="90.0" font-size="2.6" font-family="sans-serif">5      VC-CT-6150     A    1    WAGO 750-600</text>
+<text x="20" y="93.5" font-size="2.6" font-family="sans-serif">6      VC-CT-6200     A    2    Inductive limit switch</text>
+<text x="20" y="97.0" font-size="2.6" font-family="sans-serif">7      VC-CT-6210     A    1    Emergency stop</text>
+<text x="20" y="100.5" font-size="2.6" font-family="sans-serif">8      VC-CT-6220     A    1    Safety relay</text>
+<text x="20" y="104.0" font-size="2.6" font-family="sans-serif">9      VC-CT-6230     A    1    Warning beacon</text>
+<text x="20" y="107.5" font-size="2.6" font-family="sans-serif">10     VC-CT-6240     A    1    Operator tablet</text>
+<text x="20" y="111.0" font-size="2.6" font-family="sans-serif">11     VC-CT-6300     A    1    Control enclosure</text>
+<text x="20" y="114.5" font-size="2.6" font-family="sans-serif">12     VC-CT-6310     A    1    EMC cable gland set</text>
+<text x="20" y="118.0" font-size="2.6" font-family="sans-serif">13     VC-CT-6330     A    1    Frame mount kit</text>
+<text x="20" y="121.5" font-size="2.6" font-family="sans-serif">14     VC-CT-6340     A    1    Terminal and duct set</text>
+<text x="20" y="125.0" font-size="2.6" font-family="sans-serif">15     VC-CT-6350     A    1    Bulkhead and vent set</text>
+<text x="20" y="128.5" font-size="2.6" font-family="sans-serif">16     VC-CT-6400     A    1    RDDL trust wallet</text>
+<text x="20" y="132.0" font-size="2.6" font-family="sans-serif">17     VC-CT-6500     A    1    GPS antenna u-blox ANN-MB</text>
+<text x="20" y="135.5" font-size="2.6" font-family="sans-serif">18     VC-CT-6510     A    1    GPS receiver u-blox ZED-F9P</text>
+<text x="20" y="139.0" font-size="2.6" font-family="sans-serif">19     VC-CT-6600     A    1    Teltonika RUT241</text>
+<text x="20" y="142.5" font-size="2.6" font-family="sans-serif">20     VC-CT-6610     A    1    LTE SIM data plan</text>
+<text x="20" y="146.0" font-size="2.6" font-family="sans-serif">21     VC-CT-6700     A    1    Wiring harness</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>
 <text x="268" y="278.2" font-size="2.4" font-family="sans-serif">Document title</text>
