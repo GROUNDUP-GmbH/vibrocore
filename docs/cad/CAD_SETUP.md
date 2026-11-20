@@ -67,7 +67,7 @@ says so. The motor solid is only the 255 × 154 × 175 mm envelope.
 | `VC-SH-1302` | Rib blank, 300 × 10 × 60 mm. Not positioned on the plate |
 | `VC-SH-1400` | Shaft only, Ø50 × 200 mm. Flange omitted |
 | `VC-FR-4300`, `VC-FR-4400` | End-plate blanks. No hole patterns |
-| `VC-FR-4100` | Outer envelope of the 50 × 100 × 1500 mm profile, not the mk 2004 slots |
+| `VC-FR-4100` | mk 2004 STEP, 50 × 100 × 1500 mm. Slot opening 10.10 mm. The box export is the fallback envelope. |
 | `VC-SH-1100` | Purchased-motor envelope, not an OLI model |
 
 Assemblies have a parts list on the drawing sheet and an engineering BOM. They

@@ -45,8 +45,10 @@ from cad.models.mast_layout import (
     CASING_ID_MM,
     CASING_LENGTH_MM,
     CASING_OD_MM,
+    CHAIN_ROLLER_DIAMETER_MM,
     CHAIN_SECTION_X_MM,
-    CHAIN_SECTION_Y_MM,
+    CHAIN_INNER_WIDTH_MM,
+    CHAIN_TRANSVERSE_PITCH_MM,
     COLUMN_DIAMETER_MM,
     COLUMN_FLANGE_DIAMETER_MM,
     COLUMN_FLANGE_THICKNESS_MM,
@@ -76,6 +78,7 @@ from cad.models.mast_layout import (
     MOTOR_WIDTH_MM,
     SERVO_BODY_LENGTH_MM,
     SERVO_FLANGE_MM,
+    SERVO_SHAFT_LENGTH_MM,
     PILLOW_HEIGHT_MM,
     PILLOW_LENGTH_MM,
     PILLOW_WIDTH_MM,
@@ -114,6 +117,10 @@ ASSEMBLY_ID = "VC-ASM-0000-layout"
 RENDER_DIR = ROOT / "cad" / "export" / "renders"
 STEP_NAME = f"{ASSEMBLY_ID}.step"
 OVERLAP_TOLERANCE_MM3 = 1.0
+# The Siemens oil seal extends 8 mm. This PLE120 recess is 4.4 mm deep.
+# The key has no keyway in that bore. Flange faces still meet.
+# Every other pair stays under the tolerance. See VC-HB-2200 in the BOM.
+KNOWN_OVERLAP_PAIRS = frozenset({frozenset({"VC-HB-2100", "VC-HB-2200"})})
 RENDER_VIEWS = ("iso", "side", "top")
 
 # Datum plan for this pose. Not a part and not a chain term.
@@ -407,11 +414,31 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     profile_outer_y = half_pitch + MAST_PROFILE_WIDTH_MM / 2.0
     from cad.tools.geometry import vendor_step_path
 
+    from cad.models.vendor_parts import oriented_mk2004
+
+    mk_profile = oriented_mk2004()
     profile_vendor = vendor_step_path("VC-FR-4100") is not None
     for index, sign in enumerate((-1.0, 1.0), start=1):
         # The drive-side tube is cut short so the gearbox can sit above the plate.
-        # A vendor file replaces both tubes. The test hook depends on that.
-        if sign < 0 and not profile_vendor:
+        # The mk extrusion is scaled on its length axis. Any other vendor file
+        # replaces both tubes at full length. The test hook depends on that.
+        if mk_profile is not None:
+            if sign < 0:
+                length = station["profile_top"] - bay["short_z0"]
+                blank = oriented_mk2004(length)
+                center_z = bay["short_z0"] + length / 2.0
+            else:
+                blank = mk_profile
+                center_z = profile_center_z
+            add(
+                f"VC-FR-4100-{index}",
+                blank,
+                0.0,
+                sign * half_pitch,
+                center_z,
+                profile_turn,
+            )
+        elif sign < 0 and not profile_vendor:
             length = station["profile_top"] - bay["short_z0"]
             blank = Box(MAST_PROFILE_WIDTH_MM, MAST_PROFILE_DEPTH_MM, length)
             add(
@@ -490,7 +517,7 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     web_z1 = station["upper_top"]
     web_y = PROFILE_SPACING_MM + RUNNER_WIDTH_MM
     lug_z = station["lower_bottom"] + RUNNER_LENGTH_MM / 2.0
-    lug_x0 = front_strand_x + CHAIN_SECTION_X_MM / 2.0
+    lug_x0 = front_strand_x + CHAIN_ROLLER_DIAMETER_MM / 2.0
     carriage = Compound(
         children=[
             span(
@@ -697,20 +724,33 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
 
     strand_z0 = z_drive + sprocket_r + _MODEL_GAP_MM
     strand_z1 = z_idler - sprocket_r - _MODEL_GAP_MM
-    strand_length = strand_z1 - strand_z0
     chain_vendor = load_vendor_shape("VC-HB-2700")
     if chain_vendor is not None:
         add("VC-HB-2700", chain_vendor, drive_x, 0.0, (strand_z0 + strand_z1) / 2.0)
     else:
-        strand = Box(CHAIN_SECTION_X_MM, CHAIN_SECTION_Y_MM, strand_length)
-        for index, sign in enumerate((1.0, -1.0), start=1):
-            add(
-                f"VC-HB-2700-{index}",
-                strand,
-                drive_x + sign * SPROCKET_PITCH_RADIUS_MM,
-                0.0,
-                (strand_z0 + strand_z1) / 2.0,
+        from cad.models.roller_chain import duplex_chain
+
+        tip_r = sprocket_r
+        if sprocket_solid is not None:
+            import math
+
+            tip_r = max(
+                math.hypot(float(vertex.X), float(vertex.Z)) for vertex in sprocket_solid.vertices()
             )
+        add(
+            "VC-HB-2700",
+            duplex_chain(
+                z_drive,
+                z_idler,
+                SPROCKET_PITCH_RADIUS_MM,
+                tip_r,
+                drive_x,
+                _MODEL_GAP_MM,
+            ),
+            0.0,
+            0.0,
+            0.0,
+        )
 
     # Shaft stays inside the gap. It ends before the profile inner faces.
     shaft_length = 240.0
@@ -757,13 +797,20 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
             (bay["gear_y0"] + bay["gear_y1"]) / 2.0,
             z_lift,
         )
-    add(
-        "VC-HB-2100",
-        Box(SERVO_FLANGE_MM, SERVO_BODY_LENGTH_MM, SERVO_FLANGE_MM),
-        motor_x,
-        bay["motor_y"],
-        z_lift,
-    )
+    from cad.models.vendor_parts import oriented_motor
+
+    motor = oriented_motor()
+    if motor is None:
+        add(
+            "VC-HB-2100",
+            Box(SERVO_FLANGE_MM, SERVO_BODY_LENGTH_MM, SERVO_FLANGE_MM),
+            motor_x,
+            bay["motor_y"],
+            z_lift,
+        )
+    else:
+        # Local Y = 0 is the flange face. The shaft enters the gearbox.
+        add("VC-HB-2100", motor, motor_x, bay["gear_y0"], z_lift)
 
     # Horizontal flange. The neck stays inside the profile depth and meets both
     # stiffeners on a face. The pad under the gearbox is wider and misses the stiffeners.
@@ -802,15 +849,15 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         0.0,
     )
 
-    # Same mk 2004 section as the uprights. Cut to the clear span and set between the strands.
+    # Same mk 2004 section as the uprights. Scale the extrusion axis to the clear span.
     bar_length = profile_inner_y * 2.0
-    add(
-        "VC-FR-4180",
-        Box(MAST_PROFILE_WIDTH_MM, bar_length, MAST_PROFILE_DEPTH_MM),
-        0.0,
-        0.0,
-        450.0,
-    )
+    bar = oriented_mk2004(bar_length) if mk_profile is not None else None
+    if bar is None:
+        bar_solid = Box(MAST_PROFILE_WIDTH_MM, bar_length, MAST_PROFILE_DEPTH_MM)
+    else:
+        # Local Z is the length. This yaw lays that axis on Y and the 100 mm side on Z.
+        bar_solid = Rot(90, 0, 0) * bar
+    add("VC-FR-4180", bar_solid, 0.0, 0.0, 450.0)
 
     profile_top = station["profile_top"]
     idler_length = 340.0
@@ -849,13 +896,14 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
 
     for index, sign in enumerate((-1.0, 1.0), start=1):
         add(f"VC-HB-2830-{index}", idler_bracket(sign), 0.0, 0.0, 0.0)
-        add(
-            f"VC-HB-2900-{index}",
-            Cylinder(4.0, 8.0),
-            drive_x,
-            sign * 150.0,
-            z_idler + 21.0,
-        )
+    # G&G 681-302-1504 envelope. One piece. Not a measured housing.
+    # The disc is the 15-tooth size. The 57 mm block is the catalogue maximum of the 36-57 mm range.
+    # It sits above the front stiffener and clear of the idler sprocket. It does not mesh the chain.
+    tension_width = CHAIN_TRANSVERSE_PITCH_MM + CHAIN_INNER_WIDTH_MM
+    tension_disc = along_y(SPROCKET_TIP_DIAMETER_MM / 2.0, tension_width)
+    tension_slide = Box(40.0, 30.0, 57.0)
+    tension_z = station["profile_top"] + SPROCKET_TIP_DIAMETER_MM / 2.0 + _MODEL_GAP_MM
+    add("VC-HB-2900", tension_disc + tension_slide, drive_x + 60.0, 50.0, tension_z)
 
     def frame_gusset(flange_x0: float, flange_x1: float, web_x: float):
         thickness = GUSSET_SHEET_THICKNESS_MM
@@ -1037,8 +1085,14 @@ def _check_pose(parts: list[Placed], station: dict[str, float]) -> None:
     if COLUMN_FLANGE_DIAMETER_MM > pitch - MOTOR_WIDTH_MM + 0.05:
         raise ValueError("column flange does not fit between the motors")
     lift = by_name["VC-HB-2100"].bounding_box()
-    if abs(float(lift.max.Y - lift.min.Y) - SERVO_BODY_LENGTH_MM) > 0.05:
-        raise ValueError("lift motor axis is not parallel to the sprocket shaft")
+    lift_span = float(lift.max.Y - lift.min.Y)
+    shaft_span = SERVO_BODY_LENGTH_MM + SERVO_SHAFT_LENGTH_MM
+    if abs(lift_span - shaft_span) <= 0.5:
+        flange_y = float(lift.min.Y) + SERVO_BODY_LENGTH_MM
+    else:
+        if abs(lift_span - SERVO_BODY_LENGTH_MM) > 0.05:
+            raise ValueError("lift motor axis is not parallel to the sprocket shaft")
+        flange_y = float(lift.max.Y)
     if abs(float(lift.max.X - lift.min.X) - SERVO_FLANGE_MM) > 0.05:
         raise ValueError("lift motor flange is not the datasheet square")
     if float(lift.min.X) < rear_face_x_mm() - 0.05:
@@ -1047,7 +1101,7 @@ def _check_pose(parts: list[Placed], station: dict[str, float]) -> None:
     if vendor_step_path("VC-HB-2200") is not None:
         if abs(float(gear.max.Y - gear.min.Y) - GEARBOX_LENGTH_MM) > 0.05:
             raise ValueError("gearbox length is not 204 mm")
-        if abs(float(gear.min.Y) - float(lift.max.Y)) > 0.05:
+        if abs(float(gear.min.Y) - flange_y) > 0.05:
             raise ValueError("motor flange does not meet the gearbox input")
         if abs(float(gear.min.X) - rear_face_x_mm()) > 0.05:
             raise ValueError("gearbox flange is not flush with the rear face")
@@ -1139,6 +1193,18 @@ def overlap_pairs(parts: list[Placed] | None = None, bom=None) -> list[tuple[str
             if volume > OVERLAP_TOLERANCE_MM3:
                 hits.append((left.name, right.name, volume))
     return hits
+
+
+def split_overlaps(parts: list[Placed] | None = None, bom=None):
+    """Unexpected overlaps, then the known motor-to-gearbox fit."""
+    other = []
+    known = []
+    for left, right, volume in overlap_pairs(parts, bom):
+        if frozenset((left, right)) in KNOWN_OVERLAP_PAIRS:
+            known.append((left, right, volume))
+        else:
+            other.append((left, right, volume))
+    return other, known
 
 
 def _find(parts: list[Placed], name: str):

@@ -792,9 +792,12 @@ parts:
   supply: purchase
   subsystem: frame
   category: Frame
-  spec: mk 2004 profile, 50 x 100 mm, length 1500 mm. Two profiles.
+  spec: mk 2004 profile, order type 51.04.2004, configured file 51.04.1500. 50 x 100 mm, length
+    1500 mm. Alloy AlMgSi0.7 F28 / EN AW-6005A T6. Slot opening 10.10 mm. Two profiles.
   legacy_ref: '3.32'
   supplier_id: mk
+  mass_kg: 7.275
+  mass_note: 4.850 kg/m times 1.5 m. Catalogue section 1805.51 mm2. The STEP volume gives about 1797.7 mm2.
   estimate_eur_low: 60
   estimate_eur_high: 90
   geometry:
@@ -805,11 +808,9 @@ parts:
     fidelity: envelope
     source: docs/engineering/BOM.md#3
   unknowns:
-  - mk 2004 slot geometry is not in the repository. The solid is the outer envelope only and is not a
-    machining model.
-  - Alloy and the exact mk order code.
-  - Cut length of the drive-side upright. The purchased length stays 1500 mm. The pose starts that tube
-    above the gearbox.
+  - Cut length of the drive-side upright. The purchased length stays 1500 mm. The pose scales that tube
+    along the extrusion only.
+  notes: The machine pose loads cad/vendor/VC-FR-4100/51.04.1500.stp. The box above is the fallback envelope.
 - part_number: VC-FR-4150
   name: Bottom frame gusset
   revision_index: 0
@@ -863,9 +864,11 @@ parts:
   subsystem: frame
   category: Frame
   spec: mk 2004 profile, 50 x 100 mm, cut to the clear span between the upright inner faces. The uprights
-    VC-FR-4100 stay 1500 mm. At the 300 mm pitch the cut length is 250 mm.
+    VC-FR-4100 stay 1500 mm. At the 300 mm pitch the cut length is 250 mm. Same extrusion as VC-FR-4100,
+    scaled on the length axis only.
   legacy_ref: draft-fr-4180
   supplier_id: mk
+  mass_note: 4.850 kg/m. The draft 250 mm cut is about 1.21 kg. Pitch is TBD, so the mass is not frozen.
   unknowns:
   - Final cut length follows the profile pitch. The 300 mm pitch is TBD. Not in BOM.md v1.
   notes: Draft. Cut this bar to length. Do not change the purchased 1500 mm uprights to hide the height deficit.
@@ -1212,16 +1215,16 @@ parts:
   category: Hub
   spec: Siemens 1FL2104-4AG11-1MC0. 3.2 Nm rated, 10.8 Nm maximum, 3000 rpm, 1 kW, 230 V.
     Shaft 19 x 40 mm. Flange 81 mm square, centering 70 mm, pitch circle 90 mm, B5, M6 holes.
-    Integrated 3.3 Nm holding brake. Multiturn absolute encoder. About 4.1 kg. Overall length 186.6 mm.
+    Integrated 3.3 Nm holding brake. Multiturn absolute encoder. About 4.1 kg.
+    Body behind the flange 186.6 mm. Overall length with the shaft 226.6 mm.
+    Phase Out Announce. Successor pattern 1FL2104-4BG. See cad/vendor/VC-HB-2100/SOURCE.md.
   legacy_ref: '2.17'
   manufacturer_pn: 1FL2104-4AG11-1MC0
   estimate_eur_low: 250
   estimate_eur_high: 400
-  notes: 'Approved 2026-11-20. See docs/engineering/LIFT-DRIVE-SIZING.md. The envelope uses the datasheet
-    flange and the overall length. No vendor STEP yet. The Nanotec file is not loaded. The 250-400 EUR
-    band is the previous placeholder. It is not a Siemens quote. See cad/vendor/VC-HB-2100/SOURCE.md.'
-  unknowns:
-  - Vendor STEP is not in the repository. The shaft is inside the gearbox envelope and is not a second solid.
+  notes: 'Approved 2026-11-20. See docs/engineering/LIFT-DRIVE-SIZING.md. The SiePortal STEP is loaded.
+    Mass stays about 4.1 kg for this type. The successor mass is 3.2 kg and is not used.
+    The 250-400 EUR band is the previous placeholder. It is not a Siemens quote.'
 - part_number: VC-HB-2110
   name: Lift motor bracket
   revision_index: 0
@@ -1259,6 +1262,9 @@ parts:
   notes: 'Approved 2026-11-20. The vendor STEP is in cad/vendor/VC-HB-2200. The 2D PDF and the DXF are
     not in the repository. The 600-900 EUR band is the previous placeholder. It is not a Neugart quote.
     See docs/engineering/LIFT-DRIVE-SIZING.md.'
+  unknowns:
+  - Input adapter of article 100460948 was configured for 1FL2104-4AG10. Re-check it for the current
+    oil seal and for successor 1FL2104-4BG. The STEP recess is 4.4 mm deep and has no keyway.
 - part_number: VC-HB-2300
   name: SINAMICS S200 servo drive
   revision_index: 0
@@ -1326,11 +1332,17 @@ parts:
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: 10B-2 duplex roller chain, 3.2 m, pre-greased. Pitch 15.875 mm.
+  spec: G&G 600-302-0000 duplex roller chain, 10B-2, with connecting link 600-302-0001. Purchase length
+    3.2 m is a placeholder. Pitch 15.875 mm. ISO 606 roller 10.16 mm, inner width 9.65 mm, transverse
+    pitch 16.59 mm.
   legacy_ref: '2.23'
+  manufacturer_pn: 600-302-0000
   estimate_eur_low: 30
   estimate_eur_high: 50
-  notes: iwis or Wippermann.
+  notes: 'Parametric solid in the machine pose. G&G publishes no chain CAD. See cad/vendor/VC-HB-2700/SOURCE.md.'
+  unknowns:
+  - Purchase length 3.2 m stays a placeholder until the lift height is decided.
+  - Breaking load is not stated by G&G. Do not assign a value.
 - part_number: VC-HB-2800
   name: Sprocket 10B-2 15T drive
   revision_index: 0
@@ -1394,12 +1406,15 @@ parts:
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: Spring or adjustable tensioner for the 10B-2 loop.
+  spec: G&G 681-302-1504 chain tensioner. 10B-2 duplex, 15 teeth, range 36 mm to 57 mm, M12, with
+    mounting kit. The placed solid is an envelope of that range, not a housing drawing.
   legacy_ref: '2.26'
+  manufacturer_pn: 681-302-1504
   estimate_eur_low: 20
   estimate_eur_high: 40
+  notes: See cad/vendor/VC-HB-2900/SOURCE.md. One piece. It does not mesh the chain.
   unknowns:
-  - Selected model.
+  - Housing outline beyond the 36 mm to 57 mm catalogue range. Not a measured drawing.
 - part_number: VC-HB-3000
   name: Power-off brake 24 V
   revision_index: 0

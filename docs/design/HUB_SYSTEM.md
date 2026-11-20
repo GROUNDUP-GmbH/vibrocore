@@ -86,13 +86,17 @@ The sizing and the torque limit are in [LIFT-DRIVE-SIZING.md](../engineering/LIF
 
 | Parameter              | Value                              |
 |------------------------|------------------------------------|
-| Chain type             | 10B-2 duplex roller chain          |
-| Pitch                  | 15.875 mm (5/8″)                  |
-| Breaking load          | ~44.5 kN (10B-2)                  |
-| Working load (10:1 SF) | ~4.5 kN                           |
-| Sprocket (drive)       | 10B-2, 15 teeth, taper-lock bore   |
-| Sprocket (idle)        | 10B-2, 15 teeth, bearing-mounted   |
-| Chain length           | ~3.2 m (for 1.5 m stroke + wrap)   |
+| Chain type             | G&G 600-302-0000, 10B-2 duplex     |
+| Connecting link        | G&G 600-302-0001                   |
+| Pitch                  | 15.875 mm (ISO 606)                |
+| Roller / inner width   | 10.16 mm / 9.65 mm                 |
+| Transverse pitch       | 16.59 mm                           |
+| Breaking load          | Not stated by G&G. Open point.     |
+| Working load           | 4.5 kN                             |
+| Sprocket (drive)       | G&G 501-302-0515, 10B-2, 15 teeth  |
+| Sprocket (idle)        | Same solid, bearing-mounted        |
+| Tensioner              | G&G 681-302-1504, range 36–57 mm   |
+| Chain length           | 3.2 m placeholder until lift height |
 | Lubrication            | Pre-greased + periodic oil          |
 
 ### 3.4 Drive Shaft (Separate from Gearbox Output)

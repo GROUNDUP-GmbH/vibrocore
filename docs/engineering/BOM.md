@@ -32,10 +32,10 @@ complexity reduction vs. V1 custom design.*
 |20 | Elastomer coupling      | R+W EKH or KTR ROTEX 28          |   1 |   60–100 | R+W (DE) / KTR (DE)       |
 |21 | Drive shaft             | Ø25–30 mm, keyed                  |   1 |   30–50  | Custom / standard (EU)     |
 |22 | Pillow block UCP 206    | Self-aligning, Ø30 bore           |   2 |   30–50  | SKF / Schaeffler (EU)      |
-|23 | Chain 10B-2 duplex      | 3.2 m, pre-greased                |   1 |   30–50  | iwis / Wippermann (DE)     |
-|24 | Sprocket 10B-2 15T      | Taper-lock, drive                 |   1 |   25–40  | z24.de / ETKF (DE)         |
-|25 | Sprocket 10B-2 15T      | Bearing-mounted, idle             |   1 |   30–50  | z24.de / ETKF (DE)         |
-|26 | Chain tensioner          | Spring-type or adjustable         |   1 |   20–40  | Standard (EU)              |
+|23 | Chain 10B-2 duplex      | G&G 600-302-0000, 3.2 m placeholder |   1 |   30–50  | G&G                        |
+|24 | Sprocket 10B-2 15T      | G&G 501-302-0515, drive           |   1 |   25–40  | G&G                        |
+|25 | Sprocket 10B-2 15T      | Same solid, idle                  |   1 |   30–50  | G&G                        |
+|26 | Chain tensioner          | G&G 681-302-1504, 36–57 mm        |   1 |   20–40  | G&G                        |
 |27 | Power-off brake         | Obsolete. Motor brake is used.    |   0 |  100–180 | History only. Not in the rollup. |
 |28 | Linear guide rail HGR20 | 1,300 mm length                   |   2 |  100–180 | Hiwin / Bosch Rexroth      |
 |29 | Linear slider HGH20     | Ball bearing type                  |   4 |   80–140 | Hiwin / Bosch Rexroth      |
@@ -48,7 +48,7 @@ complexity reduction vs. V1 custom design.*
 
 | # | Component               | Spec                              | Qty | Est. €   | Supplier / Source          |
 |---|-------------------------|-----------------------------------|-----|----------|----------------------------|
-|32 | Al profile 50×100       | mk 2004, 1,500 mm                 |   2 |  120–180 | mk Technology (DE)         |
+|32 | Al profile 50×100       | mk 2004, 51.04.2004, 1,500 mm, 7.275 kg |   2 |  120–180 | mk Technology (DE)         |
 |33 | Profile connectors      | mk standard corners/T-slot        |   8 |   40–80  | mk Technology (DE)         |
 |34 | Bottom steel plate      | S355, 400×300×15 mm, machined     |   1 |   80–120 | Custom (EU)                |
 |35 | Top steel plate         | S355, 300×200×12 mm, machined     |   1 |   50–80  | Custom (EU)                |

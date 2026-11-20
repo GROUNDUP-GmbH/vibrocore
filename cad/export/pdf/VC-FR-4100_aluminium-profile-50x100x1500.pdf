@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 812 >>
+<< /Length 641 >>
 stream
 BT
 /F1 11 Tf
@@ -23,11 +23,7 @@ T*
 T*
 (Box 50 x 100 x 1500 mm) Tj
 T*
-(TODO: mk 2004 slot geometry is not in the repository. The solid is the outer envelope only and is not a machining model.) Tj
-T*
-(TODO: Alloy and the exact mk order code.) Tj
-T*
-(TODO: Cut length of the drive-side upright. The purchased length stays 1500 mm. The pose starts that tube above the gearbox.) Tj
+(TODO: Cut length of the drive-side upright. The purchased length stays 1500 mm. The pose scales that tube along the extrusion only.) Tj
 T*
 (Owner: Ground UP GmbH) Tj
 T*
@@ -58,8 +54,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000001111 00000 n 
+0000000940 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-1181
+1010
 %%EOF

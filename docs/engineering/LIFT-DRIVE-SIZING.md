@@ -21,7 +21,9 @@ The supply is 230 V single phase through the S200 drive.
 The shaft is Ø19 mm by 40 mm. The flange is 81 mm square.
 The centering diameter is 70 mm. The pitch circle is 90 mm.
 The holding brake is 3.3 Nm. The encoder is a multiturn absolute encoder.
-The mass is about 4.1 kg. The overall length is 186.6 mm.
+The mass is about 4.1 kg.
+The body behind the flange face is 186.6 mm.
+The SiePortal STEP adds the 40 mm shaft, so the overall length is 226.6 mm.
 
 The gearbox torques are from the Neugart PLE catalogue, 2026-10.
 The sizes and the mass are from the vendor solid of article 100460948.
@@ -83,7 +85,34 @@ A second brake, if one is required, must satisfy brake torque × 40 ≤ 500 Nm.
 The old 16 Nm brake gives 640 Nm at the output.
 That is above T2Stop. Do not use it.
 
-## 5. Sources
+## 5. Phase-out
+
+1FL2104-4AG11-1MC0 is Phase Out Announce.
+The Siemens successor is SH40 New, order pattern 1FL2104-4BG□1-□□C0.
+The announcement is Siemens document 109997329, dated 2026-01-29.
+The S200 PN / 1FL2 operating instructions are 06/2026, document 110005040.
+The S200 drive 6SL5510-1BB11-0AA0 stays.
+
+| Item | Successor | This motor |
+|---|---|---|
+| Length with brake | 192.6 mm | 226.6 mm |
+| Flange thickness | 8 mm | 6.4 mm |
+| Usable IP65 shaft | 19 mm by 37 mm | 19 mm by 32 mm |
+| Mass | 3.2 kg | 4.1 kg |
+| Inertia | 0.97 kgcm² | not used here |
+| Maximum torque | 11.2 Nm | 10.8 Nm |
+| Enclosure | always IP65 | IP65 on this order |
+
+These items stay the same.
+Flange 81 mm square. Centering diameter 70 mm. Pitch circle 90 mm. Four holes Ø6.6 mm.
+Shaft 19 h6. Key 6 mm by 6 mm by 25 mm. Holding brake 3.3 Nm.
+
+The selected mass stays 4.1 kg. Do not switch the model to 3.2 kg.
+The Neugart input adapter of article 100460948 was configured for 1FL2104-4AG10.
+Re-check that adapter for the successor.
+The current STEP oil seal extends about 8 mm. The gearbox recess is 4.4 mm deep and has no keyway.
+
+## 6. Sources
 
 1. Siemens datasheet 1FL2104-4AG11-1MC0, generated 2026-11-20.
    https://mall.industry.siemens.com/spice/docuservice/rest/document.spring?articleNumber=1FL21044AG111MC0&documentGroup=TED&documentId=DCS_DATASHEET_CLEANED&language=en&region=ww
@@ -94,3 +123,7 @@ That is above T2Stop. Do not use it.
 4. Neugart CAD for article 100460948, generated 2026-11-20.
    The PDF and the DXF from that mail are not stored here.
    See cad/vendor/VC-HB-2200/SOURCE.md.
+5. Siemens SiePortal STEP 1FL2104-4AG11-1MC0_3D_en.STP.
+   See cad/vendor/VC-HB-2100/SOURCE.md.
+6. Siemens document 109997329, 2026-01-29. Successor announcement.
+7. Siemens document 110005040. S200 PN / 1FL2 operating instructions, 06/2026.

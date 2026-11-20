@@ -21,8 +21,8 @@ GEARBOX_EMERGENCY_NM = 360.0
 # The BOM line says about 20 Nm. The motor catalogue number is not selected.
 MOTOR_TORQUE_NOMINAL_NM = 15.0
 MOTOR_TORQUE_BOM_NM = 20.0
-# HUB_SYSTEM.md: breaking load about 44.5 kN, working load about 4.5 kN (10:1).
-CHAIN_BREAK_N = 44500.0
+# HUB_SYSTEM.md section 4. The working load is 4.5 kN.
+# G&G does not state a breaking load for 600-302-0000. Do not store a substitute.
 CHAIN_WORKING_N = 4500.0
 LOAD_CELL_RATED_N = 5000.0
 

@@ -12,9 +12,7 @@
     "source": "docs/engineering/BOM.md#3",
     "step": "cad/export/step/VC-FR-4100.step",
     "unknowns": [
-      "mk 2004 slot geometry is not in the repository. The solid is the outer envelope only and is not a machining model.",
-      "Alloy and the exact mk order code.",
-      "Cut length of the drive-side upright. The purchased length stays 1500 mm. The pose starts that tube above the gearbox."
+      "Cut length of the drive-side upright. The purchased length stays 1500 mm. The pose scales that tube along the extrusion only."
     ]
   },
   {

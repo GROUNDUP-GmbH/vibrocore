@@ -179,14 +179,18 @@ These visual stand-ins are not in the height sum.
 | rail_section_height_mm | 17.5 mm | Hiwin HGR20R published height HR. The STEP mounting face sits on the profile. |
 | runner_pitch_mm | 200 mm | Centre distance of the two HGH20CA blocks on one rail. Not in the BOM. |
 | head_front_gap_mm | 10 mm | Draft gap from the carriage plate to the motor rear face. The plate rear is flush with that face. |
-| servo_body_length_mm | 186.6 mm | Siemens 1FL2104 overall length. The envelope is that square prism. No STEP yet. |
+| servo_body_length_mm | 186.6 mm | Body of Siemens 1FL2104 behind the flange face. The STEP shaft adds 40 mm. |
+| chain_pitch_mm | 15.875 mm | ISO 606 size 10B. The placed chain uses this pitch. |
+| chain_roller_diameter_mm | 10.16 mm | ISO 606 roller diameter. The strand thickness is this diameter. |
+| chain_inner_width_mm | 9.65 mm | ISO 606 inner width of one row. |
+| chain_transverse_pitch_mm | 16.59 mm | ISO 606 duplex transverse pitch. |
 | coupling_diameter_mm | 65 mm | Fallback envelope of VC-HB-2400 when no STEP is present. |
 | coupling_length_mm | 50 mm | Fallback envelope of VC-HB-2400 when no STEP is present. |
 | pillow_length_mm | 30 mm | UCP 206 envelope along the shaft. The 30 mm bore is selected. |
 | pillow_width_mm | 70 mm | UCP 206 envelope. The housing outline was not downloaded. |
 | pillow_height_mm | 45 mm | UCP 206 envelope. The housing outline was not downloaded. |
-| chain_section_x_mm | 16 mm | Strand thickness. The pitch is 15.875 mm. The link CAD was not downloaded. |
-| chain_section_y_mm | 32 mm | Strand width for duplex 10B-2. The link CAD was not downloaded. |
+| chain_section_x_mm | 16 mm | Old envelope thickness. The placed chain uses the 10.16 mm roller. |
+| chain_section_y_mm | 32 mm | Old envelope width. The placed rows use 9.65 mm and a 16.59 mm transverse pitch. |
 | rail_bottom_offset_mm | 100 mm | From the bottom of the profile to the bottom of the rail. |
 | rib_centre_x_mm | 170 mm | Weld position of VC-SH-1302 from the rod axis. |
 | shoe_passage_radial_clearance_mm | 1 mm | Old layout bore. The machine pose uses the 83 mm casing bore instead. |
@@ -269,7 +273,7 @@ The guided travel is 1009.6 mm.
 The start value is 1009.6 mm.
 That is the top of the travel.
 The upper block then ends on the rail top at 1415 mm.
-The same solids at stroke 0, at mid travel 511.2 mm and at the top do not overlap.
+The same solids at stroke 0, at mid travel 504.8 mm and at the top do not overlap, except the motor and the gearbox.
 
 The volume behind the profile rear faces is reserved for the machine tilt mechanism.
 Those faces are the plane X = −50 mm.
@@ -287,10 +291,11 @@ The chain lift is VC-ASM-2000, not the VC-ASM-8100 actuators.
 Both chain strands, the drive sprocket and the idler sprocket sit in the profile gap.
 The shaft axis is the mast mid-plane, X = 0.
 The axis runs along Y and stops before the inner faces.
-The rear strand stays at X = −45.9 mm, 4.1 mm in front of the rear face.
-The placed sprocket spans about X = −41.4 mm to 41.4 mm.
-The chain strands still stop outside the 83 mm envelope, so they stay clear of the teeth.
-The Siemens servo and the PLE120 gearbox are parallel to that shaft.
+The rear strand stays at X = −43.0 mm, 7.0 mm in front of the rear face.
+The placed sprocket spans about X = −41.9 mm to 41.9 mm.
+The chain is an ISO 606 section on the pitch radius.
+The wrap is a shell outside the tooth tip. It is not a meshed link.
+The Siemens servo is the SiePortal STEP. The PLE120 gearbox is the Neugart STEP.
 They sit above the bottom plate.
 The head plate sweeps Y = ±210 mm down to the rail, so this train stands outside that sweep, on the drive side.
 The axis is at X = 7.5 mm and Z = 79.5 mm.
@@ -328,10 +333,12 @@ The chain path still uses the published 83 mm tip diameter.
 The placed G&G sprocket tip is about 82.7 mm and its width is 25.5 mm.
 The pitch radius is the documented 37.9 mm.
 The gearbox solid is Neugart article 100460948. It is 115 mm square and 204 mm long.
-The servo envelope is the datasheet flange, 81 mm by 186.6 mm.
-No motor STEP is in the repository.
+The servo is the SiePortal solid of 1FL2104-4AG11-1MC0.
+The flange face meets the gearbox. The 40 mm shaft enters the bore.
+The oil seal and the key share about 5110 mm³ with the gearbox.
+That pair is the open adapter check. Every other pair stays under 1 mm³.
 
-VC-HB-2100 is an envelope.
+VC-HB-2100 is the Siemens STEP.
 VC-HB-2200 is the Neugart STEP.
 VC-HB-2400 is a KTR ROTEX 28 coupling.
 The set is a 32H7 hub, an unbored hub and a 92 Sh-A spider.
@@ -355,7 +362,9 @@ They keep the manufacturer origin because the jaw face is not the box centre.
 The shaft tip meets the jaw face.
 The motor flange meets the gearbox input on a face.
 A missing file keeps the catalogue envelope.
-The mk 2004 profile, the 10B-2 chain, the UCP 206 blocks and the OLI MVE motors stay envelopes.
+The mk 2004 uprights and the drive crossbar use the 3Dfindit extrusion.
+The 10B-2 chain is an ISO 606 section. G&G publishes no chain CAD.
+The UCP 206 blocks and the OLI MVE motors stay envelopes.
 
 The vibrating plate bottom is at the same height as the lower guide block.
 The plate does not hang below the carriage.
@@ -392,11 +401,11 @@ The head clears the rails, the profiles and the gussets at stroke 0, at mid trav
 | Vibrating plate to nearest profile | 50.0 mm | The plate rear is flush with the motors. |
 | Vibrating plate to nearest rail | 32.5 mm | The plate shares the guide-block height. |
 | Carriage to chain strand | 0.0 mm | The lug meets the front strand on a face. |
-| Rear chain strand to the rear face | 4.1 mm | The strand stays in the gap, at X = −45.9 mm. |
+| Rear chain strand to the rear face | 7.0 mm | The strand stays in the gap, at X = −43.0 mm. |
 | Lift-motor body to the rear face | 17.0 mm | The 81 mm flange starts at X = −33 mm. |
 | Gearbox body to the rear face | 0.0 mm | The 115 mm body is flush at X = −50 mm. |
 
-No pair of part solids shares more than 1 mm³.
+No pair of part solids shares more than 1 mm³, except VC-HB-2100 and VC-HB-2200.
 The ground datum is not a part.
 
 The views are:
@@ -418,9 +427,10 @@ The views are:
 9. Usable stroke. The model travel is 1009.6 mm because two 90.4 mm blocks sit 200 mm apart on the 1300 mm rail. The 200 mm pitch is TBD.
 10. Centre distance of the two mast profiles. The rod is in front of the rails. The 300 mm pitch is TBD.
 11. Front gap from the carriage plate to the motor rear face. The model uses a draft gap of 10 mm. The plate rear is flush with that face.
-12. Siemens 1FL2104 STEP file. The motor is still the datasheet envelope. The PLE120 STEP is loaded.
-13. Coupling bore against the Ø25 mm gearbox shaft. The STEP hub is 32H7 and is seated on the journal. Pillow-block outline and chain-link section are still open.
-14. Weld position of the two ribs VC-SH-1302.
+12. Neugart input adapter. Article 100460948 was configured for 1FL2104-4AG10. Re-check it for the current oil seal and for successor 1FL2104-4BG.
+13. Coupling bore against the Ø25 mm gearbox shaft. The STEP hub is 32H7 and is seated on the journal. Pillow-block outline is still open.
+14. Chain purchase length. 3.2 m stays a placeholder until the lift height is decided. G&G states no breaking load.
+15. Weld position of the two ribs VC-SH-1302.
 
 ## Options
 

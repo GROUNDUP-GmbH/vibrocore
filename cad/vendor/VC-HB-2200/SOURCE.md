@@ -35,3 +35,9 @@ Measured on this solid:
 The coupling hub sits on the output journal.
 The shaft tip meets the jaw face of the 32H7 hub.
 The chain sprocket stays on the separate chain shaft.
+
+The centering recess on the motor face is about Ø70 mm and 4.4 mm deep.
+The Siemens 1FL2104-4AG11 STEP has an oil seal about 8 mm long.
+That seal and the motor key share volume with this solid.
+The adapter was configured for 1FL2104-4AG10.
+Re-check it for that seal and for the successor 1FL2104-4BG.

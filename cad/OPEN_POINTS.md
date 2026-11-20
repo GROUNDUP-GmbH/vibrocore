@@ -85,9 +85,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-CT-6700` Wiring harness: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6800` RevPi Connect 4: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6810` RevPi DIO module: no solid. Dimensions were not complete enough to model.
-- `VC-FR-4100` Aluminium profile 50x100x1500: mk 2004 slot geometry is not in the repository. The solid is the outer envelope only and is not a machining model.
-- `VC-FR-4100` Aluminium profile 50x100x1500: Alloy and the exact mk order code.
-- `VC-FR-4100` Aluminium profile 50x100x1500: Cut length of the drive-side upright. The purchased length stays 1500 mm. The pose starts that tube above the gearbox.
+- `VC-FR-4100` Aluminium profile 50x100x1500: Cut length of the drive-side upright. The purchased length stays 1500 mm. The pose scales that tube along the extrusion only.
 - `VC-FR-4150` Bottom frame gusset: Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4160` Top frame gusset: Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4170` Mid frame gusset: Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
@@ -115,17 +113,18 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-GP-7310` DT325 drive head: no solid. Dimensions were not complete enough to model.
 - `VC-GP-7400` Core liner 3.25 inch: no solid. Dimensions were not complete enough to model.
 - `VC-GP-7410` DT325 liner retainer HD: no solid. Dimensions were not complete enough to model.
-- `VC-HB-2100` Servo motor 1FL2104: Vendor STEP is not in the repository. The shaft is inside the gearbox envelope and is not a second solid.
 - `VC-HB-2110` Lift motor bracket: Plate thickness, bolt size and weld sizes. Not in BOM.md v1.
+- `VC-HB-2200` Planetary gearbox PLE120-040: Input adapter of article 100460948 was configured for 1FL2104-4AG10. Re-check it for the current oil seal and for successor 1FL2104-4BG. The STEP recess is 4.4 mm deep and has no keyway.
 - `VC-HB-2300` SINAMICS S200 servo drive: PROFINET order 6SL5510-1BB11-0AF0 if the PLC does not use pulse and direction. The price is not a quote.
 - `VC-HB-2400` Elastomer coupling: Gearbox output is Ø25 mm. The STEP hub is 32H7, so the bore is not a fit. The hub is seated on the journal. The chain-side hub is unbored.
 - `VC-HB-2500` Hub drive shaft: Diameter inside the 25-30 mm range, length, key size and sprocket seat.
 - `VC-HB-2600` Pillow block UCP 206: Confirm 30 mm bore against the final shaft diameter. HUB_SYSTEM.md also mentions UCP 205/206.
-- `VC-HB-2700` Duplex chain 10B-2: no solid. Dimensions were not complete enough to model.
+- `VC-HB-2700` Duplex chain 10B-2: Purchase length 3.2 m stays a placeholder until the lift height is decided.
+- `VC-HB-2700` Duplex chain 10B-2: Breaking load is not stated by G&G. Do not assign a value.
 - `VC-HB-2810` Sprocket 10B-2 15T idle: no solid. Dimensions were not complete enough to model.
 - `VC-HB-2820` Idler shaft: Key size and the bearing catalogue number. Not in BOM.md v1.
 - `VC-HB-2830` Idler bearing bracket: Bearing catalogue number, slot length and bolt size. Not in BOM.md v1.
-- `VC-HB-2900` Chain tensioner: Selected model.
+- `VC-HB-2900` Chain tensioner: Housing outline beyond the 36 mm to 57 mm catalogue range. Not a measured drawing.
 - `VC-HB-3000` Power-off brake 24 V: Obsolete. Do not buy. The motor holding brake replaces this part.
 - `VC-HB-3200` Carriage plate: Length, width, hole pattern and chain-pin position. Thickness alone is not enough to model a blank.
 - `VC-HB-3300` Fastener kit, hub: no solid. Dimensions were not complete enough to model.
