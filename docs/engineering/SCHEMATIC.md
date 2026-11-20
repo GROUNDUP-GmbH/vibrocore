@@ -1,28 +1,66 @@
 # Cabinet schematic
 
-Drawing VC-SCH-5000 is the cabinet schematic.
-The KiCad 8 project is `cad/kicad/vibrocore-control/`.
-The PDF is `cad/export/kicad/vibrocore-control.pdf`.
-The terminal list and the cable list are in that same directory.
-Wire numbers are the global labels.
-The same label on two sheets is one net.
-Sheet 1 lists every wire number that leaves its sheet.
-Regenerate the sheets with `python3 cad/kicad/vibrocore-control/generate_schematic.py`.
-Run ERC with `kicad-cli sch erc --severity-all --exit-code-violations`.
+Drawing VC-SCH-5000 revision 0D is the cabinet schematic.
+The drawing of record is the QElectroTech project `cad/electrical/VC-SCH-5000/VC-SCH-5000.qet`.
+The PDF is `cad/export/qet/VC-SCH-5000.pdf`.
+One PNG per folio is in `cad/export/qet/png/`.
+The title block reads Ground UP GmbH, file VC-SCH-5000, revision 0D, date 2026-11-20.
+Regenerate the project with `python3 cad/electrical/VC-SCH-5000/generate_qet.py`.
+The generator reads the component names, the article numbers, the terminal list and the cable list from the KiCad generator.
+It does not add a part.
 
-## Sheets
+The KiCad 8 project `cad/kicad/vibrocore-control/` is a superseded reference.
+Its revision is 0C.
+Keep the files.
+Do not treat the KiCad PDF as the drawing of record.
+The KiCad ERC job still checks that reference.
 
-| Sheet | File | Content |
+Each folio has a column and row grid.
+That grid is the current-path reference.
+Power is at the top.
+Control is below.
+The flow is left to right.
+A wire is orthogonal.
+A wire shorter than one grid step is rejected.
+Text that overlaps text, a symbol, a wire, a device border, the ruler or the title block is rejected.
+A junction dot is a connection.
+A crossing without a dot is not a connection.
+Notes sit in the numbered notes field.
+A marker such as (1) is the only note mark in the drawing area.
+The terminal plan is folio 19.
+The cable list is folio 20.
+QElectroTech writes the component list, the wire list, the net list and the conductor list into `cad/export/qet/`.
+The terminal-strip editor did not write a separate file.
+Folio 19 is the terminal plan.
+The conductor export carries the section and the colour.
+It does not name the harness cables.
+Folio 20 names those cables.
+
+## Folios
+
+| Folio | Title | Content |
 | --- | --- | --- |
-| 1 | `vibrocore-control.kicad_sch` | Index and wire-number cross reference |
-| 2 | `01-power.kicad_sch` | Mains, isolator, RCD, branch MCBs, both 24 V supplies, 0 V and PE |
-| 3 | `02-safety.kicad_sch` | E-stop, PNOZ s4, STO, reset and feedback |
-| 4 | `03-hub.kicad_sch` | S200, 1FL2104, encoder, brake, pulse and direction |
-| 5 | `04-sonic.kicad_sch` | ATV320 and two OLI motors |
-| 6 | `05-revpi.kicad_sch` | RevPi Connect 4, one DIO, limits, enabling switch and index |
-| 7 | `06-tilt.kicad_sch` | Tilt contactors and the lift H-bridge |
-| 8 | `07-rotation.kicad_sch` | Proposed rod-rotation drive |
-| 9 | `08-network.kicad_sch` | RUT241, Ethernet and RS-485 |
+| 1 | Cover and folio index | Drawing index |
+| 2 | Mains incoming | Instagrid, isolator Q1, RCD QF1, breaker F1, PE |
+| 3 | Branch feeders | F2 is one three-pole GV2L20. Pole 3 is open. F3, F4 and F5 |
+| 4 | 24 V supplies | G1 and G2 device boxes, F14, F24, 0 V and bond W1 |
+| 5 | E-stop and PNOZ inputs | Mushroom E-stop, reset, and the PNOZ s4 device box |
+| 6 | PNOZ outputs | PNOZ s4 output terminals, STO channels and the monitor contact |
+| 7 | S200 power and motor | 6SL5510 and the 1FL2104 as device boxes |
+| 8 | S200 control | S200 control terminals, encoder, pulse and RS-485 |
+| 9 | ATV320 motor A | ATV320, F21 and motor A as device boxes |
+| 10 | ATV320 motor B | ATV320, F22 and motor B. V and W swap at X3 |
+| 11 | ATV320 control | ATV320 control terminals |
+| 12 | RevPi supply | RevPi Connect 4 device, order 100378 |
+| 13 | DIO channels | RevPi DIO device, order 100197 |
+| 14 | Field devices | Limits, enabling switch, index sensor and beacon |
+| 15 | Tilt | Finder 62.32 contactors and the tilt actuator |
+| 16 | Lift | H-bridge and the lift actuators |
+| 17 | Rotation proposal | Nanotec proposal, not released |
+| 18 | Network | RUT241 device, Ethernet and RS-485 |
+| 19 | Terminal plan | Strips X1 to X10 |
+| 20 | Cable list | Harness cables |
+| 21 | Notes | Points that apply to the whole drawing |
 
 ## Controller
 
@@ -39,7 +77,7 @@ There is no CODESYS target on this drawing.
 
 The E-stop has three NC contacts.
 Two contacts go to the PNOZ s4, article 750104, part VC-CT-6220.
-The third contact is DIO input 2.
+The third contact is DIO input index 2.
 Set the PNOZ for two channels, short detection and a monitored manual reset.
 Confirm the rotary-switch mark in the PNOZ s4 manual before you commission the relay.
 PNOZ contact 13-14 is STO channel 1 for the S200 and for the ATV320.
@@ -74,9 +112,15 @@ The rotation drive has its own 2 A fuse on the general rail.
 ## Hub drive
 
 Order the S200 as 6SL5510-1BB11-0AA0.
-X131 and X108 are the terminals of the PTI standard drive.
-The STO pin order on this drawing is taken from the S200 PN sheet.
-Confirm that order on the PTI sheet.
+This is the PTI standard drive.
+X131 pins are 1 STO1+, 2 STO1-, 3 STO-VS, 4 STO-M, 5 STO2+ and 6 STO2-.
+STO1+ and STO2+ come from the PNOZ.
+STO1- and STO2- go to 0 V.
+STO-VS and STO-M are TBC.
+Do not land 24 V on STO-VS until the figure is confirmed.
+X130 is not on this PTI drive.
+STO status is status word bit STO_EP.
+Do not land 440_S200FB until a digital output is assigned.
 U1 is the pulse and direction source.
 U1 is not a DIO pin.
 The pulse scale is TODO.
@@ -87,11 +131,19 @@ One ATV320 output feeds both OLI MVE 400/6-HF motors.
 Motor A keeps the drive phase order.
 Motor B swaps V and W at terminal X3.
 F21 and F22 must tolerate a PWM output.
+R1C is the fault-relay common and sits on the general 24 V rail.
+R1B is the NC contact and feeds DIO input index 11.
+R1A stays open.
 Do not link the ATV320 P24 terminal to the cabinet 24 V.
+F2 is a TeSys GV2L20.
+NVE41289.09 lists it for ATV320U15M2 in an enclosure on 240 V one phase.
+The line current is 17.8 A at 200 V.
+The magnetic trip is 223 A.
+Pole 3 is open.
+The supply wire is 6 mm2.
 Assign the second STO channel in SoMove.
 The parameter name is TODO.
-Relay R1B opens on a fault and feeds DIO input 11.
-Relay R2 is the STO monitor for DIO input 5.
+Relay R2 is the STO monitor for DIO input index 5.
 The R2 parameter is TODO.
 
 ## Tilt and lift
@@ -101,7 +153,7 @@ The off state puts both motor leads on 0 V.
 Do not command both tilt directions.
 Do not command both lift directions.
 The lift power stage is the existing H-bridge VC-LT-9110.
-The lift limit contacts are on sheet 6.
+The lift limit contacts are on the field-device sheet.
 DI7 and DI8 are drawn as separate contacts.
 Confirm the actuator terminal names.
 
@@ -113,7 +165,7 @@ This order code speaks USB, not Modbus.
 Clock and direction come from U2.
 U2 is not a DIO pin.
 The enable bit is DIO output 6.
-The index sensor is B1 on sheet 6.
+The index sensor is B1 on the field-device sheet.
 The RUT241 runs from the general 24 V rail.
 RevPi ETH0 goes to the router LAN port.
 Modbus slave 1 is the ATV320.
@@ -126,7 +178,21 @@ The rotation drive is not on this bus.
 
 Strips X1 to X10 are the names on this drawing.
 The purchased terminal block is not chosen.
-The cross-section is an assumption: 6 mm2 on the mains, 4 mm2 on the motor power, 2.5 mm2 on the 24 V rails.
+The mains cable is 3G6.
+PE on that cable is 6 mm2.
+The sonic feeder is 6 mm2.
+The S200 feeder is 2.5 mm2.
+Servo power and each vibrator output are 4G1.5 shielded.
+The drive-to-protector wires 600_U, 600_V and 600_W are 1.5 mm2.
+They are the same motor feed as that cable.
+The harness cores stay 610_UA, 611_VA, 612_WA, 620_UB, 621_VB and 622_WB.
+The servo brake pair is 2x0.75 mm2.
+The general 24 V rail is 2.5 mm2.
+The S200 24 V feed is 1.0 mm2.
+STO, field signals and the rotation cable are 0.75 mm2.
+The field 24 V feed is 1.0 mm2.
+Tilt power is 1.5 mm2 and the current is TBC.
+The lift section is TBC.
 
 | Strip | Function |
 | --- | --- |
@@ -147,13 +213,17 @@ The E-stop contact block is not chosen.
 The reset-button order code and colour are not chosen.
 The PNOZ rotary-switch detent text is not confirmed on the unit.
 The state of auxiliary contact 41-42 is not confirmed.
-The S200 X131 pin order is not confirmed on the PTI sheet.
-The X130 STO-status pin name is TODO.
+X131 is confirmed.
+X130 is absent on this drive.
+STO-VS and STO-M are still TBC.
+The STO status wire 440_S200FB is not landed.
 The PTI connector name and the pulse scale are TODO.
 The RS-485 port on the PTI unit is TODO.
 The Siemens order codes for the motor cable and the encoder cable are TODO.
 The RevPi power and RS-485 housing pin numbers are TODO.
-The ATV320 line current is not confirmed against the C16 breaker and the Instagrid current.
+The Instagrid source is 15.7 A continuous.
+The drive rated input is 17.8 A at 200 V.
+The drive does not run at rated input on this source.
 The SoMove STO parameter and the RJ45 pin numbers are TODO.
 The Modbus baud and parity are TODO.
 F21 and F22 have no PWM-rated order code.
@@ -167,5 +237,9 @@ The energy-chain length for a 1300 mm stroke is TODO.
 There is no slip ring.
 The rotation cable is not released.
 The feeder and the Instagrid may trip on the combined inrush.
+The terminal list gives 211_24C as 1.0 mm2.
+The supplies note calls the general 24 V rail 2.5 mm2.
+Both statements are on revision 0C.
+This drawing keeps both.
 No new EUR price is sourced.
 Do not copy the old EUR 180-300 band onto the ATV320.

@@ -1,12 +1,17 @@
 name: KiCad ERC
 
+# The KiCad project is the superseded reference for VC-SCH-5000 revision 0C.
+# The drawing of record is the QElectroTech project, revision 0D.
+# tests/test_qet_schematic.py checks that project. It does not need QElectroTech.
+
 on:
   push:
   pull_request:
 
 jobs:
   erc:
-    runs-on: ubuntu-latest
+    # ubuntu-latest is 26.04. The KiCad 8 PPA has no package for that release.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Install KiCad 8

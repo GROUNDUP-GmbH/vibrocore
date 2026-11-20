@@ -1,0 +1,242 @@
+label;designation;manufacturer;manufacturer_reference;quantity;location;function;title;folio
+A10;E;;;;;;Lift;16/21
+A10;R;;;;;;Lift;16/21
+A10;P;;;;;;Lift;16/21
+A10;M;;;;;;Lift;16/21
+A10;MP;;;;;;Lift;16/21
+A10;MN;;;;;;Lift;16/21
+A2;L1;;VC-HB-2300;;;;S200 power and motor;7/21
+A2;L2 open;;;;;;S200 power and motor;7/21
+A2;L3;;;;;;S200 power and motor;7/21
+A2;U;;;;;;S200 power and motor;7/21
+A2;V;;;;;;S200 power and motor;7/21
+A2;W;;;;;;S200 power and motor;7/21
+A2;PE;;;;;;S200 power and motor;7/21
+A2;X108 BR+;;;;;;S200 power and motor;7/21
+A2;X108 BR-;;;;;;S200 power and motor;7/21
+A2;STO1+;;VC-HB-2300;;;;S200 control;8/21
+A2;STO1-;;;;;;S200 control;8/21
+A2;STO-VS TBC;;;;;;S200 control;8/21
+A2;STO-M TBC;;;;;;S200 control;8/21
+A2;STO2+;;;;;;S200 control;8/21
+A2;STO2-;;;;;;S200 control;8/21
+A2;STO_EP not landed;;;;;;S200 control;8/21
+A2;X124 24 V;;;;;;S200 control;8/21
+A2;X124 24 V;;;;;;S200 control;8/21
+A2;X124 0 V;;;;;;S200 control;8/21
+A2;X124 0 V;;;;;;S200 control;8/21
+A2;X120 encoder;;;;;;S200 control;8/21
+A2;23;;;;;;S200 control;8/21
+A2;25;;;;;;S200 control;8/21
+A2;36;;;;;;S200 control;8/21
+A2;37;;;;;;S200 control;8/21
+A2;38;;;;;;S200 control;8/21
+A2;39;;;;;;S200 control;8/21
+A3;L1;;VC-SH-1210;;;;ATV320 motor A;9/21
+A3;L2;;;;;;ATV320 motor A;9/21
+A3;U;;;;;;ATV320 motor A;9/21
+A3;V;;;;;;ATV320 motor A;9/21
+A3;W;;;;;;ATV320 motor A;9/21
+A3;PE;;;;;;ATV320 motor A;9/21
+A3;U;;;;;;ATV320 motor B;10/21
+A3;V;;;;;;ATV320 motor B;10/21
+A3;W;;;;;;ATV320 motor B;10/21
+A3;STO;;VC-SH-1210;;;;ATV320 control;11/21
+A3;DI3;;;;;;ATV320 control;11/21
+A3;DI1;;;;;;ATV320 control;11/21
+A3;COM;;;;;;ATV320 control;11/21
+A3;R1A open;;;;;;ATV320 control;11/21
+A3;R1B;;;;;;ATV320 control;11/21
+A3;R1C;;;;;;ATV320 control;11/21
+A3;R2A;;;;;;ATV320 control;11/21
+A3;R2C;;;;;;ATV320 control;11/21
+A3;RJ45 A TBC;;;;;;ATV320 control;11/21
+A3;RJ45 B TBC;;;;;;ATV320 control;11/21
+A3;P24 open;;;;;;ATV320 control;11/21
+A4;24;;VC-CT-6800;;;;RevPi supply;12/21
+A4;0;;;;;;RevPi supply;12/21
+A4;GND;;;;;;RevPi supply;12/21
+A4;FG;;;;;;RevPi supply;12/21
+A4;P;;;;;;RevPi supply;12/21
+A4;N;;;;;;RevPi supply;12/21
+A4;ETH0;;;;;;RevPi supply;12/21
+A4;ETH1 service;;;;;;RevPi supply;12/21
+A4;PiBridge;;;;;;RevPi supply;12/21
+A5;PiBridge;;VC-CT-6810;;;;RevPi supply;12/21
+A5;I1;;VC-CT-6810;;;;DIO channels;13/21
+A5;I2;;;;;;DIO channels;13/21
+A5;I3;;;;;;DIO channels;13/21
+A5;I4;;;;;;DIO channels;13/21
+A5;I5;;;;;;DIO channels;13/21
+A5;I6;;;;;;DIO channels;13/21
+A5;I7;;;;;;DIO channels;13/21
+A5;I8;;;;;;DIO channels;13/21
+A5;I9;;;;;;DIO channels;13/21
+A5;I10;;;;;;DIO channels;13/21
+A5;I11;;;;;;DIO channels;13/21
+A5;I12;;;;;;DIO channels;13/21
+A5;I13;;;;;;DIO channels;13/21
+A5;O1;;;;;;DIO channels;13/21
+A5;O2;;;;;;DIO channels;13/21
+A5;O3;;;;;;DIO channels;13/21
+A5;O4;;;;;;DIO channels;13/21
+A5;O5;;;;;;DIO channels;13/21
+A5;O6;;;;;;DIO channels;13/21
+A5;O7;;;;;;DIO channels;13/21
+A6;a2;;VC-CT-6280;;;;Rotation proposal;17/21
+A6;b4;;;;;;Rotation proposal;17/21
+A6;b8;;;;;;Rotation proposal;17/21
+A6;b6;;;;;;Rotation proposal;17/21
+A7;1  +24;;VC-CT-6600;;;;Network;18/21
+A7;2  0V;;;;;;Network;18/21
+A7;LAN;;;;;;Network;18/21
+B1;24 V;;VC-CT-6250;;;;Field devices;14/21
+B1;OUT;;;;;;Field devices;14/21
+B1;0 V;;;;;;Field devices;14/21
+D2;1N4007;;VC-CT-6780;;;;Tilt;15/21
+D3;1N4007;;VC-CT-6780;;;;Tilt;15/21
+F1;L;;VC-PW-5710;;;;Mains incoming;2/21
+F1;N;;;;;;Mains incoming;2/21
+F14;6 A;;VC-PW-5800;;;;24 V supplies;4/21
+F2;L;;VC-PW-5730;;;;Branch feeders;3/21
+F2;N;;;;;;Branch feeders;3/21
+F2;pole 3 open;;;;;;Branch feeders;3/21
+F2;L;;;;;;Branch feeders;3/21
+F2;N;;;;;;Branch feeders;3/21
+F21;U;;VC-PW-5770;;;;ATV320 motor A;9/21
+F21;V;;;;;;ATV320 motor A;9/21
+F21;W;;;;;;ATV320 motor A;9/21
+F21;U;;;;;;ATV320 motor A;9/21
+F21;V;;;;;;ATV320 motor A;9/21
+F21;W;;;;;;ATV320 motor A;9/21
+F22;U;;VC-PW-5770;;;;ATV320 motor B;10/21
+F22;V;;;;;;ATV320 motor B;10/21
+F22;W;;;;;;ATV320 motor B;10/21
+F22;U;;;;;;ATV320 motor B;10/21
+F22;V;;;;;;ATV320 motor B;10/21
+F22;W;;;;;;ATV320 motor B;10/21
+F24;20 A;;VC-PW-5810;;;;24 V supplies;4/21
+F3;L;;VC-PW-5740;;;;Branch feeders;3/21
+F3;N;;;;;;Branch feeders;3/21
+F30;OPEN fuse 2 A;;VC-PW-5820;;;;PNOZ outputs;6/21
+F31;OPEN fuse 2 A;;VC-PW-5820;;;;PNOZ outputs;6/21
+F4;L;;VC-PW-5750;;;;Branch feeders;3/21
+F4;N;;;;;;Branch feeders;3/21
+F5;L;;VC-PW-5760;;;;Branch feeders;3/21
+F5;N;;;;;;Branch feeders;3/21
+F6;2 A;;VC-PW-5790;;;;Rotation proposal;17/21
+G0;;;VC-PW-5100;;;;Mains incoming;2/21
+G1;L;;VC-PW-5310;;;;24 V supplies;4/21
+G1;N;;;;;;24 V supplies;4/21
+G1;PE;;;;;;24 V supplies;4/21
+G1;+;;;;;;24 V supplies;4/21
+G1;-;;;;;;24 V supplies;4/21
+G2;L;;VC-PW-5320;;;;24 V supplies;4/21
+G2;N;;;;;;24 V supplies;4/21
+G2;PE;;;;;;24 V supplies;4/21
+G2;+;;;;;;24 V supplies;4/21
+G2;-;;;;;;24 V supplies;4/21
+H1;OPEN beacon;;VC-CT-6230;;;;Field devices;14/21
+K1;S11;;VC-CT-6220;;;;E-stop and PNOZ inputs;5/21
+K1;S21;;;;;;E-stop and PNOZ inputs;5/21
+K1;S22;;;;;;E-stop and PNOZ inputs;5/21
+K1;S12;;;;;;E-stop and PNOZ inputs;5/21
+K1;S34;;;;;;E-stop and PNOZ inputs;5/21
+K1;A1;;;;;;E-stop and PNOZ inputs;5/21
+K1;A2;;;;;;E-stop and PNOZ inputs;5/21
+K1;13;;VC-CT-6220;;;;PNOZ outputs;6/21
+K1;14;;;;;;PNOZ outputs;6/21
+K1;23;;;;;;PNOZ outputs;6/21
+K1;24;;;;;;PNOZ outputs;6/21
+K1;33;;;;;;PNOZ outputs;6/21
+K1;34;;;;;;PNOZ outputs;6/21
+K1;41;;;;;;PNOZ outputs;6/21
+K1;42;;;;;;PNOZ outputs;6/21
+K2;vertical;;VC-LT-9230;;;;Tilt;15/21
+K3;fold;;VC-LT-9230;;;;Tilt;15/21
+M1;U;;VC-HB-2100;;;;S200 power and motor;7/21
+M1;V;;;;;;S200 power and motor;7/21
+M1;W;;;;;;S200 power and motor;7/21
+M1;PE;;;;;;S200 power and motor;7/21
+M1;BR+;;;;;;S200 power and motor;7/21
+M1;BR-;;;;;;S200 power and motor;7/21
+M2;U;;VC-SH-1100;;;;ATV320 motor A;9/21
+M2;V;;;;;;ATV320 motor A;9/21
+M2;W;;;;;;ATV320 motor A;9/21
+M2;PE;;;;;;ATV320 motor A;9/21
+M3;U;;VC-SH-1100;;;;ATV320 motor B;10/21
+M3;W;;;;;;ATV320 motor B;10/21
+M3;V;;;;;;ATV320 motor B;10/21
+M3;PE;;;;;;ATV320 motor B;10/21
+M4;A;;VC-LT-9200;;;;Tilt;15/21
+M4;B;;;;;;Tilt;15/21
+M5;A;;VC-LT-9100;;;;Lift;16/21
+M5;B;;;;;;Lift;16/21
+M6;A;;VC-LT-9100;;;;Lift;16/21
+M6;B;;;;;;Lift;16/21
+PE1;PE;;;;;;Mains incoming;2/21
+PE2;PE;;;;;;24 V supplies;4/21
+PE3;PE;;;;;;Rotation proposal;17/21
+Q1;L;;VC-PW-5700;;;;Mains incoming;2/21
+Q1;N;;;;;;Mains incoming;2/21
+QF1;L;;VC-PW-5720;;;;Mains incoming;2/21
+QF1;N;;;;;;Mains incoming;2/21
+R1;OPEN 120 ohm;;VC-CT-6790;;;;S200 control;8/21
+S1;11-12;;VC-CT-6210;;;;E-stop and PNOZ inputs;5/21
+S1;21-22;;;;;;E-stop and PNOZ inputs;5/21
+S1;31-32;;;;;;E-stop and PNOZ inputs;5/21
+S10;OPEN reset;;VC-CT-6270;;;;E-stop and PNOZ inputs;5/21
+S14;OPEN limit;;;;;;Field devices;14/21
+S15;OPEN limit;;;;;;Field devices;14/21
+S16;OPEN limit;;;;;;Field devices;14/21
+S17;OPEN limit;;;;;;Field devices;14/21
+S4;OPEN limit switch;;VC-CT-6200;;;;Field devices;14/21
+S5;OPEN limit switch;;VC-CT-6200;;;;Field devices;14/21
+S6;IDEC HE1B-M1;;VC-CT-6260;;;;Field devices;14/21
+U1;36;;;;;;S200 control;8/21
+U1;37;;;;;;S200 control;8/21
+U1;38;;;;;;S200 control;8/21
+U1;39;;;;;;S200 control;8/21
+U2;b8;;;;;;Rotation proposal;17/21
+U2;b6;;;;;;Rotation proposal;17/21
+X10:1;M+;;;;;;Lift;16/21
+X10:2;M-;;;;;;Lift;16/21
+X1:1;L;;;;;;Mains incoming;2/21
+X1:2;N;;;;;;Mains incoming;2/21
+X1:3;PE;;;;;;Mains incoming;2/21
+X1:4;0V;;;;;;24 V supplies;4/21
+X2:1;U;;;;;;ATV320 motor A;9/21
+X2:2;V;;;;;;ATV320 motor A;9/21
+X2:3;W;;;;;;ATV320 motor A;9/21
+X2:4;PE;;;;;;ATV320 motor A;9/21
+X3:1;1;;;;;;ATV320 motor B;10/21
+X3:2;2;;;;;;ATV320 motor B;10/21
+X3:3;3;;;;;;ATV320 motor B;10/21
+X3:4;PE;;;;;;ATV320 motor B;10/21
+X4:1;U;;;;;;S200 power and motor;7/21
+X4:2;V;;;;;;S200 power and motor;7/21
+X4:3;W;;;;;;S200 power and motor;7/21
+X4:4;PE;;;;;;S200 power and motor;7/21
+X5:1;ENC;;;;;;S200 control;8/21
+X5:2;shield;;;;;;S200 control;8/21
+X6:1;P;;;;;;S200 power and motor;7/21
+X6:2;N;;;;;;S200 power and motor;7/21
+X7:1;460_LIM_UP;;;;;;Field devices;14/21
+X7:2;461_LIM_DN;;;;;;Field devices;14/21
+X7:3;462_ENABLE;;;;;;Field devices;14/21
+X7:4;480_INDEX;;;;;;Field devices;14/21
+X7:5;470_TILT_V;;;;;;Field devices;14/21
+X7:6;471_TILT_F;;;;;;Field devices;14/21
+X7:7;472_LIFT_D;;;;;;Field devices;14/21
+X7:8;473_LIFT_R;;;;;;Field devices;14/21
+X7:9;494_BEACON;;;;;;Field devices;14/21
+X8:1;A;;;;;;Tilt;15/21
+X8:2;B;;;;;;Tilt;15/21
+X9:1;+24;;;;;;Rotation proposal;17/21
+X9:2;0V;;;;;;Rotation proposal;17/21
+X9:3;495_ROT_EN;;;;;;Rotation proposal;17/21
+X9:4;530_CLKP;;;;;;Rotation proposal;17/21
+X9:5;CLK-;;;;;;Rotation proposal;17/21
+X9:6;532_DIRP;;;;;;Rotation proposal;17/21
+X9:7;DIR-;;;;;;Rotation proposal;17/21
+X9:8;PE;;;;;;Rotation proposal;17/21

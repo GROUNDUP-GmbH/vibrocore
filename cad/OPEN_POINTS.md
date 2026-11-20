@@ -229,9 +229,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-PW-5710` Line circuit breaker: Price is unknown.
 - `VC-PW-5720` Residual current device: Order code is unknown.
 - `VC-PW-5720` Residual current device: Price is unknown.
-- `VC-PW-5730` Branch MCB sonic inverter: The order code is not selected.
-- `VC-PW-5730` Branch MCB sonic inverter: The price is not sourced.
-- `VC-PW-5730` Branch MCB sonic inverter: The manual may require a different rating. Do not order until that page is checked.
+- `VC-PW-5730` Branch breaker sonic inverter: The price is not sourced.
 - `VC-PW-5740` Branch MCB hub drive: The order code is not selected.
 - `VC-PW-5740` Branch MCB hub drive: The price is not sourced.
 - `VC-PW-5750` Branch MCB S200 24 V supply: The order code is not selected.
@@ -254,7 +252,6 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-SH-1100` OLI MVE 400/6-HF: The solid is the published envelope, not a manufacturer model.
 - `VC-SH-1200` Frequency inverter 1.5 kW: Superseded. Do not buy this row.
 - `VC-SH-1210` Sonic inverter ATV320U15M2C: The EUR price is not sourced. Do not copy the old EUR 180-300 band.
-- `VC-SH-1210` Sonic inverter ATV320U15M2C: Line current and the branch breaker must be confirmed in the installation manual before you order the MCB.
 - `VC-SH-1210` Sonic inverter ATV320U15M2C: The Modbus register map is TODO.
 - `VC-SH-1300` Vibrating plate weldment: Rib spacing and weld details are not specified, so the ribs are separate blanks and are not positioned on the plate.
 - `VC-SH-1301` Vibrating plate blank: 4x M12 isolator coordinates.

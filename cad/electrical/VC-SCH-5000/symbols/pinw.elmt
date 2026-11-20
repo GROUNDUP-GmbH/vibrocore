@@ -1,0 +1,12 @@
+<definition version="0.100.0" type="element" link_type="simple" width="16" height="8" hotspot_x="16" hotspot_y="4">
+    <uuid uuid="{c0e5b8d6-317a-5f21-9a77-1c0e5b8d0001}"/>
+    <names>
+        <name lang="en">Device terminal, wire from the left</name>
+        <name lang="de">Geräteklemme, Anschluss von links</name>
+    </names>
+    <informations>Ground UP. Terminal on the left edge of a device box.</informations>
+    <description>
+        <line x1="-16" y1="0" x2="0" y2="0" end1="none" end2="none" length1="1.5" length2="1.5" style="line-style:normal;line-weight:normal;filling:none;color:black" antialias="false"/>
+        <terminal uuid="{c0e5b8d6-317a-5f21-9a77-1c0e5b8d0002}" name="1" x="-16" y="0" orientation="w" type="Generic"/>
+    </description>
+</definition>

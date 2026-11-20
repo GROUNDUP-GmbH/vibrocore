@@ -1,18 +1,18 @@
 {
-  "board": {
-    "design_settings": {
-      "defaults": {},
-      "meta": { "version": 2 }
-    }
-  },
-  "meta": {
-    "filename": "vibrocore-control.kicad_pro",
-    "version": 1
-  },
+  "meta": {"filename": "vibrocore-control.kicad_pro", "version": 1},
+  "board": {"design_settings": {"defaults": {}, "meta": {"version": 2}}},
   "net_settings": {},
   "schematic": {
     "legacy_lib_dir": "",
-    "legacy_lib_list": []
+    "legacy_lib_list": [],
+    "meta": {"version": 1},
+    "drawing": {
+      "intersheets_ref_show": true,
+      "intersheets_ref_own_page": false,
+      "intersheets_ref_prefix": "[",
+      "intersheets_ref_suffix": "]",
+      "intersheets_ref_short": false
+    }
   },
   "sheets": [],
   "text_variables": {}

@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 1366 >>
+<< /Length 1370 >>
 stream
 BT
 /F1 11 Tf
@@ -33,7 +33,7 @@ T*
 T*
 (8  VC-PW-5720  rev A  qty 1  Residual current device) Tj
 T*
-(9  VC-PW-5730  rev A  qty 1  Branch MCB sonic inverter) Tj
+(9  VC-PW-5730  rev A  qty 1  Branch breaker sonic inverter) Tj
 T*
 (10  VC-PW-5740  rev A  qty 1  Branch MCB hub drive) Tj
 T*
@@ -78,8 +78,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000001666 00000 n 
+0000001670 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-1736
+1740
 %%EOF
