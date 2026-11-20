@@ -20,6 +20,8 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `mast-height-deficit`: The 1500 mm profile is unchanged. The study layout in docs/engineering/MAST-LAYOUT.md and cad/export/layout/mast-stack.svg computes the deficit for one 1219.2 mm casing plus the head, the shoe and the adapter. Shoe length, adapter length, carriage height and ground clearance are TBD.
 - `se050-double-count`: Closed 2026-11-19. VC-CT-6410 is obsolete. The SE050 breakout is inside VC-CT-6400 and is not a second purchase.
 - `rut241-9v-converter`: Closed 2026-11-19. VC-CT-6620 is obsolete. The RUT241 input is 9-30 V DC. The router runs from the 24 V rail.
+- `chain-encoder-obsolete`: Closed 2026-11-20. VC-HB-3410 and VC-CT-6130 are obsolete. Position comes from the 1FL2 absolute encoder through the S200. The enclosure has no chain-encoder gland and no encoder I/O.
+- `no-48v-rail`: Closed 2026-11-20. VC-PW-5200 and VC-PW-5400 are obsolete. No 48 V load remains. The S200 and the 1FL2 run on 230 V AC from the Instagrid. VC-PW-5310 is the dedicated SDR-120-24 for S200 control and the brake. VC-PW-5320 reserves an SDR-480-24 size slot for the rest of the machine. The rating of that slot stays open until the actuator currents are known.
 
 ## Parts with undocumented geometry or procurement data
 
@@ -56,14 +58,15 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-CS-9540` Scanner 5 V and 12 V PSU: no solid. Dimensions were not complete enough to model.
 - `VC-CS-9550` Industrial USB stick 128 GB: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6100` WAGO PFC200 XTR: no solid. Dimensions were not complete enough to model.
-- `VC-CT-6110` WAGO 750-430 XTR: no solid. Dimensions were not complete enough to model.
-- `VC-CT-6120` WAGO 750-530 XTR: no solid. Dimensions were not complete enough to model.
+- `VC-CT-6110` WAGO 750-430/040-000: no solid. Dimensions were not complete enough to model.
+- `VC-CT-6120` WAGO 750-537/040-000: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6130` WAGO 750-637: no solid. Dimensions were not complete enough to model.
-- `VC-CT-6140` WAGO 750-826: no solid. Dimensions were not complete enough to model.
+- `VC-CT-6140` WAGO 750-652: 750-652 is a candidate. The order is not frozen.
 - `VC-CT-6150` WAGO 750-600: no solid. Dimensions were not complete enough to model.
-- `VC-CT-6200` Inductive limit switch: no solid. Dimensions were not complete enough to model.
-- `VC-CT-6210` Emergency stop: no solid. Dimensions were not complete enough to model.
-- `VC-CT-6220` Safety relay: no solid. Dimensions were not complete enough to model.
+- `VC-CT-6200` Inductive limit switch: The order is not frozen. ifm IFS248 is a candidate. SICK is not ruled out.
+- `VC-CT-6210` Emergency stop: Order code is not frozen. Eaton or Schneider. The device must have two NC contacts.
+- `VC-CT-6220` Safety relay: The safety assessment is open. Do not state a performance level.
+- `VC-CT-6220` Safety relay: The 80-130 EUR band is not a quote for article 750104.
 - `VC-CT-6230` Warning beacon: Order code is unknown.
 - `VC-CT-6230` Warning beacon: Price is unknown.
 - `VC-CT-6230` Warning beacon: Steady or flashing pattern is not selected.
@@ -71,10 +74,21 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-CT-6240` Operator tablet: Ingress protection is unknown.
 - `VC-CT-6240` Operator tablet: Order code is unknown.
 - `VC-CT-6240` Operator tablet: Price is unknown.
-- `VC-CT-6300` Control enclosure: VFD envelope is unknown, so internal width and height are unknown.
-- `VC-CT-6300` Control enclosure: Order code is unknown.
-- `VC-CT-6300` Control enclosure: Price is unknown.
-- `VC-CT-6300` Control enclosure: Only the 750-430 width (12 mm) was verified. The other module widths were not summed.
+- `VC-CT-6300` Control enclosure: Price of AX 1181.000 is unknown.
+- `VC-CT-6300` Control enclosure: The sonic inverter order is not frozen. It must have STO. The placeholder envelope is 140 x 160 x 164.5 mm.
+- `VC-CT-6300` Control enclosure: The machine 24 V rating is open. The slot is the SDR-480-24 envelope. There is no 48 V rail.
+- `VC-CT-6300` Control enclosure: Isolator, circuit breaker and residual-current device order codes are unknown.
+- `VC-CT-6300` Control enclosure: The power budget and the safety assessment are still open.
+- `VC-CT-6310` EMC cable gland set: Price is unknown.
+- `VC-CT-6310` EMC cable gland set: Clamping length for each cable is not frozen. Confirm the gland length on the order.
+- `VC-CT-6320` Filter fan pair: Confirm the current article suffix before an order.
+- `VC-CT-6320` Filter fan pair: The power budget is open, so the fan is not selected.
+- `VC-CT-6330` Frame mount kit: The buffer order code is not frozen. Confirm shore hardness and the exact article before the order.
+- `VC-CT-6330` Frame mount kit: Price is unknown.
+- `VC-CT-6340` Terminal and duct set: Terminal count and duct length are not frozen.
+- `VC-CT-6340` Terminal and duct set: Price is unknown.
+- `VC-CT-6350` Bulkhead and vent set: The vent article is not frozen.
+- `VC-CT-6350` Bulkhead and vent set: Price is unknown.
 - `VC-CT-6400` RDDL trust wallet: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6410` SE050 breakout: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6500` GPS antenna u-blox ANN-MB: no solid. Dimensions were not complete enough to model.
@@ -85,6 +99,11 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-CT-6700` Wiring harness: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6800` RevPi Connect 4: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6810` RevPi DIO module: no solid. Dimensions were not complete enough to model.
+- `VC-CT-6820` PiBridge plug connector: It is not confirmed whether the DIO packing already includes one joining plug.
+- `VC-CT-6830` CODESYS Control Basic M licence: no solid. Dimensions were not complete enough to model.
+- `VC-CT-6840` Cabinet heater 230 V: Order code is unknown.
+- `VC-CT-6840` Cabinet heater 230 V: Price is unknown.
+- `VC-CT-6840` Cabinet heater 230 V: Power and rail width are unknown.
 - `VC-FR-4100` Aluminium profile 50x100x1500: mk 2004 slot geometry is not in the repository. The solid is the outer envelope only and is not a machining model.
 - `VC-FR-4100` Aluminium profile 50x100x1500: Alloy and the exact mk order code.
 - `VC-FR-4100` Aluminium profile 50x100x1500: Cut length of the drive-side upright. The purchased length stays 1500 mm. The pose starts that tube above the gearbox.
@@ -117,7 +136,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-GP-7410` DT325 liner retainer HD: no solid. Dimensions were not complete enough to model.
 - `VC-HB-2100` Servo motor 1FL2104: Vendor STEP is not in the repository. The shaft is inside the gearbox envelope and is not a second solid.
 - `VC-HB-2110` Lift motor bracket: Plate thickness, bolt size and weld sizes. Not in BOM.md v1.
-- `VC-HB-2300` SINAMICS S200 servo drive: PROFINET order 6SL5510-1BB11-0AF0 if the PLC does not use pulse and direction. The price is not a quote.
+- `VC-HB-2300` SINAMICS S200 servo drive: no solid. Dimensions were not complete enough to model.
 - `VC-HB-2400` Elastomer coupling: Gearbox output is Ø25 mm. The STEP hub is 32H7, so the bore is not a fit. The hub is seated on the journal. The chain-side hub is unbored.
 - `VC-HB-2500` Hub drive shaft: Diameter inside the 25-30 mm range, length, key size and sprocket seat.
 - `VC-HB-2600` Pillow block UCP 206: Confirm 30 mm bore against the final shaft diameter. HUB_SYSTEM.md also mentions UCP 205/206.
@@ -133,10 +152,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-HB-3400` Drag chain: Inner width, inner height and bend radius are unknown.
 - `VC-HB-3400` Drag chain: Order code is unknown.
 - `VC-HB-3400` Drag chain: Price is unknown.
-- `VC-HB-3410` Chain-shaft encoder 1000 ppr: Bore is unknown. The chain shaft diameter is still 25-30 mm.
-- `VC-HB-3410` Chain-shaft encoder 1000 ppr: Supply voltage and output circuit must match 750-637. The exact interface is not frozen.
-- `VC-HB-3410` Chain-shaft encoder 1000 ppr: Order code is unknown.
-- `VC-HB-3410` Chain-shaft encoder 1000 ppr: Price is unknown.
+- `VC-HB-3410` Chain-shaft encoder 1000 ppr: no solid. Dimensions were not complete enough to model.
 - `VC-HB-3420` Chain drive guard: Length, width and mounting holes are unknown. Shaft length and sprocket position are not frozen.
 - `VC-HB-3420` Chain drive guard: Material thickness is unknown.
 - `VC-HB-3420` Chain drive guard: Price is unknown.
@@ -157,10 +173,12 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-PS-8100` viDoc RTK Light: no solid. Dimensions were not complete enough to model.
 - `VC-PS-8200` WLAN bridge: no solid. Dimensions were not complete enough to model.
 - `VC-PW-5100` Instagrid ONE max: no solid. Dimensions were not complete enough to model.
-- `VC-PW-5200` Mean Well SDR-480-48: EUR price is unknown. The old EUR 80-140 range was not a quote for SDR-480-48 and is withdrawn.
+- `VC-PW-5200` Mean Well SDR-480-48: no solid. Dimensions were not complete enough to model.
 - `VC-PW-5300` Mean Well DDR-60D-24: no solid. Dimensions were not complete enough to model.
-- `VC-PW-5310` Mean Well SDR-120-24: no solid. Dimensions were not complete enough to model.
-- `VC-PW-5400` DC converter 48 V to 12 V and 5 V: Whether this is one dual-output converter or two parts.
+- `VC-PW-5320` Machine 24 V supply: The current rating stays open until the actuator currents are known.
+- `VC-PW-5320` Machine 24 V supply: SDR-480-24 is the slot size. It is not a purchase order.
+- `VC-PW-5320` Machine 24 V supply: Price is unknown.
+- `VC-PW-5400` DC converter 48 V to 12 V and 5 V: no solid. Dimensions were not complete enough to model.
 - `VC-PW-5500` Power distribution kit: no solid. Dimensions were not complete enough to model.
 - `VC-PW-5600` Power cable set: no solid. Dimensions were not complete enough to model.
 - `VC-PW-5700` Main isolator: Order code is unknown.
@@ -172,7 +190,8 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-PW-5720` Residual current device: Price is unknown.
 - `VC-SH-1100` OLI MVE 400/6-HF: Which motor axis is the 90 mm bolt pitch, and which is the 125 mm pitch, is not stated.
 - `VC-SH-1100` OLI MVE 400/6-HF: The solid is the published envelope, not a manufacturer model.
-- `VC-SH-1200` Frequency inverter 1.5 kW: Enclosure size, braking behaviour beyond the V20 parameter notes, and the final order code.
+- `VC-SH-1200` Frequency inverter 1.5 kW: The order code is unknown. STO is required and is not selected.
+- `VC-SH-1200` Frequency inverter 1.5 kW: The placeholder envelope is 140 x 160 x 164.5 mm until that order is known.
 - `VC-SH-1300` Vibrating plate weldment: Rib spacing and weld details are not specified, so the ribs are separate blanks and are not positioned on the plate.
 - `VC-SH-1301` Vibrating plate blank: 4x M12 isolator coordinates.
 - `VC-SH-1301` Vibrating plate blank: Two times 4x M12 motor holes. Pitch is 90 x 125 mm, location on the plate is not fixed.

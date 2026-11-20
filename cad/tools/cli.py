@@ -15,6 +15,7 @@ import sys
 import tempfile
 from pathlib import Path
 
+from cad.models.electronics_enclosure import export_electronics_enclosure
 from cad.models.machine_assembly import RENDER_DIR, export_machine_assembly
 from cad.models.mast_layout import LAYOUT_DIR, export_mast_layout
 from cad.tools.bom import ROOT, load_bom, modelled_parts
@@ -86,6 +87,7 @@ def export_all(bom=None) -> None:
     export_drawings(bom)
     export_step_files(bom)
     export_machine_assembly(bom, geometry_mod.STEP_DIR, RENDER_DIR)
+    export_electronics_enclosure(bom, geometry_mod.STEP_DIR, RENDER_DIR)
     export_mast_layout(bom)
     write_open_points(bom)
 
@@ -122,6 +124,7 @@ def check() -> int:
             export_drawings(bom)
             export_step_files(bom)
             export_machine_assembly(bom, geometry.STEP_DIR, root / "renders")
+            export_electronics_enclosure(bom, geometry.STEP_DIR, root / "renders")
             export_mast_layout(bom, destination=root / "layout")
             write_open_points(bom, root / "OPEN_POINTS.md")
         finally:

@@ -102,7 +102,13 @@ def test_bushing_opens_for_the_cutting_shoe():
 def test_safety_and_power_lines_follow_the_review():
     bom = load_bom()
     assert bom.part("VC-PW-5200").manufacturer_pn == "SDR-480-48"
+    assert bom.part("VC-PW-5200").lifecycle == "obsolete"
     assert bom.part("VC-PW-5200").estimate_eur_low is None
+    assert bom.part("VC-PW-5400").lifecycle == "obsolete"
+    power = {line.part_number for line in bom.children("VC-ASM-4000")}
+    assert "VC-PW-5200" not in power
+    assert "VC-PW-5400" not in power
+    assert {"VC-PW-5310", "VC-PW-5320"} <= power
     assert bom.part("VC-CT-6300").estimate_eur_low is None
     assert "200 x 150 x 80 mm is withdrawn" in bom.part("VC-CT-6300").spec
     assert bom.part("VC-CT-6410").lifecycle == "obsolete"

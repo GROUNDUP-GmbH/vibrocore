@@ -69,15 +69,16 @@ complexity reduction vs. V1 custom design.*
 | # | Component               | Spec                              | Qty | Est. €   | Supplier / Source          |
 |---|-------------------------|-----------------------------------|-----|----------|----------------------------|
 |41 | Instagrid ONE max       | 230V AC, 3.6 kW, 2.1 kWh         |   1 | 2,500*   | instagrid.co (rental opt.) |
-|42 | DC PSU 48V              | Mean Well SDR-480-48, 48 V / 10 A / 480 W. Price unknown. Do not order SDR-75-48. | 1 | unknown | Mean Well |
-|43 | DC/DC 48V → 24V        | For brake, relays. V1.1 live PN: Mean Well **SDR-120-24** (supersedes DDR-60D-24) | 1 | 40–70 | Mean Well (EU) |
-|44 | DC/DC 48V → 12V/5V    | For PLC, sensors                  |   1 |   15–30  | Traco / Mean Well (EU)     |
+|42 | DC PSU 48V              | Obsolete. No 48 V load remains. Do not order SDR-480-48. | 0 | — | History |
+|43 | SDR-120-24              | Dedicated 24 V for S200 control (max 2.2 A, 22.8–28.8 V) and the brake (<1 A). 5 A. | 1 | 40–70 | Mean Well |
+|43b| Machine 24 V supply     | Slot is the SDR-480-24 envelope. Rating is open until actuator currents are known. | 1 | unknown | Mean Well |
+|44 | DC/DC 48V → 12V/5V    | Obsolete. The other loads are 24 V. | 0 | — | History |
 |45 | Power distribution      | DIN rail, fuses, contactors       |   1 |   60–100 | Schneider / Eaton (EU)     |
 |46 | Cable set               | Silicone, shielded, 2.5–6 mm²    |   1 |   40–80  | Lapp (DE)                  |
 
 *Instagrid ONE typically rented (€95/week). Purchase ~€2,500.
 
-**Power System Subtotal (YAML rollup, Instagrid purchase included): EUR 2,655–2,780.** A rental is not a stock line. The old EUR 80–140 supply range is withdrawn.
+**Power System Subtotal (YAML rollup, Instagrid purchase included): EUR 2,640–2,750.** A rental is not a stock line. The 48 V supply and the 48 V converter are not in this rollup.
 
 ## 5. Control & Electronics
 
@@ -86,12 +87,12 @@ complexity reduction vs. V1 custom design.*
 |47 | WAGO PFC200 XTR             | 750-8212, 1 GHz Cortex-A8, 512 MB RAM, 4 GB Flash, −40..+70°C, 5g vib, 2×ETH, RS-485, Docker built-in (FW ≥ 23) | 1 | 600–900 | wago.com (DE) |
 |48 | WAGO 750-430 XTR            | 4× DI 24V DC, CAGE CLAMP                                 |   1 |   60–90   | wago.com (DE)                |
 |49 | WAGO 750-530 XTR            | 4× DO 24V DC, 0.5A, CAGE CLAMP                           |   1 |   60–90   | wago.com (DE)                |
-|50 | WAGO 750-637                | Incremental encoder interface                             |   1 |  100–150  | wago.com (DE)                |
-|51 | WAGO 750-826                | RS-485 Modbus RTU serial interface                        |   1 |   80–120  | wago.com (DE)                |
+|50 | WAGO 750-637                | Obsolete. Position comes from the 1FL2 absolute encoder through the S200. | 0 | — | Do not buy |
+|51 | WAGO 750-652                | RS-485 candidate. Article 750-826 does not exist. Order is not frozen. | 1 | 80–120 | wago.com (DE) |
 |52 | WAGO 750-600                | End module                                                |   1 |   10–20   | wago.com (DE)                |
 |53 | Limit switches              | Inductive, M12, NC, IP67                                 |   2 |   30–60   | ifm / Sick (DE)              |
-|54 | Emergency stop              | Mushroom NC, Category 3, IP65 enclosure                  |   1 |   40–70   | Eaton / Schneider (EU)       |
-|55 | Safety relay                | Pilz PNOZ m B0 or equivalent                             |   1 |   80–130  | Pilz (DE)                   |
+|54 | Emergency stop              | 2-NC mushroom. One contact is hard-wired to the safety relay. | 1 | 40–70 | Eaton / Schneider (EU) |
+|55 | Safety relay                | DIN space for Pilz PNOZ s4 750104. Assessment is open. Do not state a PL. | 1 | 80–130 | Pilz (DE) |
 |56 | Control enclosure           | IP65. Size 200×150×80 mm is withdrawn. Order code and price unknown. | 1 | unknown | TBD |
 |57 | RDDL Trust Wallet           | Xiao ESP32-C3 + NXP SE050 breakout                       |   1 |   25–50   | Seeed Studio / Mouser (EU)   |
 |58 | SE050 breakout board        | Included in row 57. Do not buy a second board.           |   0 |   20–40   | History only                 |
@@ -111,7 +112,7 @@ complexity reduction vs. V1 custom design.*
 | CODESYS V3.5 Runtime | Included with WAGO PFC | Licensed per hardware |
 | CODESYS Go | Free tier (500h/year) | Browser-based IDE, no Windows needed |
 
-**Control Subtotal Option A (WAGO): EUR 1,565–2,460 (YAML rollup of VC-ASM-5000).**
+**Control Subtotal Option A (WAGO): EUR 1,465–2,310 (YAML rollup of VC-ASM-5000).** The 750-637 encoder module is obsolete and is not in this rollup.
 
 ---
 
@@ -123,12 +124,12 @@ Recommended for V1 prototype / cost-sensitive builds.*
 | # | Component | Spec | Qty | Est. € | Supplier |
 |---|-----------|------|-----|--------|----------|
 |47b| RevPi Connect 4 | CM4 Quad-Core A72 1.5 GHz, 4 GB RAM, 32 GB eMMC, 2× GbE, RS-485 built-in, Docker-native, −25..+55 °C, DIN rail | 1 | 450–520 | [revolutionpi.com](https://revolutionpi.com/shop/en/revpi-connect4) (DE) |
-|48b| RevPi DIO module | 14× DI 24V + 14× DO 24V; DI configurable as quadrature encoder/counter — replaces WAGO 750-430 + 750-530 + 750-637 in one unit | 1 | 196–220 | revolutionpi.com (DE) |
+|48b| RevPi DIO module | 14× DI 24V + 14× DO 24V. Replaces the DI and DO modules. The chain encoder is obsolete. | 1 | 196 | revolutionpi.com (DE) |
 |49b| *(RS-485 built-in)* | Modbus RTU to Siemens V20 + Nanotec C5-E — no separate module needed | — | 0 | — |
 |50b–64b| Shared Option A lines, without the WAGO rack and without the obsolete SE050 and 9 V lines | | | inside the total below | same as §5 |
 
-**Control Subtotal Option B:** EUR 1,181–1,650.
-Arithmetic: Option A rollup EUR 1,565–2,460, minus the WAGO rack EUR 1,030–1,550, plus RevPi Connect 4 EUR 450–520 and RevPi DIO EUR 196–220.
+**Control Subtotal Option B:** EUR 1,224–1,599.
+Arithmetic: Option A rollup EUR 1,465–2,310, minus the WAGO rack EUR 930–1,400, plus RevPi Connect 4 EUR 493 and RevPi DIO EUR 196. The chain encoder is obsolete, so the DIO does not replace a 750-637. The PiBridge plug and the CODESYS licence are not in this total.
 
 **Software (RevPi — zero additional cost, full open source):**
 
@@ -142,8 +143,8 @@ Arithmetic: Option A rollup EUR 1,565–2,460, minus the WAGO rack EUR 1,030–1
 
 **Control Subtotal Option B (RevPi): ~1,521–2,430 € (hardware only; software €0)**
 
-> **Option B savings vs. Option A: ~€300–600 less for the controller sub-system**
-> (RevPi base €646 vs. WAGO system €910–1,370)
+> **Option B savings vs. Option A:** use the subtotals above, EUR 1,224–1,599 against EUR 1,465–2,310.
+> The old WAGO band of EUR 910–1,370 included the obsolete 750-637 and is withdrawn.
 
 > **Key tradeoffs:**
 > - Temperature: RevPi −25 °C vs. WAGO −40 °C. For EU field use (March–November) this
@@ -152,9 +153,10 @@ Arithmetic: Option A rollup EUR 1,565–2,460, minus the WAGO rack EUR 1,030–1
 >   from drilling vibrations via rubber mounts — in practice both are adequate.
 > - CODESYS real-time: RevPi uses PREEMPT_RT Linux (soft PLC). For Vibrocore's
 >   500ms Modbus polling cycles this is more than sufficient.
-> - Encoder: RevPi DIO quadrature encoder mode handles 10 kHz count rate comfortably
->   (1000ppr × 10 mm/s = ~6.7 kHz max at drilling speed).
-> - I/O advantage: 1 RevPi DIO replaces 3 WAGO modules — simpler wiring.
+> - Position comes from the 1FL2 absolute encoder through the S200.
+>   VC-HB-3410 and WAGO 750-637 are obsolete.
+>   Do not use the RevPi DIO encoder mode for a chain encoder.
+> - I/O advantage: 1 RevPi DIO replaces the DI and DO modules.
 >
 > See `docs/design/CONTROL_SYSTEM.md#controller-comparison` for full analysis.
 
@@ -298,7 +300,7 @@ Hub carriage plate
    └────┬─────────────────────────┘
         │  RS-485 (existing Modbus RTU bus)
         ▼
-   WAGO 750-826 / RevPi RS-485 (Slave 3, after Slave 2 Nanotec C5-E)
+   WAGO 750-652 candidate / RevPi RS-485 (Slave 3). Article 750-826 does not exist.
 ```
 
 | # | Component | Spec | Qty | Est. € | Supplier |
@@ -429,10 +431,10 @@ Do not add the §8e I/O cost again. Those modules are already inside VC-ASM-5000
 | Sonic head VC-ASM-1000 | 1,185 | 1,900 | YAML rollup |
 | Hub VC-ASM-2000 | 1,435 | 2,310 | YAML rollup. The obsolete brake is not included. |
 | Frame VC-ASM-3000 | 440 | 730 | Live lines. The obsolete gas spring is not included. |
-| Power VC-ASM-4000 | 2,655 | 2,780 | Includes Instagrid at EUR 2,500. Supply price is unknown. |
-| Control VC-ASM-5000 | 1,565 | 2,460 | Option A. SE050 and the 9 V converter are not included. |
+| Power VC-ASM-4000 | 2,640 | 2,750 | Includes Instagrid at EUR 2,500. No 48 V rail. Machine 24 V price is unknown. |
+| Control VC-ASM-5000 | 1,465 | 2,310 | Option A. The encoder module is not included. |
 | Field VC-ASM-8000 | 1,259 | 2,300 | Lift, tilt, penetrometer, scanner. |
-| **Machine VC-ASM-0000** | **8,539** | **12,480** | Sum of the six rollups above. |
+| **Machine VC-ASM-0000** | **8,424** | **12,300** | Sum of the six rollups above. |
 | Casing kit VC-KIT-6000 | 2,007.85 | 2,007.85 | Offer prices. Half-shell price is unknown. |
 | Positioning kit VC-KIT-7000 | 2,020 | 2,040 | viDoc plus WLAN bridge. |
 
@@ -496,7 +498,7 @@ Do not invent an order code.
 | # | Component | Spec | Qty | Est. € | Supplier |
 |---|-----------|------|-----|--------|----------|
 | 96 | Drag chain | Travel 1300 mm. Inner size TBD until cable diameters are known. | 1 | unknown | TBD |
-| 97 | Chain-shaft encoder | 1000 ppr, quadrature, on the chain shaft, into WAGO 750-637. Bore TBD. | 1 | unknown | TBD |
+| 97 | Chain-shaft encoder | Obsolete. Position comes from the 1FL2 absolute encoder through the S200. | 0 | — | Do not buy |
 | 98 | Chain drive guard | Fixed guard for the chain and the sprockets. Size TBD. | 1 | unknown | Custom (EU) |
 | 99 | Vibro head guard | Fixed guard for the vibro head. Size TBD. | 1 | unknown | Custom (EU) |
 | 100 | Main isolator | Lockable, 230 V, at least 20 A, between Instagrid and the machine. | 1 | unknown | TBD |

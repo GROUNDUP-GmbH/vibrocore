@@ -1,16 +1,21 @@
 id,name,is_company,supplier_rank,website,country_id/id,comment
+vibrocore.partner_codesys,CODESYS GmbH,1,1,https://store.codesys.com,base.de,Option B runtime licence. Not on the live control BOM.
 vibrocore.partner_custom_eu,Custom fabrication (EU),1,1,,,"Placeholder partner, not a vendor master record. Replace before purchasing."
 vibrocore.partner_geoprobe,Geoprobe Systems,1,1,https://geoprobe.com,base.us,
 vibrocore.partner_geoprobe_eu,Geoprobe Environmental Technologies S.A.,1,1,,base.be,"Seller on offer 26100096, dated 2026-03-03, Braine-le-Comte, Belgium. Prices are EUR net and exclude freight."
+vibrocore.partner_ifm,ifm electronic,1,1,https://www.ifm.com,base.de,Limit-switch candidate. The order is not frozen.
 vibrocore.partner_instagrid,instagrid,1,1,https://instagrid.co,base.de,Purchase price is on the product. Rental is a separate commercial decision.
 vibrocore.partner_lapp,Lapp,1,1,https://www.lappkabel.de,base.de,
 vibrocore.partner_meanwell,Mean Well,1,1,https://www.meanwell.com,base.tw,
 vibrocore.partner_mk,mk Technology Group,1,1,https://www.mk-group.com,base.de,
 vibrocore.partner_neugart,Neugart,1,1,https://www.neugart.com,base.de,
 vibrocore.partner_oli,OLI Vibrators,1,1,https://www.olivibra.com,base.it,Manufacturer. Confirm the EU dealer before ordering.
+vibrocore.partner_pilz,Pilz GmbH & Co. KG,1,1,https://www.pilz.com,base.de,Safety-relay candidate. Not a frozen supplier award.
 vibrocore.partner_pix4d,Pix4D,1,1,https://www.pix4d.com,base.ch,viDoc supplier named in BOM.md. The instrument may already be owned.
 vibrocore.partner_raspberrypi,Raspberry Pi Ltd,1,1,https://www.raspberrypi.com,base.gb,
 vibrocore.partner_revolutionpi,Kunbus / Revolution Pi,1,1,https://revolutionpi.com,base.de,RevPi Connect 4 option B controller.
+vibrocore.partner_rittal,Rittal GmbH & Co. KG,1,1,https://www.rittal.com,base.de,
+vibrocore.partner_telegaertner,Telegärtner,1,1,https://www.telegaertner.com,base.de,
 vibrocore.partner_teltonika,Teltonika Networks,1,1,https://teltonika-networks.com,base.lt,
 vibrocore.partner_ublox,u-blox,1,1,https://www.u-blox.com,base.ch,
 vibrocore.partner_wago,WAGO,1,1,https://www.wago.com,base.de,

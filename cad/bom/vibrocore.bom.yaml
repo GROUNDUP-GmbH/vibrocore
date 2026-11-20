@@ -98,6 +98,29 @@ suppliers:
   name: Raspberry Pi Ltd
   country_xml: base.gb
   website: https://www.raspberrypi.com
+- id: pilz
+  name: Pilz GmbH & Co. KG
+  country_xml: base.de
+  website: https://www.pilz.com
+  comment: Safety-relay candidate. Not a frozen supplier award.
+- id: rittal
+  name: Rittal GmbH & Co. KG
+  country_xml: base.de
+  website: https://www.rittal.com
+- id: ifm
+  name: ifm electronic
+  country_xml: base.de
+  website: https://www.ifm.com
+  comment: Limit-switch candidate. The order is not frozen.
+- id: codesys
+  name: CODESYS GmbH
+  country_xml: base.de
+  website: https://store.codesys.com
+  comment: Option B runtime licence. Not on the live control BOM.
+- id: telegaertner
+  name: Telegärtner
+  country_xml: base.de
+  website: https://www.telegaertner.com
 data_issues:
 - id: legacy-row-numbers
   summary: BOM.md skips rows 9-16 and reuses rows 56-63 in Control, Geoprobe and Positioning. legacy_ref
@@ -146,6 +169,14 @@ data_issues:
 - id: rut241-9v-converter
   summary: Closed 2026-11-19. VC-CT-6620 is obsolete. The RUT241 input is 9-30 V DC. The router runs from
     the 24 V rail.
+- id: chain-encoder-obsolete
+  summary: Closed 2026-11-20. VC-HB-3410 and VC-CT-6130 are obsolete. Position comes from the 1FL2
+    absolute encoder through the S200. The enclosure has no chain-encoder gland and no encoder I/O.
+- id: no-48v-rail
+  summary: Closed 2026-11-20. VC-PW-5200 and VC-PW-5400 are obsolete. No 48 V load remains. The S200
+    and the 1FL2 run on 230 V AC from the Instagrid. VC-PW-5310 is the dedicated SDR-120-24 for S200
+    control and the brake. VC-PW-5320 reserves an SDR-480-24 size slot for the rest of the machine.
+    The rating of that slot stays open until the actuator currents are known.
 parts:
 - part_number: VC-ASM-0000
   name: Vibrocore V1.1
@@ -209,8 +240,9 @@ parts:
   supply: assemble
   subsystem: power
   category: Assemblies
-  spec: Phase-1 power path from Instagrid ONE max to the VFD and the 48 V hub supply. V1.1 uses SDR-120-24
-    for the 24 V rail.
+  spec: Instagrid ONE max feeds 230 V AC to the S200, the 1FL2 and the sonic inverter. Two 24 V DIN
+    supplies. VC-PW-5310 is dedicated to S200 control and the brake. VC-PW-5320 is the machine 24 V slot.
+    There is no 48 V rail.
   legacy_ref: '4'
 - part_number: VC-ASM-5000
   name: Control system assembly
@@ -220,8 +252,9 @@ parts:
   subsystem: control
   category: Assemblies
   spec: WAGO PFC200 XTR rack (Option A), safety circuit, GPS head unit and Teltonika RUT241. V1.1 includes
-    a second 750-430 and 750-530 for lift/tilt I/O. RevPi Connect 4 (VC-CT-6800) is Option B, not on this
-    BOM.
+    a second 750-430/040-000 and a second 750-537/040-000. The 750-637 encoder module is obsolete and is
+    not on this BOM. RevPi Connect 4 (VC-CT-6800) is Option B and is not on this BOM. The box is Rittal
+    AX 1181.000. The DIN layout reserves PNOZ s4 750104 and an SDR-480-24 size slot. There is no 48 V rail.
   legacy_ref: '5'
 - part_number: VC-ASM-8000
   name: Field subsystems assembly
@@ -490,35 +523,36 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: Controller 750-8212, -40 to +70 C, 5 g vibration, two Ethernet ports, RS-485.
+  spec: PFC200 G2 XTR, order 750-8212/040-000. Two Ethernet ports. RS-232 and RS-485. Width 78.6 mm.
+    Height 100 mm. Depth 71.9 mm. Temperature -40 to +70 C. 5 g vibration.
   legacy_ref: '5.47'
-  manufacturer_pn: 750-8212
+  manufacturer_pn: 750-8212/040-000
   supplier_id: wago
   estimate_eur_low: 600
   estimate_eur_high: 900
 - part_number: VC-CT-6110
-  name: WAGO 750-430 XTR
+  name: WAGO 750-430/040-000
   revision_index: 0
   revision_letter: A
   supply: purchase
   subsystem: control
   category: Control
-  spec: 4 digital inputs, 24 V DC, CAGE CLAMP.
+  spec: 8 digital inputs, 24 V DC, 3 ms, 1-wire, XTR. Width 12 mm. There is no 4-channel XTR article.
   legacy_ref: '5.48'
-  manufacturer_pn: 750-430
+  manufacturer_pn: 750-430/040-000
   supplier_id: wago
   estimate_eur_low: 60
   estimate_eur_high: 90
 - part_number: VC-CT-6120
-  name: WAGO 750-530 XTR
+  name: WAGO 750-537/040-000
   revision_index: 0
   revision_letter: A
   supply: purchase
   subsystem: control
   category: Control
-  spec: 4 digital outputs, 24 V DC, 0.5 A, CAGE CLAMP.
+  spec: 8 digital outputs, 24 V DC, 0.5 A, XTR. Width 12 mm. Article 750-530/040-000 does not exist.
   legacy_ref: '5.49'
-  manufacturer_pn: 750-530
+  manufacturer_pn: 750-537/040-000
   supplier_id: wago
   estimate_eur_low: 60
   estimate_eur_high: 90
@@ -529,25 +563,31 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: Incremental encoder interface.
+  spec: Incremental encoder interface, width 24 mm. Obsolete. Do not buy. Do not fit.
   legacy_ref: '5.50'
   manufacturer_pn: 750-637
   supplier_id: wago
   estimate_eur_low: 100
   estimate_eur_high: 150
+  lifecycle: obsolete
+  notes: 'Obsolete on 2026-11-20. VC-HB-3410 is obsolete. Position comes from the 1FL2 absolute encoder
+    through the S200. This module is not on a live BOM. The 100-150 EUR band is history and is not in
+    the control rollup.'
 - part_number: VC-CT-6140
-  name: WAGO 750-826
+  name: WAGO 750-652
   revision_index: 0
   revision_letter: A
   supply: purchase
   subsystem: control
   category: Control
-  spec: RS-485 serial interface for Modbus RTU.
+  spec: RS-232/RS-485 serial interface, width 12 mm. Candidate for Modbus RTU. Article 750-826 does not exist.
   legacy_ref: '5.51'
-  manufacturer_pn: 750-826
+  manufacturer_pn: 750-652
   supplier_id: wago
   estimate_eur_low: 80
   estimate_eur_high: 120
+  unknowns:
+  - 750-652 is a candidate. The order is not frozen.
 - part_number: VC-CT-6150
   name: WAGO 750-600
   revision_index: 0
@@ -568,11 +608,14 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: M12 inductive limit switch, NC, IP67. Upper and lower carriage.
+  spec: M12 inductive limit switch, NC, IP67. Upper and lower carriage. The switches are outside the cabinet.
   legacy_ref: '5.53'
+  supplier_id: ifm
   estimate_eur_low: 15
   estimate_eur_high: 30
-  notes: ifm or SICK.
+  unknowns:
+  - The order is not frozen. ifm IFS248 is a candidate. SICK is not ruled out.
+  notes: 'Candidate page: https://www.ifm.com/de/en/product/IFS248. The STEP in cad/vendor/VC-CT-6200 is that candidate.'
 - part_number: VC-CT-6210
   name: Emergency stop
   revision_index: 0
@@ -580,11 +623,14 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: Mushroom NC, Category 3, in an IP65 enclosure.
+  spec: Mushroom E-stop with two NC contacts, in an IP65 enclosure. One NC contact is the hard-wired
+    channel into the safety relay. The PLC reads a monitor contact. The button is outside the cabinet.
   legacy_ref: '5.54'
   estimate_eur_low: 40
   estimate_eur_high: 70
-  notes: Eaton or Schneider.
+  unknowns:
+  - Order code is not frozen. Eaton or Schneider. The device must have two NC contacts.
+  notes: Do not use a single NC contact as the only stop path. The 40-70 EUR band is not a quote.
 - part_number: VC-CT-6220
   name: Safety relay
   revision_index: 0
@@ -592,11 +638,18 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: Pilz PNOZ m B0 or equivalent.
+  spec: DIN space reserved for Pilz PNOZ s4, article 750104, 24 V DC, 22.5 x 98 x 120 mm, 3 N/O and 1 N/C.
+    The safety assessment is open. Do not state a performance level.
   legacy_ref: '5.55'
+  manufacturer_pn: '750104'
+  supplier_id: pilz
   estimate_eur_low: 80
   estimate_eur_high: 130
-  notes: PNOZ m B0 is a candidate, not a frozen order.
+  unknowns:
+  - The safety assessment is open. Do not state a performance level.
+  - The 80-130 EUR band is not a quote for article 750104.
+  notes: 'Operating manual https://www.pilz.com/download/open/OM_PNOZ_s4_21396-EN-24.pdf. DC supply is
+    2.5 W. PNOZ m B0 article 772100 is not the reserved slot.'
 - part_number: VC-CT-6230
   name: Warning beacon
   revision_index: 0
@@ -604,8 +657,8 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: 24 V DC beacon. Firmware output xAlarmBeacon at %QX0.3 drives it. The 750-530 channel is rated
-    0.5 A. Beacon current must be 0.5 A or less.
+  spec: 24 V DC beacon. Firmware output xAlarmBeacon at %QX0.3 drives it. The 750-537/040-000 channel is
+    rated 0.5 A. Beacon current must be 0.5 A or less.
   legacy_ref: '5.103'
   unknowns:
   - Order code is unknown.
@@ -634,19 +687,21 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: IP65 enclosure with a DIN rail. The size 200 x 150 x 80 mm is withdrawn. Mean Well SDR-480-48
-    is 128.5 mm deep. The old depth is 80 mm, so the supply does not fit. WAGO 750-8212 is 78.6 x 100
-    x 71.9 mm. The VFD size is unknown. Do not order an enclosure until the VFD order code is known.
+  spec: Rittal AX 1181.000, sheet steel, IP66, 800 x 1000 x 400 mm, RAL 7035. The size 200 x 150 x 80 mm
+    is withdrawn. The mounting plate is included. Installation depth T3 is 287.5 mm. Price is unknown.
+    The PSU set is not frozen. Do not order the box as a closed design.
   legacy_ref: '5.56'
+  manufacturer_pn: 1181.000
+  supplier_id: rittal
   unknowns:
-  - VFD envelope is unknown, so internal width and height are unknown.
-  - Order code is unknown.
-  - Price is unknown.
-  - Only the 750-430 width (12 mm) was verified. The other module widths were not summed.
-  notes: 'Sources: https://www.meanwell.com/Upload/PDF/SDR-480/SDR-480-SPEC.PDF and
-    https://www.wago.com/wagoweb/documentation/750/eng_dat/d07508212_00400000_0en.pdf and
-    https://www.wago.com/wagoweb/documentation/750/eng_manu/modules/m07500430_00xx0000_0en.pdf.
-    Mean Well also asks for 40 mm above the supply, 20 mm below it, and 5 mm at each side.'
+  - Price of AX 1181.000 is unknown.
+  - The sonic inverter order is not frozen. It must have STO. The placeholder envelope is 140 x 160 x 164.5 mm.
+  - The machine 24 V rating is open. The slot is the SDR-480-24 envelope. There is no 48 V rail.
+  - Isolator, circuit breaker and residual-current device order codes are unknown.
+  - The power budget and the safety assessment are still open.
+  notes: 'Product page https://www.rittal.com/pdf-creator/variant/com-en/1181000. Technical table
+    https://www.rittal.com/imf/none/3_14206/1055000_Technical_details_DE/ gives T3 = 287.5 mm for 1181.000.
+    AX 1055.000 is not used. Its T3 is 187.5 mm. That is below the S200 depth. See docs/engineering/ENCLOSURE.md.'
 - part_number: VC-CT-6400
   name: RDDL trust wallet
   revision_index: 0
@@ -754,6 +809,89 @@ parts:
   estimate_eur_low: 50
   estimate_eur_high: 90
   notes: Weidmueller or Phoenix Contact.
+- part_number: VC-CT-6310
+  name: EMC cable gland set
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: Lapp SKINTOP MS-SC-M. 1x M25 53112640, 9x M20 53112630, 7x M16 53112620. The M20 count is
+    seven circuits plus two spares. The M16 count is five circuits plus two spares. There is no
+    chain-encoder gland.
+  legacy_ref: '5.6310'
+  supplier_id: lapp
+  unknowns:
+  - Price is unknown.
+  - Clamping length for each cable is not frozen. Confirm the gland length on the order.
+  notes: 'Catalogue https://products.lappgroup.com/online-catalogue/cable-glands/skintop-cable-glands-nickel-plated-brass-metric/emc/skintop-ms-sc-m.html.
+    Datasheet DB53112610EN. M16 clamps 4.5-10 mm. M20 clamps 7-13 mm. M25 clamps 9-17 mm.'
+- part_number: VC-CT-6320
+  name: Filter fan pair
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: Optional Rittal SK 3238.100 fan and SK 3238.200 outlet filter, 230 V. Not fitted. The door
+    keeps two clear zones. Fitting the pair drops the box from IP66 to IP54.
+  legacy_ref: '5.6320'
+  supplier_id: rittal
+  lifecycle: alternative
+  unknowns:
+  - Confirm the current article suffix before an order.
+  - The power budget is open, so the fan is not selected.
+  notes: 'About 36 to 42 m3/h with one outlet filter. Fan heat is about 15 W. Do not cut the IP66 skin
+    until the power budget asks for forced air. See docs/engineering/ENCLOSURE.md.'
+- part_number: VC-CT-6330
+  name: Frame mount kit
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: Four mk consoles 16/40, article 31.40.0016, four mk T-slot nuts Lasche 1 M8, article 34.01.0001,
+    and four rubber-metal buffers 40 x 40 mm with M8 studs. The buffers sit between the box and the
+    idle-side mk 51.04 upright.
+  legacy_ref: '5.6330'
+  supplier_id: mk
+  unknowns:
+  - The buffer order code is not frozen. Confirm shore hardness and the exact article before the order.
+  - Price is unknown.
+  notes: 'The bracket solid is an envelope, about 80 x 80 x 8 mm. It is not the mk machining model.
+    Do not use Winkel 40 article 25.50.1001. That article is series 25. The profile is series 40/50, slot 10.'
+- part_number: VC-CT-6340
+  name: Terminal and duct set
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: WAGO TOPJOB S 2002-1201 feed-through terminals, WAGO 2002-1207 PE terminals, and wiring ducts
+    between the DIN rows.
+  legacy_ref: '5.6340'
+  supplier_id: wago
+  unknowns:
+  - Terminal count and duct length are not frozen.
+  - Price is unknown.
+  notes: The AX door already has a PE conductor connection. An M8 stud is modelled on the gland face.
+    A separate stud article is not frozen.
+- part_number: VC-CT-6350
+  name: Bulkhead and vent set
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: Three Telegärtner SMA bulkhead jacks J01151A0001 (GNSS and two LTE) and one RP-SMA bulkhead
+    J01151R0011 (Wi-Fi). One pressure-equalisation vent, M12, IP66. The vent article is not frozen.
+  legacy_ref: '5.6350'
+  supplier_id: telegaertner
+  unknowns:
+  - The vent article is not frozen.
+  - Price is unknown.
+  notes: 'SMA catalogue https://www.telegaertner.com/en/online-catalogue-coax/sma/sma-bulkhead-jack.
+    J01151A0001 is the single-hole SMA jack. J01151R0011 is the RP-SMA bulkhead.'
 - part_number: VC-CT-6800
   name: RevPi Connect 4
   revision_index: 0
@@ -762,14 +900,15 @@ parts:
   subsystem: control
   category: Control
   spec: CM4 Quad-Core A72 1.5 GHz, 4 GB RAM, 32 GB eMMC, 2x GbE, RS-485, Docker-native, -25 to +55 C,
-    DIN rail. Option B controller.
+    DIN rail. Housing 96 x 45 x 110.5 mm. Kunbus item 100378. Option B controller.
   legacy_ref: 5.47b
+  manufacturer_pn: '100378'
   supplier_id: revolutionpi
-  estimate_eur_low: 450
-  estimate_eur_high: 520
+  estimate_eur_low: 493
+  estimate_eur_high: 493
   lifecycle: alternative
-  notes: Alternative to VC-CT-6100 (WAGO PFC200 XTR). Not on the Option A control BOM. Recommended for
-    V1 prototype / cost-sensitive builds.
+  notes: 'Alternative to VC-CT-6100. Not on the Option A control BOM. Official shop list 493 EUR excl. tax
+    on 2026-11-20. That figure is not a quote. Source https://revolutionpi.com/en/ordering/overview-products-and-prices.'
 - part_number: VC-CT-6810
   name: RevPi DIO module
   revision_index: 0
@@ -777,14 +916,66 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: 14x DI 24 V + 14x DO 24 V; DI configurable as quadrature encoder/counter. Replaces WAGO 750-430
-    + 750-530 + 750-637 in one unit for Option B.
+  spec: Kunbus item 100197. 14x DI 24 V and 14x DO 24 V. Width 22.5 mm. Replaces the DI and DO modules
+    on the Option B path. It does not replace an encoder module. The chain encoder is obsolete.
   legacy_ref: 5.48b
+  manufacturer_pn: '100197'
   supplier_id: revolutionpi
   estimate_eur_low: 196
-  estimate_eur_high: 220
+  estimate_eur_high: 196
   lifecycle: alternative
-  notes: Option B only. Not on the Option A control BOM.
+  notes: 'Option B only. Official shop list 196 EUR excl. tax on 2026-11-20. That figure is not a quote.
+    RS-485 is on the Connect 4. Do not use the DIO encoder mode for a chain encoder.'
+- part_number: VC-CT-6820
+  name: PiBridge plug connector
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: Kunbus item 100204. Overhead PiBridge plug that joins a Connect 4 to one I/O module.
+  legacy_ref: 5.6820
+  manufacturer_pn: '100204'
+  supplier_id: revolutionpi
+  estimate_eur_low: 5.5
+  estimate_eur_high: 5.5
+  lifecycle: alternative
+  unknowns:
+  - It is not confirmed whether the DIO packing already includes one joining plug.
+  notes: 'Option B only. Official shop list 5.50 EUR excl. tax on 2026-11-20. That figure is not a quote.
+    Not on the live control BOM.'
+- part_number: VC-CT-6830
+  name: CODESYS Control Basic M licence
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: CODESYS Control for Linux ARM SL, article 2302000048, Basic M. Buy this only if the Structured
+    Text firmware stays on the RevPi.
+  legacy_ref: 5.6830
+  manufacturer_pn: '2302000048'
+  supplier_id: codesys
+  estimate_eur_low: 69
+  estimate_eur_high: 69
+  lifecycle: alternative
+  notes: 'Option B only. Store list from 69 EUR excl. tax on 2026-11-20. That figure is not a quote.
+    Source https://store.codesys.com/en/codesys-control-basic-m-bundle.html. Not on the live control BOM.'
+- part_number: VC-CT-6840
+  name: Cabinet heater 230 V
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: Optional 230 V enclosure heater. Not fitted. Qty stays zero until a later design asks for one.
+  legacy_ref: 5.6840
+  lifecycle: alternative
+  unknowns:
+  - Order code is unknown.
+  - Price is unknown.
+  - Power and rail width are unknown.
+  notes: Option B optional. Not on a live BOM. The old "about EUR 15" figure is not an estimate.
 - part_number: VC-FR-4100
   name: Aluminium profile 50x100x1500
   revision_index: 0
@@ -1273,9 +1464,8 @@ parts:
   estimate_eur_low: 80
   estimate_eur_high: 150
   notes: 'Approved 2026-11-20. Replaces the stepper driver. Installed in the control enclosure.
-    The 80-150 EUR band is the previous placeholder. It is not a Siemens quote.'
-  unknowns:
-  - PROFINET order 6SL5510-1BB11-0AF0 if the PLC does not use pulse and direction. The price is not a quote.
+    The selected order is the pulse-train code 6SL5510-1BB11-0AA0. The PROFINET code 6SL5510-1BB11-0AF0
+    is not selected. The 80-150 EUR band is the previous placeholder. It is not a Siemens quote.'
 - part_number: VC-HB-2400
   name: Elastomer coupling
   revision_index: 0
@@ -1494,18 +1684,13 @@ parts:
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: Incremental encoder, 1000 pulses per revolution, quadrature A and B, on the chain shaft. The
-    signal goes to WAGO 750-637 (VC-CT-6130).
+  spec: Incremental encoder, 1000 pulses per revolution, on the chain shaft. Obsolete. Do not buy.
+    Do not fit a gland for it.
   legacy_ref: '2.97'
-  unknowns:
-  - Bore is unknown. The chain shaft diameter is still 25-30 mm.
-  - Supply voltage and output circuit must match 750-637. The exact interface is not frozen.
-  - Order code is unknown.
-  - Price is unknown.
-  notes: 'GVL_IO maps %IW4 and %IW5 to this encoder. GVL_PARAMS uses 671.9 counts per mm from
-    (1000 x 4 x 40) / (15 x 15.875). The factor 40 is the gearbox ratio, so that scale fits a motor-shaft
-    encoder. A chain-shaft encoder is (1000 x 4) / (15 x 15.875) = 16.80 counts per mm. FB_HubControl
-    reads the drive position, not the 750-637 words. Do not change 671.9 in this revision.'
+  lifecycle: obsolete
+  notes: 'Obsolete on 2026-11-20. Position comes from the 1FL2 absolute encoder through the S200.
+    VC-CT-6130 is obsolete with this part. GVL_IO has no encoder words for it. GVL_PARAMS still holds
+    671.9. Do not change 671.9 in this revision. FB_HubControl reads the drive position over Modbus.'
 - part_number: VC-HB-3420
   name: Chain drive guard
   revision_index: 0
@@ -1742,16 +1927,13 @@ parts:
   supply: purchase
   subsystem: power
   category: Power
-  spec: 230 V AC to 48 V DC, DIN rail, for the hub drive. Order code SDR-480-48. Rated 48 V, 10 A, 480 W.
-    Body 85.5 x 125.2 x 128.5 mm. Do not order SDR-75-48. That supply is 1.6 A and 75 W.
+  spec: 48 V, 10 A, 480 W. Obsolete. Do not buy. No 48 V load remains.
   legacy_ref: '4.42'
   manufacturer_pn: SDR-480-48
   supplier_id: meanwell
-  unknowns:
-  - EUR price is unknown. The old EUR 80-140 range was not a quote for SDR-480-48 and is withdrawn.
-  notes: 'The only stated 48 V load is the hub motor. The BOM gives a 6 A phase current. 6 A x 48 V =
-    288 W. That product is an upper bound, not a measured bus current. VC-PW-5400 is a further 48 V load
-    and its current is unknown. 10 A leaves 4 A above the 6 A bound. Source:
+  lifecycle: obsolete
+  notes: 'Obsolete on 2026-11-20. The S200 and the 1FL2 run on 230 V AC. Do not order SDR-480-48 or
+    SDR-75-48. The old price band is not in the power rollup. Source:
     https://www.meanwell.com/Upload/PDF/SDR-480/SDR-480-SPEC.PDF (SDR-480-SPEC 2025-02-17).'
 - part_number: VC-PW-5300
   name: Mean Well DDR-60D-24
@@ -1776,14 +1958,37 @@ parts:
   supply: purchase
   subsystem: power
   category: Power
-  spec: 230 V AC to 24 V DC, 5 A, 120 W, DIN rail. V1.1 24 V rail for lift/tilt actuators.
+  spec: 230 V AC to 24 V DC, 5 A, 120 W, DIN rail. Dedicated supply for the S200 control input and the
+    motor brake. S200 control is 2.2 A maximum at 22.8 to 28.8 V. Brake current is below 1 A. 24 V is
+    inside that window. 3.2 A is below 5 A.
   legacy_ref: 8.psu
   manufacturer_pn: SDR-120-24
   supplier_id: meanwell
   estimate_eur_low: 40
   estimate_eur_high: 70
   replaces: VC-PW-5300
-  notes: Replaces superseded VC-PW-5300 (DDR-60D-24). Required when lift and tilt run together.
+  notes: 'This unit is not the actuator rail. Actuators and the rest of the 24 V loads use VC-PW-5320.
+    Nameplate heat at 120 W and 91 percent is 11.9 W. The stated load is below that. Source:
+    https://www.meanwell.com/Upload/PDF/SDR-120/SDR-120-SPEC.PDF.'
+  lifecycle: active
+- part_number: VC-PW-5320
+  name: Machine 24 V supply
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: power
+  category: Power
+  spec: 230 V AC to 24 V DC for the rest of the machine. The DIN slot is the SDR-480-24 envelope,
+    85.5 x 125.2 x 128.5 mm. The order and the current rating are not frozen.
+  legacy_ref: '4.5320'
+  supplier_id: meanwell
+  unknowns:
+  - The current rating stays open until the actuator currents are known.
+  - SDR-480-24 is the slot size. It is not a purchase order.
+  - Price is unknown.
+  notes: 'Clearances stay 40 mm above, 20 mm below and 5 mm at each side. A full SDR-480-24 at 94 percent
+    would lose about 30.6 W. That figure is a ceiling, not the selected loss. Source:
+    https://www.meanwell.com/Upload/PDF/SDR-480/SDR-480-SPEC.PDF.'
   lifecycle: active
 - part_number: VC-PW-5400
   name: DC converter 48 V to 12 V and 5 V
@@ -1792,12 +1997,13 @@ parts:
   supply: purchase
   subsystem: power
   category: Power
-  spec: Logic supply for the PLC side and sensors. BOM.md groups 12 V and 5 V on one line.
+  spec: 48 V to 12 V and 5 V. Obsolete. Do not buy. No 48 V rail remains.
   legacy_ref: '4.44'
   estimate_eur_low: 15
   estimate_eur_high: 30
-  unknowns:
-  - Whether this is one dual-output converter or two parts.
+  lifecycle: obsolete
+  notes: 'Obsolete on 2026-11-20. The PLC, the sensors and the other loads are 24 V. The 15-30 EUR band
+    is history and is not in the power rollup.'
 - part_number: VC-PW-5500
   name: Power distribution kit
   revision_index: 0
@@ -1898,14 +2104,17 @@ parts:
   supply: purchase
   subsystem: sonic_head
   category: Sonic Head
-  spec: 1.5 kW, 230 V single-phase in, three-phase out, V/f, output to 400 Hz.
+  spec: 1.5 kW, 230 V single-phase in, three-phase out. The selected inverter must have STO. The order
+    is not selected. The enclosure holds a placeholder of 140 x 160 x 164.5 mm.
   legacy_ref: '1.2'
   estimate_eur_low: 180
   estimate_eur_high: 300
-  notes: 'Candidates named in the docs: Siemens SINAMICS V20, ABB ACS150. No order code is selected. Mounted
-    in the control enclosure, kept on the sonic-head BOM because BOM.md lists it there.'
+  notes: 'Candidates named in the docs include Siemens SINAMICS V20 and ABB ACS150. Neither is selected.
+    Mounted in the control enclosure. Kept on the sonic-head BOM because BOM.md lists it there. STO stays
+    hard-wired from the safety relay. Do not claim a performance level.'
   unknowns:
-  - Enclosure size, braking behaviour beyond the V20 parameter notes, and the final order code.
+  - The order code is unknown. STO is required and is not selected.
+  - The placeholder envelope is 140 x 160 x 164.5 mm until that order is known.
 - part_number: VC-SH-1300
   name: Vibrating plate weldment
   revision_index: 0
@@ -2224,7 +2433,6 @@ boms:
   - {part_number: VC-HB-3200, qty: 1}
   - {part_number: VC-HB-3300, qty: 1}
   - {part_number: VC-HB-3400, qty: 1}
-  - {part_number: VC-HB-3410, qty: 1}
   - {part_number: VC-HB-3420, qty: 1}
 - part_number: VC-ASM-3000
   mrp_type: normal
@@ -2250,9 +2458,8 @@ boms:
   mrp_type: normal
   lines:
   - {part_number: VC-PW-5100, qty: 1}
-  - {part_number: VC-PW-5200, qty: 1}
   - {part_number: VC-PW-5310, qty: 1}
-  - {part_number: VC-PW-5400, qty: 1}
+  - {part_number: VC-PW-5320, qty: 1}
   - {part_number: VC-PW-5500, qty: 1}
   - {part_number: VC-PW-5600, qty: 1}
   - {part_number: VC-PW-5700, qty: 1}
@@ -2264,7 +2471,6 @@ boms:
   - {part_number: VC-CT-6100, qty: 1}
   - {part_number: VC-CT-6110, qty: 2}
   - {part_number: VC-CT-6120, qty: 2}
-  - {part_number: VC-CT-6130, qty: 1}
   - {part_number: VC-CT-6140, qty: 1}
   - {part_number: VC-CT-6150, qty: 1}
   - {part_number: VC-CT-6200, qty: 2}
@@ -2273,6 +2479,10 @@ boms:
   - {part_number: VC-CT-6230, qty: 1}
   - {part_number: VC-CT-6240, qty: 1}
   - {part_number: VC-CT-6300, qty: 1}
+  - {part_number: VC-CT-6310, qty: 1}
+  - {part_number: VC-CT-6330, qty: 1}
+  - {part_number: VC-CT-6340, qty: 1}
+  - {part_number: VC-CT-6350, qty: 1}
   - {part_number: VC-CT-6400, qty: 1}
   - {part_number: VC-CT-6500, qty: 1}
   - {part_number: VC-CT-6510, qty: 1}

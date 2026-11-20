@@ -12,8 +12,10 @@ VAR_GLOBAL CONSTANT
        NEMA 42 + Neugart PLPE120-040 (40:1) + 10B-2 chain + 15T sprocket
        ========================================================= *)
 
-    (* Encoder pulses per mm of carriage travel
-       = (pulses/rev × gear_ratio) / (sprocket_teeth × chain_pitch)
+    (* Encoder pulses per mm of carriage travel.
+       The chain-shaft encoder is obsolete.
+       Position comes from the 1FL2 absolute encoder through the S200.
+       This constant stays 671.9 in this revision.
        = (1000 × 4 × 40) / (15 × 15.875) = 160000 / 238.125 ≈ 671.9 *)
     rENCODER_PULSES_PER_MM  : REAL := 671.9;
 
