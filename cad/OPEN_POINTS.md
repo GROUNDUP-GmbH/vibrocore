@@ -115,22 +115,19 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-GP-7310` DT325 drive head: no solid. Dimensions were not complete enough to model.
 - `VC-GP-7400` Core liner 3.25 inch: no solid. Dimensions were not complete enough to model.
 - `VC-GP-7410` DT325 liner retainer HD: no solid. Dimensions were not complete enough to model.
-- `VC-HB-2100` NEMA 42 closed-loop stepper: Exact catalogue number, body length and mass of the closed-loop motor.
+- `VC-HB-2100` Servo motor 1FL2104: Vendor STEP is not in the repository. The shaft is inside the gearbox envelope and is not a second solid.
 - `VC-HB-2110` Lift motor bracket: Plate thickness, bolt size and weld sizes. Not in BOM.md v1.
-- `VC-HB-2200` Planetary gearbox PLPE120-040: Input flange code for the selected NEMA 42 motor.
-- `VC-HB-2300` Closed-loop stepper driver: Final driver, and therefore the connector and the encoder interface.
-- `VC-HB-2400` Elastomer coupling: Chain-side bore. The gearbox-side hub in the STEP is 32H7. The chain-side hub is unbored.
+- `VC-HB-2200` Planetary gearbox PLE120-040: Exact input-flange length of article 100460948. The envelope uses the catalogue minimum of 204 mm.
+- `VC-HB-2300` SINAMICS S200 servo drive: PROFINET order 6SL5510-1BB11-0AF0 if the PLC does not use pulse and direction. The price is not a quote.
+- `VC-HB-2400` Elastomer coupling: Gearbox output is Ø25 mm. The STEP hub is 32H7, so the two are not mated. The chain-side hub is unbored.
 - `VC-HB-2500` Hub drive shaft: Diameter inside the 25-30 mm range, length, key size and sprocket seat.
 - `VC-HB-2600` Pillow block UCP 206: Confirm 30 mm bore against the final shaft diameter. HUB_SYSTEM.md also mentions UCP 205/206.
 - `VC-HB-2700` Duplex chain 10B-2: no solid. Dimensions were not complete enough to model.
-- `VC-HB-2800` Sprocket 10B-2 15T drive: no solid. Dimensions were not complete enough to model.
 - `VC-HB-2810` Sprocket 10B-2 15T idle: no solid. Dimensions were not complete enough to model.
 - `VC-HB-2820` Idler shaft: Key size and the bearing catalogue number. Not in BOM.md v1.
 - `VC-HB-2830` Idler bearing bracket: Bearing catalogue number, slot length and bolt size. Not in BOM.md v1.
 - `VC-HB-2900` Chain tensioner: Selected model.
-- `VC-HB-3000` Power-off brake 24 V: The d10H7 bore does not match the Ø19 stand-in motor shaft. The two are not mated.
-- `VC-HB-3100` Linear guide rail HGR20: no solid. Dimensions were not complete enough to model.
-- `VC-HB-3110` Linear carriage HGH20: no solid. Dimensions were not complete enough to model.
+- `VC-HB-3000` Power-off brake 24 V: Obsolete. Do not buy. The motor holding brake replaces this part.
 - `VC-HB-3200` Carriage plate: Length, width, hole pattern and chain-pin position. Thickness alone is not enough to model a blank.
 - `VC-HB-3300` Fastener kit, hub: no solid. Dimensions were not complete enough to model.
 - `VC-HB-3400` Drag chain: Cable outside diameters are unknown.

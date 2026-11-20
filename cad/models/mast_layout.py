@@ -113,15 +113,15 @@ ISOLATOR_FREE_HEIGHT_MM = 40.0
 ISOLATOR_DIAMETER_MM = 16.0
 ISOLATOR_COUNT = 4
 # VC-HB-3100. Hiwin HGR20R published section. WR is the width. HR is the height.
-# The vendor STEP needs the Hiwin configurator. The solid is the rectangular envelope.
+# The STEP mounting face is the profile front face. See cad/vendor/VC-HB-3100/SOURCE.md.
 RAIL_SECTION_WIDTH_MM = 20.0
 RAIL_SECTION_HEIGHT_MM = 17.5
-# VC-HB-3110. Hiwin HGH20CA published block.
-# H is the height from the rail mounting face. W is the width. L is the length.
-# The vendor STEP needs the Hiwin product page. The solid is an envelope with a rail channel.
+# VC-HB-3110. Hiwin HGH20CAZ0H. H is the height from the rail mounting face.
+# W is the width. The length is the STEP solid, including the end seals.
+# The mounting-hole centre is 5.3 mm from that solid centre. See SOURCE.md.
 RUNNER_HEIGHT_MM = 30.0
 RUNNER_WIDTH_MM = 44.0
-RUNNER_LENGTH_MM = 77.5
+RUNNER_LENGTH_MM = 90.4
 RUNNER_COUNT = 4
 # TBD. Centre distance of the two blocks on one rail. Not in the BOM.
 RUNNER_PITCH_MM = 200.0
@@ -158,16 +158,15 @@ SPROCKET_PITCH_RADIUS_MM = 37.9
 # iwis 10B-2, 15 teeth. Tip diameter and overall length from the published product page.
 SPROCKET_TIP_DIAMETER_MM = 83.0
 SPROCKET_WIDTH_MM = 40.0
-# Neugart PLPE120, ratio 40, two stages. L1 is the published minimum total length.
-# The input flange can be longer. This envelope is that minimum.
-GEARBOX_HOUSING_DIAMETER_MM = 120.0
-GEARBOX_LENGTH_MM = 219.5
-# NEMA 42 frame is documented. The 180 mm length is the fallback envelope. TBD.
-# The placed solid is the public ST11018M6504 STEP, a stand-in for the closed-loop motor.
-NEMA42_FRAME_MM = 110.0
-NEMA42_BODY_LENGTH_MM = 180.0
-# Fallback brake envelope. The placed solid is the BFK457-10 STEP. TBD when that file is absent.
-BRAKE_LENGTH_MM = 40.0
+# Neugart PLE120, ratio 40, two stages. Catalogue 2026-10.
+# D6 and the motor-flange edge are both 115 mm. L1 is the minimum total length.
+# Article 100460948 can be longer. The emailed STEP is not here yet.
+GEARBOX_FLANGE_MM = 115.0
+GEARBOX_LENGTH_MM = 204.0
+# Siemens 1FL2104-4AG11-1MC0. Datasheet flange AB and overall length LB.
+# The Ø19 x 40 mm shaft enters the gearbox and is not a second solid.
+SERVO_FLANGE_MM = 81.0
+SERVO_BODY_LENGTH_MM = 186.6
 # Fallback coupling envelope. The placed solid is the ROTEX 28 STEP set. TBD when those files are absent.
 COUPLING_DIAMETER_MM = 65.0
 COUPLING_LENGTH_MM = 50.0
@@ -254,11 +253,11 @@ PLACEHOLDERS: dict[str, tuple[float, str]] = {
     ),
     "rail_section_width_mm": (
         RAIL_SECTION_WIDTH_MM,
-        "Hiwin HGR20R published rail width WR. The STEP file was not downloaded. The solid is the envelope.",
+        "Hiwin HGR20R published rail width WR. The STEP mounting face sits on the profile.",
     ),
     "rail_section_height_mm": (
         RAIL_SECTION_HEIGHT_MM,
-        "Hiwin HGR20R published rail height HR. The STEP file was not downloaded. The solid is the envelope.",
+        "Hiwin HGR20R published rail height HR. The STEP mounting face sits on the profile.",
     ),
     "runner_pitch_mm": (
         RUNNER_PITCH_MM,
@@ -285,13 +284,9 @@ PLACEHOLDERS: dict[str, tuple[float, str]] = {
         BRACKET_GUSSET_HEIGHT_MM,
         "TBD. Draft height of the vibration-motor bracket gussets. See CARRIAGE-BRACKET.md.",
     ),
-    "nema42_body_length_mm": (
-        NEMA42_BODY_LENGTH_MM,
-        "TBD. Fallback NEMA 42 body length when no STEP is present. The placed file is a geometry stand-in.",
-    ),
-    "brake_length_mm": (
-        BRAKE_LENGTH_MM,
-        "TBD. Fallback envelope length of VC-HB-3000 when no STEP is present.",
+    "servo_body_length_mm": (
+        SERVO_BODY_LENGTH_MM,
+        "Siemens 1FL2104 overall length LB. The envelope is that square prism. No STEP yet.",
     ),
     "coupling_diameter_mm": (
         COUPLING_DIAMETER_MM,

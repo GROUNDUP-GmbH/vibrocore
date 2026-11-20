@@ -48,9 +48,12 @@ def open_points_text(bom) -> str:
     ]
     for issue in bom.issues:
         lines.append(f"- `{issue['id']}`: {issue['summary']}")
+    from cad.tools.geometry import vendor_step_path
+
     lines.extend(["", "## Parts with undocumented geometry or procurement data", ""])
     for part in sorted(bom.parts.values(), key=lambda item: item.part_number):
-        if not part.unknowns and not part.geometry:
+        has_vendor = vendor_step_path(part.part_number) is not None
+        if not part.unknowns and not part.geometry and not has_vendor:
             lines.append(
                 f"- `{part.part_number}` {part.name}: no solid. Dimensions were not complete enough to model."
             )

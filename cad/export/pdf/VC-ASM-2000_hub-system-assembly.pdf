@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 1641 >>
+<< /Length 1572 >>
 stream
 BT
 /F1 11 Tf
@@ -17,13 +17,13 @@ BT
 16 TL
 (VC-ASM-2000 Hub system assembly  assembly, preliminary) Tj
 T*
-(1  VC-HB-2100  rev A  qty 1  NEMA 42 closed-loop stepper) Tj
+(1  VC-HB-2100  rev A  qty 1  Servo motor 1FL2104) Tj
 T*
 (2  VC-HB-2110  rev A  qty 1  Lift motor bracket) Tj
 T*
-(3  VC-HB-2200  rev A  qty 1  Planetary gearbox PLPE120-040) Tj
+(3  VC-HB-2200  rev A  qty 1  Planetary gearbox PLE120-040) Tj
 T*
-(4  VC-HB-2300  rev A  qty 1  Closed-loop stepper driver) Tj
+(4  VC-HB-2300  rev A  qty 1  SINAMICS S200 servo drive) Tj
 T*
 (5  VC-HB-2400  rev A  qty 1  Elastomer coupling) Tj
 T*
@@ -43,21 +43,19 @@ T*
 T*
 (13  VC-HB-2900  rev A  qty 1  Chain tensioner) Tj
 T*
-(14  VC-HB-3000  rev A  qty 1  Power-off brake 24 V) Tj
+(14  VC-HB-3100  rev A  qty 2  Linear guide rail HGR20) Tj
 T*
-(15  VC-HB-3100  rev A  qty 2  Linear guide rail HGR20) Tj
+(15  VC-HB-3110  rev A  qty 4  Linear carriage HGH20) Tj
 T*
-(16  VC-HB-3110  rev A  qty 4  Linear carriage HGH20) Tj
+(16  VC-HB-3200  rev A  qty 1  Carriage plate) Tj
 T*
-(17  VC-HB-3200  rev A  qty 1  Carriage plate) Tj
+(17  VC-HB-3300  rev A  qty 1  Fastener kit, hub) Tj
 T*
-(18  VC-HB-3300  rev A  qty 1  Fastener kit, hub) Tj
+(18  VC-HB-3400  rev A  qty 1  Drag chain) Tj
 T*
-(19  VC-HB-3400  rev A  qty 1  Drag chain) Tj
+(19  VC-HB-3410  rev A  qty 1  Chain-shaft encoder 1000 ppr) Tj
 T*
-(20  VC-HB-3410  rev A  qty 1  Chain-shaft encoder 1000 ppr) Tj
-T*
-(21  VC-HB-3420  rev A  qty 1  Chain drive guard) Tj
+(20  VC-HB-3420  rev A  qty 1  Chain drive guard) Tj
 T*
 (Owner: Ground UP GmbH) Tj
 T*
@@ -88,8 +86,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000001941 00000 n 
+0000001872 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-2011
+1942
 %%EOF

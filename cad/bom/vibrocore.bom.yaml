@@ -1204,21 +1204,24 @@ parts:
     only and is not in any rollup. Geoprobe lists "DT325 Retainer HD" and notes "No O-ring"
     (https://geoprobe.com/tooling/dt325-soil-sampling-system/mn208472). Do not buy it.'
 - part_number: VC-HB-2100
-  name: NEMA 42 closed-loop stepper
+  name: Servo motor 1FL2104
   revision_index: 0
   revision_letter: A
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: NEMA 42, closed loop, about 20 Nm, 6 A, incremental encoder, 19 mm keyed shaft.
+  spec: Siemens 1FL2104-4AG11-1MC0. 3.2 Nm rated, 10.8 Nm maximum, 3000 rpm, 1 kW, 230 V.
+    Shaft 19 x 40 mm. Flange 81 mm square, centering 70 mm, pitch circle 90 mm, B5, M6 holes.
+    Integrated 3.3 Nm holding brake. Multiturn absolute encoder. About 4.1 kg. Overall length 186.6 mm.
   legacy_ref: '2.17'
+  manufacturer_pn: 1FL2104-4AG11-1MC0
   estimate_eur_low: 250
   estimate_eur_high: 400
-  notes: 'Candidates: Nanotec, Leadshine. Mass is published as about 6-8 kg, so no single mass is stored.
-    The assembly uses the public Nanotec ST11018M6504 STEP as a geometry stand-in. That file has no encoder.
-    It is not the closed-loop motor. See cad/vendor/VC-HB-2100/SOURCE.md.'
+  notes: 'Approved 2026-11-20. See docs/engineering/LIFT-DRIVE-SIZING.md. The envelope uses the datasheet
+    flange and the overall length. No vendor STEP yet. The Nanotec file is not loaded. The 250-400 EUR
+    band is the previous placeholder. It is not a Siemens quote. See cad/vendor/VC-HB-2100/SOURCE.md.'
   unknowns:
-  - Exact catalogue number, body length and mass of the closed-loop motor.
+  - Vendor STEP is not in the repository. The shaft is inside the gearbox envelope and is not a second solid.
 - part_number: VC-HB-2110
   name: Lift motor bracket
   revision_index: 0
@@ -1226,9 +1229,9 @@ parts:
   supply: subcontract
   subsystem: hub
   category: Hub
-  spec: Draft steel shelf. Holds the NEMA 42 above the bottom plate. The motor axis is parallel to the
-    sprocket shaft. The brake body is flush with the profile rear face. The gear teeth that drop the drive
-    onto the chain shaft are not selected. Nothing enters the reserved volume behind the rear faces.
+  spec: Draft steel shelf. Holds the Siemens servo above the bottom plate. The motor axis is parallel
+    to the sprocket shaft. The gear teeth that drop the drive onto the chain shaft are not selected.
+    Nothing enters the reserved volume behind the rear faces.
   legacy_ref: draft-hb-2110
   supplier_id: custom_eu
   material: S355
@@ -1237,35 +1240,41 @@ parts:
   - Plate thickness, bolt size and weld sizes. Not in BOM.md v1.
   notes: Draft. Made part. Do not manufacture from this revision.
 - part_number: VC-HB-2200
-  name: Planetary gearbox PLPE120-040
+  name: Planetary gearbox PLE120-040
   revision_index: 0
   revision_letter: A
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: Neugart PLPE120, ratio 40:1, output shaft 32 mm with keyway.
+  spec: Neugart PLE120, ratio 40, type PLE120-040-SSSA3AF-Z19/40/70/90/B5/M6, article 100460948.
+    Motor flange edge 115 mm. Output shaft 25 mm. Catalogue minimum total length 204 mm.
   legacy_ref: '2.18'
-  manufacturer_pn: PLPE120-040
+  manufacturer_pn: PLE120-040-SSSA3AF-Z19/40/70/90/B5/M6
   supplier_id: neugart
   estimate_eur_low: 600
   estimate_eur_high: 900
+  notes: 'Approved 2026-11-20. Envelope from the public PLE catalogue (2026-10) until the emailed STEP
+    arrives. The Neugart PDFs are not in the repository. The 600-900 EUR band is the previous placeholder.
+    It is not a Neugart quote. See docs/engineering/LIFT-DRIVE-SIZING.md.'
   unknowns:
-  - Input flange code for the selected NEMA 42 motor.
+  - Exact input-flange length of article 100460948. The envelope uses the catalogue minimum of 204 mm.
 - part_number: VC-HB-2300
-  name: Closed-loop stepper driver
+  name: SINAMICS S200 servo drive
   revision_index: 0
   revision_letter: A
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: Leadshine CL86T-V4.1 or Nanotec C5-E. Modbus / CiA 402 to the PFC200.
+  spec: Cabinet item. SINAMICS S200, 1 kW, 200 to 240 V, order 6SL5510-1BB11-0AA0. Pulse train.
+    STO and holding-brake control. Not in the machine pose.
   legacy_ref: '2.19'
+  manufacturer_pn: 6SL5510-1BB11-0AA0
   estimate_eur_low: 80
   estimate_eur_high: 150
-  notes: CONTROL_SYSTEM.md draws the Nanotec C5-E. BOM.md leaves both candidates. Installed in the control
-    enclosure.
+  notes: 'Approved 2026-11-20. Replaces the stepper driver. Installed in the control enclosure.
+    The 80-150 EUR band is the previous placeholder. It is not a Siemens quote.'
   unknowns:
-  - Final driver, and therefore the connector and the encoder interface.
+  - PROFINET order 6SL5510-1BB11-0AF0 if the PLC does not use pulse and direction. The price is not a quote.
 - part_number: VC-HB-2400
   name: Elastomer coupling
   revision_index: 0
@@ -1280,7 +1289,7 @@ parts:
   notes: 'The STEP set is a 32H7 hub with keyway, an unbored hub and a 92 Sh-A spider. See
     cad/vendor/VC-HB-2400/SOURCE.md.'
   unknowns:
-  - Chain-side bore. The gearbox-side hub in the STEP is 32H7. The chain-side hub is unbored.
+  - Gearbox output is Ø25 mm. The STEP hub is 32H7, so the two are not mated. The chain-side hub is unbored.
 - part_number: VC-HB-2500
   name: Hub drive shaft
   revision_index: 0
@@ -1397,14 +1406,17 @@ parts:
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: Spring-applied electromagnetic brake, 24 V, holding torque above 15 Nm, between motor and gearbox.
+  spec: Obsolete. Kendrion INTORQ BFK457-10, 16 Nm. Not in the machine pose.
   legacy_ref: '2.27'
   estimate_eur_low: 100
   estimate_eur_high: 180
-  notes: 'Kendrion INTORQ BFK457-10 Compact, 16 Nm, bore d10H7. The STEP is in cad/vendor/VC-HB-3000.
-    See SOURCE.md.'
+  lifecycle: obsolete
+  notes: 'Obsolete 2026-11-20. 16 Nm times the ratio 40 is 640 Nm at the gearbox output. PLE120 T2Stop
+    at i=40 is 500 Nm. The brake can exceed that stop torque. The Siemens motor holding brake is used
+    instead. The STEP is not loaded. The price is history and is not in the rollup.
+    See docs/engineering/LIFT-DRIVE-SIZING.md and cad/vendor/VC-HB-3000/SOURCE.md.'
   unknowns:
-  - The d10H7 bore does not match the Ø19 stand-in motor shaft. The two are not mated.
+  - Obsolete. Do not buy. The motor holding brake replaces this part.
 - part_number: VC-HB-3100
   name: Linear guide rail HGR20
   revision_index: 0
@@ -1416,7 +1428,8 @@ parts:
   legacy_ref: '2.28'
   estimate_eur_low: 50
   estimate_eur_high: 90
-  notes: Hiwin or Bosch Rexroth. HGR20 is the Hiwin designation used in BOM.md.
+  notes: 'HIWIN HGR20R1300H. The STEP is in cad/vendor/VC-HB-3100. The mounting face sits on the profile.
+    Bolt pitch is 60 mm. See SOURCE.md.'
 - part_number: VC-HB-3110
   name: Linear carriage HGH20
   revision_index: 0
@@ -1424,10 +1437,12 @@ parts:
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: Ball-type carriage for the size-20 rail. Four carriages.
+  spec: HIWIN HGH20CAZ0H ball carriage for the size-20 rail. Four carriages. Overall length 90.4 mm.
   legacy_ref: '2.29'
   estimate_eur_low: 20
   estimate_eur_high: 35
+  notes: 'The STEP is in cad/vendor/VC-HB-3110. The block top is 30 mm from the rail mounting face.
+    See SOURCE.md.'
 - part_number: VC-HB-3200
   name: Carriage plate
   revision_index: 0
@@ -2203,7 +2218,6 @@ boms:
   - {part_number: VC-HB-2820, qty: 1}
   - {part_number: VC-HB-2830, qty: 2}
   - {part_number: VC-HB-2900, qty: 1}
-  - {part_number: VC-HB-3000, qty: 1}
   - {part_number: VC-HB-3100, qty: 2}
   - {part_number: VC-HB-3110, qty: 4}
   - {part_number: VC-HB-3200, qty: 1}

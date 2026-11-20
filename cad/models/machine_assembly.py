@@ -36,7 +36,6 @@ from cad.models.mast_layout import (
     BOTTOM_PLATE_REAR_OVERHANG_MM,
     BOTTOM_PLATE_THICKNESS_MM,
     BOTTOM_PLATE_WIDTH_MM,
-    BRAKE_LENGTH_MM,
     BRACKET_BOLT_PITCH_Z_MM,
     BRACKET_GUSSET_HEIGHT_MM,
     BRACKET_GUSSET_THICKNESS_MM,
@@ -55,7 +54,7 @@ from cad.models.mast_layout import (
     COUPLING_DIAMETER_MM,
     COUPLING_LENGTH_MM,
     CHAIN_AXIS_X_MM,
-    GEARBOX_HOUSING_DIAMETER_MM,
+    GEARBOX_FLANGE_MM,
     GEARBOX_LENGTH_MM,
     GROUND_CLEARANCE_MM,
     GUSSET_HEIGHT_MM,
@@ -74,8 +73,8 @@ from cad.models.mast_layout import (
     MOTOR_HEIGHT_MM,
     MOTOR_LENGTH_MM,
     MOTOR_WIDTH_MM,
-    NEMA42_BODY_LENGTH_MM,
-    NEMA42_FRAME_MM,
+    SERVO_BODY_LENGTH_MM,
+    SERVO_FLANGE_MM,
     PILLOW_HEIGHT_MM,
     PILLOW_LENGTH_MM,
     PILLOW_WIDTH_MM,
@@ -192,102 +191,66 @@ def chain_axis_x_mm() -> float:
 
 
 def lift_motor_axis_x_mm() -> float:
-    """Fallback axis when the brake STEP is absent. The gearbox then clears the rear face."""
-    return rear_face_x_mm() + GEARBOX_HOUSING_DIAMETER_MM / 2.0
+    """Axis of the lift train. The 115 mm gearbox is flush with the rear face."""
+    return rear_face_x_mm() + GEARBOX_FLANGE_MM / 2.0
 
 
 def _drive_bay() -> dict:
-    """Lift train above the bottom plate, in front of the rails.
+    """Lift train above the bottom plate, outside the head sweep.
 
-    The axis stays parallel to the chain shaft. It sits in front of the rail so the
-    chain, the pillows and the uprights stay clear. The gearbox rests on a horizontal
-    flange on the plate, offset to the drive side. The drive-side upright starts
-    above that gearbox. The purchased length stays 1500 mm.
-    The cable points forward. The motor connector points up.
+    The motor bolts to the gearbox input. The coupling sits on the gearbox output,
+    toward the mast, and still stays outside the head. The gearbox rests on a
+    horizontal flange. The drive-side upright starts above the gearbox.
+    Nothing enters the tilt volume behind the rear faces.
     """
-    from cad.models.vendor_parts import oriented_brake, oriented_coupling, oriented_motor
+    from cad.models.vendor_parts import oriented_coupling
 
-    brake = oriented_brake()
-    motor = oriented_motor()
     coupling = oriented_coupling()
     plate_top = BOTTOM_PLATE_THICKNESS_MM
     gap = 2.0
-    if brake is not None:
-        brake_box = brake.bounding_box()
-        # Brake body flush with the profile rear face. The head never reaches this Y.
-        motor_x = rear_face_x_mm() - float(brake_box.min.X)
-        z_lift = plate_top + gap - float(brake_box.min.Z)
-    else:
-        brake_box = None
-        motor_x = lift_motor_axis_x_mm()
-        z_lift = plate_top + gap + GEARBOX_HOUSING_DIAMETER_MM / 2.0
-    gear_bottom = z_lift - GEARBOX_HOUSING_DIAMETER_MM / 2.0
-    # The horizontal flange fills the gap under the gearbox and rests on the plate.
-    if gear_bottom < plate_top + 6.0:
-        z_lift += plate_top + 6.0 - gear_bottom
-        gear_bottom = plate_top + 6.0
-    # The head plate spans Y = ±210 mm and sweeps down to the rail. The gearbox
-    # stays outside that sweep, on the drive side. The output points outboard.
-    gear_y1 = -(VIBRATING_PLATE_LENGTH_MM / 2.0) - gap
-    gear_y0 = gear_y1 - GEARBOX_LENGTH_MM
+    flange_thickness = 7.0
+    half = GEARBOX_FLANGE_MM / 2.0
+    motor_x = lift_motor_axis_x_mm()
+    gear_bottom = plate_top + flange_thickness
+    z_lift = gear_bottom + half
+    # The head plate spans Y = ±210 mm. The inboard face of this train stops short of it.
+    head_limit = -(VIBRATING_PLATE_LENGTH_MM / 2.0) - gap
     if coupling is not None:
-        from build123d import Rot
-
-        coupling = Rot(0, 0, 180) * coupling
         coupling_box = coupling.bounding_box()
-        coupling_y = (gear_y0 - gap) - float(coupling_box.max.Y)
+        coupling_y = head_limit - float(coupling_box.max.Y)
         coupling_y0 = coupling_y + float(coupling_box.min.Y)
         coupling_y1 = coupling_y + float(coupling_box.max.Y)
     else:
         coupling_box = None
-        coupling_y1 = gear_y0 - gap
+        coupling_y1 = head_limit
         coupling_y0 = coupling_y1 - COUPLING_LENGTH_MM
         coupling_y = (coupling_y0 + coupling_y1) / 2.0
-    if brake is not None:
-        brake_y = (coupling_y0 - gap) - float(brake_box.max.Y)
-        brake_y0 = brake_y + float(brake_box.min.Y)
-        brake_y1 = brake_y + float(brake_box.max.Y)
-    else:
-        brake_y1 = coupling_y0 - gap
-        brake_y0 = brake_y1 - BRAKE_LENGTH_MM
-        brake_y = (brake_y0 + brake_y1) / 2.0
-    if motor is not None:
-        motor_box = motor.bounding_box()
-        motor_y = (brake_y0 - gap) - float(motor_box.max.Y)
-        motor_y0 = motor_y + float(motor_box.min.Y)
-        motor_y1 = motor_y + float(motor_box.max.Y)
-        motor_low_z = z_lift + float(motor_box.min.Z)
-    else:
-        motor_box = None
-        motor_y1 = brake_y0 - gap
-        motor_y0 = motor_y1 - NEMA42_BODY_LENGTH_MM
-        motor_y = (motor_y0 + motor_y1) / 2.0
-        motor_low_z = z_lift - NEMA42_FRAME_MM / 2.0
+    # Output faces the coupling. The motor is on the far side and shares the input face.
+    gear_y1 = coupling_y0 - gap
+    gear_y0 = gear_y1 - GEARBOX_LENGTH_MM
+    motor_y1 = gear_y0
+    motor_y0 = motor_y1 - SERVO_BODY_LENGTH_MM
+    motor_y = (motor_y0 + motor_y1) / 2.0
     return {
-        "brake": brake,
-        "motor": motor,
         "coupling": coupling,
-        "brake_box": brake_box,
-        "motor_box": motor_box,
         "coupling_box": coupling_box,
         "motor_x": motor_x,
         "z_lift": z_lift,
         "gear_y0": gear_y0,
         "gear_y1": gear_y1,
         "gear_bottom": gear_bottom,
+        "gear_top": z_lift + half,
         "coupling_y": coupling_y,
         "coupling_y0": coupling_y0,
         "coupling_y1": coupling_y1,
-        "brake_y": brake_y,
-        "brake_y0": brake_y0,
-        "brake_y1": brake_y1,
         "motor_y": motor_y,
         "motor_y0": motor_y0,
         "motor_y1": motor_y1,
-        "motor_low_z": motor_low_z,
-        "short_z0": z_lift + GEARBOX_HOUSING_DIAMETER_MM / 2.0 + gap,
+        "motor_low_z": z_lift - SERVO_FLANGE_MM / 2.0,
+        "short_z0": z_lift + half + gap,
         "plate_top": plate_top,
         "flange_y1": -(PROFILE_SPACING_MM / 2.0 - MAST_PROFILE_WIDTH_MM / 2.0),
+        "gear_max_x": motor_x + half,
     }
 
 
@@ -459,13 +422,18 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
 
     front = profile_front_x_mm()
     rail_center_z = station["rail_bottom"] + RAIL_LENGTH_MM / 2.0
-    rail_x = front + RAIL_SECTION_HEIGHT_MM / 2.0
+    from cad.models.vendor_parts import oriented_block, oriented_rail
+
+    rail_solid = oriented_rail()
+    block_solid = oriented_block()
+    # Envelope centres. A vendor solid keeps its mounting plane at local X = 0.
+    rail_x = 0.0 if rail_solid is not None else front + RAIL_SECTION_HEIGHT_MM / 2.0
     rail_blank = Box(RAIL_SECTION_HEIGHT_MM, RAIL_SECTION_WIDTH_MM, RAIL_LENGTH_MM)
     for index, sign in enumerate((-1.0, 1.0), start=1):
         add(
             f"VC-HB-3100-{index}",
-            bought("VC-HB-3100", rail_blank),
-            rail_x,
+            rail_blank if rail_solid is None else rail_solid,
+            front + rail_x,
             sign * half_pitch,
             rail_center_z,
         )
@@ -480,7 +448,7 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         shift = -RUNNER_HEIGHT_MM / 2.0 + (RAIL_SECTION_HEIGHT_MM + _MODEL_GAP_MM) / 2.0
         return block - Pos(shift, 0, 0) * channel
 
-    runner_x = front + RUNNER_HEIGHT_MM / 2.0
+    runner_x = 0.0 if block_solid is not None else RUNNER_HEIGHT_MM / 2.0
     runner_zs = (
         station["lower_bottom"] + RUNNER_LENGTH_MM / 2.0,
         station["lower_bottom"] + RUNNER_PITCH_MM + RUNNER_LENGTH_MM / 2.0,
@@ -490,8 +458,8 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         for center_z in runner_zs:
             add(
                 f"VC-HB-3110-{runner_index}",
-                bought("VC-HB-3110", runner_blank()),
-                runner_x,
+                runner_blank() if block_solid is None else block_solid,
+                front + runner_x,
                 sign * half_pitch,
                 center_z,
             )
@@ -752,11 +720,10 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
             z_drive,
         )
 
-    # Motor, brake and gearbox sit above the plate. The axis stays parallel to the chain shaft.
-    # The brake body is flush with the rear face. The cable runs forward, above the plate.
+    # Servo and gearbox sit above the plate. The axis is parallel to the chain shaft.
+    # The 115 mm gearbox is flush with the rear face. The motor bolts to its input.
     motor_x = bay["motor_x"]
     z_lift = bay["z_lift"]
-    train_turn = Rot(0, 0, 90)
     if bay["coupling"] is not None:
         add("VC-HB-2400", bay["coupling"], motor_x, bay["coupling_y"], z_lift)
     else:
@@ -769,58 +736,46 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         )
     add(
         "VC-HB-2200",
-        bought("VC-HB-2200", along_y(GEARBOX_HOUSING_DIAMETER_MM / 2.0, GEARBOX_LENGTH_MM)),
+        Box(GEARBOX_FLANGE_MM, GEARBOX_LENGTH_MM, GEARBOX_FLANGE_MM),
         motor_x,
         (bay["gear_y0"] + bay["gear_y1"]) / 2.0,
         z_lift,
     )
-    if bay["brake"] is not None:
-        add("VC-HB-3000", bay["brake"], motor_x, bay["brake_y"], z_lift)
-    else:
-        add(
-            "VC-HB-3000",
-            Box(BRAKE_LENGTH_MM, NEMA42_FRAME_MM, NEMA42_FRAME_MM),
-            motor_x,
-            bay["brake_y"],
-            z_lift,
-            train_turn,
-        )
-    if bay["motor"] is not None:
-        add("VC-HB-2100", bay["motor"], motor_x, bay["motor_y"], z_lift)
-    else:
-        add(
-            "VC-HB-2100",
-            Box(NEMA42_BODY_LENGTH_MM, NEMA42_FRAME_MM, NEMA42_FRAME_MM),
-            motor_x,
-            bay["motor_y"],
-            z_lift,
-            train_turn,
-        )
-
-    # Horizontal flange. It sits on the plate, meets both stiffeners, and runs out
-    # under the gearbox. It does not cross the mast centre. The gearbox rests on it.
     add(
-        "VC-FR-4182",
-        span(
-            rear_face_x_mm(),
-            front,
-            bay["gear_y0"],
-            bay["flange_y1"],
-            bay["plate_top"],
-            bay["gear_bottom"],
-        ),
-        0.0,
-        0.0,
-        0.0,
+        "VC-HB-2100",
+        Box(SERVO_FLANGE_MM, SERVO_BODY_LENGTH_MM, SERVO_FLANGE_MM),
+        motor_x,
+        bay["motor_y"],
+        z_lift,
     )
+
+    # Horizontal flange. The neck stays inside the profile depth and meets both
+    # stiffeners on a face. The pad under the gearbox is wider and misses the stiffeners.
+    neck = span(
+        rear_face_x_mm(),
+        front,
+        bay["gear_y0"],
+        bay["flange_y1"],
+        bay["plate_top"],
+        bay["gear_bottom"],
+    )
+    pad = span(
+        front,
+        bay["gear_max_x"],
+        bay["gear_y0"],
+        bay["gear_y1"],
+        bay["plate_top"],
+        bay["gear_bottom"],
+    )
+    add("VC-FR-4182", neck + pad, 0.0, 0.0, 0.0)
     # Draft shelf under the motor. Tooth counts for the drop to the chain shaft are not selected.
     shelf_top = bay["motor_low_z"] - 2.0
     shelf_bottom = max(bay["plate_top"] + 2.0, shelf_top - 8.0)
     add(
         "VC-HB-2110",
         span(
-            max(rear_face_x_mm() + 2.0, motor_x - NEMA42_FRAME_MM / 2.0 + 4.0),
-            motor_x + NEMA42_FRAME_MM / 2.0 - 4.0,
+            max(rear_face_x_mm() + 2.0, motor_x - SERVO_FLANGE_MM / 2.0 + 4.0),
+            motor_x + SERVO_FLANGE_MM / 2.0 - 4.0,
             bay["motor_y0"] + 4.0,
             bay["motor_y1"] - 4.0,
             shelf_bottom,
@@ -1065,14 +1020,15 @@ def _check_pose(parts: list[Placed], station: dict[str, float]) -> None:
         raise ValueError("motor centre distance does not match the shared parameter")
     if COLUMN_FLANGE_DIAMETER_MM > pitch - MOTOR_WIDTH_MM + 0.05:
         raise ValueError("column flange does not fit between the motors")
-    if vendor_step_path("VC-HB-2100") is None:
-        lift = by_name["VC-HB-2100"].bounding_box()
-        if abs(float(lift.max.Y - lift.min.Y) - NEMA42_BODY_LENGTH_MM) > 0.05:
-            raise ValueError("lift motor axis is not parallel to the sprocket shaft")
-        if abs(float(lift.max.X - lift.min.X) - NEMA42_FRAME_MM) > 0.05:
-            raise ValueError("lift motor frame is not square in X")
-        if float(lift.min.X) < rear_face_x_mm() - 0.05:
-            raise ValueError("lift motor enters the reserved rear volume")
+    lift = by_name["VC-HB-2100"].bounding_box()
+    if abs(float(lift.max.Y - lift.min.Y) - SERVO_BODY_LENGTH_MM) > 0.05:
+        raise ValueError("lift motor axis is not parallel to the sprocket shaft")
+    if abs(float(lift.max.X - lift.min.X) - SERVO_FLANGE_MM) > 0.05:
+        raise ValueError("lift motor flange is not the datasheet square")
+    if float(lift.min.X) < rear_face_x_mm() - 0.05:
+        raise ValueError("lift motor enters the reserved rear volume")
+    if "VC-HB-3000" in by_name:
+        raise ValueError("the separate brake is obsolete and must not be placed")
     if vendor_step_path("VC-HB-2800") is None:
         sprocket = by_name["VC-HB-2800"].bounding_box()
         if abs(float(sprocket.max.Y - sprocket.min.Y) - SPROCKET_WIDTH_MM) > 0.05:

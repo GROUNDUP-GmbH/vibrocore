@@ -1,36 +1,16 @@
 # VC-HB-2100
 
-Manufacturer: Nanotec.
-Type code: ST11018M6504.
-The requested closed-loop type was ST11018M6504-B.
-This public file has no encoder.
-It is a geometry stand-in for the closed-loop motor.
-It is not that motor.
+Manufacturer: Siemens.
+Type code: 1FL2104-4AG11-1MC0.
+SIMOTICS S-1FL2, 1 kW, with holding brake and multiturn encoder.
 
-URL: https://www.nanotec.com/fileadmin/files/Datenblaetter/Schrittmotoren/ST11018/ST11018M6504.stp
-File: `ST11018M6504.stp` (364696 bytes).
-The file starts with `ISO-10303-21`.
-Downloaded: 2026-11-19.
-Terms: public direct download, no account.
-Check the manufacturer's terms before redistributing this file.
+Datasheet: https://mall.industry.siemens.com/spice/docuservice/rest/document.spring?articleNumber=1FL21044AG111MC0&documentGroup=TED&documentId=DCS_DATASHEET_CLEANED&language=en&region=ww
+Read: 2026-11-20.
+No STEP file is in this folder.
+The public Nanotec ST11018M6504 file is not the motor and is not loaded.
 
-`load_vendor_shape` recenters the bounding box and does not rotate the file.
-The file shaft is +Z.
-`Rot(0, 90, 0)` maps that shaft to +X.
-`Rot(180, 0, 0)` points the connector to −Z.
-`Rot(0, 0, 90)` maps the shaft to +Y, toward the brake.
-`Rot(0, 180, 0)` about that shaft points the connector up.
-The bounding-box centre is not the shaft axis.
-A second shift puts the Ø19 shaft on X = 0 and Z = 0.
-Y is not shifted.
-The shaft tip stays at +Y.
-
-The oriented body is 110.00 × 218.87 × 123.50 mm.
-In the machine the axis is X = 15 mm and Z = −67 mm.
-The shaft tip is 2 mm before the brake.
-The placed body runs from X = −40 mm to X = 70 mm.
-That is 10 mm in front of the profile rear face.
-The connector points up and does not enter the bottom plate.
-The brake bore is d10H7.
-This shaft is Ø19 mm.
-The two are not mated.
+The envelope is the datasheet square prism.
+Flange size AB is 81 mm. Overall length LB is 186.6 mm.
+The Ø19 × 40 mm shaft enters the gearbox and is not a second solid.
+Centering diameter N is 70 mm. Pitch circle M is 90 mm. Holes are Ø6.6 mm.
+The flange face sits on the gearbox input face.

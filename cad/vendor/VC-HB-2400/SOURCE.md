@@ -24,14 +24,14 @@ The jaw band is Z = 0 to 17.5 mm in the file.
 The unbored hub is yawed 45° about Z, turned 180° about Y, then shifted +17.5 mm on Z.
 The spider is shifted +8.75 mm on Z so it sits on that band.
 `Rot(-90, 0, 0)` then lays the axis on Y.
-The file is turned 180° about Z in the assembly, so the 32H7 hub faces +Y, toward the gearbox.
-The gearbox output points away from the mast.
-The unbored hub then faces −Y, toward the brake.
+The 32H7 hub faces −Y, toward the gearbox.
+The gearbox is outboard of the coupling. Its output points toward the mast.
+The unbored hub faces +Y. The separate brake is not in the train.
 
 The oriented coupling is 65 × 87.5 × 65 mm.
 The 50 mm envelope is only the fallback.
 A 2 mm gap stays between the 32H7 face and the gearbox output face.
-The placed coupling is outboard of the gearbox, on the drive side of the head.
+The placed coupling is inboard of the gearbox and still outside the head sweep.
 The jaws and the spider share about 39 mm³ inside this one part.
 That is the elastomer fit.
 A boolean fuse of the three solids is rejected, so they stay one compound.

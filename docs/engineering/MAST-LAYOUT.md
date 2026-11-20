@@ -175,12 +175,11 @@ These visual stand-ins are not in the height sum.
 | carriage_depth_mm | 120 mm | Plan size only. |
 | isolator_free_height_mm | 40 mm | Not in the height chain. Not a catalogue height. |
 | isolator_diameter_mm | 16 mm | Placeholder in the gap between the motors. |
-| rail_section_width_mm | 20 mm | Hiwin HGR20R published width WR. The solid is the envelope. |
-| rail_section_height_mm | 17.5 mm | Hiwin HGR20R published height HR. The solid is the envelope. |
+| rail_section_width_mm | 20 mm | Hiwin HGR20R published width WR. The STEP mounting face sits on the profile. |
+| rail_section_height_mm | 17.5 mm | Hiwin HGR20R published height HR. The STEP mounting face sits on the profile. |
 | runner_pitch_mm | 200 mm | Centre distance of the two HGH20CA blocks on one rail. Not in the BOM. |
 | head_front_gap_mm | 10 mm | Draft gap from the carriage plate to the motor rear face. The plate rear is flush with that face. |
-| nema42_body_length_mm | 180 mm | Fallback length when no STEP is present. The placed file is a geometry stand-in. |
-| brake_length_mm | 40 mm | Fallback envelope of VC-HB-3000 when no STEP is present. |
+| servo_body_length_mm | 186.6 mm | Siemens 1FL2104 overall length. The envelope is that square prism. No STEP yet. |
 | coupling_diameter_mm | 65 mm | Fallback envelope of VC-HB-2400 when no STEP is present. |
 | coupling_length_mm | 50 mm | Fallback envelope of VC-HB-2400 when no STEP is present. |
 | pillow_length_mm | 30 mm | UCP 206 envelope along the shaft. The 30 mm bore is selected. |
@@ -262,12 +261,12 @@ The overhang from that face to the rod axis is 160.0 mm.
 
 Four Hiwin HGH20CA blocks engage the two rails.
 The selected block is HGH20CA.
-H is 30 mm, W is 44 mm and L is 77.5 mm.
+H is 30 mm from the rail mounting face. W is 44 mm. The STEP solid is 90.4 mm long.
 The block pitch on one rail is 200 mm.
 That pitch is TBD.
-The guided travel is 1022.5 mm.
+The guided travel is 1009.6 mm.
 `STROKE_POSITION_MM` is the travel of the lower block from the rail bottom.
-The start value is 1022.5 mm.
+The start value is 1009.6 mm.
 That is the top of the travel.
 The upper block then ends on the rail top at 1415 mm.
 The same solids at stroke 0, at mid travel 511.2 mm and at the top do not overlap.
@@ -281,9 +280,8 @@ VC-FR-4195 covers the band above the rails, from Z = 1430 mm to the profile top.
 VC-FR-4186 covers the lower bay, up to the short upright.
 The tilt mechanism must clear both sheets.
 The bottom plate is the base.
-The lift motor, the brake and the gearbox sit above it.
-The brake body is flush with X = −50 mm.
-Its bottom is 2 mm above the plate.
+The lift motor and the gearbox sit above it.
+The separate brake is not in this pose.
 
 The chain lift is VC-ASM-2000, not the VC-ASM-8100 actuators.
 Both chain strands, the drive sprocket and the idler sprocket sit in the profile gap.
@@ -292,18 +290,21 @@ The axis runs along Y and stops before the inner faces.
 The rear strand stays at X = −45.9 mm, 4.1 mm in front of the rear face.
 The placed sprocket spans about X = −41.4 mm to 41.4 mm.
 The chain strands still stop outside the 83 mm envelope, so they stay clear of the teeth.
-The NEMA 42 motor, the brake and the PLPE120 gearbox are parallel to that shaft.
+The Siemens servo and the PLE120 gearbox are parallel to that shaft.
 They sit above the bottom plate.
 The head plate sweeps Y = ±210 mm down to the rail, so this train stands outside that sweep, on the drive side.
-The brake body is 130 mm across.
-Its axis is at X = 15 mm and Z = 82 mm.
-The cable points forward and the motor connector points up, so neither passes through the plate.
-The 120 mm gearbox uses the same axis.
+The axis is at X = 7.5 mm and Z = 79.5 mm.
+The 115 mm gearbox is flush with X = −50 mm.
+The motor flange is 81 mm square, so the motor body starts at X = −33 mm.
+The coupling is inboard of the gearbox and stops at Y = −212 mm.
+The motor bolts to the gearbox input, further outboard.
 A horizontal flange, VC-FR-4182, sits on the plate and runs out under the gearbox.
-It stops at the profile front face and does not cross the mast centre.
+Its neck stays inside the profile depth and meets both stiffeners on a face.
+A pad under the gearbox reaches X = 65 mm. That pad is clear of the stiffeners.
+The flange does not cross the mast centre.
 The gearbox housing rests on that flange.
 The drive-side upright is cut short.
-It starts above the gearbox, at Z = 144 mm, and still reaches the same top as the other upright.
+It starts above the gearbox, at Z = 139 mm, and still reaches the same top as the other upright.
 The idle-side upright stays 1500 mm.
 The purchased length of VC-FR-4100 stays 1500 mm.
 VC-FR-4185 is a 4 mm sheet on the front face of the lower bay.
@@ -311,7 +312,6 @@ It stops under the carriage, because at stroke 0 the carriage web is at Z = 105 
 VC-FR-4186 is the matching rear sheet.
 VC-HB-2110 is a draft shelf under the motor.
 The gear teeth that drop the drive onto the chain shaft are not selected.
-When the brake STEP is absent, the fallback axis is X = 10 mm.
 A cut mk 2004 bar, VC-FR-4180, spans the clear gap between the inner faces.
 It sits between the chain strands at mid height.
 At the 300 mm pitch that cut length is 250 mm.
@@ -327,40 +327,37 @@ The gusset webs sit between the chain strands.
 The chain path still uses the published 83 mm tip diameter.
 The placed G&G sprocket tip is about 82.7 mm and its width is 25.5 mm.
 The pitch radius is the documented 37.9 mm.
-The gearbox envelope is the published PLPE120 two-stage minimum, 120 mm by 219.5 mm.
-The NEMA 42 frame is 110 mm.
-The closed-loop body length is still TBD.
-The placed stand-in is longer than the 180 mm fallback because the connector is included.
+The gearbox envelope is the published PLE120 two-stage minimum, 115 mm by 204 mm.
+The servo envelope is the datasheet flange, 81 mm by 186.6 mm.
+No STEP is in the repository for either part.
 
-Four purchased parts use manufacturer STEP files.
-VC-HB-2100 is the public Nanotec ST11018M6504 file.
-It is a geometry stand-in for the closed-loop motor.
-The file has no encoder.
+VC-HB-2100 and VC-HB-2200 are envelopes.
 VC-HB-2400 is a KTR ROTEX 28 coupling.
 The set is a 32H7 hub, an unbored hub and a 92 Sh-A spider.
 The placed length is 87.5 mm.
 The 50 mm envelope is only the fallback.
+The 32H7 hub faces the gearbox. The gearbox shaft is Ø25 mm, so the two are not mated.
 VC-HB-2800 is the G&G 501-302-0515 sprocket.
 VC-HB-2810 reuses that solid.
 It has no second file.
-VC-HB-3000 is the Kendrion INTORQ BFK457-10 Compact.
-`load_vendor_shape` recenters one STEP file and does not rotate it.
-The assembly then applies the rotation in that part's `SOURCE.md`.
-The brake cable pulls the bounding-box centre off the shaft, so the origin moves onto the rotor.
+VC-HB-3100 is the HIWIN HGR20R1300H rail.
+VC-HB-3110 is the HIWIN HGH20CAZ0H block.
+The rail mounting face sits on the profile front face.
+The block top is 30 mm from that face. The block length is 90.4 mm.
+VC-HB-3000 is obsolete and is not placed.
+`load_vendor_shape` recenters one STEP file and does not rotate it, unless SOURCE.md says otherwise.
+The HIWIN files keep the mounting face, so they are not recentered.
 The coupling is three files.
 They keep the manufacturer origin because the jaw face is not the box centre.
-The gearbox output points away from the mast.
-A 2 mm gap stays between the gearbox and the coupling, between the coupling and the brake, and between the brake and the motor shaft tip.
-The brake bore is d10H7.
-The stand-in shaft is Ø19 mm.
-Those two are not mated.
+A 2 mm gap stays between the gearbox output and the coupling.
+The motor flange meets the gearbox input on a face.
 A missing file keeps the catalogue envelope.
-HIWIN rails and carriages, the mk 2004 profile, the Neugart PLPE120, the 10B-2 chain, the UCP 206 blocks and the OLI MVE motors stay envelopes.
-Those files need a login.
+The mk 2004 profile, the 10B-2 chain, the UCP 206 blocks and the OLI MVE motors stay envelopes.
 
 The vibrating plate bottom is at the same height as the lower guide block.
 The plate does not hang below the carriage.
-That pose lifts the shoe tip by 70 mm, to Z = −433.7 mm.
+The shoe tip in this pose is at Z = −446.6 mm.
+The longer guide blocks reduce the top of the travel, so the tip is 12.9 mm lower than the 77.5 mm block pose.
 The parameter chain still adds the head and the carriage in series.
 The required height is still 1761.2 mm.
 The deficit against the 1300 mm stroke is still 461.2 mm.
@@ -382,7 +379,7 @@ The head clears the rails, the profiles and the gussets at stroke 0, at mid trav
 
 | Pair | Clearance | Note |
 |---|---|---|
-| Shoe to nearest profile | 407.4 mm | 3D distance. The tip is below the mast. It was 471.7 mm before the head moved up. |
+| Shoe to nearest profile | 419.1 mm | 3D distance. The tip is below the mast. |
 | Casing to nearest profile | 175.8 mm | The casing passes the mast height. |
 | Casing to the 83 mm bore wall | 0.225 mm | Radial clearance on the 82.55 mm casing. The bore is unchanged. |
 | Rod axis past the rail face | 160.0 mm | Overhang from the rail to the rod. |
@@ -393,8 +390,8 @@ The head clears the rails, the profiles and the gussets at stroke 0, at mid trav
 | Vibrating plate to nearest rail | 32.5 mm | The plate shares the guide-block height. |
 | Carriage to chain strand | 0.0 mm | The lug meets the front strand on a face. |
 | Rear chain strand to the rear face | 4.1 mm | The strand stays in the gap, at X = −45.9 mm. |
-| Lift-motor body to the rear face | 10.0 mm | ST11018 stand-in. The body starts at X = −40 mm. |
-| Brake body to the rear face | 0.0 mm | The Ø130 body is flush at X = −50 mm. The cable points forward. The body is 2 mm above the plate. |
+| Lift-motor body to the rear face | 17.0 mm | The 81 mm flange starts at X = −33 mm. |
+| Gearbox body to the rear face | 0.0 mm | The 115 mm body is flush at X = −50 mm. |
 
 No pair of part solids shares more than 1 mm³.
 The ground datum is not a part.
@@ -415,11 +412,11 @@ The views are:
 6. Column flange thickness.
 7. Isolator free height and diameter for VC-SH-1600.
 8. Motor centre distance. The minimum is 170 mm. The 266 mm pitch is only a layout placeholder.
-9. Usable stroke. The model travel is 1022.5 mm because two 77.5 mm blocks sit 200 mm apart on the 1300 mm rail. The 200 mm pitch is TBD.
+9. Usable stroke. The model travel is 1009.6 mm because two 90.4 mm blocks sit 200 mm apart on the 1300 mm rail. The 200 mm pitch is TBD.
 10. Centre distance of the two mast profiles. The rod is in front of the rails. The 300 mm pitch is TBD.
 11. Front gap from the carriage plate to the motor rear face. The model uses a draft gap of 10 mm. The plate rear is flush with that face.
-12. Closed-loop NEMA 42 catalogue number. The model uses the public ST11018M6504 STEP as a geometry stand-in. That file has no encoder.
-13. Coupling chain-side bore, pillow-block outline and chain-link section. The brake in the model is INTORQ BFK457-10 Compact. Its bore is d10H7. The stand-in motor shaft is Ø19 mm. Those two are not mated.
+12. Siemens 1FL2104 and Neugart PLE120 STEP files. The model uses the datasheet and catalogue envelopes until those files arrive.
+13. Coupling bore against the Ø25 mm gearbox shaft. The STEP hub is 32H7. Pillow-block outline and chain-link section are still open.
 14. Weld position of the two ribs VC-SH-1302.
 
 ## Options

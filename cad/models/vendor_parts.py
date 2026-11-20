@@ -12,45 +12,39 @@ from build123d import Pos, Rot
 from cad.tools.geometry import load_vendor_shape
 
 
-def oriented_motor():
-    """Nanotec body. Shaft along +Y. The connector hangs on -Z.
+def _mount_to_machine(loaded):
+    """Map a HIWIN file onto the machine axes.
 
-    The file shaft is +Z. Rot(0, 90, 0) maps that to +X.
-    Rot(180, 0, 0) then Rot(0, 0, 90) maps the shaft to +Y.
-    load_vendor_shape puts the bounding-box centre at the origin.
-    That centre is not the shaft axis. The shift puts the Ø19 shaft on X = 0 and Z = 0.
-    Rot(0, 180, 0) about that shaft points the connector up, clear of the bottom plate.
+    File Z = 0 is the rail mounting plane. File Y is the rail direction.
+    The result keeps that plane at X = 0 and the width centred on Y.
     """
-    loaded = load_vendor_shape("VC-HB-2100")
+    return Rot(90, 0, 0) * Rot(0, 90, 0) * loaded
+
+
+def oriented_rail():
+    """HGR20R. Mounting face at X = 0. Length centred on Z.
+
+    The file origin is the mounting face, so the solid is not bbox-recentered.
+    """
+    loaded = load_vendor_shape("VC-HB-3100", recenter=False)
     if loaded is None:
         return None
-    solid = Rot(0, 0, 90) * Rot(180, 0, 0) * Rot(0, 90, 0) * loaded
-    shaft = next(
-        item
-        for item in solid.solids()
-        if item.bounding_box().size.Y > 50.0 and item.bounding_box().size.X < 30.0
-    )
-    center = shaft.bounding_box().center()
-    return Rot(0, 180, 0) * Pos(-float(center.X), 0.0, -float(center.Z)) * solid
+    return Pos(0.0, 0.0, -650.0) * _mount_to_machine(loaded)
 
 
-def oriented_brake():
-    """BFK457-10 Compact. Shaft along Y, cable on +X, lug on +Z.
+def oriented_block():
+    """HGH20CA. Same mounting plane as the rail. Length centred on Z.
 
-    The file shaft is +X and the cable runs toward -Y.
-    Rot(90, 270, 0) maps the shaft onto Y and the cable onto -Z.
-    load_vendor_shape recenters the bounding box. The cable pulls that centre off the shaft.
-    The rotor, not the cable, defines the axis.
-    Rot(0, -90, 0) about the shaft then sends the cable forward and the lug up.
-    A cable on -Z would pass through the bottom plate.
+    The hole pattern is centred on the rail width. The length centre of the
+    holes is 5.3 mm from the solid centre. The solid is centred so both ends
+    stay on the rail.
     """
-    loaded = load_vendor_shape("VC-HB-3000")
+    loaded = load_vendor_shape("VC-HB-3110", recenter=False)
     if loaded is None:
         return None
-    solid = Rot(90, 270, 0) * loaded
-    rotor = min(solid.solids(), key=lambda item: abs(item.volume))
-    center = rotor.bounding_box().center()
-    return Rot(0, -90, 0) * Pos(-float(center.X), 0.0, -float(center.Z)) * solid
+    solid = _mount_to_machine(loaded)
+    mid_z = float(solid.bounding_box().center().Z)
+    return Pos(0.0, 0.0, -mid_z) * solid
 
 
 def oriented_sprocket():
