@@ -31,9 +31,9 @@ pub const KB_SET_OUTPUT_WATCHDOG: u32 = kb_io(26);
 pub const DIO_INPUTS: u8 = 14;
 pub const DIO_OUTPUTS: u8 = 14;
 
-/// Assigned inputs. Two inputs stay spare. A second DIO is not required.
-/// The tilt angle is 4-20 mA, so a RevPi AIO is required. See `IO-LIST.md`.
-pub const DI_ASSIGNED: u8 = 12;
+/// Assigned inputs. One input stays spare. A second I/O module is not required.
+/// There is no tilt sensor and no analogue module. See `IO-LIST.md`.
+pub const DI_ASSIGNED: u8 = 13;
 pub const DO_ASSIGNED: u8 = 7;
 
 /// Proposed DIO input index. Not a process-image byte offset.
@@ -49,6 +49,7 @@ pub const DI_TILT_FOLDED: u8 = 8;
 pub const DI_LIFT_DEPLOYED: u8 = 9;
 pub const DI_LIFT_RETRACTED: u8 = 10;
 pub const DI_SONIC_FAULT: u8 = 11;
+pub const DI_ROTATION_INDEX: u8 = 12;
 
 /// Proposed DIO output index. Not a process-image byte offset.
 /// The S200 brake and both STO paths are hard-wired. They are not outputs.
@@ -156,9 +157,10 @@ mod tests {
 
     #[test]
     fn discrete_map_fits_one_dio_and_leaves_the_brake_off_the_list() {
-        assert_eq!(DIO_INPUTS - DI_ASSIGNED, 2);
+        assert_eq!(DIO_INPUTS - DI_ASSIGNED, 1);
         assert_eq!(DIO_OUTPUTS - DO_ASSIGNED, 7);
         assert_eq!(DI_SONIC_FAULT, 11);
+        assert_eq!(DI_ROTATION_INDEX, 12);
         assert_eq!(DO_ROTATION_ENABLE, 6);
     }
 }

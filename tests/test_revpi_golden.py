@@ -52,6 +52,16 @@ def _play_plant(plant: Plant, case: dict) -> None:
     setup = case.get("setup") or {}
     if "position_um" in setup:
         plant.set_position_um(setup["position_um"])
+    if setup.get("indexed"):
+        plant.set_rotation_indexed()
+    sample = setup.get("sample")
+    if sample:
+        plant.set_sample_plan(
+            int(sample["stages"]),
+            int(sample["in_depth_um"]),
+            [int(value) for value in sample["depth_um"]],
+            [int(value) for value in sample["container_mdeg"]],
+        )
     for step in case["steps"]:
         output = None
         for _ in range(step["cycles"]):
@@ -67,6 +77,6 @@ def test_golden_vectors_match_python_plant():
     assert data["cycle_ms"] == PLANT_CYCLE_MS
     assert data["sf3_second_hold_fitted"] is False
     assert SF3_SECOND_HOLD_FITTED is False
-    assert len(data["cases"]) == 15
+    assert len(data["cases"]) == 23
     for case in data["cases"]:
         _play_plant(Plant(), case)

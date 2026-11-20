@@ -11,6 +11,7 @@ mod params;
 mod plant;
 mod rotation;
 mod safety;
+mod sample;
 mod sonic;
 mod tilt;
 
@@ -20,12 +21,13 @@ pub use hub::{
 };
 pub use plant::{Plant, PlantInput, PlantOutput};
 pub use rotation::{
-    Rotation, RotationCommand, RotationDrive, RotationFeedback, RotationInput, RotationOutput,
-    RotationState, StepDirRotation,
+    Rotation, RotationCommand, RotationDrive, RotationFeedback, RotationGoal, RotationInput,
+    RotationOutput, RotationState, StepDirRotation,
 };
 pub use safety::{
     SafetyInput, SafetyMonitor, SafetyOutput, SafetyReason, CYCLE_MS, STONE_CURRENT_PCT_THR,
     STONE_DEBOUNCE_MS,
 };
+pub use sample::{Sample, SampleCommand, SamplePhase, SamplePlan};
 pub use sonic::{Sonic, SonicInput, SonicOutput, SonicState};
 pub use tilt::{LiftState, Tilt, TiltInput, TiltOutput, TiltState};

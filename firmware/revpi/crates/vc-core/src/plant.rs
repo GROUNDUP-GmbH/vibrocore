@@ -7,6 +7,7 @@ use crate::hub::{Hub, HubInput, HubOutput, HubState};
 use crate::params::{LOWERED_UM, SONIC_TARGET_MHZ};
 use crate::rotation::{Rotation, RotationInput, RotationOutput};
 use crate::safety::{SafetyInput, SafetyMonitor, SafetyOutput};
+use crate::sample::{Sample, SampleCommand, SamplePlan, SampleView};
 use crate::sonic::{Sonic, SonicInput, SonicOutput};
 use crate::tilt::{Tilt, TiltInput, TiltOutput};
 
@@ -22,8 +23,6 @@ pub struct PlantInput {
     pub sonic_actual_running: bool,
     pub tool_engaged: bool,
     pub enabling_held: bool,
-    pub sensor_valid: bool,
-    pub angle_mdeg: i32,
     pub limit_vertical_reached: bool,
     pub limit_folded_reached: bool,
     pub limit_deployed_reached: bool,
@@ -40,8 +39,10 @@ pub struct PlantInput {
     pub cmd_reset: bool,
     pub brake_test_enable: bool,
     pub brake_slip_um: i32,
+    pub cmd_sample: bool,
     pub cmd_rotate: bool,
     pub rotate_reverse: bool,
+    pub rotation_index: bool,
     pub rotation_actual_rpm: i16,
     pub rotation_torque_pct: u8,
     pub rotation_fault: bool,
@@ -61,8 +62,6 @@ impl Default for PlantInput {
             sonic_actual_running: false,
             tool_engaged: false,
             enabling_held: false,
-            sensor_valid: true,
-            angle_mdeg: 0,
             limit_vertical_reached: false,
             limit_folded_reached: false,
             limit_deployed_reached: false,
@@ -79,7 +78,9 @@ impl Default for PlantInput {
             cmd_reset: false,
             brake_test_enable: false,
             brake_slip_um: 0,
+            cmd_sample: false,
             cmd_rotate: false,
+            rotation_index: false,
             rotate_reverse: false,
             rotation_actual_rpm: 0,
             rotation_torque_pct: 0,
@@ -96,6 +97,7 @@ pub struct PlantOutput {
     pub tilt: TiltOutput,
     pub rotation: RotationOutput,
     pub safety: SafetyOutput,
+    pub sample: SampleCommand,
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -109,6 +111,10 @@ pub struct Plant {
     last_up: bool,
     sonic_running: bool,
     sonic_confirmed: bool,
+    sample: Sample,
+    indexed: bool,
+    move_done: bool,
+    stalled: bool,
 }
 
 impl Default for Plant {
@@ -129,7 +135,20 @@ impl Plant {
             last_up: false,
             sonic_running: false,
             sonic_confirmed: true,
+            sample: Sample::new(),
+            indexed: false,
+            move_done: false,
+            stalled: false,
         }
+    }
+
+    pub fn set_sample_plan(&mut self, plan: SamplePlan) {
+        self.sample.set_plan(plan);
+    }
+
+    pub fn set_rotation_indexed(&mut self) {
+        self.rotation.mark_indexed();
+        self.indexed = true;
     }
 
     pub fn set_position_um(&mut self, position_um: i32) {
@@ -147,12 +166,20 @@ impl Plant {
             hub_moving_down: self.last_down,
             hub_moving_up: self.last_up,
         });
+        let sample = self.sample.begin(SampleView {
+            cmd_sample: input.cmd_sample,
+            cmd_reset: input.cmd_reset,
+            position_um: self.hub.position_um(),
+            sonic_running: self.sonic_running,
+            sonic_confirmed: self.sonic_confirmed,
+            indexed: self.indexed,
+            move_done: self.move_done,
+            stalled: self.stalled,
+        });
         let hub_idle = self.hub.state() == HubState::Idle;
         let tilt = self.tilt.tick(TiltInput {
             safe_state: safety.safe_state,
             hub_idle,
-            sensor_valid: input.sensor_valid,
-            angle_mdeg: input.angle_mdeg,
             limit_vertical_reached: input.limit_vertical_reached,
             limit_folded_reached: input.limit_folded_reached,
             limit_deployed_reached: input.limit_deployed_reached,
@@ -165,7 +192,6 @@ impl Plant {
         let hub = self.hub.tick(HubInput {
             safe_state: safety.safe_state,
             stone_detected: safety.stone_detected,
-            lift_allowed: tilt.lift_allowed,
             enabling_held: input.enabling_held,
             limit_up_reached: safety.limit_up_triggered,
             limit_down_reached: safety.limit_down_triggered,
@@ -174,16 +200,18 @@ impl Plant {
             cmd_cycle_start: input.cmd_cycle_start,
             cmd_jog_down: input.cmd_jog_down,
             cmd_jog_up: input.cmd_jog_up,
-            cmd_park: input.cmd_park,
+            cmd_park: input.cmd_park || sample.hub_park,
             cmd_unpark: input.cmd_unpark,
             cmd_reset: input.cmd_reset,
             brake_test_enable: input.brake_test_enable,
             brake_slip_um: input.brake_slip_um,
+            sample_active: sample.sample_active,
+            sample_speed_um_s: sample.sample_speed_um_s,
         });
         let lowered = hub.position_um > LOWERED_UM;
         let sonic = self.sonic.tick(SonicInput {
             safe_state: safety.safe_state,
-            fast_stop: hub.need_sonic_stop,
+            fast_stop: sample.fast_stop || hub.need_sonic_stop,
             lowered,
             tool_engaged: input.tool_engaged,
             sto_healthy: input.sonic_sto_healthy,
@@ -192,25 +220,41 @@ impl Plant {
             cmd_reset: input.cmd_reset,
             target_mhz: input.sonic_target_mhz,
         });
-        let hub_quiet = matches!(hub.state, HubState::Idle | HubState::Parked);
+        let sample_blocks = sample.active && !sample.wants_rotation;
+        let manual_rotate = input.cmd_rotate && !sample.active;
         let rotation = self.rotation.tick(RotationInput {
-            permit: hub_quiet && !sonic.run_command && !safety.safe_state,
-            cmd_run: input.cmd_rotate,
-            reverse: input.rotate_reverse,
+            permit: !safety.safe_state
+                && !sonic.run_command
+                && !hub.moving
+                && !sample_blocks
+                && (sample.wants_rotation || manual_rotate),
+            cmd_run: sample.wants_rotation || manual_rotate,
+            reverse: input.rotate_reverse && !sample.wants_rotation,
             actual_rpm: input.rotation_actual_rpm,
             torque_pct: input.rotation_torque_pct,
             drive_fault: input.rotation_fault,
+            goal: sample.goal,
+            target_mdeg: sample.target_mdeg,
+            index_seen: input.rotation_index,
         });
+        if rotation.stalled || rotation.fault {
+            self.sample.note_stall();
+        }
+        let sample_out = self.sample.command();
         self.last_down = hub.speed_um_s > 0;
         self.last_up = hub.speed_um_s < 0;
         self.sonic_running = sonic.run_command;
         self.sonic_confirmed = sonic.confirmed_stopped;
+        self.indexed = rotation.indexed;
+        self.move_done = rotation.move_done;
+        self.stalled = rotation.stalled || rotation.fault;
         PlantOutput {
             hub,
             sonic,
             tilt,
             rotation,
             safety,
+            sample: sample_out,
         }
     }
 }

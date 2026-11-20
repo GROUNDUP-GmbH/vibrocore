@@ -21,7 +21,7 @@ firmware/revpi/
 ```
 
 `vc-core` contains the safety monitor and the machine plant.
-The plant covers hub, sonic, tilt, jog and rod rotation.
+The plant covers hub, sonic, tilt, jog, rod rotation and soil sampling.
 Hub motion is a logical pulse train for the S200 PTI.
 Modbus setpoints are not the motion path.
 Unverified Modbus registers stay TODO.
@@ -33,7 +33,12 @@ The brake test is optional.
 That decision is a risk acceptance, not a performance level.
 Jog runs only while the enabling switch is held.
 The sonic head runs only when the tool is lowered and engaged.
-Tilt and lift stop above the angle limit.
+Tilt has two direction outputs and the actuator end stops.
+There is no tilt angle limit and no tilt sensor.
+The sample sequence drives in, cuts one revolution, then dumps at each stage.
+One to four depth stages are parameters.
+A stall aborts to a fault state.
+Rotation stays blocked while the sonic head runs or the lift moves.
 None of these monitors is an ISO 13849 performance level.
 
 `vc-io` names `/dev/piControl0` and the piControl ioctl numbers.
@@ -54,7 +59,7 @@ The MQTT bridge stores messages in memory.
 It does not open a socket.
 Topic names match ADR-0001.
 New live topics use the reserved `vibrocore/status/` prefix.
-The names are `hub`, `sonic`, `tilt`, `rotation` and `jog`.
+The names are `hub`, `sonic`, `tilt`, `rotation`, `jog`, `sample`, `stage` and `container`.
 
 ## Tests on the host
 

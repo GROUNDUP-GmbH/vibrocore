@@ -1,11 +1,13 @@
 //! Tilt actuators and the sampling-position lift actuators.
 //!
-//! Both pairs use 24 V relays. The angle monitor is SF6.
-//! SF6 is not an ISO 13849 performance level. The safety relay is hard-wired.
+//! Both pairs use 24 V relays.
+//! Stefan removed the tilt-angle limit on 2026-11-20.
+//! The machine works on hilly farmland.
+//! Tilt keeps two direction outputs and the actuator end stops.
+//! There is no tilt sensor.
+//! This code is not an ISO 13849 performance level.
 
-use crate::params::TILT_ANGLE_LIMIT_MDEG;
-
-/// Codes 0 to 4 match `FB_TiltControl`. Code 5 is the angle inhibit.
+/// Codes match `FB_TiltControl`. There is no angle-inhibit code.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
 pub enum TiltState {
@@ -14,7 +16,6 @@ pub enum TiltState {
     Vertical = 2,
     TiltingFold = 3,
     Folded = 4,
-    Inhibited = 5,
 }
 
 /// Codes match `FB_LiftControl`.
@@ -32,8 +33,6 @@ pub enum LiftState {
 pub struct TiltInput {
     pub safe_state: bool,
     pub hub_idle: bool,
-    pub sensor_valid: bool,
-    pub angle_mdeg: i32,
     pub limit_vertical_reached: bool,
     pub limit_folded_reached: bool,
     pub limit_deployed_reached: bool,
@@ -49,8 +48,6 @@ impl Default for TiltInput {
         Self {
             safe_state: false,
             hub_idle: true,
-            sensor_valid: true,
-            angle_mdeg: 0,
             limit_vertical_reached: false,
             limit_folded_reached: false,
             limit_deployed_reached: false,
@@ -71,7 +68,6 @@ pub struct TiltOutput {
     pub tilt_fold: bool,
     pub lift_extend: bool,
     pub lift_retract: bool,
-    pub lift_allowed: bool,
     pub fault: bool,
 }
 
@@ -96,39 +92,35 @@ impl Tilt {
     }
 
     pub fn tick(&mut self, input: TiltInput) -> TiltOutput {
-        let lift_allowed = input.sensor_valid && input.angle_mdeg <= TILT_ANGLE_LIMIT_MDEG;
         let mut vertical = false;
         let mut fold = false;
         let mut extend = false;
         let mut retract = false;
         let mut fault = false;
 
-        if input.safe_state || !input.sensor_valid {
-            self.tilt_state = TiltState::Inhibited;
+        if input.safe_state {
+            self.tilt_state = TiltState::Unknown;
             self.lift_state = LiftState::Unknown;
         } else {
             let both_tilt = input.cmd_vertical && input.cmd_fold;
             let both_lift = input.cmd_extend && input.cmd_retract;
-            fault = both_tilt
-                || both_lift
-                || (!input.hub_idle && (both_lift || input.cmd_extend || input.cmd_retract));
+            let moving = input.cmd_extend || input.cmd_retract;
+            fault = both_tilt || both_lift || !input.hub_idle && moving;
             if !both_tilt && input.cmd_vertical && !input.limit_vertical_reached {
                 vertical = true;
                 self.tilt_state = TiltState::TiltingVertical;
-            } else if !both_tilt && input.cmd_fold && lift_allowed && !input.limit_folded_reached {
+            } else if !both_tilt && input.cmd_fold && !input.limit_folded_reached {
                 fold = true;
                 self.tilt_state = TiltState::TiltingFold;
             } else if input.limit_vertical_reached {
                 self.tilt_state = TiltState::Vertical;
             } else if input.limit_folded_reached {
                 self.tilt_state = TiltState::Folded;
-            } else if !lift_allowed {
-                self.tilt_state = TiltState::Inhibited;
             } else {
                 self.tilt_state = TiltState::Unknown;
             }
 
-            if fault || !input.hub_idle || !lift_allowed {
+            if fault || !input.hub_idle {
                 self.lift_state = LiftState::Unknown;
             } else if input.cmd_extend && !input.limit_deployed_reached {
                 extend = true;
@@ -159,7 +151,6 @@ impl Tilt {
             tilt_fold: fold,
             lift_extend: extend,
             lift_retract: retract,
-            lift_allowed,
             fault,
         }
     }
@@ -170,27 +161,23 @@ mod tests {
     use super::*;
 
     #[test]
-    fn angle_limit_blocks_fold_and_lift_but_allows_a_return_to_vertical() {
+    fn fold_ignores_hill_angle_and_stops_on_the_end_switch() {
         let mut tilt = Tilt::new();
-        let blocked = tilt.tick(TiltInput {
-            angle_mdeg: 10_000,
+        let folding = tilt.tick(TiltInput {
             cmd_fold: true,
-            cmd_extend: true,
             ..TiltInput::default()
         });
-        assert!(!blocked.tilt_fold);
-        assert!(!blocked.lift_extend);
-        assert!(!blocked.lift_allowed);
-        assert_eq!(blocked.tilt_state, TiltState::Inhibited);
+        assert!(folding.tilt_fold);
+        assert!(!folding.tilt_vertical);
+        assert_eq!(folding.tilt_state, TiltState::TiltingFold);
 
-        let back = tilt.tick(TiltInput {
-            angle_mdeg: 10_000,
-            cmd_vertical: true,
+        let stopped = tilt.tick(TiltInput {
+            cmd_fold: true,
+            limit_folded_reached: true,
             ..TiltInput::default()
         });
-        assert!(back.tilt_vertical);
-        assert!(!back.lift_allowed);
-        assert_eq!(back.tilt_state, TiltState::TiltingVertical);
+        assert!(!stopped.tilt_fold);
+        assert_eq!(stopped.tilt_state, TiltState::Folded);
     }
 
     #[test]

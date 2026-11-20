@@ -2,14 +2,11 @@
 
 This file maps every control signal to one channel.
 One RevPi DIO, part VC-CT-6810, has 14 inputs and 14 outputs.
-This machine uses 12 inputs and 7 outputs on that module.
-Two inputs stay spare.
+This machine uses 13 inputs and 7 outputs on that module.
+One input stays spare.
 Seven outputs stay spare.
-A second DIO module is not required.
-The tilt sensor is a 4-20 mA signal.
-That signal does not fit a digital input.
-Fit one RevPi AIO, Kunbus item 100250, as the second I/O module.
-Use AIO current input 1 for the tilt angle.
+A second I/O module is not required.
+There is no analogue input module.
 Byte offsets come from PiCtory.
 The numbers below are channel indexes, not byte offsets.
 
@@ -53,10 +50,29 @@ That monitor is not a performance level.
 
 ## SF6 tilt and lift
 
-Above the angle limit, software blocks fold and blocks lift.
-A move back toward vertical stays allowed.
-An invalid sensor blocks both tilt directions and blocks lift.
-This inhibit is not a performance level.
+Stefan removed the tilt angle limit on 2026-11-20.
+The machine works on hilly farmland.
+A five degree lock is not used.
+Tilt keeps two direction outputs.
+Both outputs are never on together.
+The actuators stop on their own end switches.
+There is no tilt sensor.
+Lift motion does not read a tilt angle.
+This code is not a performance level.
+
+## Soil sample
+
+The carriage drives the sampler in with the sonic head.
+Sonic and lift then stop.
+The rod then turns one revolution to cut the core.
+The carriage stops at each depth stage.
+One to four stages are allowed.
+At each stage the rod turns to that container angle.
+Rotation stays blocked while the sonic head runs.
+Rotation stays blocked while the lift moves.
+A stall or a torque limit aborts the sequence.
+The index input sets the angle to zero.
+This sequence is not a performance level.
 
 ## Digital inputs
 
@@ -74,7 +90,7 @@ This inhibit is not a performance level.
 | 9 | Lift deployed | 24 V DC, NC | Lift actuator limit | Tool lowered |
 | 10 | Lift retracted | 24 V DC, NC | Lift actuator limit | Tool raised |
 | 11 | Sonic fault | 24 V DC | Sonic inverter fault relay | Monitor |
-| 12 | Spare |  |  |  |
+| 12 | Rotation index | 24 V DC | Rotation index or marker | Sets angle zero |
 | 13 | Spare |  |  |  |
 
 ## Digital outputs
@@ -92,12 +108,6 @@ This inhibit is not a performance level.
 
 Never energize lift extend and lift retract together.
 Never energize both tilt directions together.
-
-## Analogue input
-
-| Index | Signal | Type | Device | Role |
-| --- | --- | --- | --- | --- |
-| AIO AI1 | Tilt angle | 4-20 mA | ifm JN2200 | SF6 monitor |
 
 ## Not on the DIO
 

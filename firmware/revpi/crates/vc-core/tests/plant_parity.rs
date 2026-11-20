@@ -2,7 +2,7 @@
 //! `tests/test_revpi_golden.py` plays the same file on `tests/revpi_plant.py`.
 
 use serde_json::{Map, Value};
-use vc_core::{Plant, PlantInput, PlantOutput, CYCLE_MS, SF3_SECOND_HOLD_FITTED};
+use vc_core::{Plant, PlantInput, PlantOutput, SamplePlan, CYCLE_MS, SF3_SECOND_HOLD_FITTED};
 
 fn overlay(value: &Value) -> PlantInput {
     let mut input = PlantInput::default();
@@ -27,8 +27,6 @@ fn overlay(value: &Value) -> PlantInput {
     );
     set_bool(&mut input.tool_engaged, object, "tool_engaged");
     set_bool(&mut input.enabling_held, object, "enabling_held");
-    set_bool(&mut input.sensor_valid, object, "sensor_valid");
-    set_i32(&mut input.angle_mdeg, object, "angle_mdeg");
     set_bool(
         &mut input.limit_vertical_reached,
         object,
@@ -61,7 +59,9 @@ fn overlay(value: &Value) -> PlantInput {
     set_bool(&mut input.cmd_reset, object, "cmd_reset");
     set_bool(&mut input.brake_test_enable, object, "brake_test_enable");
     set_i32(&mut input.brake_slip_um, object, "brake_slip_um");
+    set_bool(&mut input.cmd_sample, object, "cmd_sample");
     set_bool(&mut input.cmd_rotate, object, "cmd_rotate");
+    set_bool(&mut input.rotation_index, object, "rotation_index");
     set_bool(&mut input.rotate_reverse, object, "rotate_reverse");
     set_i16(
         &mut input.rotation_actual_rpm,
@@ -133,7 +133,6 @@ fn fields(output: &PlantOutput) -> Map<String, Value> {
         Value::Bool(output.tilt.tilt_vertical),
     );
     map.insert("tilt_fold".into(), Value::Bool(output.tilt.tilt_fold));
-    map.insert("lift_allowed".into(), Value::Bool(output.tilt.lift_allowed));
     map.insert("lift_extend".into(), Value::Bool(output.tilt.lift_extend));
     map.insert(
         "rotation_state".into(),
@@ -147,9 +146,49 @@ fn fields(output: &PlantOutput) -> Map<String, Value> {
         "rotation_stalled".into(),
         Value::Bool(output.rotation.stalled),
     );
+    map.insert(
+        "rotation_angle_mdeg".into(),
+        json_i64(output.rotation.angle_mdeg as i64),
+    );
+    map.insert(
+        "rotation_indexed".into(),
+        Value::Bool(output.rotation.indexed),
+    );
+    map.insert(
+        "rotation_move_done".into(),
+        Value::Bool(output.rotation.move_done),
+    );
+    map.insert("sample_phase".into(), json_u8(output.sample.phase as u8));
+    map.insert("sample_stage".into(), json_u8(output.sample.stage));
+    map.insert(
+        "container_mdeg".into(),
+        json_i64(output.sample.container_mdeg as i64),
+    );
+    map.insert("sample_fault".into(), Value::Bool(output.sample.fault));
     map.insert("safe_state".into(), Value::Bool(output.safety.safe_state));
     map.insert("safety_reason".into(), json_u8(output.safety.reason as u8));
     map
+}
+
+fn read_plan(object: &Map<String, Value>) -> SamplePlan {
+    let mut plan = SamplePlan::default();
+    if let Some(stages) = object.get("stages").and_then(Value::as_u64) {
+        plan.stages = stages as u8;
+    }
+    if let Some(depth) = object.get("in_depth_um").and_then(Value::as_i64) {
+        plan.in_depth_um = depth as i32;
+    }
+    if let Some(depths) = object.get("depth_um").and_then(Value::as_array) {
+        for (index, value) in depths.iter().take(4).enumerate() {
+            plan.depth_um[index] = value.as_i64().unwrap_or(0) as i32;
+        }
+    }
+    if let Some(angles) = object.get("container_mdeg").and_then(Value::as_array) {
+        for (index, value) in angles.iter().take(4).enumerate() {
+            plan.container_mdeg[index] = value.as_i64().unwrap_or(0) as i32;
+        }
+    }
+    plan
 }
 
 fn json_u8(value: u8) -> Value {
@@ -179,6 +218,12 @@ fn golden_vectors_match_the_rust_plant() {
         let mut plant = Plant::new();
         if let Some(position) = case["setup"]["position_um"].as_i64() {
             plant.set_position_um(position as i32);
+        }
+        if case["setup"]["indexed"].as_bool() == Some(true) {
+            plant.set_rotation_indexed();
+        }
+        if let Some(plan) = case["setup"]["sample"].as_object() {
+            plant.set_sample_plan(read_plan(plan));
         }
         for step in case["steps"].as_array().expect("steps") {
             let input = overlay(&step["input"]);

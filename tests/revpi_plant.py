@@ -2,7 +2,10 @@
 
 Keep this file in step with ``firmware/revpi/crates/vc-core``.
 The old ``tests/sim.py`` blocks stay the reference for the first 60 tests.
-This model adds jog, park, tilt, rotation and the sonic interlocks.
+This model adds jog, park, tilt, rotation, sampling and the sonic interlocks.
+Stefan removed the tilt-angle limit on 2026-11-20.
+The machine works on hilly farmland.
+Tilt keeps two direction outputs and the actuator end stops.
 
 SF3, Stefan, 2026-11-20: there is no second holding means.
 The S200 motor holding brake is the only hold.
@@ -24,7 +27,6 @@ RETRACT_UM_S = 50_000
 JOG_UM_S = 10_000
 BRAKE_TEST_CYCLES = 10
 BRAKE_SLIP_LIMIT_UM = 2_000
-TILT_ANGLE_LIMIT_MDEG = 5_000
 SONIC_RAMP_CYCLES = 10
 SONIC_RAMP_UP_MHZ = 1_500
 SONIC_SKIP_LOW_MHZ = 8_000
@@ -35,6 +37,10 @@ SONIC_STOP_TIMEOUT_CYCLES = 500
 ROTATION_RPM = 60
 ROTATION_TORQUE_LIMIT_PCT = 40
 ROTATION_STALL_CYCLES = 20
+REV_MDEG = 360_000
+MDEG_PER_RPM_S = 6_000
+SAMPLE_STAGE_MIN = 1
+SAMPLE_STAGE_MAX = 4
 
 SF3_SECOND_HOLD_FITTED = False
 
@@ -50,6 +56,7 @@ HUB_JOG = 8
 HUB_PARK_MOVE = 9
 HUB_BRAKE_TEST = 10
 HUB_PARKED = 11
+HUB_SAMPLE = 12
 
 SONIC_IDLE = 0
 SONIC_STARTING = 1
@@ -61,6 +68,14 @@ SONIC_FAULT = 5
 
 def _step_um(speed_um_s: int) -> int:
     return speed_um_s * CYCLE_MS // 1000
+
+
+def _step_mdeg(rpm: int) -> int:
+    return rpm * MDEG_PER_RPM_S * CYCLE_MS // 1000
+
+
+def _wrap_mdeg(angle: int) -> int:
+    return angle % REV_MDEG
 
 
 class Plant:
@@ -86,9 +101,42 @@ class Plant:
         self._last_up = False
         self._sonic_running = False
         self._sonic_confirmed = True
+        self._angle = 0
+        self._indexed = False
+        self._remaining = 0
+        self._tracking = 0
+        self._move_done = False
+        self._rotation_stalled = False
+        self._sample_phase = 0
+        self._stages = 1
+        self._in_depth = TARGET_UM
+        self._depths = [0, 0, 0, 0]
+        self._containers = [0, 0, 0, 0]
+        self._stage_index = 0
+        self._prev_sample = False
+        self._sample_fault = False
+        self._motion_open = False
 
     def set_position_um(self, position_um: int) -> None:
         self.position_um = max(0, min(STROKE_UM, position_um))
+
+    def set_rotation_indexed(self) -> None:
+        self._indexed = True
+        self._angle = 0
+
+    def set_sample_plan(
+        self,
+        stages: int,
+        in_depth_um: int,
+        depth_um: list[int],
+        container_mdeg: list[int],
+    ) -> None:
+        self._stages = stages
+        self._in_depth = in_depth_um
+        depths = list(depth_um)[:4]
+        containers = list(container_mdeg)[:4]
+        self._depths = depths + [0] * (4 - len(depths))
+        self._containers = containers + [0] * (4 - len(containers))
 
     def tick(self, **raw: object) -> dict[str, object]:
         inp = _defaults()
@@ -103,20 +151,37 @@ class Plant:
             xHubMovingDown=self._last_down,
             xHubMovingUp=self._last_up,
         )
+        sample = self._sample_begin(inp)
         hub_idle = self.hub_state == HUB_IDLE
         tilt = self._tilt(inp, self._safety.xSafeState, hub_idle)
-        hub = self._hub(inp, self._safety, tilt["lift_allowed"])
+        hub = self._hub(inp, self._safety, sample)
         lowered = hub["position_um"] > LOWERED_UM
-        sonic = self._sonic(inp, self._safety.xSafeState, hub["need_sonic_stop"], lowered)
-        hub_quiet = hub["state"] in (HUB_IDLE, HUB_PARKED)
-        rotation = self._rotation(
+        sonic = self._sonic(
             inp,
-            hub_quiet and not sonic["run"] and not self._safety.xSafeState,
+            self._safety.xSafeState,
+            bool(sample["fast_stop"] or hub["need_sonic_stop"]),
+            lowered,
         )
+        manual = bool(inp["cmd_rotate"]) and not sample["active"]
+        sample_blocks = bool(sample["active"]) and not sample["wants_rotation"]
+        permit = (
+            not self._safety.xSafeState
+            and not sonic["run"]
+            and not hub["moving"]
+            and not sample_blocks
+            and (sample["wants_rotation"] or manual)
+        )
+        rotation = self._rotation(inp, permit, sample, manual)
+        if rotation["stalled"] or rotation["fault"]:
+            self._note_stall()
+        sample_out = self._sample_command()
         self._last_down = hub["speed_um_s"] > 0
         self._last_up = hub["speed_um_s"] < 0
         self._sonic_running = bool(sonic["run"])
         self._sonic_confirmed = bool(sonic["confirmed"])
+        self._indexed = bool(rotation["indexed"])
+        self._move_done = bool(rotation["move_done"])
+        self._rotation_stalled = bool(rotation["stalled"] or rotation["fault"])
         return {
             "hub_state": hub["state"],
             "position_um": hub["position_um"],
@@ -132,22 +197,32 @@ class Plant:
             "tilt_state": tilt["tilt_state"],
             "tilt_vertical": tilt["vertical"],
             "tilt_fold": tilt["fold"],
-            "lift_allowed": tilt["lift_allowed"],
             "lift_extend": tilt["extend"],
             "rotation_state": rotation["state"],
             "rotation_speed_rpm": rotation["speed_rpm"],
             "rotation_stalled": rotation["stalled"],
+            "rotation_angle_mdeg": rotation["angle_mdeg"],
+            "rotation_indexed": rotation["indexed"],
+            "rotation_move_done": rotation["move_done"],
+            "sample_phase": sample_out["phase"],
+            "sample_stage": sample_out["stage"],
+            "container_mdeg": sample_out["container_mdeg"],
+            "sample_fault": sample_out["fault"],
             "safe_state": self._safety.xSafeState,
             "safety_reason": self._safety.eSafetyReason,
         }
 
-    def _hub(self, inp: dict[str, object], safety: FB_Safety, lift_allowed: bool) -> dict[str, object]:
+    def _hub(
+        self,
+        inp: dict[str, object],
+        safety: FB_Safety,
+        sample: dict[str, object],
+    ) -> dict[str, object]:
         reset_edge = bool(inp["cmd_reset"]) and not self._prev_reset
         self._prev_reset = bool(inp["cmd_reset"])
         view = {
             "safe": safety.xSafeState,
             "stone": safety.xStoneDetected,
-            "lift_allowed": lift_allowed,
             "enabling": bool(inp["enabling_held"]),
             "limit_up": safety.xLimitUpTriggered,
             "limit_down": safety.xLimitDownTriggered,
@@ -156,15 +231,21 @@ class Plant:
             "cycle": bool(inp["cmd_cycle_start"]),
             "jog_down": bool(inp["cmd_jog_down"]),
             "jog_up": bool(inp["cmd_jog_up"]),
-            "park": bool(inp["cmd_park"]),
+            "park": bool(inp["cmd_park"]) or bool(sample["hub_park"]),
             "unpark": bool(inp["cmd_unpark"]),
             "brake_test": bool(inp["brake_test_enable"]),
             "slip": int(inp["brake_slip_um"]),
+            "sample_active": bool(sample["sample_active"]),
+            "sample_speed": int(sample["speed"]),
         }
         if view["safe"] and self.hub_state != HUB_ESTOP:
             self.hub_state = HUB_ESTOP
             self._stop_ticks = 0
             return self._stopped(True, False)
+        if view["sample_active"]:
+            return self._sample_move(view)
+        if self.hub_state == HUB_SAMPLE:
+            self.hub_state = HUB_IDLE
         handler = {
             HUB_IDLE: self._idle,
             HUB_JOG: self._jog,
@@ -178,22 +259,31 @@ class Plant:
             HUB_PARKED: self._parked,
             HUB_ESTOP: lambda item: self._estop(item, reset_edge),
             HUB_FAULT: lambda item: self._fault_state(item, reset_edge),
+            HUB_SAMPLE: self._idle,
         }[self.hub_state]
         return handler(view)
 
+    def _sample_move(self, item: dict[str, object]) -> dict[str, object]:
+        self.hub_state = HUB_SAMPLE
+        speed = int(item["sample_speed"])
+        blocked = (speed > 0 and bool(item["limit_down"])) or (
+            speed < 0 and bool(item["limit_up"])
+        )
+        if speed == 0 or blocked:
+            return self._stopped(False, blocked)
+        self._move(speed)
+        return self._motion(HUB_SAMPLE, speed)
+
     def _idle(self, item: dict[str, object]) -> dict[str, object]:
         self._hub_fault = False
-        motion = item["jog_down"] or item["jog_up"] or item["cycle"] or item["park"]
-        if not item["lift_allowed"] and motion:
-            return self._stopped(False, True)
-        if item["park"] and item["lift_allowed"]:
+        if item["park"]:
             self._origin_um = self.position_um
             self._test_ticks = 0
             if self.position_um <= HOME_UM:
                 return self._enter_hold(item)
             self.hub_state = HUB_PARK_MOVE
             return self._park_move(item)
-        if item["cycle"] and item["lift_allowed"]:
+        if item["cycle"]:
             self.hub_state = HUB_HOMING
             return self._home(item)
         if self._jog_allowed(item):
@@ -204,7 +294,7 @@ class Plant:
     def _jog(self, item: dict[str, object]) -> dict[str, object]:
         if not self._jog_allowed(item):
             self.hub_state = HUB_IDLE
-            return self._stopped(False, not item["lift_allowed"])
+            return self._stopped(False, False)
         down = item["jog_down"] and not item["limit_down"]
         up = item["jog_up"] and not down and not item["limit_up"]
         if down:
@@ -217,17 +307,9 @@ class Plant:
         return self._stopped(False, False)
 
     def _jog_allowed(self, item: dict[str, object]) -> bool:
-        return bool(
-            item["enabling"]
-            and item["lift_allowed"]
-            and not item["safe"]
-            and (item["jog_down"] or item["jog_up"])
-        )
+        return bool(item["enabling"] and not item["safe"] and (item["jog_down"] or item["jog_up"]))
 
     def _home(self, item: dict[str, object]) -> dict[str, object]:
-        if not item["lift_allowed"]:
-            self.hub_state = HUB_IDLE
-            return self._stopped(False, True)
         if self.position_um <= HOME_UM or item["limit_up"]:
             self.position_um = 0
             self.hub_state = HUB_DRILL_WAIT
@@ -236,9 +318,6 @@ class Plant:
         return self._motion(HUB_HOMING, -HOMING_UM_S)
 
     def _drill_wait(self, item: dict[str, object]) -> dict[str, object]:
-        if not item["lift_allowed"]:
-            self.hub_state = HUB_IDLE
-            return self._stopped(False, True)
         if self.position_um <= LOWERED_UM:
             self._move(PENETRATE_UM_S)
             return self._motion(HUB_DRILL_WAIT, PENETRATE_UM_S)
@@ -266,8 +345,6 @@ class Plant:
         return self._stopped(True, False)
 
     def _retract(self, item: dict[str, object]) -> dict[str, object]:
-        if not item["lift_allowed"]:
-            return self._stopped(False, True)
         if self.position_um <= HOME_UM or item["limit_up"]:
             self.position_um = 0
             self.hub_state = HUB_IDLE
@@ -276,9 +353,6 @@ class Plant:
         return self._motion(HUB_RETRACT, -RETRACT_UM_S)
 
     def _park_move(self, item: dict[str, object]) -> dict[str, object]:
-        if not item["lift_allowed"]:
-            self.hub_state = HUB_IDLE
-            return self._stopped(False, True)
         if self.position_um <= HOME_UM or item["limit_up"]:
             return self._enter_hold(item)
         self._move(-HOMING_UM_S)
@@ -336,6 +410,7 @@ class Plant:
             "pulse_enable": speed_um_s != 0,
             "need_sonic_stop": False,
             "motion_blocked": False,
+            "moving": speed_um_s != 0,
             "fault": self._hub_fault,
         }
 
@@ -347,6 +422,7 @@ class Plant:
             "pulse_enable": False,
             "need_sonic_stop": need_stop,
             "motion_blocked": blocked,
+            "moving": False,
             "fault": self._hub_fault,
         }
 
@@ -449,42 +525,32 @@ class Plant:
         return self._still_ticks >= SONIC_STANDSTILL_CYCLES
 
     def _tilt(self, inp: dict[str, object], safe: bool, hub_idle: bool) -> dict[str, object]:
-        angle = int(inp["angle_mdeg"])
-        valid = bool(inp["sensor_valid"])
-        lift_allowed = valid and angle <= TILT_ANGLE_LIMIT_MDEG
         vertical = False
         fold = False
         extend = False
         retract = False
         fault = False
-        if safe or not valid:
-            self.tilt_state = 5
+        if safe:
+            self.tilt_state = 0
             self.lift_state = 0
         else:
             both_tilt = bool(inp["cmd_vertical"]) and bool(inp["cmd_fold"])
             both_lift = bool(inp["cmd_extend"]) and bool(inp["cmd_retract"])
             moving = bool(inp["cmd_extend"]) or bool(inp["cmd_retract"])
-            fault = both_tilt or both_lift or ((not hub_idle) and (both_lift or moving))
+            fault = both_tilt or both_lift or (not hub_idle and moving)
             if not both_tilt and inp["cmd_vertical"] and not inp["limit_vertical_reached"]:
                 vertical = True
                 self.tilt_state = 1
-            elif (
-                not both_tilt
-                and inp["cmd_fold"]
-                and lift_allowed
-                and not inp["limit_folded_reached"]
-            ):
+            elif not both_tilt and inp["cmd_fold"] and not inp["limit_folded_reached"]:
                 fold = True
                 self.tilt_state = 3
             elif inp["limit_vertical_reached"]:
                 self.tilt_state = 2
             elif inp["limit_folded_reached"]:
                 self.tilt_state = 4
-            elif not lift_allowed:
-                self.tilt_state = 5
             else:
                 self.tilt_state = 0
-            if fault or not hub_idle or not lift_allowed:
+            if fault or not hub_idle:
                 self.lift_state = 0
             elif inp["cmd_extend"] and not inp["limit_deployed_reached"]:
                 extend = True
@@ -510,42 +576,250 @@ class Plant:
             "fold": fold,
             "extend": extend,
             "retract": retract,
-            "lift_allowed": lift_allowed,
             "fault": fault,
         }
 
-    def _rotation(self, inp: dict[str, object], permit: bool) -> dict[str, object]:
+    def _rotation(
+        self,
+        inp: dict[str, object],
+        permit: bool,
+        sample: dict[str, object],
+        manual: bool,
+    ) -> dict[str, object]:
         if bool(inp["rotation_fault"]):
             self.rotation_state = 3
             self._stall_ticks = 0
-            return self._rotation_stop(True, False)
+            return self._rotation_stop(True, False, False)
         if not permit:
             self.rotation_state = 4
             self._stall_ticks = 0
-            return self._rotation_stop(False, False)
-        if not bool(inp["cmd_rotate"]):
+            return self._rotation_stop(False, False, False)
+        goal = int(sample["goal"])
+        moving = bool(sample["wants_rotation"] or manual) or goal != 0
+        if not moving:
+            self._tracking = 0
             self.rotation_state = 0
             self._stall_ticks = 0
-            return self._rotation_stop(False, False)
-        speed = -ROTATION_RPM if inp["rotate_reverse"] else ROTATION_RPM
-        loaded = int(inp["rotation_actual_rpm"]) == 0 and int(inp["rotation_torque_pct"]) >= ROTATION_TORQUE_LIMIT_PCT
+            return self._rotation_stop(False, False, False)
+        loaded = int(inp["rotation_actual_rpm"]) == 0 and int(
+            inp["rotation_torque_pct"]
+        ) >= ROTATION_TORQUE_LIMIT_PCT
         if loaded:
             self._stall_ticks += 1
         else:
             self._stall_ticks = 0
         if self._stall_ticks >= ROTATION_STALL_CYCLES:
             self.rotation_state = 2
-            return self._rotation_stop(False, True)
-        self.rotation_state = 1
-        return {"state": 1, "speed_rpm": speed, "stalled": False, "fault": False}
+            return self._rotation_stop(False, True, False)
+        if goal == 1:
+            return self._seek_index(bool(inp["rotation_index"]))
+        if goal == 2:
+            return self._move_absolute(int(sample["target_mdeg"]))
+        if goal == 3:
+            return self._move_relative(int(sample["target_mdeg"]))
+        speed = -ROTATION_RPM if inp["rotate_reverse"] and not sample["wants_rotation"] else ROTATION_RPM
+        self._angle = _wrap_mdeg(self._angle + _step_mdeg(speed))
+        return self._rotation_run(speed, False)
 
-    def _rotation_stop(self, fault: bool, stalled: bool) -> dict[str, object]:
+    def _seek_index(self, index_seen: bool) -> dict[str, object]:
+        if index_seen:
+            self._angle = 0
+            self._indexed = True
+            self._tracking = 0
+            self.rotation_state = 0
+            return self._rotation_stop(False, False, True)
+        self._angle = _wrap_mdeg(self._angle + _step_mdeg(ROTATION_RPM))
+        return self._rotation_run(ROTATION_RPM, False)
+
+    def _move_absolute(self, target_mdeg: int) -> dict[str, object]:
+        if not self._indexed:
+            self.rotation_state = 3
+            return self._rotation_stop(True, False, False)
+        target = _wrap_mdeg(target_mdeg)
+        self._tracking = 2
+        distance = (target - self._angle + REV_MDEG) % REV_MDEG
+        if distance == 0:
+            self.rotation_state = 0
+            return self._rotation_stop(False, False, True)
+        step = _step_mdeg(ROTATION_RPM)
+        if step >= distance:
+            self._angle = target
+            self.rotation_state = 0
+            return self._rotation_stop(False, False, True)
+        self._angle = _wrap_mdeg(self._angle + step)
+        return self._rotation_run(ROTATION_RPM, False)
+
+    def _move_relative(self, travel_mdeg: int) -> dict[str, object]:
+        if self._tracking != 3:
+            self._tracking = 3
+            self._remaining = max(0, travel_mdeg)
+        if self._remaining <= 0:
+            self._tracking = 0
+            self.rotation_state = 0
+            return self._rotation_stop(False, False, True)
+        step = _step_mdeg(ROTATION_RPM)
+        if step >= self._remaining:
+            self._angle = _wrap_mdeg(self._angle + self._remaining)
+            self._remaining = 0
+            self._tracking = 0
+            self.rotation_state = 0
+            return self._rotation_stop(False, False, True)
+        self._remaining -= step
+        self._angle = _wrap_mdeg(self._angle + step)
+        return self._rotation_run(ROTATION_RPM, False)
+
+    def _rotation_run(self, speed: int, move_done: bool) -> dict[str, object]:
+        self.rotation_state = 1
+        return {
+            "state": 1,
+            "speed_rpm": speed,
+            "stalled": False,
+            "fault": False,
+            "angle_mdeg": self._angle,
+            "indexed": self._indexed,
+            "move_done": move_done,
+        }
+
+    def _rotation_stop(self, fault: bool, stalled: bool, move_done: bool) -> dict[str, object]:
         return {
             "state": self.rotation_state,
             "speed_rpm": 0,
             "stalled": stalled,
             "fault": fault,
+            "angle_mdeg": self._angle,
+            "indexed": self._indexed,
+            "move_done": move_done,
         }
+
+    def _plan_valid(self) -> bool:
+        if not SAMPLE_STAGE_MIN <= self._stages <= SAMPLE_STAGE_MAX:
+            return False
+        if self._in_depth <= 0:
+            return False
+        previous = self._in_depth
+        for index in range(self._stages):
+            depth = self._depths[index]
+            angle = self._containers[index]
+            if depth < 0 or depth >= previous or not 0 <= angle < REV_MDEG:
+                return False
+            previous = depth
+        return True
+
+    def _enter_after_index(self) -> None:
+        at_depth = self.position_um >= self._in_depth
+        if at_depth and self._sonic_confirmed and not self._sonic_running:
+            self._sample_phase = 4
+        elif at_depth:
+            self._sample_phase = 3
+        else:
+            self._sample_phase = 2
+
+    def _sample_begin(self, inp: dict[str, object]) -> dict[str, object]:
+        start = bool(inp["cmd_sample"]) and not self._prev_sample
+        self._prev_sample = bool(inp["cmd_sample"])
+        if bool(inp["cmd_reset"]) and self._sample_phase == 8:
+            self._sample_fault = False
+            self._sample_phase = 0
+            self._stage_index = 0
+        if (
+            self._rotation_stalled
+            and self._sample_phase not in (0, 9)
+        ):
+            self._fail_sample()
+        if start and self._sample_phase == 0:
+            self._stage_index = 0
+            if not self._plan_valid():
+                self._fail_sample()
+            elif not self._indexed:
+                self._sample_phase = 1
+            else:
+                self._enter_after_index()
+        self._sample_advance()
+        command = self._sample_command()
+        self._motion_open = bool(command["wants_rotation"])
+        return command
+
+    def _sample_advance(self) -> None:
+        phase = self._sample_phase
+        if phase == 1 and self._motion_open and self._indexed:
+            self._motion_open = False
+            self._enter_after_index()
+        elif phase == 2 and self.position_um >= self._in_depth:
+            self._sample_phase = 3
+        elif phase == 3 and self._sonic_confirmed and not self._sonic_running:
+            self._sample_phase = 4
+        elif phase == 4 and self._motion_open and self._move_done:
+            self._motion_open = False
+            self._stage_index = 0
+            self._sample_phase = 5
+        elif phase == 5 and self.position_um <= self._depths[self._stage_index]:
+            self._sample_phase = 6
+        elif phase == 6 and self._motion_open and self._move_done:
+            self._motion_open = False
+            next_stage = self._stage_index + 1
+            if next_stage >= self._stages:
+                self._sample_phase = 7
+            else:
+                self._stage_index = next_stage
+                self._sample_phase = 5
+        elif phase == 7 and self.position_um <= HOME_UM:
+            self._sample_phase = 9
+
+    def _note_stall(self) -> None:
+        if self._sample_phase not in (0, 9):
+            self._fail_sample()
+
+    def _fail_sample(self) -> None:
+        self._sample_fault = True
+        self._motion_open = False
+        self._sample_phase = 8
+
+    def _sample_command(self) -> dict[str, object]:
+        phase = self._sample_phase
+        stage = self._stage_index + 1 if phase in (5, 6) else 0
+        container = self._containers[self._stage_index] if phase == 6 else 0
+        command: dict[str, object] = {
+            "phase": phase,
+            "stage": stage,
+            "container_mdeg": container,
+            "sample_active": False,
+            "speed": 0,
+            "hub_park": False,
+            "fast_stop": phase not in (0, 2, 9),
+            "goal": 0,
+            "target_mdeg": 0,
+            "wants_rotation": False,
+            "active": phase not in (0, 9),
+            "fault": self._sample_fault,
+        }
+        if phase == 1:
+            command["sample_active"] = True
+            command["goal"] = 1
+            command["wants_rotation"] = True
+        elif phase == 2:
+            command["sample_active"] = True
+            command["speed"] = PENETRATE_UM_S
+        elif phase in (3, 8):
+            command["sample_active"] = True
+        elif phase == 4:
+            command["sample_active"] = True
+            command["goal"] = 3
+            command["target_mdeg"] = REV_MDEG
+            command["wants_rotation"] = True
+        elif phase == 5:
+            command["sample_active"] = True
+            command["speed"] = -RETRACT_UM_S
+        elif phase == 6:
+            command["sample_active"] = True
+            command["goal"] = 2
+            command["target_mdeg"] = container
+            command["wants_rotation"] = True
+        elif phase == 7:
+            command["sample_active"] = True
+            command["speed"] = -RETRACT_UM_S
+        elif phase == 9:
+            command["hub_park"] = True
+        return command
 
 
 def _defaults() -> dict[str, object]:
@@ -560,8 +834,6 @@ def _defaults() -> dict[str, object]:
         "sonic_actual_running": False,
         "tool_engaged": False,
         "enabling_held": False,
-        "sensor_valid": True,
-        "angle_mdeg": 0,
         "limit_vertical_reached": False,
         "limit_folded_reached": False,
         "limit_deployed_reached": False,
@@ -578,7 +850,9 @@ def _defaults() -> dict[str, object]:
         "cmd_reset": False,
         "brake_test_enable": False,
         "brake_slip_um": 0,
+        "cmd_sample": False,
         "cmd_rotate": False,
+        "rotation_index": False,
         "rotate_reverse": False,
         "rotation_actual_rpm": 0,
         "rotation_torque_pct": 0,

@@ -19,18 +19,23 @@ Do not buy a second brake for this function.
 
 ## Sonic inverter
 
-Buy Schneider Electric ATV320U15M2C.
-The rating is 1.5 kW, 200-240 V, one phase in.
-Heavy duty output current is 8.0 A.
-Output frequency is 0.1 Hz to 599 Hz.
-The drive has an STO input.
-Each OLI MVE 400/6-HF draws about 1.45 A.
-Two motors draw about 2.9 A together.
-A 6-pole motor at 6000 rpm needs about 300 Hz.
+Keep Schneider Electric ATV320U15M2C.
+The data sheet still covers the sonic head in SONIC_HEAD.md.
+Two OLI MVE 400/6-HF motors share one output.
+Each motor draws about 1.45 A at 230 V three phase.
+The pair draws about 2.9 A and about 1.16 kW.
+A 6-pole motor at 6000 rpm needs 300 Hz.
+The same motor at 6600 rpm needs 330 Hz.
+The sheet rates 1.5 kW heavy duty.
+The input is 200 V to 240 V, one phase.
+That input matches the Instagrid supply.
+Continuous output current is 8.0 A at 4 kHz.
+Maximum output frequency is 599 Hz.
 8.0 A covers 2.9 A.
-599 Hz covers 300 Hz.
-The drive STO is a drive function.
-Do not claim a machine performance level from it.
+1.5 kW covers 1.16 kW.
+599 Hz covers 330 Hz.
+The drive has STO, rated SIL 3 on the drive.
+That STO input is not a machine performance level.
 Data sheet: https://iportal.se.com/Contents/docs/SQD-ATV320U15M2C_DATASHEET.PDF
 Product page: https://www.se.com/us/en/product/ATV320U15M2C/variable-speed-drive-altivar-machine-atv320-1-5kw-200-to-240v-1-phase-compact/
 
@@ -45,17 +50,6 @@ The rating on the body is IP40.
 Mount it inside a housing.
 Data sheet: https://www.mouser.com/catalog/specsheets/IDEC_HE1BSeries.pdf
 Product page: https://www.idec.com/en-us/safety-explosion-protection/safety-components/enabling-switches/he1b-series/he1b-m1
-
-## Tilt sensor
-
-Buy ifm JN2200.
-The type code is INC-M2M360ABIAKG/US.
-The range is plus or minus 180 degrees.
-The signal is 4-20 mA.
-A fault current is about 2 mA.
-This signal is why the RevPi AIO is required.
-Data sheet: https://media.ifm.com/dam/5bb1f070-ef83-490a-b8e0-67515ba7967e/Original/JN2200-02_EN-US.pdf
-Product page: https://www.ifm.com/us/en/product/JN2200
 
 ## Tilt contactors
 
@@ -83,6 +77,9 @@ This order code speaks USB, not Modbus RTU.
 Clock-direction mode is in the manual.
 A Modbus RTU order code in the same family is TODO.
 Do not treat this row as a released selection.
+The axis needs one index input on DIO input 12.
+The index sensor order code is not chosen.
+An encoder index on the drive may replace that sensor.
 Manual: https://www.nanotec.com/fileadmin/files/Handbuecher/Handbuecher_Archiv/Plug_Drive/PD2-C/fir-v2139/PD2C_USB_Technical-Manual_V3.2.0.pdf
 Product page: https://www.nanotec.com/eu/en/products/1892-pd2-c4118l1804-e-01
 
@@ -98,11 +95,3 @@ Motor power does not cross that rotating joint.
 Buy a slip ring only if a later design routes power through the joint.
 No slip ring order code is assigned.
 Series page: https://www.igus.com/product/series-2400
-
-## Analogue module
-
-Buy Kunbus RevPi AIO item 100250.
-It has current inputs for 4-20 mA.
-The ifm JN2200 uses that range.
-One DIO cannot read this sensor.
-Data sheet: https://revolutionpi.com/fileadmin/downloads/datasheets/Datasheet_RevPi_AIO.pdf

@@ -29,13 +29,13 @@ pub const MQTT_CYCLE_PREFIX: &str = "vibrocore/cycle/";
 /// ADR-0001 prefix reserved for a live status mirror.
 pub const MQTT_STATUS_PREFIX: &str = "vibrocore/status/";
 
-/// Live hub state. Retain is yes. Codes 8 to 11 are jog, park move, brake test and parked.
+/// Live hub state. Retain is yes. Code 12 is the soil-sample move.
 pub const MQTT_STATUS_HUB: &str = "vibrocore/status/hub";
 
 /// Live sonic state.
 pub const MQTT_STATUS_SONIC: &str = "vibrocore/status/sonic";
 
-/// Live tilt state and angle.
+/// Live tilt state. There is no tilt angle.
 pub const MQTT_STATUS_TILT: &str = "vibrocore/status/tilt";
 
 /// Live rod-rotation state.
@@ -43,6 +43,15 @@ pub const MQTT_STATUS_ROTATION: &str = "vibrocore/status/rotation";
 
 /// Live jog gate. The enabling switch must be held.
 pub const MQTT_STATUS_JOG: &str = "vibrocore/status/jog";
+
+/// Live soil-sample phase.
+pub const MQTT_STATUS_SAMPLE: &str = "vibrocore/status/sample";
+
+/// Live sample stage. The value is 1 to 4 during a stage, else 0.
+pub const MQTT_STATUS_STAGE: &str = "vibrocore/status/stage";
+
+/// Live container angle for the active dump, in millidegrees.
+pub const MQTT_STATUS_CONTAINER: &str = "vibrocore/status/container";
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum RuntimeError {
@@ -194,6 +203,9 @@ mod tests {
             MQTT_STATUS_TILT,
             MQTT_STATUS_ROTATION,
             MQTT_STATUS_JOG,
+            MQTT_STATUS_SAMPLE,
+            MQTT_STATUS_STAGE,
+            MQTT_STATUS_CONTAINER,
         ] {
             assert!(topic.starts_with(MQTT_STATUS_PREFIX));
         }

@@ -39,13 +39,14 @@ pub enum HubState {
     ParkMove = 9,
     BrakeTest = 10,
     Parked = 11,
+    /// Carriage motion owned by the soil-sample sequence.
+    Sample = 12,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct HubInput {
     pub safe_state: bool,
     pub stone_detected: bool,
-    pub lift_allowed: bool,
     pub enabling_held: bool,
     pub limit_up_reached: bool,
     pub limit_down_reached: bool,
@@ -61,6 +62,9 @@ pub struct HubInput {
     pub brake_test_enable: bool,
     /// Test input. Added to position during the brake test.
     pub brake_slip_um: i32,
+    /// Soil-sample sequence owns the carriage while this is true.
+    pub sample_active: bool,
+    pub sample_speed_um_s: i32,
 }
 
 impl Default for HubInput {
@@ -68,7 +72,6 @@ impl Default for HubInput {
         Self {
             safe_state: false,
             stone_detected: false,
-            lift_allowed: true,
             enabling_held: false,
             limit_up_reached: false,
             limit_down_reached: false,
@@ -82,6 +85,8 @@ impl Default for HubInput {
             cmd_reset: false,
             brake_test_enable: SF3_BRAKE_TEST_DEFAULT,
             brake_slip_um: 0,
+            sample_active: false,
+            sample_speed_um_s: 0,
         }
     }
 }
@@ -151,6 +156,13 @@ impl Hub {
             return self.stopped(true, false);
         }
 
+        if input.sample_active {
+            return self.sample_move(input);
+        }
+        if self.state == HubState::Sample {
+            self.state = HubState::Idle;
+        }
+
         match self.state {
             HubState::Idle => self.idle(input),
             HubState::Jog => self.jog(input),
@@ -164,17 +176,25 @@ impl Hub {
             HubState::Parked => self.parked(input),
             HubState::EstopHold => self.estop(input, reset_edge),
             HubState::Fault => self.fault_state(input, reset_edge),
+            HubState::Sample => self.idle(input),
         }
+    }
+
+    fn sample_move(&mut self, input: HubInput) -> HubOutput {
+        self.state = HubState::Sample;
+        let speed = input.sample_speed_um_s;
+        let blocked =
+            (speed > 0 && input.limit_down_reached) || (speed < 0 && input.limit_up_reached);
+        if speed == 0 || blocked {
+            return self.stopped(false, blocked);
+        }
+        self.move_by(speed);
+        self.motion(HubState::Sample, speed)
     }
 
     fn idle(&mut self, input: HubInput) -> HubOutput {
         self.fault = false;
-        let motion_cmd =
-            input.cmd_jog_down || input.cmd_jog_up || input.cmd_cycle_start || input.cmd_park;
-        if !input.lift_allowed && motion_cmd {
-            return self.stopped(false, true);
-        }
-        if input.cmd_park && input.lift_allowed {
+        if input.cmd_park {
             self.origin_um = self.position_um;
             self.test_ticks = 0;
             if self.at_home() {
@@ -183,7 +203,7 @@ impl Hub {
             self.state = HubState::ParkMove;
             return self.park_move(input);
         }
-        if input.cmd_cycle_start && input.lift_allowed {
+        if input.cmd_cycle_start {
             self.state = HubState::Homing;
             return self.home(input);
         }
@@ -197,7 +217,7 @@ impl Hub {
     fn jog(&mut self, input: HubInput) -> HubOutput {
         if !self.jog_allowed(input) {
             self.state = HubState::Idle;
-            return self.stopped(false, !input.lift_allowed);
+            return self.stopped(false, false);
         }
         let down = input.cmd_jog_down && !input.limit_down_reached;
         let up = input.cmd_jog_up && !down && !input.limit_up_reached;
@@ -214,17 +234,10 @@ impl Hub {
     }
 
     fn jog_allowed(self, input: HubInput) -> bool {
-        input.enabling_held
-            && input.lift_allowed
-            && !input.safe_state
-            && (input.cmd_jog_down || input.cmd_jog_up)
+        input.enabling_held && !input.safe_state && (input.cmd_jog_down || input.cmd_jog_up)
     }
 
     fn home(&mut self, input: HubInput) -> HubOutput {
-        if !input.lift_allowed {
-            self.state = HubState::Idle;
-            return self.stopped(false, true);
-        }
         if self.at_home() || input.limit_up_reached {
             self.position_um = 0;
             self.state = HubState::DrillWait;
@@ -235,10 +248,6 @@ impl Hub {
     }
 
     fn drill_wait(&mut self, input: HubInput) -> HubOutput {
-        if !input.lift_allowed {
-            self.state = HubState::Idle;
-            return self.stopped(false, true);
-        }
         if self.position_um <= LOWERED_UM {
             self.move_by(PENETRATE_UM_S);
             return self.motion(HubState::DrillWait, PENETRATE_UM_S);
@@ -274,9 +283,6 @@ impl Hub {
     }
 
     fn retract(&mut self, input: HubInput) -> HubOutput {
-        if !input.lift_allowed {
-            return self.stopped(false, true);
-        }
         if self.at_home() || input.limit_up_reached {
             self.position_um = 0;
             self.state = HubState::Idle;
@@ -287,10 +293,6 @@ impl Hub {
     }
 
     fn park_move(&mut self, input: HubInput) -> HubOutput {
-        if !input.lift_allowed {
-            self.state = HubState::Idle;
-            return self.stopped(false, true);
-        }
         if self.at_home() || input.limit_up_reached {
             return self.enter_hold(input);
         }

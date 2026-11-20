@@ -28,9 +28,6 @@ pub const BRAKE_TEST_CYCLES: u32 = BRAKE_TEST_MS / CYCLE_MS;
 /// Slip above this value fails the brake test.
 pub const BRAKE_SLIP_LIMIT_UM: i32 = 2_000;
 
-/// SF6. Angle is millidegrees from vertical.
-pub const TILT_ANGLE_LIMIT_MDEG: i32 = 5_000;
-
 pub const SONIC_RAMP_MS: u32 = 100;
 pub const SONIC_RAMP_CYCLES: u32 = SONIC_RAMP_MS / CYCLE_MS;
 pub const SONIC_RAMP_UP_MHZ: i32 = 1_500;
@@ -47,6 +44,27 @@ pub const ROTATION_TORQUE_LIMIT_PCT: u8 = 40;
 pub const ROTATION_STALL_MS: u32 = 200;
 pub const ROTATION_STALL_CYCLES: u32 = ROTATION_STALL_MS / CYCLE_MS;
 
+/// One revolution, in millidegrees.
+pub const REV_MDEG: i32 = 360_000;
+
+/// Millidegrees per second for one rpm.
+pub const MDEG_PER_RPM_S: i32 = 6_000;
+
+pub const SAMPLE_STAGE_MIN: u8 = 1;
+pub const SAMPLE_STAGE_MAX: u8 = 4;
+
 pub fn step_um(speed_um_s: i32) -> i32 {
     speed_um_s * (CYCLE_MS as i32) / 1_000
+}
+
+pub fn step_mdeg(rpm: i16) -> i32 {
+    rpm as i32 * MDEG_PER_RPM_S * (CYCLE_MS as i32) / 1_000
+}
+
+pub fn wrap_mdeg(angle: i32) -> i32 {
+    let mut wrapped = angle % REV_MDEG;
+    if wrapped < 0 {
+        wrapped += REV_MDEG;
+    }
+    wrapped
 }

@@ -151,31 +151,31 @@
       ]
     },
     {
-      "name": "tilt_above_angle_blocks_fold_and_hub",
+      "name": "tilt_fold_on_a_hill_does_not_block_jog",
       "setup": {"position_um": 100000},
       "steps": [
         {
           "cycles": 1,
-          "input": {"angle_mdeg": 10000, "cmd_fold": true, "cmd_jog_down": true, "enabling_held": true},
+          "input": {"cmd_fold": true, "cmd_jog_down": true, "enabling_held": true},
           "expect": {
-            "tilt_state": 5,
-            "tilt_fold": false,
-            "lift_allowed": false,
-            "hub_state": 0,
-            "speed_um_s": 0,
-            "motion_blocked": true,
-            "position_um": 100000
+            "tilt_state": 3,
+            "tilt_fold": true,
+            "tilt_vertical": false,
+            "hub_state": 8,
+            "speed_um_s": 10000,
+            "position_um": 100100,
+            "motion_blocked": false
           }
         }
       ]
     },
     {
-      "name": "tilt_above_angle_still_allows_vertical",
+      "name": "tilt_fold_stops_on_the_end_switch",
       "steps": [
         {
           "cycles": 1,
-          "input": {"angle_mdeg": 10000, "cmd_vertical": true},
-          "expect": {"tilt_state": 1, "tilt_vertical": true, "lift_allowed": false, "tilt_fold": false}
+          "input": {"cmd_fold": true, "limit_folded_reached": true},
+          "expect": {"tilt_state": 4, "tilt_fold": false, "tilt_vertical": false}
         }
       ]
     },
@@ -197,6 +197,189 @@
           "cycles": 20,
           "input": {"cmd_rotate": true, "rotation_torque_pct": 40},
           "expect": {"rotation_state": 2, "rotation_stalled": true, "rotation_speed_rpm": 0, "sonic_run": false}
+        }
+      ]
+    },
+    {
+      "name": "sample_one_stage_cuts_dumps_and_parks",
+      "setup": {
+        "position_um": 100000,
+        "indexed": true,
+        "sample": {"stages": 1, "in_depth_um": 100000, "depth_um": [90000], "container_mdeg": [90000]}
+      },
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 4, "hub_state": 12, "rotation_state": 1, "rotation_angle_mdeg": 3600, "sonic_run": false, "position_um": 100000}
+        },
+        {
+          "cycles": 100,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 5, "sample_stage": 1, "rotation_state": 4, "rotation_angle_mdeg": 0, "position_um": 99500, "rotation_speed_rpm": 0}
+        },
+        {
+          "cycles": 20,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 6, "sample_stage": 1, "container_mdeg": 90000, "rotation_state": 1, "rotation_angle_mdeg": 3600, "position_um": 90000}
+        },
+        {
+          "cycles": 25,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 7, "sample_stage": 0, "rotation_angle_mdeg": 90000, "position_um": 89500, "rotation_speed_rpm": 0}
+        },
+        {
+          "cycles": 176,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 9, "hub_state": 11, "position_um": 0, "rotation_angle_mdeg": 90000, "sample_fault": false}
+        }
+      ]
+    },
+    {
+      "name": "sample_two_stages_then_park",
+      "setup": {
+        "position_um": 20000,
+        "indexed": true,
+        "sample": {"stages": 2, "in_depth_um": 20000, "depth_um": [18000, 16000], "container_mdeg": [0, 90000]}
+      },
+      "steps": [
+        {
+          "cycles": 110,
+          "input": {"cmd_sample": true},
+          "expect": {"sample_phase": 6, "sample_stage": 2, "container_mdeg": 90000, "rotation_angle_mdeg": 3600, "position_um": 16000}
+        },
+        {
+          "cycles": 53,
+          "input": {"cmd_sample": true},
+          "expect": {"sample_phase": 9, "hub_state": 11, "position_um": 0, "rotation_angle_mdeg": 90000, "sample_fault": false}
+        }
+      ]
+    },
+    {
+      "name": "sample_three_stages_then_park",
+      "setup": {
+        "position_um": 20000,
+        "indexed": true,
+        "sample": {"stages": 3, "in_depth_um": 20000, "depth_um": [18000, 16000, 14000], "container_mdeg": [0, 90000, 180000]}
+      },
+      "steps": [
+        {
+          "cycles": 139,
+          "input": {"cmd_sample": true},
+          "expect": {"sample_phase": 6, "sample_stage": 3, "container_mdeg": 180000, "rotation_angle_mdeg": 93600, "position_um": 14000}
+        },
+        {
+          "cycles": 49,
+          "input": {"cmd_sample": true},
+          "expect": {"sample_phase": 9, "hub_state": 11, "position_um": 0, "rotation_angle_mdeg": 180000, "sample_fault": false}
+        }
+      ]
+    },
+    {
+      "name": "sample_four_stages_then_park",
+      "setup": {
+        "position_um": 20000,
+        "indexed": true,
+        "sample": {"stages": 4, "in_depth_um": 20000, "depth_um": [18000, 16000, 14000, 12000], "container_mdeg": [0, 90000, 180000, 270000]}
+      },
+      "steps": [
+        {
+          "cycles": 168,
+          "input": {"cmd_sample": true},
+          "expect": {"sample_phase": 6, "sample_stage": 4, "container_mdeg": 270000, "rotation_angle_mdeg": 183600, "position_um": 12000}
+        },
+        {
+          "cycles": 45,
+          "input": {"cmd_sample": true},
+          "expect": {"sample_phase": 9, "hub_state": 11, "position_um": 0, "rotation_angle_mdeg": 270000, "sample_fault": false}
+        }
+      ]
+    },
+    {
+      "name": "sample_drives_in_with_sonic_then_cuts",
+      "setup": {
+        "position_um": 40000,
+        "indexed": true,
+        "sample": {"stages": 1, "in_depth_um": 50000, "depth_um": [40000], "container_mdeg": [0]}
+      },
+      "steps": [
+        {
+          "cycles": 67,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 2, "sonic_state": 1, "sonic_run": true, "rotation_state": 4, "position_um": 50050, "hub_state": 12}
+        },
+        {
+          "cycles": 1,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 3, "sonic_run": false, "position_um": 50050, "rotation_speed_rpm": 0}
+        },
+        {
+          "cycles": 20,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 4, "rotation_state": 1, "rotation_angle_mdeg": 3600, "sonic_run": false, "position_um": 50050}
+        },
+        {
+          "cycles": 198,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 9, "hub_state": 11, "position_um": 0, "rotation_angle_mdeg": 0, "sample_fault": false}
+        }
+      ]
+    },
+    {
+      "name": "sample_stall_aborts_to_fault",
+      "setup": {
+        "position_um": 100000,
+        "indexed": true,
+        "sample": {"stages": 1, "in_depth_um": 100000, "depth_um": [90000], "container_mdeg": [90000]}
+      },
+      "steps": [
+        {
+          "cycles": 20,
+          "input": {"cmd_sample": true, "tool_engaged": true, "rotation_torque_pct": 40},
+          "expect": {
+            "sample_phase": 8,
+            "sample_fault": true,
+            "rotation_state": 2,
+            "rotation_stalled": true,
+            "rotation_angle_mdeg": 68400,
+            "rotation_speed_rpm": 0,
+            "hub_state": 12,
+            "position_um": 100000,
+            "speed_um_s": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "sample_rejects_a_stage_count_outside_1_to_4",
+      "setup": {
+        "indexed": true,
+        "sample": {"stages": 0, "in_depth_um": 20000, "depth_um": [18000], "container_mdeg": [0]}
+      },
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"cmd_sample": true},
+          "expect": {"sample_phase": 8, "sample_fault": true, "hub_state": 12, "speed_um_s": 0, "rotation_speed_rpm": 0}
+        }
+      ]
+    },
+    {
+      "name": "sample_seeks_the_rotation_index_before_the_cut",
+      "setup": {
+        "position_um": 100000,
+        "sample": {"stages": 1, "in_depth_um": 100000, "depth_um": [98000], "container_mdeg": [0]}
+      },
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"cmd_sample": true, "rotation_index": true},
+          "expect": {"sample_phase": 1, "rotation_indexed": true, "rotation_move_done": true, "rotation_angle_mdeg": 0, "hub_state": 12}
+        },
+        {
+          "cycles": 1,
+          "input": {"cmd_sample": true, "rotation_index": true},
+          "expect": {"sample_phase": 4, "rotation_indexed": true, "rotation_angle_mdeg": 3600, "sonic_run": false}
         }
       ]
     }
