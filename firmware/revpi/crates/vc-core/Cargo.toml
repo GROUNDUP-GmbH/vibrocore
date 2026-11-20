@@ -1,0 +1,12 @@
+[package]
+name = "vc-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Vibrocore domain logic and state codes. No device I/O."
+
+[dependencies]
+
+[dev-dependencies]
+serde_json = "1"

@@ -1,0 +1,16 @@
+[package]
+name = "vc-runtime"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Real-time loop, watchdogs and MQTT bridge skeleton."
+
+[[bin]]
+name = "vibrocore-ctl"
+path = "src/main.rs"
+
+[dependencies]
+vc-core = { path = "../vc-core" }
+vc-io = { path = "../vc-io" }
+vc-modbus = { path = "../vc-modbus" }

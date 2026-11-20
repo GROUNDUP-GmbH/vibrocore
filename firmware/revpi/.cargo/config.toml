@@ -1,0 +1,4 @@
+# Linker for a native aarch64 build on an x86_64 host.
+# `cross build --target aarch64-unknown-linux-gnu` does not need this file.
+[target.aarch64-unknown-linux-gnu]
+linker = "aarch64-linux-gnu-gcc"
