@@ -12,7 +12,7 @@ manufacturing internal reference.
 | Solids and STEP | [build123d](https://github.com/gumyr/build123d) 0.13 on OpenCascade | Headless, pinned, runs in CI. A part is modelled only when the design docs already give its dimensions |
 | Drawings | SVG (A3) and a text PDF from `cad/tools/drawings.py` | ISO 7200 title block, ISO 5457 sheet, ISO 128 first-angle note. No GUI |
 | Interactive mechanical CAD | FreeCAD 1.0 or newer, Part / Assembly / TechDraw | What a designer opens. `cad/freecad/make_plate.py` rebuilds the plate blank. `cad/freecad/plm_upload_macro.py` exports the active part and calls `plm-sync`. Not required for CI |
-| Wiring notes | KiCad 8 schematic `cad/kicad/vibrocore-control/` | Text-native. There is no PCB yet |
+| Cabinet schematic | KiCad 8 schematic `cad/kicad/vibrocore-control/` | Drawing VC-SCH-5000. There is no PCB yet |
 | Product data | Odoo 19 with [OdooPLM](https://github.com/OmniaGit/odooplm) 19.0 | Engineering BOM, documents, revisions. Plain `mrp.bom` CSVs are the fallback |
 
 FreeCAD's own Assembly and TechDraw workbenches are the right place for a released
