@@ -16,7 +16,7 @@
 <text x="20" y="68.00000000000001" font-size="2.8" font-family="sans-serif">6      VC-PW-5700     A    1    Main isolator</text>
 <text x="20" y="72.20000000000002" font-size="2.8" font-family="sans-serif">7      VC-PW-5710     A    1    Line circuit breaker</text>
 <text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-PW-5720     A    1    Residual current device</text>
-<text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-PW-5730     A    1    Branch MCB sonic inverter</text>
+<text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-PW-5730     A    1    Branch breaker sonic inverter</text>
 <text x="20" y="84.80000000000003" font-size="2.8" font-family="sans-serif">10     VC-PW-5740     A    1    Branch MCB hub drive</text>
 <text x="20" y="89.00000000000003" font-size="2.8" font-family="sans-serif">11     VC-PW-5750     A    1    Branch MCB S200 24 V supply</text>
 <text x="20" y="93.20000000000003" font-size="2.8" font-family="sans-serif">12     VC-PW-5760     A    1    Branch MCB general 24 V supply</text>

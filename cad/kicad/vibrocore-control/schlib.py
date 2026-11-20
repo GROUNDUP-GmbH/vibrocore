@@ -214,6 +214,7 @@ def multi_breaker(name: str, prefix: str, poles: int, horizontal: bool, mark: li
 multi_breaker("ISO2", "Q", 2, False, [poly([(-4, -2), (4, -2)]), stext(6, 0, "ISO", "0.8")])
 multi_breaker("RCD2", "QF", 2, False, [circ(6, 0, 2), stext(6, 0, "B", "1.27")])
 multi_breaker("MCB2", "F", 2, False)
+multi_breaker("MCB3", "F", 3, False, [stext(6, 0, "M", "1.0")])
 multi_breaker("MPROT", "F", 3, True, [stext(0, 5, "PWM", "0.8")])
 
 add(

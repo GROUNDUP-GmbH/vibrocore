@@ -571,7 +571,7 @@ VC-CT-6100, the PFC200, is unchanged.
 | 120 | Hub motor cable | S200 X2 and brake pair to X108. Siemens cable order code TBD. | 1 | unknown | Lapp / Siemens |
 | 121 | Hub encoder cable | 1FL2104 encoder to S200 X120. Order code TBD. | 1 | unknown | Siemens |
 | 122 | 24 V slot | Already VC-PW-5320. Not a second supply. Rating stays open. | 0 | — | Mean Well |
-| 123 | Branch MCB sonic | 2-pole C16 for the ATV320. Confirm the manual. | 1 | unknown | TBD |
+| 123 | Branch breaker sonic | TeSys GV2L20, 18 A magnetic. NVE41289.09 enclosure table. Supply 6 mm2. | 1 | unknown | Schneider |
 | 124 | Branch MCB hub | 2-pole C16 for the S200. | 1 | unknown | TBD |
 | 125 | Branch MCB S200 supply | 2-pole C4 for the SDR-120-24 primary. | 1 | unknown | TBD |
 | 126 | Branch MCB general supply | 2-pole C10 for the SDR-480-24 primary. | 1 | unknown | TBD |

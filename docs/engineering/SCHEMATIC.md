@@ -100,9 +100,12 @@ R1C is the fault-relay common and sits on the general 24 V rail.
 R1B is the NC contact and feeds DIO input index 11.
 R1A stays open.
 Do not link the ATV320 P24 terminal to the cabinet 24 V.
-F2 stays C16.
-The ATV320 input is 17.8 A at 200 V.
-Confirm F2 before you order it.
+F2 is a TeSys GV2L20.
+NVE41289.09 lists it for ATV320U15M2 in an enclosure on 240 V one phase.
+The line current is 17.8 A at 200 V.
+The magnetic trip is 223 A.
+Pole 3 is open.
+The supply wire is 6 mm2.
 Assign the second STO channel in SoMove.
 The parameter name is TODO.
 Relay R2 is the STO monitor for DIO input index 5.
@@ -142,7 +145,7 @@ Strips X1 to X10 are the names on this drawing.
 The purchased terminal block is not chosen.
 The mains cable is 3G6.
 PE on that cable is 6 mm2.
-The sonic feeder is 4 mm2.
+The sonic feeder is 6 mm2.
 The S200 feeder is 2.5 mm2.
 Servo power and each vibrator output are 4G1.5 shielded.
 The servo brake pair is 2x0.75 mm2.
@@ -180,7 +183,9 @@ The PTI connector name and the pulse scale are TODO.
 The RS-485 port on the PTI unit is TODO.
 The Siemens order codes for the motor cable and the encoder cable are TODO.
 The RevPi power and RS-485 housing pin numbers are TODO.
-The ATV320 line current is not confirmed against the C16 breaker and the Instagrid current.
+The Instagrid source is 15.7 A continuous.
+The drive rated input is 17.8 A at 200 V.
+The drive does not run at rated input on this source.
 The SoMove STO parameter and the RJ45 pin numbers are TODO.
 The Modbus baud and parity are TODO.
 F21 and F22 have no PWM-rated order code.

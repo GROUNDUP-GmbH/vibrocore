@@ -2431,7 +2431,6 @@ parts:
   datasheet: https://www.se.com/us/en/product/ATV320U15M2C/variable-speed-drive-altivar-machine-atv320-1-5kw-200-to-240v-1-phase-compact/
   unknowns:
   - The EUR price is not sourced. Do not copy the old EUR 180-300 band.
-  - Line current and the branch breaker must be confirmed in the installation manual before you order the MCB.
   - The Modbus register map is TODO.
   notes: 'Selected 2026-11-20. Replaces VC-SH-1200. Data sheet mirror:
     https://iportal.se.com/Contents/docs/SQD-ATV320U15M2C_DATASHEET.PDF. Mounted in the cabinet.'
@@ -2489,20 +2488,23 @@ parts:
   notes: Do not substitute a loose multi-core until the connector is confirmed.
   lifecycle: active
 - part_number: VC-PW-5730
-  name: Branch MCB sonic inverter
+  name: Branch breaker sonic inverter
   revision_index: 0
   revision_letter: A
   supply: purchase
   subsystem: power
   category: Safety
-  spec: Two-pole MCB, characteristic C, 16 A, on the ATV320 feeder. Confirm the rating in the ATV320
-    installation manual. The Instagrid feeder is only about 16 A continuous.
+  spec: 'TeSys GV2L20. 3-pole magnetic circuit breaker, 18 A, Irm 223 A. It feeds ATV320U15M2C.
+    NVE41289.09, table IEC Type Circuit-Breaker with enclosure, 240 V single-phase, row ATV320U15M2.
+    Pole 3 is open. The supply wire is 6 mm2. The drive terminal maximum is 6 mm2.'
   legacy_ref: '9.123'
+  manufacturer_pn: GV2L20
+  supplier_id: schneider
+  datasheet: https://www.se.com/ww/en/download/document/NVE41289/
   unknowns:
-  - The order code is not selected.
   - The price is not sourced.
-  - The manual may require a different rating. Do not order until that page is checked.
-  notes: Schneider or Eaton. Schematic reference F2.
+  notes: 'Schematic reference F2. The same table also lists PowerPacT B-L36030 at 30 A. Fit GV2L20.
+    The Instagrid source is 15.7 A continuous, so the drive does not run at its 17.8 A rated input.'
   lifecycle: active
 - part_number: VC-PW-5740
   name: Branch MCB hub drive

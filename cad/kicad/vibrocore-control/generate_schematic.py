@@ -48,6 +48,8 @@ class Inst:
     ref_dy: int = -8
     val_dx: int = 0
     val_dy: int = 8
+    ref_justify: str = ""
+    val_justify: str = ""
 
 
 @dataclass
@@ -71,12 +73,14 @@ class Sheet:
         inst = Inst(
             ref, sym, x, y, value, unit,
             in_bom=kw.get("in_bom", symbol.in_bom),
-            hide_value=kw.get("hide_value", False),
+            hide_value=kw.get("hide_value", sym.startswith("TERM") and value == ref),
             hide_ref=kw.get("hide_ref", False),
-            ref_dx=kw.get("ref_dx", 0),
-            ref_dy=kw.get("ref_dy", -(span + 2)),
+            ref_dx=kw.get("ref_dx", 8 if sym.startswith("TERM") else 0),
+            ref_dy=kw.get("ref_dy", -2 if sym.startswith("TERM") else -(span + 2)),
             val_dx=kw.get("val_dx", 0),
             val_dy=kw.get("val_dy", span + 3),
+            ref_justify=kw.get("ref_justify", "left" if sym.startswith("TERM") else ""),
+            val_justify=kw.get("val_justify", ""),
         )
         self.insts.append(inst)
         return inst
@@ -175,8 +179,12 @@ class Sheet:
 
 
 def pair(sheet: Sheet, ref: str, sym: str, x: int, y: int, value: str, dx: int = 20) -> None:
-    sheet.place_pin(ref, sym, "1", x, y, value, unit=1, val_dx=dx + 8, val_dy=-10, ref_dy=-10)
-    sheet.place_pin(ref, sym, "3", x + dx, y, value, unit=2, hide_value=True, ref_dy=-10)
+    """Two-pole device. The reference sits above the line pole. The value sits to its right."""
+    sheet.place_pin(
+        ref, sym, "1", x, y, value, unit=1,
+        ref_dy=-14, ref_justify="left", val_dx=8, val_dy=6, val_justify="left",
+    )
+    sheet.place_pin(ref, sym, "3", x + dx, y, value, unit=2, hide_value=True, hide_ref=True)
     sheet.dash(ref)
 
 

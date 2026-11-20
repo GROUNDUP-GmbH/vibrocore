@@ -25,9 +25,10 @@ def build_power(s: Sheet) -> None:
     s.notes = [
         "Instagrid ONE max is the only AC source. Continuous current is 15.7 A.",
         "Q1 does not switch PE. QF1 is type B, 30 mA.",
-        "F2 stays C16. The ATV320 input is 17.8 A at 200 V.",
-        "Confirm F2 before you order it. Its order code is not frozen.",
-        "The S200 feeder is 2.5 mm2. The sonic feeder is 4 mm2.",
+        "F2 is GV2L20. NVE41289.09, IEC breaker table, enclosure, 240 V one phase.",
+        "The row is ATV320U15M2. The line current is 17.8 A at 200 V. Irm is 223 A.",
+        "Pole 3 of F2 is open. The supply wire is 6 mm2. The terminal maximum is 6 mm2.",
+        "The S200 feeder is 2.5 mm2.",
         "The general 24 V rail is 2.5 mm2. The S200 24 V feed is 1.0 mm2.",
         "Both 0 V rails meet at X1 pin 4. W1 is the only bond to PE.",
         "Confirm W1 in the S200 PTI manual. Remove W1 if that manual forbids the bond.",
@@ -65,27 +66,33 @@ def build_power(s: Sheet) -> None:
     s.wire("130_L", s.pin("F1", "2"), (lx, bus_l))
     s.wire("131_N", s.pin("F1", "4"), (nx, bus_n))
     branches = [
-        ("F2", "VC-PW-5730 C16", "140_L", "141_N", "4 mm2", True),
-        ("F3", "VC-PW-5740 C16", "150_L", "151_N", "2.5 mm2", True),
-        ("F4", "VC-PW-5750 C4", "160_L", "161_N", "1.5 mm2", False),
-        ("F5", "VC-PW-5760 C10", "170_L", "171_N", "2.5 mm2", False),
+        ("F2", "MCB3", "VC-PW-5730 GV2L20", "140_L", "141_N", "6 mm2", True),
+        ("F3", "MCB2", "VC-PW-5740 C16", "150_L", "151_N", "2.5 mm2", True),
+        ("F4", "MCB2", "VC-PW-5750 C4", "160_L", "161_N", "1.5 mm2", False),
+        ("F5", "MCB2", "VC-PW-5760 C10", "170_L", "171_N", "2.5 mm2", False),
     ]
     bx = lx + 40
-    for index, (ref, value, net_l, net_n, label, leaves) in enumerate(branches):
+    for index, (ref, sym, value, net_l, net_n, label, leaves) in enumerate(branches):
         x = bx + index * 46
-        s.place_pin(ref, "MCB2", "1", x, bus_l, value, unit=1, val_dx=18, val_dy=-11, ref_dy=-11)
-        s.place_pin(ref, "MCB2", "3", x + 16, bus_n, value, unit=2, hide_value=True, ref_dy=-11)
+        s.place_pin(
+            ref, sym, "1", x, bus_l, value, unit=1,
+            ref_dy=-12, ref_justify="left", val_dx=8, val_dy=6, val_justify="left",
+        )
+        s.place_pin(ref, sym, "3", x + 16, bus_n, value, unit=2, hide_value=True, hide_ref=True)
+        if sym == "MCB3":
+            s.place_pin(ref, sym, "5", x + 32, bus_n + 18, value, unit=3, hide_value=True, hide_ref=True)
+            s.text(x + 36, bus_n + 22, "pole 3 open")
         s.dash(ref)
         if leaves:
             s.stub(net_l, (ref, "2"), dy=2)
             s.stub(net_n, (ref, "4"), dy=2)
-            s.text(x - 2, s.pin(ref, "2")[1] + 6, label)
+            s.text(x + 8, s.pin(ref, "2")[1] + 4, label)
     refs = [row[0] for row in branches]
     s.hrail("130_L", bus_l, [(lx, bus_l)] + [(ref, "1") for ref in refs])
     s.hrail("131_N", bus_n, [(nx, bus_n)] + [(ref, "3") for ref in refs])
-    s.text(lx + 2, bus_l - 4, "L  4 mm2 on the sonic branch, 2.5 mm2 on the S200 branch")
-    s.place("G1", "PSU0", 150, 150, "VC-PW-5310 SDR-120-24")
-    s.place("G2", "PSU", 250, 150, "VC-PW-5320 SDR-480-24 slot")
+    s.text(8, bus_l - 8, "Sonic tap 6 mm2. S200 tap 2.5 mm2.")
+    s.place("G1", "PSU0", 150, 150, "VC-PW-5310 SDR-120-24", val_dx=18, val_dy=20, val_justify="left", ref_dy=-22)
+    s.place("G2", "PSU", 250, 150, "VC-PW-5320 SDR-480-24 slot", val_dx=18, val_dy=20, val_justify="left", ref_dy=-22)
     gutter = nx + 8
     gutter2 = gutter + 8
     for ref, psu, net_l, net_n, gy, gx in (
@@ -103,10 +110,13 @@ def build_power(s: Sheet) -> None:
         ("G2", "210_24C", "211_24C", "F24", "VC-PW-5810 20A", "PF2"),
     ):
         plus = s.pin(psu, "P")
-        s.place_pin(fuse_ref, "FUSE", "1", plus[0] + 18, plus[1], fuse_value, ref_dx=8)
+        s.place_pin(
+            fuse_ref, "FUSE", "1", plus[0] + 18, plus[1], fuse_value,
+            ref_dx=8, ref_dy=-4, ref_justify="left", val_dx=8, val_dy=6, val_justify="left",
+        )
         s.link(net_in, (psu, "P"), (fuse_ref, "1"))
         out = s.pin(fuse_ref, "2")
-        s.place_pin(flag, "PWR", "1", out[0], out[1] + 10, net_out, hide_value=True)
+        s.place_pin(flag, "PWR", "1", out[0], out[1] + 10, net_out, hide_value=True, ref_dx=8, ref_justify="left")
         s.link(net_out, (fuse_ref, "2"), (flag, "1"))
     zero = 186
     s.place_pin("X1.4", "TERM_H", "2", 120, zero, "X1:4", ref_dy=-6)
@@ -135,12 +145,13 @@ def build_safety(s: Sheet) -> None:
         "OPEN: the reset button order code and colour are not chosen.",
         "The RevPi only reads feedback. Do not claim an ISO 13849 PL.",
     ]
+    # Notes sit in the empty top-left band, clear of the PNOZ.
     s.place("K1", "PNOZ", 168, 108, "VC-CT-6220 750104", unit=1)
     y11 = s.pin("K1", "S11")
     s.place_pin("S1", "ESTOP", "11", y11[0] - 16, y11[1], "VC-CT-6210 OPEN", unit=1, val_dy=-12)
     y21 = s.pin("K1", "S21")
-    s.place_pin("S1", "ESTOP", "21", y21[0] - 16, y21[1], "VC-CT-6210 OPEN", unit=2, hide_value=True)
-    s.place_pin("S1", "ESTOP", "31", 90, s.pin("K1", "S22")[1] + 24, "VC-CT-6210 OPEN", unit=3, hide_value=True)
+    s.place_pin("S1", "ESTOP", "21", y21[0] - 16, y21[1], "VC-CT-6210 OPEN", unit=2, hide_value=True, hide_ref=True)
+    s.place_pin("S1", "ESTOP", "31", 90, s.pin("K1", "S22")[1] + 24, "VC-CT-6210 OPEN", unit=3, hide_value=True, hide_ref=True)
     s.dash("S1")
     s.link("410_S11", ("S1", "11"), ("K1", "S11"))
     s.link("412_S21", ("S1", "21"), ("K1", "S21"))
@@ -152,16 +163,16 @@ def build_safety(s: Sheet) -> None:
     s.link("414_S34", ("S10", "2"), ("K1", "S34"))
     s.wire("411_S12", s.pin("S10", "1"), (s.pin("S10", "1")[0], s.pin("K1", "S12")[1]), s.pin("K1", "S12"))
     s.place_pin("F30", "FUSE", "2", 250, s.pin("K1", "A1")[1], "VC-PW-5820 2A", ref_dx=8)
-    s.place_pin("K1", "PNOZ", "13", s.pin("F30", "2")[0] + 24, s.pin("F30", "2")[1], "13-14", unit=2, hide_value=True, ref_dy=-10)
+    s.place_pin("K1", "PNOZ", "13", s.pin("F30", "2")[0] + 24, s.pin("F30", "2")[1], "13-14", unit=2, hide_value=True, hide_ref=True, ref_dy=-10)
     s.link("430_F30", ("F30", "2"), ("K1", "13"))
     s.stub("431_STO1", ("K1", "14"), dx=16)
     s.place_pin("F31", "FUSE", "2", 250, s.pin("K1", "14")[1] + 24, "VC-PW-5820 2A", ref_dx=8)
-    s.place_pin("K1", "PNOZ", "23", s.pin("F31", "2")[0] + 24, s.pin("F31", "2")[1], "23-24", unit=3, hide_value=True, ref_dy=-10)
+    s.place_pin("K1", "PNOZ", "23", s.pin("F31", "2")[0] + 24, s.pin("F31", "2")[1], "23-24", unit=3, hide_value=True, hide_ref=True, ref_dy=-10)
     s.link("432_F31", ("F31", "2"), ("K1", "23"))
     s.stub("433_STO2", ("K1", "24"), dx=16)
-    s.place_pin("K1", "PNOZ", "33", 300, s.pin("K1", "24")[1] + 22, "33-34 spare", unit=4, hide_value=True, ref_dy=-10)
+    s.place_pin("K1", "PNOZ", "33", 300, s.pin("K1", "24")[1] + 22, "33-34 spare", unit=4, hide_value=True, hide_ref=True, ref_dy=-10)
     s.text(300, s.pin("K1", "34")[1] + 6, "Spare. Do not load.")
-    s.place_pin("K1", "PNOZ", "41", 250, s.pin("K1", "33")[1] + 20, "41-42", unit=5, hide_value=True, ref_dy=-10)
+    s.place_pin("K1", "PNOZ", "41", 250, s.pin("K1", "33")[1] + 20, "41-42", unit=5, hide_value=True, hide_ref=True, ref_dy=-10)
     s.stub("421_PNOZ", ("K1", "42"), dx=16)
     s.stub("420_ESTOP", ("S1", "31"), dx=16)
     rail = 28
@@ -169,7 +180,7 @@ def build_safety(s: Sheet) -> None:
     s.vrail("001_0V", rail + 12, [("K1", "A2")])
     s.text(250, s.pin("K1", "14")[1] - 4, "STO ch 1  0.75 mm2")
     s.text(250, s.pin("K1", "24")[1] - 4, "STO ch 2  0.75 mm2")
-    s.note_at = (12, 200)
+    s.note_at = (16, 8)
 
 
 def side_net(s: Sheet, net: str, nodes, dx: int) -> None:
@@ -210,7 +221,10 @@ def build_hub(s: Sheet) -> None:
     side_net(s, "001_0V", [("A2", "0V"), ("A2", "0Vb"), ("A2", "2"), ("A2", "6")], -20)
     uy = s.pin("A2", "U")[1]
     s.place_pin("M1", "MSRV", "U", s.pin("A2", "U")[0] + 78, uy, "VC-HB-2100 1FL2104")
-    s.place_pin("U1", "PULSE", "P", s.pin("A2", "36")[0] + 36, s.pin("A2", "36")[1], "pulse source TODO", in_bom=False)
+    s.place_pin(
+        "U1", "PULSE", "P", s.pin("A2", "36")[0] + 36, s.pin("A2", "36")[1],
+        "pulse source TODO", in_bom=False, ref_dy=-16, val_dx=10, val_dy=2, val_justify="left",
+    )
     pairs = (("U", "X4.1", "540_U", "U"), ("V", "X4.2", "541_V", "V"), ("W", "X4.3", "542_W", "W"))
     for drive, term, net, motor in pairs:
         dx, dy = s.pin("A2", drive)
@@ -223,7 +237,10 @@ def build_hub(s: Sheet) -> None:
     s.join("543_BRP", ("A2", "BRP"), ("X6.1", "1"), ("X6.1", "2"), ("M1", "BRP"))
     s.join("544_BRN", ("A2", "BRN"), ("X6.2", "1"), ("X6.2", "2"), ("M1", "BRN"))
     s.place_pin("X5.1", "TERM_H", "1", s.pin("A2", "X120")[0] + 24, s.pin("A2", "X120")[1], "X5.1")
-    s.place_pin("X5.2", "TERM_H", "1", s.pin("X5.1", "2")[0] + 20, s.pin("A2", "X120")[1] + 10, "X5.2")
+    s.place_pin(
+        "X5.2", "TERM_H", "1", s.pin("X5.1", "2")[0] + 20, s.pin("A2", "X120")[1] + 14,
+        "X5.2", ref_dx=8, ref_dy=-2, ref_justify="left",
+    )
     s.join("510_ENC", ("A2", "X120"), ("X5.1", "1"), ("X5.1", "2"))
     s.stub("510_ENC", ("X5.1", "2"), dx=14)
     left_pe = s.pin("A2", "PE")
@@ -249,7 +266,7 @@ def build_hub(s: Sheet) -> None:
     s.stub("910_A", ("R1", "1"), dy=16)
     s.stub("911_B", ("R1", "2"), dy=16)
     s.text(s.pin("A2", "U")[0] + 4, s.pin("A2", "U")[1] - 4, "4G1.5 shielded")
-    s.note_at = (12, 214)
+    s.note_at = (16, 8)
 
 
 def build_sonic(s: Sheet) -> None:
@@ -265,7 +282,9 @@ def build_sonic(s: Sheet) -> None:
         "The R1 logic assignment is still TODO. R2 parameter is TODO.",
         "RJ45 pin numbers are TBC. See the Modbus manual NVE41308.",
         "PA, PB, PC and P0 stay open. There is no braking resistor.",
-        "Output cable is 4G1.5 mm2 shielded. Shield at the drive end.",
+        "Supply wire is 6 mm2. NVE41289 frame 2, U15M2C, rated condition.",
+        "Each motor cable stays 4G1.5. The drive runs below rated output current.",
+        "Shield the motor cable at the drive end.",
     ]
     s.place("A3", "ATV", 120, 130, "VC-SH-1210 ATV320U15M2C")
     for pin, net in (("L1", "140_L"), ("L2", "141_N"), ("STO", "431_STO1"), ("DI3", "433_STO2"), ("DI1", "450_RESET"), ("COM", "001_0V")):
@@ -282,13 +301,16 @@ def build_sonic(s: Sheet) -> None:
     s.vrail("211_24C", rail, [("A3", "R1C"), ("A3", "R2A")])
     for unit, drive, ypin in ((1, "U", "1"), (2, "V", "3"), (3, "W", "5")):
         px, py = s.pin("A3", drive)
-        s.place_pin("F21", "MPROT", ypin, px + 40, py, "VC-PW-5770 OPEN", unit=unit, hide_value=unit != 1, ref_dy=-8)
+        s.place_pin("F21", "MPROT", ypin, px + 40, py, "VC-PW-5770 OPEN", unit=unit, hide_value=unit != 1, hide_ref=unit != 1, ref_dy=-8)
     s.dash("F21")
     for unit, drive, ypin in ((1, "U", "1"), (2, "V", "3"), (3, "W", "5")):
         px, py = s.pin("A3", drive)
-        s.place_pin("F22", "MPROT", ypin, px + 40, py + 36, "VC-PW-5770 OPEN", unit=unit, hide_value=True, ref_dy=-8)
+        s.place_pin("F22", "MPROT", ypin, px + 40, py + 36, "VC-PW-5770 OPEN", unit=unit, hide_value=unit != 1, hide_ref=unit != 1, ref_dy=-8)
     s.dash("F22")
-    s.place_pin("M2", "M3", "U", s.pin("F21", "2")[0] + 70, s.pin("A3", "U")[1], "VC-SH-1100 motor A")
+    s.place_pin(
+        "M2", "M3", "U", s.pin("F21", "2")[0] + 70, s.pin("A3", "U")[1],
+        "VC-SH-1100 motor A", val_dx=14, val_dy=0, val_justify="left",
+    )
     for drive, fin, fout, term, net, motor in (
         ("U", "1", "2", "X2.1", "610_UA", "U"),
         ("V", "3", "4", "X2.2", "611_VA", "V"),
@@ -303,9 +325,12 @@ def build_sonic(s: Sheet) -> None:
         dx, dy = s.pin("F21", fout)
         s.place_pin(term, "TERM_H", "1", dx + 22, dy, term)
         s.join(net, ("F21", fout), (term, "1"), (term, "2"), ("M2", motor))
-    s.place_pin("X2.4", "TERM_H", "1", s.pin("M2", "PE")[0] - 24, s.pin("M2", "PE")[1], "X2.4")
+    s.place_pin("X2.4", "TERM_H", "1", s.pin("M2", "PE")[0] - 24, s.pin("M2", "PE")[1], "X2.4", ref_dx=0, ref_dy=-8)
     s.join("102_PE", ("A3", "PE2"), ("X2.4", "1"), ("X2.4", "2"), ("M2", "PE"))
-    s.place_pin("M3", "M3", "U", s.pin("F22", "2")[0] + 78, s.pin("F22", "2")[1], "VC-SH-1100 motor B")
+    s.place_pin(
+        "M3", "M3", "U", s.pin("F22", "2")[0] + 78, s.pin("F22", "2")[1],
+        "VC-SH-1100 motor B", val_dx=14, val_dy=0, val_justify="left",
+    )
     # Swap V and W on the way to motor B. The jogs sit side by side.
     lanes = {"V": s.pin("F22", "4")[0] + 16, "W": s.pin("F22", "4")[0] + 24}
     mapping = (
@@ -322,11 +347,11 @@ def build_sonic(s: Sheet) -> None:
         else:
             s.wire(net, src, (lanes[lane], src[1]), (lanes[lane], dest[1]), s.pin(term, "1"))
         s.link(net, (term, "2"), ("M3", motor))
-    s.place_pin("X3.4", "TERM_H", "1", s.pin("M3", "PE")[0] - 24, s.pin("M3", "PE")[1], "X3.4")
+    s.place_pin("X3.4", "TERM_H", "1", s.pin("M3", "PE")[0] - 24, s.pin("M3", "PE")[1], "X3.4", ref_dx=0, ref_dy=-8)
     s.join("102_PE", ("X3.4", "1"), ("X3.4", "2"), ("M3", "PE"), ("A3", "PE2"))
     s.text(s.pin("M3", "U")[0] - 20, s.pin("M3", "U")[1] - 8, "Swap V and W at X3")
     s.text(s.pin("M2", "U")[0] - 10, s.pin("M2", "U")[1] - 8, "4G1.5 shielded")
-    s.note_at = (12, 220)
+    s.note_at = (16, 8)
 
 
 def _contact_24(s: Sheet, ref: str, sym: str, signal: str, y: int, x_signal: int, value: str) -> None:
@@ -342,6 +367,8 @@ def build_revpi(s: Sheet) -> None:
         "X4 order 24 V, 0 V, NC, FG is TBC. RS-485 order GND, N, P is TBC.",
         "The signal names 24 V, 0 V, FG, P, N and GND are the documented names.",
         "OPEN: the index sensor order code is not chosen. The symbol is PNP.",
+        "S4 and S5 are VC-CT-6200. S6 is the IDEC HE1B-M1.",
+        "S14 to S17 are the lift limit contacts.",
         "Spare inputs and outputs stay open.",
         "ETH1 is a service port. Do not put it in the harness.",
         "There is no PFC200 and no CODESYS target on this drawing.",
@@ -364,13 +391,13 @@ def build_revpi(s: Sheet) -> None:
         y = s.pin("A5", dio)[1]
         x = s.pin("A5", dio)[0]
         s.place_pin(term, "TERM_H", "2", x - 22, y, term)
-        s.place_pin(ref, sym, "2", x - 52, y, value)
+        s.place_pin(ref, sym, "2", x - 52, y, value, hide_value=True, ref_dy=-3)
         s.join(net, ("A5", dio), (term, "2"), (term, "1"), (ref, "2"))
         s.vrail("211_24C", 16, [(ref, "1")])
     y = s.pin("A5", "I13")[1]
     x = s.pin("A5", "I13")[0]
     s.place_pin("X7.4", "TERM_H", "2", x - 22, y, "X7.4")
-    s.place_pin("B1", "PNP", "OUT", x - 60, y, "VC-CT-6250 OPEN")
+    s.place_pin("B1", "PNP", "OUT", x - 60, y, "VC-CT-6250 OPEN", hide_value=True, ref_dx=10, ref_dy=-8, ref_justify="left")
     s.join("480_INDEX", ("A5", "I13"), ("X7.4", "2"), ("X7.4", "1"), ("B1", "OUT"))
     s.vrail("211_24C", 16, [("B1", "24")])
     s.vrail("001_0V", 28, [("B1", "0")])
@@ -386,8 +413,8 @@ def build_revpi(s: Sheet) -> None:
     ):
         x, y = s.pin("A5", dio)
         s.place_pin(term, "TERM_H", "2", x - 20, y, term)
-        s.place_pin(second, "SW_NC", "2", x - 46, y, second + " NC")
-        s.place_pin(first, "SW_NC", "2", x - 74, y, first + " NC")
+        s.place_pin(second, "SW_NC", "2", x - 46, y, second + " NC", hide_value=True, ref_dy=-3)
+        s.place_pin(first, "SW_NC", "2", x - 74, y, first + " NC", hide_value=True, ref_dy=-3)
         s.join(net, ("A5", dio), (term, "2"), (term, "1"), (second, "2"))
         s.link(mid, (second, "1"), (first, "2"))
         s.vrail("211_24C", 16, [(first, "1")])
@@ -429,10 +456,10 @@ def build_tilt(s: Sheet) -> None:
     ]
     s.place("K2", "REL", 80, 36, "VC-LT-9230 vertical", unit=1)
     s.place("K3", "REL", 170, 36, "VC-LT-9230 fold", unit=1)
-    s.place_pin("K2", "REL", "11", 80, 70, "K2 contacts", unit=2, hide_value=True)
-    s.place_pin("K3", "REL", "11", 170, 86, "K3 contacts", unit=2, hide_value=True)
-    s.place_pin("K2", "REL", "21", 80, 112, "K2 power", unit=3, hide_value=True)
-    s.place_pin("K3", "REL", "21", 170, 128, "K3 power", unit=3, hide_value=True)
+    s.place_pin("K2", "REL", "11", 80, 70, "K2 contacts", unit=2, hide_value=True, hide_ref=True)
+    s.place_pin("K3", "REL", "11", 170, 86, "K3 contacts", unit=2, hide_value=True, hide_ref=True)
+    s.place_pin("K2", "REL", "21", 80, 112, "K2 power", unit=3, hide_value=True, hide_ref=True)
+    s.place_pin("K3", "REL", "21", 170, 128, "K3 power", unit=3, hide_value=True, hide_ref=True)
     s.place_pin("D2", "DIODE", "1", s.pin("K2", "A1")[0] + 16, s.pin("K2", "A1")[1], "VC-CT-6780")
     s.place_pin("D3", "DIODE", "1", s.pin("K3", "A1")[0] + 16, s.pin("K3", "A1")[1], "VC-CT-6780")
     s.link("496_K2", ("K2", "A1"), ("D2", "1"))
@@ -481,15 +508,15 @@ def build_tilt(s: Sheet) -> None:
     )
     s.link("551_LIFTN", ("X10.2", "2"), ("M5", "2"))
     s.link("551_LIFTN", ("M5", "2"), ("M6", "2"))
-    s.place_pin("X8.5", "TERM_H", "1", 100, 230, "X8.5")
-    s.place_pin("X10.3", "TERM_H", "1", 160, 230, "X10.3")
-    s.hrail("211_24C", 230, [(20, 230), ("X8.5", "1"), ("X8.5", "2"), ("X10.3", "1"), ("X10.3", "2")])
-    s.place_pin("X8.6", "TERM_H", "1", 100, 242, "X8.6")
-    s.place_pin("X10.4", "TERM_H", "1", 160, 242, "X10.4")
-    s.hrail("001_0V", 242, [(36, 242), ("X8.6", "1"), ("X8.6", "2"), ("X10.4", "1"), ("X10.4", "2")])
+    s.place_pin("X8.5", "TERM_H", "1", 100, 214, "X8.5")
+    s.place_pin("X10.3", "TERM_H", "1", 160, 214, "X10.3")
+    s.hrail("211_24C", 214, [(20, 214), ("X8.5", "1"), ("X8.5", "2"), ("X10.3", "1"), ("X10.3", "2")])
+    s.place_pin("X8.6", "TERM_H", "1", 100, 224, "X8.6")
+    s.place_pin("X10.4", "TERM_H", "1", 160, 224, "X10.4")
+    s.hrail("001_0V", 224, [(36, 224), ("X8.6", "1"), ("X8.6", "2"), ("X10.4", "1"), ("X10.4", "2")])
     s.text(40, 34, "K2 coil")
     s.text(120, 34, "K3 coil")
-    s.note_at = (250, 16)
+    s.note_at = (210, 8)
 
 
 def build_rotation(s: Sheet) -> None:
@@ -505,15 +532,15 @@ def build_rotation(s: Sheet) -> None:
         "The index sensor is B1 on sheet 05.",
     ]
     s.place("A6", "NANO", 160, 90, "VC-CT-6280 proposal")
-    s.place_pin("F6", "FUSE", "1", 40, 40, "VC-PW-5790 2A")
-    s.place_pin("PF3", "PWR", "1", s.pin("F6", "2")[0], s.pin("F6", "2")[1] + 12, "24V R", hide_value=True)
+    s.place_pin("F6", "FUSE", "1", 40, 40, "VC-PW-5790 2A", val_dx=8, val_dy=0, val_justify="left", ref_dy=-10)
+    s.place_pin("PF3", "PWR", "1", s.pin("F6", "2")[0], s.pin("F6", "2")[1] + 12, "24V R", hide_value=True, ref_dx=8, ref_justify="left")
     s.link("500_24R", ("F6", "2"), ("PF3", "1"))
     s.vrail("211_24C", 24, [("F6", "1")])
     s.place_pin("X9.1", "TERM_H", "1", 90, s.pin("A6", "a2")[1], "X9.1")
     s.join("500_24R", ("PF3", "1"), ("X9.1", "1"), ("X9.1", "2"), ("A6", "a2"))
     bx = s.pin("A6", "b8")[0]
     s.place_pin("U2", "PULSE", "P", bx + 56, s.pin("A6", "b8")[1], "clock source TODO", in_bom=False)
-    s.place_pin("X9.3", "TERM_H", "2", s.pin("A6", "b4")[0] - 24, s.pin("A6", "b4")[1], "X9.3")
+    s.place_pin("X9.3", "TERM_H", "2", s.pin("A6", "b4")[0] - 50, s.pin("A6", "b4")[1], "X9.3")
     s.stub("495_ROT_EN", ("X9.3", "1"), dx=-14)
     s.link("495_ROT_EN", ("X9.3", "2"), ("A6", "b4"))
     s.place_pin("X9.4", "TERM_H", "1", bx + 22, s.pin("A6", "b8")[1], "X9.4")
@@ -531,7 +558,7 @@ def build_rotation(s: Sheet) -> None:
     s.hrail("001_0V", 150, [(36, 150), ("X9.2", "1"), ("X9.2", "2"), ("X9.5", "1"), ("X9.5", "2"), ("X9.7", "1"), ("X9.7", "2")])
     s.place_pin("PE2", "EARTH", "1", 210, 150, "PE", hide_value=True, hide_ref=True)
     s.join("102_PE", ("X9.8", "1"), ("X9.8", "2"), ("PE2", "1"))
-    s.text(80, 144, "CLK- and DIR- are parked on 0 V.")
+    s.text(80, 136, "CLK- and DIR- are parked on 0 V.")
     s.note_at = (12, 180)
 
 
@@ -967,12 +994,14 @@ def emit_sheet(sheet: Sheet, path: str, global_nets: dict[str, list[str]]) -> st
         bom = "yes" if inst.in_bom else "no"
         ref_hide = " hide" if inst.hide_ref else ""
         val_hide = " hide" if inst.hide_value else ""
+        ref_just = f" (justify {inst.ref_justify})" if inst.ref_justify else ""
+        val_just = f" (justify {inst.val_justify})" if inst.val_justify else ""
         chunks.append(
             f"""  (symbol (lib_id {q("vibrocore:" + inst.sym)}) (at {f(inst.x)} {f(inst.y)} 0) (unit {inst.unit})
     (exclude_from_sim no) (in_bom {bom}) (on_board yes) (dnp no)
     (uuid {q(uid(sheet.filename + inst.ref + str(inst.unit) + "sym"))})
-    (property "Reference" {q(inst.ref)} (at {f(inst.x + inst.ref_dx)} {f(inst.y + inst.ref_dy)} 0) (effects (font (size 1.27 1.27)){ref_hide}))
-    (property "Value" {q(inst.value)} (at {f(inst.x + inst.val_dx)} {f(inst.y + inst.val_dy)} 0) (effects (font (size 1.27 1.27)){val_hide}))
+    (property "Reference" {q(inst.ref)} (at {f(inst.x + inst.ref_dx)} {f(inst.y + inst.ref_dy)} 0) (effects (font (size 1.27 1.27)){ref_just}{ref_hide}))
+    (property "Value" {q(inst.value)} (at {f(inst.x + inst.val_dx)} {f(inst.y + inst.val_dy)} 0) (effects (font (size 1.27 1.27)){val_just}{val_hide}))
     (property "Footprint" "" (at {f(inst.x)} {f(inst.y)} 0) (effects (font (size 1.27 1.27)) hide))
     (property "Datasheet" "~" (at {f(inst.x)} {f(inst.y)} 0) (effects (font (size 1.27 1.27)) hide))
 {pin_lines}
