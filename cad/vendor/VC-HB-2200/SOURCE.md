@@ -36,7 +36,10 @@ The coupling hub sits on the output journal.
 The shaft tip meets the jaw face of the 32H7 hub.
 The chain sprocket stays on the separate chain shaft.
 
-The centering recess on the motor face is about Ø70 mm and 4.4 mm deep.
+The centering recess on the motor face is about Ø70 mm and 4.3 mm deep.
+A radial pocket sits at local X = −17 mm, Y = 12.5 mm. The STEP mouth on the underside is Ø8 mm and does not pierce that pocket.
+The placed assembly opens a Ø7.2 mm hole so the clamp screw can be seen. The vendor file is not edited.
+The PLE manual PDF is not in this folder. The clamp-screw size and the tightening torque are TBD.
 The Siemens 1FL2104-4AG11 STEP has an oil seal about 8 mm long.
 That seal and the motor key share volume with this solid.
 The adapter was configured for 1FL2104-4AG10.

@@ -874,8 +874,8 @@ parts:
   category: Frame
   spec: One laser-cut S355 plate, 10 mm, one bend. Vertical leg on the PLE120 flange.
     Pilot bore Ø84 mm. Four holes Ø6.6 mm on PCD 90 mm for ISO 4762 M6x20 screws. The outline
-    stops under the carriage. A narrow ear behind the rail reaches the upper screw. The foot
-    takes two M8x30 through bolts and ISO 4032 nuts. No weld and no notch.
+    stops under the carriage. A narrow ear behind the rail reaches the upper screw. There is
+    no inspection window. The foot takes two M8x30 through bolts and ISO 4032 nuts. No weld and no notch.
   legacy_ref: draft-fr-4182
   supplier_id: custom_eu
   material: S355
@@ -941,14 +941,24 @@ parts:
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: Draft S355 sheet, 4 mm. Bolts across the profile rear faces in the lower bay, up to the short
-    upright. The sheet is 4 mm behind the rear face. The tilt mechanism must clear it.
+  spec: S355 sheet, 4 mm. One removable panel on the rear faces. Two M8 slot screws in the idle
+    rear slot, at Z = 50 mm and Z = 110 mm. A tab on the drive profile takes two more, at
+    Z = 160 mm and Z = 195 mm. Nuts are Lasche 1, order 34.01.0050. Remove the four screws to
+    reach the coupling, the flange screws and the motor. No inspection window in the mount plate.
+    The sheet is 4 mm behind the rear face. The tilt mechanism must clear it.
   legacy_ref: draft-fr-4186
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  unknowns:
-  - Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
+  mass_kg: 1.496
+  mass_note: Solid volume at 7850 kg/m3. The tab and the four holes are included.
+  geometry:
+    kind: box
+    length_mm: 4
+    width_mm: 350
+    height_mm: 195
+    fidelity: envelope
+    source: docs/engineering/MAST-LAYOUT.md
   notes: Draft. Made part. Do not manufacture from this revision.
 - part_number: VC-FR-4190
   name: Front top stiffener
@@ -987,9 +997,10 @@ parts:
   supply: purchase
   subsystem: frame
   category: Frame
-  spec: mk Lasche 1 mit Feder, M8, order 34.01.0050. Slot 10. Four nuts. Two hold the stiffener
-    angle in the idle inner slots. Two hold the cap lips. The solid is an 8 x 6 x 5 mm box in the
-    10.10 mm throat, not the full T-head. Price list 01/2024, 0.79 EUR.
+  spec: mk Lasche 1 mit Feder, M8, order 34.01.0050. Slot 10. Eight nuts. Two hold the stiffener
+    angle in the idle inner slots. Two hold the cap lips. Four hold the rear sheet in the rear-face
+    slots. The solid is an 8 x 6 x 5 mm box in the 10.10 mm throat, not the full T-head.
+    Price list 01/2024, 0.79 EUR.
   legacy_ref: draft-fr-4120
   supplier_id: mk
   manufacturer_pn: 34.01.0050
@@ -1013,9 +1024,9 @@ parts:
   supply: purchase
   subsystem: frame
   category: Frame
-  spec: mk Zylinderschraube M8. Four slot screws M8x20, order D0912820. Four through bolts M8x30,
-    order D0912830, in the bottom plate. Eight screws. The solid is the shank, diameter 7.8 mm,
-    so it clears the Ø9 hole.
+  spec: mk Zylinderschraube M8. Eight slot screws M8x20, order D0912820. Four of them hold the
+    rear sheet. Four through bolts M8x30, order D0912830, in the bottom plate. Twelve screws.
+    The solid is the shank, diameter 7.8 mm, so it clears the Ø9 hole.
   legacy_ref: draft-fr-4121
   supplier_id: mk
   manufacturer_pn: D0912820
@@ -1087,8 +1098,12 @@ parts:
   supply: purchase
   subsystem: frame
   category: Frame
-  spec: ISO 4762 cylinder screw M6x20. Four screws on the PLE120 flange, PCD 90 mm. The solid is
-    the shank, diameter 5 mm, inside the Ø6.6 mm hole.
+  spec: ISO 4762 cylinder screw M6x20. Four screws on the PLE120 output flange, PCD 90 mm.
+    The plate is 10 mm. The specified thread depth is 15 mm. Engagement is 10 mm, more than
+    1.5 times the 6 mm diameter. The solid is the shank, diameter 5 mm, inside the plate hole.
+  unknowns:
+  - The Neugart STEP output holes lie on a 100 mm circle and are about 16 mm deep. These screws
+    stay on the specified 90 mm circle and do not enter those bores.
   legacy_ref: draft-fr-4125
   supplier_id: mk
   mass_kg: 0.01
@@ -1415,6 +1430,80 @@ parts:
   unknowns:
   - Not placed. VC-FR-4182 carries the gearbox. The motor bolts to the input.
   notes: Not in this pose. Do not manufacture from this revision.
+- part_number: VC-HB-2120
+  name: Motor flange screw M6x16
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: hub
+  category: Hub
+  spec: ISO 4762 cylinder screw M6x16. Four screws. The flange is 6.4 mm thick. Minimum thread
+    engagement is 1.5 times 6 mm, so 9 mm. Minimum length is 15.4 mm. M6x16 gives 9.6 mm in the
+    thread. The adapter thread is 15 mm deep. Holes are Ø6.6 mm on PCD 90 mm, on the diagonals.
+    The head is Ø10 mm by 6 mm and sits on the flange back.
+  legacy_ref: draft-hb-2120
+  supplier_id: mk
+  mass_kg: 0.01
+  mass_note: Catalogue mass is not stated. 0.01 kg is a placeholder per screw.
+  estimate_eur_low: 1
+  estimate_eur_high: 1
+  geometry:
+    kind: cylinder
+    diameter_mm: 6
+    length_mm: 16
+    fidelity: envelope
+    source: docs/engineering/LIFT-DRIVE-SIZING.md
+  notes: Standard fastener. Property class is not selected.
+- part_number: VC-HB-2122
+  name: Gearbox clamp screw
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: hub
+  category: Hub
+  spec: Clamping screw of the PLE120 input hub. The solid is a placeholder on the access-hole
+    axis, close to the Ø8 mm mouth, so it shows through that hole. The true seat is the hub.
+    The size is not taken from a catalogue.
+  legacy_ref: draft-hb-2122
+  supplier_id: neugart
+  mass_kg: 0.01
+  mass_note: Catalogue mass is not stated. 0.01 kg is a placeholder.
+  estimate_eur_low: 1
+  estimate_eur_high: 1
+  geometry:
+    kind: cylinder
+    diameter_mm: 6
+    length_mm: 12
+    fidelity: envelope
+    source: cad/vendor/VC-HB-2200/SOURCE.md
+  unknowns:
+  - Clamp-screw size is TBD. The PLE manual PDF is not in cad/vendor/VC-HB-2200.
+  - Clamp-screw tightening torque is TBD. The same PDF is not in the repository.
+  notes: Standard part once the size is known. Do not treat the drawn diameter as the thread size.
+- part_number: VC-HB-2124
+  name: Adapter access plug
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: hub
+  category: Hub
+  spec: Plug for the PLE120 adapter access hole. The STEP mouth is Ø8 mm on the underside of the
+    adapter. The solid is drawn 4.5 mm clear of that mouth so the clamp screw shows through the hole.
+  legacy_ref: draft-hb-2124
+  supplier_id: neugart
+  mass_kg: 0.01
+  mass_note: Catalogue mass is not stated. 0.01 kg is a placeholder.
+  estimate_eur_low: 1
+  estimate_eur_high: 1
+  geometry:
+    kind: cylinder
+    diameter_mm: 6.8
+    length_mm: 4
+    fidelity: envelope
+    source: cad/vendor/VC-HB-2200/SOURCE.md
+  unknowns:
+  - Access-plug order code is TBD. The PLE manual PDF is not in cad/vendor/VC-HB-2200.
+  notes: Standard plug once the order code is known.
 - part_number: VC-HB-2200
   name: Planetary gearbox PLE120-040
   revision_index: 0
@@ -2408,6 +2497,9 @@ boms:
   mrp_type: normal
   lines:
   - {part_number: VC-HB-2100, qty: 1}
+  - {part_number: VC-HB-2120, qty: 4}
+  - {part_number: VC-HB-2122, qty: 1}
+  - {part_number: VC-HB-2124, qty: 1}
   - {part_number: VC-HB-2200, qty: 1}
   - {part_number: VC-HB-2300, qty: 1}
   - {part_number: VC-HB-2400, qty: 1}
@@ -2430,8 +2522,8 @@ boms:
   mrp_type: normal
   lines:
   - {part_number: VC-FR-4100, qty: 2}
-  - {part_number: VC-FR-4120, qty: 4}
-  - {part_number: VC-FR-4121, qty: 8}
+  - {part_number: VC-FR-4120, qty: 8}
+  - {part_number: VC-FR-4121, qty: 12}
   - {part_number: VC-FR-4124, qty: 4}
   - {part_number: VC-FR-4125, qty: 4}
   - {part_number: VC-FR-4182, qty: 1}

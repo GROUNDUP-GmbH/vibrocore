@@ -281,7 +281,7 @@ No chain strand, sprocket, shaft, gearbox, brake or motor enters X < −50 mm.
 The rear sheets VC-FR-4195 and VC-FR-4186 are the exceptions.
 Each is a 4 mm sheet on the rear face, from X = −54 mm to X = −50 mm.
 VC-FR-4195 covers the band above the rails, from Z = 1430 mm to the profile top.
-VC-FR-4186 covers the lower bay, up to the short upright.
+VC-FR-4186 covers the lower bay and has a tab on the short upright.
 The tilt mechanism must clear both sheets.
 The bottom plate is the base.
 The lift motor and the gearbox sit above it.
@@ -303,7 +303,7 @@ The sprocket is at Y = 0, between the uprights.
 The order along the shaft, from the gearbox toward the idle upright, is the PLE120, the ROTEX 28, the drive-side SYJ 30 TF, the sprocket, and the idle-side SYJ 30 TF.
 The bearing centres are 72.7 mm apart. The sprocket is in the middle.
 The gearbox shaft sees torque only. It does not see the chain radial load.
-VC-FR-4182 is one 10 mm laser-cut plate with one bend. No weld and no notch.
+VC-FR-4182 is one 10 mm laser-cut plate with one bend. No weld, no notch and no inspection window.
 The vertical leg sits on the output flange. Four M6 screws on PCD 90 mm hold it. The bore is Ø84 mm.
 The plate stops at Z = 100 mm, under the carriage. A narrow ear behind the rail reaches the upper screw.
 The foot sits on the bottom plate and takes two M8 through bolts.
@@ -315,7 +315,9 @@ It starts at Z = 142.4 mm and reaches the same top as the idle upright.
 The idle upright stays 1500 mm and stands on the bottom plate.
 The purchased length of VC-FR-4100 stays 1500 mm.
 VC-FR-4185 is a 4 mm pad on the idle front face only.
-VC-FR-4186 is the rear sheet. It stops at the short upright.
+VC-FR-4186 is the rear sheet. It is one removable panel.
+Two screws hold the idle rear slot. A tab on the drive profile takes two more screws.
+Remove that panel to reach the coupling, the flange screws and the motor.
 The carriage arm stays in front of the rail and meets the chain.
 VC-FR-4150, VC-FR-4160, VC-FR-4170 and VC-FR-4180 are obsolete and are not placed.
 The lower mount VC-FR-4183 and the upper mount VC-FR-4198 take their job.
@@ -332,6 +334,12 @@ The pitch radius is the documented 37.9 mm.
 The gearbox solid is Neugart article 100460948. It is 115 mm square and 204 mm long.
 The servo is the SiePortal solid of 1FL2104-4AG11-1MC0.
 The flange face meets the gearbox. The 40 mm shaft enters the bore.
+The motor flange is 81 mm square and 6.4 mm thick. The centering spigot is Ø70 mm.
+It enters the adapter recess. Four ISO 4762 M6x16 screws hold the flange.
+The holes are Ø6.6 mm on PCD 90 mm. The screw length is 6.4 mm plus 9.6 mm of thread.
+The minimum thread is 1.5 times the diameter, so 9 mm. The adapter thread is 15 mm deep.
+The clamp-screw size and its torque are TBD. The PLE manual is not in the vendor folder.
+The access plug is drawn clear of the Ø8 mm mouth so the clamp screw shows in the hole.
 The oil seal and the key share about 5110 mm³ with the gearbox.
 That pair is the open adapter check. Every other pair stays under 1 mm³.
 
@@ -402,8 +410,35 @@ The slot screws are M8x20, order D0912820.
 Each nut is a plain 8 mm box in the throat. It is not the full T-head.
 The through bolts are M8x30, order D0912830, with ISO 4032 nuts under the bottom plate.
 The flange screws are ISO 4762 M6x20.
+The plate is 10 mm thick. The specified thread depth is 15 mm.
+The engagement is 10 mm. That is more than 9 mm.
 
-The rear-face slot is not used. The volume behind X = −50 mm is reserved for the tilt mechanism.
+The rear-face slot is used by VC-FR-4186.
+Four Lasche 1 nuts and four M8x20 screws hold that sheet.
+The volume behind X = −50 mm stays reserved for the tilt mechanism.
+The sheet and its screws stay inside the 4 mm band.
+
+## Assembly and access
+
+Fit the bottom plate.
+Stand the two profiles on the plate.
+Bolt the two bearing flats to the plate.
+Set the bent mount plate on the gearbox flange.
+Fit the four M6x20 screws.
+Bolt the plate foot to the bottom plate with two M8x30 screws and two nuts.
+Bolt the angle to the idle slots and to the bottom plate.
+Fit the coupling on the gearbox shaft.
+Bolt the motor to the gearbox with four M6x16 screws.
+Fit the rear sheet with four M8x20 screws and four T-slot nuts.
+
+Stop the machine.
+Remove the power.
+Remove the four screws of VC-FR-4186.
+Take the sheet off.
+Reach the coupling, the three reachable flange screws and the motor through that opening.
+The upper flange screw stays behind the rail. The plate has no inspection window.
+Fit the sheet again.
+Tighten the four screws.
 
 | Pair | Clearance | Note |
 |---|---|---|

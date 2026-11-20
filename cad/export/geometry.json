@@ -15,6 +15,20 @@
   },
   {
     "bbox_mm": {
+      "x": 4.0,
+      "y": 350.0,
+      "z": 195.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "envelope",
+    "kind": "box",
+    "part_number": "VC-FR-4186",
+    "source": "docs/engineering/MAST-LAYOUT.md",
+    "step": "cad/export/step/VC-FR-4186.step",
+    "unknowns": []
+  },
+  {
+    "bbox_mm": {
       "x": 8.0,
       "y": 6.0,
       "z": 5.0
@@ -81,7 +95,9 @@
     "part_number": "VC-FR-4125",
     "source": "docs/engineering/MAST-LAYOUT.md",
     "step": "cad/export/step/VC-FR-4125.step",
-    "unknowns": []
+    "unknowns": [
+      "The Neugart STEP output holes lie on a 100 mm circle and are about 16 mm deep. These screws stay on the specified 90 mm circle and do not enter those bores."
+    ]
   },
   {
     "bbox_mm": {
@@ -128,6 +144,53 @@
     "unknowns": [
       "Idle-sprocket mount and profile bolt pattern.",
       "Not fitted in the current machine pose. The idler bearing blocks sit on the profile ends. The blank stays in the BOM."
+    ]
+  },
+  {
+    "bbox_mm": {
+      "x": 6.0,
+      "y": 6.0,
+      "z": 16.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "envelope",
+    "kind": "cylinder",
+    "part_number": "VC-HB-2120",
+    "source": "docs/engineering/LIFT-DRIVE-SIZING.md",
+    "step": "cad/export/step/VC-HB-2120.step",
+    "unknowns": []
+  },
+  {
+    "bbox_mm": {
+      "x": 6.0,
+      "y": 6.0,
+      "z": 12.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "envelope",
+    "kind": "cylinder",
+    "part_number": "VC-HB-2122",
+    "source": "cad/vendor/VC-HB-2200/SOURCE.md",
+    "step": "cad/export/step/VC-HB-2122.step",
+    "unknowns": [
+      "Clamp-screw size is TBD. The PLE manual PDF is not in cad/vendor/VC-HB-2200.",
+      "Clamp-screw tightening torque is TBD. The same PDF is not in the repository."
+    ]
+  },
+  {
+    "bbox_mm": {
+      "x": 6.8,
+      "y": 6.8,
+      "z": 4.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "envelope",
+    "kind": "cylinder",
+    "part_number": "VC-HB-2124",
+    "source": "cad/vendor/VC-HB-2200/SOURCE.md",
+    "step": "cad/export/step/VC-HB-2124.step",
+    "unknowns": [
+      "Access-plug order code is TBD. The PLE manual PDF is not in cad/vendor/VC-HB-2200."
     ]
   },
   {

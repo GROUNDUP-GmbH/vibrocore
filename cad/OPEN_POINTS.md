@@ -84,6 +84,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-CT-6700` Wiring harness: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6800` RevPi Connect 4: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6810` RevPi DIO module: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4125` Cylinder screw M6x20: The Neugart STEP output holes lie on a 100 mm circle and are about 16 mm deep. These screws stay on the specified 90 mm circle and do not enter those bores.
 - `VC-FR-4150` Bottom frame gusset: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4160` Top frame gusset: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4170` Mid frame gusset: no solid. Dimensions were not complete enough to model.
@@ -92,7 +93,6 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-FR-4183` Bearing seat flat: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4184` Profile stiffener angle: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4185` Lower front stiffener: no solid. Dimensions were not complete enough to model.
-- `VC-FR-4186` Lower rear stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4190` Front top stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4195` Rear top stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4200` Profile connector: Which mk connector.
@@ -114,6 +114,9 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-GP-7400` Core liner 3.25 inch: no solid. Dimensions were not complete enough to model.
 - `VC-GP-7410` DT325 liner retainer HD: no solid. Dimensions were not complete enough to model.
 - `VC-HB-2110` Lift motor bracket: Not placed. VC-FR-4182 carries the gearbox. The motor bolts to the input.
+- `VC-HB-2122` Gearbox clamp screw: Clamp-screw size is TBD. The PLE manual PDF is not in cad/vendor/VC-HB-2200.
+- `VC-HB-2122` Gearbox clamp screw: Clamp-screw tightening torque is TBD. The same PDF is not in the repository.
+- `VC-HB-2124` Adapter access plug: Access-plug order code is TBD. The PLE manual PDF is not in cad/vendor/VC-HB-2200.
 - `VC-HB-2200` Planetary gearbox PLE120-040: Input adapter of article 100460948 was configured for 1FL2104-4AG10. Re-check it for the current oil seal and for successor 1FL2104-4BG. The STEP recess is 4.4 mm deep and has no keyway.
 - `VC-HB-2300` SINAMICS S200 servo drive: PROFINET order 6SL5510-1BB11-0AF0 if the PLC does not use pulse and direction. The price is not a quote.
 - `VC-HB-2500` Chain bearing shaft: no solid. Dimensions were not complete enough to model.
@@ -203,6 +206,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 ## Modelled in this revision
 
 - `VC-FR-4100` Aluminium profile 50x100x1500: box, fidelity `envelope` (docs/engineering/BOM.md#3).
+- `VC-FR-4186` Lower rear stiffener: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4120` mk T-slot nut M8: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4121` mk cylinder screw M8: cylinder, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4122` mk angle bracket 40: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
@@ -211,6 +215,9 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-FR-4198` Upper profile mount: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4300` Bottom steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).
 - `VC-FR-4400` Top steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).
+- `VC-HB-2120` Motor flange screw M6x16: cylinder, fidelity `envelope` (docs/engineering/LIFT-DRIVE-SIZING.md).
+- `VC-HB-2122` Gearbox clamp screw: cylinder, fidelity `envelope` (cad/vendor/VC-HB-2200/SOURCE.md).
+- `VC-HB-2124` Adapter access plug: cylinder, fidelity `envelope` (cad/vendor/VC-HB-2200/SOURCE.md).
 - `VC-SH-1100` OLI MVE 400/6-HF: box, fidelity `envelope` (docs/design/SONIC_HEAD.md#2.2).
 - `VC-SH-1301` Vibrating plate blank: box, fidelity `partial` (docs/engineering/DIMENSIONING.md#3.1).
 - `VC-SH-1302` Stiffener rib: box, fidelity `solid` (docs/engineering/DIMENSIONING.md#3.1).

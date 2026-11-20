@@ -822,7 +822,10 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     z_lift = bay["z_lift"]
     if bay["gear"] is not None:
         # Input face is local Y = 0, so the placement Y is the motor face.
-        add("VC-HB-2200", bay["gear"], motor_x, bay["gear_y0"], z_lift)
+        # The STEP access mouth is a shallow Ø8 dimple. Open it through to the
+        # clamp pocket so the clamp screw can be seen. The vendor file is unchanged.
+        access = Pos(-17.0, 12.5, -33.25) * Cylinder(3.6, 49.5)
+        add("VC-HB-2200", bay["gear"] - access, motor_x, bay["gear_y0"], z_lift)
     else:
         add(
             "VC-HB-2200",
@@ -841,7 +844,7 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         coupling = Compound(children=opened)
     add("VC-HB-2400", coupling, motor_x, bay["coupling_y"], z_lift)
 
-    # One laser-cut 10 mm plate, one bend. No weld and no notch.
+    # One laser-cut 10 mm plate, one bend. No weld, no notch, no inspection window.
     # The upright stops under the carriage. A narrow ear reaches the upper M6
     # behind the rail. The foot lies under the gearbox, in the 10 mm gap.
     face_y = bay["face_y"]
@@ -922,6 +925,42 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     else:
         # Local Y = 0 is the flange face. The shaft enters the gearbox.
         add("VC-HB-2100", motor, motor_x, bay["gear_y0"], z_lift)
+        # Flange back is at local Y = -6.4 mm. Thread depth on the adapter is 15 mm.
+        # Length 16 mm gives 9.6 mm of thread. 1.5 x 6 mm is 9 mm, so M6x16 is enough.
+        # Heads sit 0.2 mm off the flange. Shanks sit in the Ø6.6 holes, on PCD 90 mm.
+        pcd = 45.0 / math.sqrt(2.0)
+        screw_index = 0
+        for sign_x in (-1.0, 1.0):
+            for sign_z in (-1.0, 1.0):
+                screw_index += 1
+                shank = along_y(2.4, 15.6)
+                head = Pos(0.0, -11.2, 0.0) * along_y(5.0, 6.0)
+                add(
+                    f"VC-HB-2120-{screw_index}",
+                    shank + head,
+                    motor_x + sign_x * pcd,
+                    bay["gear_y0"] + 1.6,
+                    z_lift + sign_z * pcd,
+                )
+        # Clamp screw near the mouth of the access hole so it can be seen.
+        # Size, torque and the true seat at the hub are not in the vendor folder.
+        # The plug is pulled 4.5 mm clear of the mouth.
+        clamp_shank = Cylinder(2.0, 12.0)
+        clamp_head = Pos(0.0, 0.0, -8.0) * Cylinder(3.0, 4.0)
+        add(
+            "VC-HB-2122",
+            clamp_shank + clamp_head,
+            motor_x - 17.0,
+            bay["gear_y0"] + 12.5,
+            z_lift - 40.0,
+        )
+        add(
+            "VC-HB-2124",
+            Cylinder(3.4, 4.0),
+            motor_x - 17.0,
+            bay["gear_y0"] + 12.5,
+            z_lift - 64.0,
+        )
 
     profile_top = station["profile_top"]
     cap = 8.0
@@ -1025,6 +1064,9 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     for hole_x in (-10.0, 10.0):
         add_screw(hole_x, 100.0, 2.0, hole_x, 100.0, 20.5)
         add_hex_nut(hole_x, 100.0)
+    # Plate is 10 mm. Thread depth on the output flange is 15 mm.
+    # M6x20 leaves 10 mm in the thread, more than 1.5 x 6 mm.
+    # The shank stays inside the plate. The STEP output circle is Ø100 mm.
     for deg in (0.0, 90.0, 180.0, 270.0):
         angle = math.radians(deg)
         m6_i += 1
@@ -1068,20 +1110,40 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         0.0,
         0.0,
     )
-    add(
-        "VC-FR-4186",
-        span(
-            rear_face_x_mm() - GUSSET_SHEET_THICKNESS_MM,
-            rear_face_x_mm(),
-            -profile_outer_y,
-            profile_outer_y,
-            plate_top,
-            short_z0 - 0.2,
-        ),
-        0.0,
-        0.0,
-        0.0,
+    # Removable rear panel. Four slot bolts. No window in the mount plate.
+    # The drive profile starts at the short upright, so that side has a tab.
+    rear = rear_face_x_mm()
+    panel = span(
+        rear - GUSSET_SHEET_THICKNESS_MM,
+        rear,
+        -profile_outer_y,
+        profile_outer_y,
+        plate_top,
+        short_z0 - 0.2,
     )
+    panel = panel + span(
+        rear - GUSSET_SHEET_THICKNESS_MM,
+        rear,
+        -profile_outer_y,
+        -profile_inner_y,
+        short_z0 - 0.2,
+        210.0,
+    )
+    rear_bolts = (
+        (half_pitch, 50.0),
+        (half_pitch, 110.0),
+        (-half_pitch, 160.0),
+        (-half_pitch, 195.0),
+    )
+    hole_axis = Rot(0, 90, 0) * Cylinder(4.5, 8.0)
+    for slot_y, slot_z in rear_bolts:
+        panel = panel - Pos(rear - 2.0, slot_y, slot_z) * hole_axis
+    add("VC-FR-4186", panel, 0.0, 0.0, 0.0)
+    for slot_y, slot_z in rear_bolts:
+        # Shank stays in the sheet hole, behind the rear face. The nut sits in the slot.
+        add_screw(rear - 3.6, slot_y, slot_z, rear - 0.2, slot_y, slot_z)
+        nut_i += 1
+        add(f"VC-FR-4120-{nut_i}", Box(6.0, 8.0, 5.0), rear + 4.0, slot_y, slot_z)
 
     _check_pose(parts, station)
     return parts
@@ -1228,8 +1290,11 @@ def _check_pose(parts: list[Placed], station: dict[str, float]) -> None:
     for item in parts:
         if item.name == "GROUND-DATUM":
             continue
-        low_x = float(item.shape.bounding_box().min.X)
-        if item.name.startswith("VC-FR-4195") or item.name.startswith("VC-FR-4186"):
+        box = item.shape.bounding_box()
+        low_x = float(box.min.X)
+        high_x = float(box.max.X)
+        in_sheet = high_x <= rear + 0.05 and low_x >= rear - GUSSET_SHEET_THICKNESS_MM - 0.05
+        if item.name.startswith("VC-FR-4195") or item.name.startswith("VC-FR-4186") or in_sheet:
             if low_x < rear - GUSSET_SHEET_THICKNESS_MM - 0.05:
                 raise ValueError("rear stiffener is thicker than the draft sheet")
             continue
@@ -1396,7 +1461,7 @@ def assembly_bbox_mm(shape=None, bom=None) -> tuple[float, float, float]:
 
 
 def export_machine_assembly(bom, step_dir: Path, render_dir: Path) -> list[Path]:
-    """Write the assembly STEP, the three PNG views and two drive close-ups."""
+    """Write the assembly STEP, the three PNG views, two drive views and two joint close-ups."""
     from build123d import Compound, export_step
 
     from cad.tools.geometry import _freeze_step_header
@@ -1422,6 +1487,21 @@ def export_machine_assembly(bom, step_dir: Path, render_dir: Path) -> list[Path]
     for view in ("drive-iso", "drive-front"):
         path = render_dir / f"{ASSEMBLY_ID}-{view}.png"
         _render_png(parts, view, path, clip=drive_clip)
+        written.append(path)
+    gear = next(item.shape for item in parts if item.name == "VC-HB-2200")
+    box = gear.bounding_box()
+    # Motor flange, four screws, the open access hole and the pulled plug.
+    joint_clip = (
+        float(box.min.X) - 6.0,
+        float(box.max.X) + 6.0,
+        float(box.min.Y) - 30.0,
+        float(box.min.Y) + 52.0,
+        float(box.min.Z) - 16.0,
+        float(box.max.Z) + 4.0,
+    )
+    for view in ("joint", "joint-access"):
+        path = render_dir / f"{ASSEMBLY_ID}-{view}.png"
+        _render_png(parts, view, path, clip=joint_clip)
         written.append(path)
     return written
 
@@ -1459,6 +1539,10 @@ def _render_png(parts: list[Placed], view: str, path: Path, clip: tuple[float, .
         # Mostly along +X so the shaft axis (Y) reads left to right.
         "drive-iso": (np.array([0.90, 0.15, 0.35]), np.array([0.0, 0.0, 1.0])),
         "drive-front": (np.array([1.0, 0.0, 0.0]), np.array([0.0, 0.0, 1.0])),
+        # Flange heads from the motor side.
+        "joint": (np.array([0.35, -0.85, -0.40]), np.array([0.0, 0.0, 1.0])),
+        # Underside of the adapter. The plug and the clamp screw sit on this face.
+        "joint-access": (np.array([0.25, -0.55, -0.80]), np.array([0.0, 1.0, 0.0])),
     }
     eye, up = eyes[view]
     forward = -eye / np.linalg.norm(eye)
@@ -1477,7 +1561,10 @@ def _render_png(parts: list[Placed], view: str, path: Path, clip: tuple[float, .
         meshes = []
         for solid in leaves or [item.shape]:
             # Some vendor faces do not mesh at the default angular tolerance.
-            meshes.append(solid.tessellate(1.8, 0.5))
+            try:
+                meshes.append(solid.tessellate(1.8, 0.5))
+            except Exception:
+                meshes.append(solid.tessellate(1.8, 0.8))
         for vertices, faces in meshes:
             if not faces:
                 continue
@@ -1640,6 +1727,9 @@ def _color_for(name: str) -> tuple[int, int, int]:
         ("VC-FR-4300", (100, 116, 139)),
         ("VC-FR-4400", (71, 85, 105)),
         ("VC-HB-2110", (30, 58, 138)),
+        ("VC-HB-2124", (226, 232, 240)),
+        ("VC-HB-2122", (180, 120, 40)),
+        ("VC-HB-2120", (203, 213, 225)),
         ("VC-HB-2100", (30, 64, 175)),
         ("VC-HB-2200", (51, 65, 85)),
         ("VC-HB-2400", (100, 116, 139)),

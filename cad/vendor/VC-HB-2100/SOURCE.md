@@ -15,7 +15,8 @@ The shaft then enters the bore.
 
 Measured on this solid:
 - Compound of 41 solids. Overall length 226.6 mm, including the 40 mm shaft.
-- Flange 81 mm square. Body behind the flange is 186.6 mm.
+- Flange 81 mm square and 6.4 mm thick. Body behind the flange is 186.6 mm.
+- Four holes Ø6.6 mm on PCD 90 mm, on the diagonals. The screws are ISO 4762 M6x16.
 - Shaft axis is file Y. Shaft radius is 9.5 mm.
 - A key solid sits on the shaft, 6 mm by 6 mm, from 15 mm to 40 mm past the flange.
 - An oil-seal stack extends about 8 mm past the flange, out to about Ø66 mm.

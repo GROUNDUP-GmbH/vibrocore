@@ -121,7 +121,11 @@ The current STEP oil seal extends about 8 mm. The gearbox recess is 4.4 mm deep 
 
 VC-FR-4182 is one 10 mm S355 plate, laser cut, with one bend. There is no weld.
 Four ISO 4762 M6x20 screws on PCD 90 mm hold the flange.
+The plate is 10 mm. The specified thread depth is 15 mm. The engagement is 10 mm.
 The output pilot is Ø80 mm. The plate bore is Ø84 mm.
+The plate has no inspection window. Remove VC-FR-4186 to reach this joint.
+The motor uses four ISO 4762 M6x16 screws. The flange is 6.4 mm. The thread engagement is 9.6 mm.
+The clamp-screw size and the tightening torque are TBD.
 The foot uses two M8x30 through bolts. VC-FR-4184 is one 40 x 40 x 6 angle on the idle inner slots.
 
 T2max is 365 Nm.
