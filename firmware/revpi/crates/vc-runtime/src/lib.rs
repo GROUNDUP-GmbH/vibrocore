@@ -29,6 +29,21 @@ pub const MQTT_CYCLE_PREFIX: &str = "vibrocore/cycle/";
 /// ADR-0001 prefix reserved for a live status mirror.
 pub const MQTT_STATUS_PREFIX: &str = "vibrocore/status/";
 
+/// Live hub state. Retain is yes. Codes 8 to 11 are jog, park move, brake test and parked.
+pub const MQTT_STATUS_HUB: &str = "vibrocore/status/hub";
+
+/// Live sonic state.
+pub const MQTT_STATUS_SONIC: &str = "vibrocore/status/sonic";
+
+/// Live tilt state and angle.
+pub const MQTT_STATUS_TILT: &str = "vibrocore/status/tilt";
+
+/// Live rod-rotation state.
+pub const MQTT_STATUS_ROTATION: &str = "vibrocore/status/rotation";
+
+/// Live jog gate. The enabling switch must be held.
+pub const MQTT_STATUS_JOG: &str = "vibrocore/status/jog";
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum RuntimeError {
     NotImplemented,
@@ -173,5 +188,14 @@ mod tests {
         assert_eq!(MQTT_HMI_STATUS, "vibrocore/hmi/status");
         assert_eq!(MQTT_CYCLE_PREFIX, "vibrocore/cycle/");
         assert_eq!(MQTT_STATUS_PREFIX, "vibrocore/status/");
+        for topic in [
+            MQTT_STATUS_HUB,
+            MQTT_STATUS_SONIC,
+            MQTT_STATUS_TILT,
+            MQTT_STATUS_ROTATION,
+            MQTT_STATUS_JOG,
+        ] {
+            assert!(topic.starts_with(MQTT_STATUS_PREFIX));
+        }
     }
 }

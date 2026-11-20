@@ -10,10 +10,13 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from revpi_plant import CYCLE_MS as PLANT_CYCLE_MS
+from revpi_plant import SF3_SECOND_HOLD_FITTED, Plant
 from sim import CYCLE_MS, FB_Safety
 
 ROOT = Path(__file__).resolve().parents[1]
 VECTORS = ROOT / "firmware" / "revpi" / "golden" / "safety-vectors.json"
+PLANT_VECTORS = ROOT / "firmware" / "revpi" / "golden" / "plant-vectors.json"
 
 
 def _play(safety: FB_Safety, case: dict) -> None:
@@ -43,3 +46,27 @@ def test_golden_vectors_match_python_safety_monitor():
     ]
     for case in cases:
         _play(FB_Safety(), case)
+
+
+def _play_plant(plant: Plant, case: dict) -> None:
+    setup = case.get("setup") or {}
+    if "position_um" in setup:
+        plant.set_position_um(setup["position_um"])
+    for step in case["steps"]:
+        output = None
+        for _ in range(step["cycles"]):
+            output = plant.tick(**step["input"])
+        assert output is not None
+        for key, value in step["expect"].items():
+            assert output[key] == value, (case["name"], key, output[key], value)
+
+
+def test_golden_vectors_match_python_plant():
+    data = json.loads(PLANT_VECTORS.read_text(encoding="utf-8"))
+    assert data["source"] == "vc-core Plant"
+    assert data["cycle_ms"] == PLANT_CYCLE_MS
+    assert data["sf3_second_hold_fitted"] is False
+    assert SF3_SECOND_HOLD_FITTED is False
+    assert len(data["cases"]) == 15
+    for case in data["cases"]:
+        _play_plant(Plant(), case)

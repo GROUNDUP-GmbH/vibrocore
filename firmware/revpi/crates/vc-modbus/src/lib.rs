@@ -1,7 +1,8 @@
 //! Modbus RTU register maps.
 //!
 //! The RevPi is the master. Slave 2 is the SINAMICS S200 PTI.
-//! Slave 1 is the sonic-head inverter. Its order code is not selected.
+//! Slave 1 is the sonic-head inverter. A proposed order code is ATV320U15M2C.
+//! The rod-rotation drive is not chosen. Its slave address stays empty.
 //! A register with `published: None` or `verified_on_device: false` is TODO.
 //! Do not send an unverified number to a drive.
 
@@ -19,6 +20,13 @@ pub const S200_SLAVE_ID: u8 = 2;
 
 /// Modbus RTU slave address of the force ADC. The ADC map is not in this crate.
 pub const FORCE_ADC_SLAVE_ID: u8 = 3;
+
+/// Proposed sonic inverter. The register map below is still TODO.
+/// This code is not in the BOM in this change.
+pub const SONIC_PROPOSED_ORDER_CODE: &str = "ATV320U15M2C";
+
+/// Rod-rotation slave address. TODO. The drive order code is not frozen.
+pub const ROTATION_SLAVE_ID: Option<u8> = None;
 
 /// One holding register in a device map.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -116,6 +124,33 @@ pub fn sonic_registers() -> &'static [Register] {
     &SONIC_REGISTERS
 }
 
+const ROTATION_REGISTERS: [Register; 4] = [
+    Register {
+        name: "speed_setpoint",
+        published: None,
+        verified_on_device: false,
+    },
+    Register {
+        name: "direction",
+        published: None,
+        verified_on_device: false,
+    },
+    Register {
+        name: "torque_limit",
+        published: None,
+        verified_on_device: false,
+    },
+    Register {
+        name: "status_word",
+        published: None,
+        verified_on_device: false,
+    },
+];
+
+pub fn rotation_registers() -> &'static [Register] {
+    &ROTATION_REGISTERS
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -152,5 +187,14 @@ mod tests {
         assert!(sonic_registers()
             .iter()
             .all(|item| !item.verified_on_device));
+    }
+
+    #[test]
+    fn rotation_map_stays_empty_until_a_drive_is_chosen() {
+        assert_eq!(SONIC_PROPOSED_ORDER_CODE, "ATV320U15M2C");
+        assert_eq!(ROTATION_SLAVE_ID, None);
+        assert!(rotation_registers()
+            .iter()
+            .all(|item| item.published.is_none() && !item.verified_on_device));
     }
 }

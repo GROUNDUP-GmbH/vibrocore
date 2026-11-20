@@ -1,0 +1,204 @@
+{
+  "source": "vc-core Plant",
+  "cycle_ms": 10,
+  "sf3_second_hold_fitted": false,
+  "sf3_note": "Stefan 2026-11-20. The S200 holding brake is the only hold. The brake test is optional.",
+  "cases": [
+    {
+      "name": "jog_without_enabling_does_not_move",
+      "setup": {"position_um": 100000},
+      "steps": [
+        {
+          "cycles": 5,
+          "input": {"cmd_jog_down": true},
+          "expect": {"hub_state": 0, "position_um": 100000, "speed_um_s": 0, "pulse_enable": false}
+        }
+      ]
+    },
+    {
+      "name": "jog_with_enabling_uses_reduced_speed",
+      "setup": {"position_um": 100000},
+      "steps": [
+        {
+          "cycles": 5,
+          "input": {"cmd_jog_down": true, "enabling_held": true},
+          "expect": {"hub_state": 8, "position_um": 100500, "speed_um_s": 10000, "pulse_enable": true}
+        }
+      ]
+    },
+    {
+      "name": "jog_release_stops",
+      "setup": {"position_um": 100000},
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"cmd_jog_down": true, "enabling_held": true},
+          "expect": {"hub_state": 8, "position_um": 100100, "speed_um_s": 10000}
+        },
+        {
+          "cycles": 1,
+          "input": {},
+          "expect": {"hub_state": 0, "position_um": 100100, "speed_um_s": 0, "pulse_enable": false}
+        }
+      ]
+    },
+    {
+      "name": "park_uses_only_the_s200_brake",
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"cmd_park": true},
+          "expect": {"hub_state": 11, "position_um": 0, "speed_um_s": 0, "pulse_enable": false, "hub_fault": false}
+        }
+      ]
+    },
+    {
+      "name": "brake_test_passes_then_park",
+      "steps": [
+        {
+          "cycles": 10,
+          "input": {"cmd_park": true, "brake_test_enable": true},
+          "expect": {"hub_state": 11, "position_um": 0, "speed_um_s": 0, "hub_fault": false}
+        }
+      ]
+    },
+    {
+      "name": "brake_test_faults_on_slip",
+      "steps": [
+        {
+          "cycles": 5,
+          "input": {"cmd_park": true, "brake_test_enable": true, "brake_slip_um": 500},
+          "expect": {"hub_state": 7, "position_um": 2500, "speed_um_s": 0, "hub_fault": true}
+        }
+      ]
+    },
+    {
+      "name": "parked_blocks_motion_until_unpark",
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"cmd_park": true},
+          "expect": {"hub_state": 11, "motion_blocked": false}
+        },
+        {
+          "cycles": 1,
+          "input": {"cmd_jog_down": true, "enabling_held": true},
+          "expect": {"hub_state": 11, "speed_um_s": 0, "motion_blocked": true, "position_um": 0}
+        },
+        {
+          "cycles": 1,
+          "input": {"cmd_unpark": true},
+          "expect": {"hub_state": 0, "motion_blocked": false, "speed_um_s": 0}
+        }
+      ]
+    },
+    {
+      "name": "homing_reaches_drill_wait_without_enabling",
+      "setup": {"position_um": 2400},
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"cmd_cycle_start": true},
+          "expect": {"hub_state": 1, "position_um": 2000, "speed_um_s": -40000}
+        },
+        {
+          "cycles": 1,
+          "input": {},
+          "expect": {"hub_state": 2, "position_um": 0, "speed_um_s": 0}
+        },
+        {
+          "cycles": 1,
+          "input": {},
+          "expect": {"hub_state": 2, "position_um": 150, "speed_um_s": 15000}
+        }
+      ]
+    },
+    {
+      "name": "sonic_blocked_until_lowered_and_tool_engaged",
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"tool_engaged": true},
+          "expect": {"sonic_state": 0, "sonic_run": false, "sonic_freq_mhz": 0}
+        }
+      ]
+    },
+    {
+      "name": "sonic_ramps_to_the_short_target",
+      "setup": {"position_um": 80000},
+      "steps": [
+        {
+          "cycles": 21,
+          "input": {"tool_engaged": true, "sonic_target_mhz": 3000},
+          "expect": {"sonic_state": 2, "sonic_freq_mhz": 3000, "sonic_run": true}
+        }
+      ]
+    },
+    {
+      "name": "sonic_sto_loss_stops_the_head",
+      "setup": {"position_um": 80000},
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"tool_engaged": true, "sonic_target_mhz": 3000},
+          "expect": {"sonic_state": 1, "sonic_run": true}
+        },
+        {
+          "cycles": 1,
+          "input": {"tool_engaged": true, "sonic_sto_healthy": false},
+          "expect": {"sonic_state": 5, "sonic_freq_mhz": 0, "sonic_run": false, "sonic_sto_fault": true, "sonic_fault": true}
+        }
+      ]
+    },
+    {
+      "name": "tilt_above_angle_blocks_fold_and_hub",
+      "setup": {"position_um": 100000},
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"angle_mdeg": 10000, "cmd_fold": true, "cmd_jog_down": true, "enabling_held": true},
+          "expect": {
+            "tilt_state": 5,
+            "tilt_fold": false,
+            "lift_allowed": false,
+            "hub_state": 0,
+            "speed_um_s": 0,
+            "motion_blocked": true,
+            "position_um": 100000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tilt_above_angle_still_allows_vertical",
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"angle_mdeg": 10000, "cmd_vertical": true},
+          "expect": {"tilt_state": 1, "tilt_vertical": true, "lift_allowed": false, "tilt_fold": false}
+        }
+      ]
+    },
+    {
+      "name": "rotation_inhibited_while_sonic_starts",
+      "setup": {"position_um": 80000},
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"tool_engaged": true, "cmd_rotate": true},
+          "expect": {"sonic_state": 1, "sonic_run": true, "rotation_state": 4, "rotation_speed_rpm": 0}
+        }
+      ]
+    },
+    {
+      "name": "rotation_stalls_at_the_torque_limit",
+      "steps": [
+        {
+          "cycles": 20,
+          "input": {"cmd_rotate": true, "rotation_torque_pct": 40},
+          "expect": {"rotation_state": 2, "rotation_stalled": true, "rotation_speed_rpm": 0, "sonic_run": false}
+        }
+      ]
+    }
+  ]
+}

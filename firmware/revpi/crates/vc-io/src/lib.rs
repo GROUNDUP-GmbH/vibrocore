@@ -27,26 +27,39 @@ pub const KB_SET_VALUE: u32 = kb_io(16);
 /// The ioctl argument layout is not confirmed in this crate.
 pub const KB_SET_OUTPUT_WATCHDOG: u32 = kb_io(26);
 
+/// One RevPi DIO. These counts are the module rating, not PiCtory offsets.
+pub const DIO_INPUTS: u8 = 14;
+pub const DIO_OUTPUTS: u8 = 14;
+
+/// Assigned inputs. Two inputs stay spare. A second DIO is not required.
+/// The tilt angle is 4-20 mA, so a RevPi AIO is required. See `IO-LIST.md`.
+pub const DI_ASSIGNED: u8 = 12;
+pub const DO_ASSIGNED: u8 = 7;
+
 /// Proposed DIO input index. Not a process-image byte offset.
 pub const DI_LIMIT_UP: u8 = 0;
 pub const DI_LIMIT_DOWN: u8 = 1;
 pub const DI_ESTOP_NC: u8 = 2;
-pub const DI_HUB_ALARM: u8 = 3;
-pub const DI_LIFT_DEPLOYED: u8 = 4;
-pub const DI_LIFT_RETRACTED: u8 = 5;
-pub const DI_TILT_VERTICAL: u8 = 6;
-pub const DI_TILT_FOLDED: u8 = 7;
+pub const DI_SAFETY_RELAY: u8 = 3;
+pub const DI_S200_STO: u8 = 4;
+pub const DI_SONIC_STO: u8 = 5;
+pub const DI_ENABLING: u8 = 6;
+pub const DI_TILT_VERTICAL: u8 = 7;
+pub const DI_TILT_FOLDED: u8 = 8;
+pub const DI_LIFT_DEPLOYED: u8 = 9;
+pub const DI_LIFT_RETRACTED: u8 = 10;
+pub const DI_SONIC_FAULT: u8 = 11;
 
 /// Proposed DIO output index. Not a process-image byte offset.
-/// Brake and hub-enable stay reserved. The S200 owns the brake and STO.
-pub const DO_BRAKE_RELEASE_RESERVED: u8 = 0;
-pub const DO_HUB_ENABLE_RESERVED: u8 = 1;
-pub const DO_VFD_RESET: u8 = 2;
-pub const DO_ALARM_BEACON: u8 = 3;
-pub const DO_LIFT_EXTEND: u8 = 4;
-pub const DO_LIFT_RETRACT: u8 = 5;
-pub const DO_TILT_VERTICAL: u8 = 6;
-pub const DO_TILT_FOLD: u8 = 7;
+/// The S200 brake and both STO paths are hard-wired. They are not outputs.
+/// The S200 pulse train is not a DIO output.
+pub const DO_LIFT_EXTEND: u8 = 0;
+pub const DO_LIFT_RETRACT: u8 = 1;
+pub const DO_TILT_VERTICAL: u8 = 2;
+pub const DO_TILT_FOLD: u8 = 3;
+pub const DO_ALARM_BEACON: u8 = 4;
+pub const DO_SONIC_RESET: u8 = 5;
+pub const DO_ROTATION_ENABLE: u8 = 6;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ImageError {
@@ -139,5 +152,13 @@ mod tests {
         assert_eq!(read_bit(image.read_byte(1).unwrap(), 2), Some(true));
         assert_eq!(image.write_byte(9, 1), Err(ImageError::Offset));
         assert_eq!(read_bit(0, 8), None);
+    }
+
+    #[test]
+    fn discrete_map_fits_one_dio_and_leaves_the_brake_off_the_list() {
+        assert_eq!(DIO_INPUTS - DI_ASSIGNED, 2);
+        assert_eq!(DIO_OUTPUTS - DO_ASSIGNED, 7);
+        assert_eq!(DI_SONIC_FAULT, 11);
+        assert_eq!(DO_ROTATION_ENABLE, 6);
     }
 }

@@ -58,7 +58,7 @@ pub struct SafetyInput {
 }
 
 /// Result of one scan. `safe_state` is a software stop request, not a PL claim.
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct SafetyOutput {
     pub safe_state: bool,
     pub stone_detected: bool,
