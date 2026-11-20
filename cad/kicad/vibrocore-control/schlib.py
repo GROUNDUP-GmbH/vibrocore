@@ -13,8 +13,8 @@ IN = "input"
 OT = "output"
 
 
-def f(steps: int) -> str:
-    value = steps * 127
+def f(steps: float) -> str:
+    value = int(round(float(steps) * 127))
     sign = "-" if value < 0 else ""
     value = abs(value)
     return f"{sign}{value // 100}.{value % 100:02d}"

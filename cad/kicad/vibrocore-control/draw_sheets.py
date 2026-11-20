@@ -8,6 +8,16 @@ from pathlib import Path
 
 from schlib import IN, OT, P, PI, PO, SYMS, Sym, f, pin_sexpr, q
 
+
+def sexpr_justify(justify: str) -> str:
+    """KiCad's schematic parser accepts left, right, top and bottom only.
+
+    Horizontal and vertical center are the defaults. The token ``center`` is a
+    parse error, and a property that fails to parse drops the whole symbol.
+    """
+    tokens = [token for token in justify.split() if token != "center"]
+    return " ".join(tokens)
+
 from generate_schematic import (
     CABLES,
     EXPORT,
@@ -22,20 +32,7 @@ from generate_schematic import (
 
 
 def build_power(s: Sheet) -> None:
-    s.notes = [
-        "Instagrid ONE max is the only AC source. Continuous current is 15.7 A.",
-        "Q1 does not switch PE. QF1 is type B, 30 mA.",
-        "F2 is GV2L20. NVE41289.09, IEC breaker table, enclosure, 240 V one phase.",
-        "The row is ATV320U15M2. The line current is 17.8 A at 200 V. Irm is 223 A.",
-        "Pole 3 of F2 is open. The supply wire is 6 mm2. The terminal maximum is 6 mm2.",
-        "The S200 feeder is 2.5 mm2.",
-        "The general 24 V rail is 2.5 mm2. The S200 24 V feed is 1.0 mm2.",
-        "Both 0 V rails meet at X1 pin 4. W1 is the only bond to PE.",
-        "Confirm W1 in the S200 PTI manual. Remove W1 if that manual forbids the bond.",
-        "There is no 48 V rail. SDR-120-24 feeds only S200 X124.",
-        "A crossing without a dot is not a connection.",
-    ]
-    s.place("G0", "SRC", 22, 18, "VC-PW-5100 Instagrid")
+    s.place("G0", "SRC", 36, 34, "VC-PW-5100 Instagrid")
     order = sorted((s.pin("G0", name)[1], name) for name in ("L", "N", "PE"))
     pin_x = s.pin("G0", "L")[0]
     rail = {name: pin_x + 12 + (2 - index) * 18 for index, (_, name) in enumerate(order)}
@@ -55,97 +52,82 @@ def build_power(s: Sheet) -> None:
     s.link("101_N", ("X1.2", "2"), ("Q1", "3"))
     qf_top = s.pin("Q1", "2")[1] + 6
     pair(s, "QF1", "RCD2", lx, qf_top, "VC-PW-5720 type B 30 mA", dx=dx)
-    s.link("110_L", ("Q1", "2"), ("QF1", "1"))
-    s.link("111_N", ("Q1", "4"), ("QF1", "3"))
+    _shelf(s, "110_L", ("Q1", "2"), ("QF1", "1"), 16)
+    _shelf(s, "111_N", ("Q1", "4"), ("QF1", "3"), -16)
     f_top = s.pin("QF1", "2")[1] + 6
     pair(s, "F1", "MCB2", lx, f_top, "VC-PW-5710 C20", dx=dx)
-    s.link("120_L", ("QF1", "2"), ("F1", "1"))
-    s.link("121_N", ("QF1", "4"), ("F1", "3"))
+    _shelf(s, "120_L", ("QF1", "2"), ("F1", "1"), 16)
+    _shelf(s, "121_N", ("QF1", "4"), ("F1", "3"), -16)
     bus_l = s.pin("F1", "2")[1] + 8
     bus_n = bus_l + 24
     s.wire("130_L", s.pin("F1", "2"), (lx, bus_l))
     s.wire("131_N", s.pin("F1", "4"), (nx, bus_n))
     branches = [
-        ("F2", "MCB3", "VC-PW-5730 GV2L20", "140_L", "141_N", "6 mm2", True),
-        ("F3", "MCB2", "VC-PW-5740 C16", "150_L", "151_N", "2.5 mm2", True),
-        ("F4", "MCB2", "VC-PW-5750 C4", "160_L", "161_N", "1.5 mm2", False),
-        ("F5", "MCB2", "VC-PW-5760 C10", "170_L", "171_N", "2.5 mm2", False),
+        ("F2", "MCB3", "VC-PW-5730 GV2L20", "140_L", "141_N"),
+        ("F3", "MCB2", "VC-PW-5740 C16", "150_L", "151_N"),
+        ("F4", "MCB2", "VC-PW-5750 C4", "160_L", "161_N"),
+        ("F5", "MCB2", "VC-PW-5760 C10", "170_L", "171_N"),
     ]
     bx = lx + 40
-    for index, (ref, sym, value, net_l, net_n, label, leaves) in enumerate(branches):
+    for index, (ref, sym, value, net_l, net_n) in enumerate(branches):
         x = bx + index * 46
-        s.place_pin(
-            ref, sym, "1", x, bus_l, value, unit=1,
-            ref_dy=-12, ref_justify="left", val_dx=8, val_dy=6, val_justify="left",
-        )
-        s.place_pin(ref, sym, "3", x + 16, bus_n, value, unit=2, hide_value=True, hide_ref=True)
+        s.place_pin(ref, sym, "1", x, bus_l, value, unit=1, hide_value=True, hide_ref=True)
+        s.place_pin(ref, sym, "3", x + 16, bus_n, value, unit=2, hide_value=False, hide_ref=False)
         if sym == "MCB3":
             s.place_pin(ref, sym, "5", x + 32, bus_n + 18, value, unit=3, hide_value=True, hide_ref=True)
-            s.text(x + 36, bus_n + 22, "pole 3 open")
         s.dash(ref)
-        if leaves:
-            s.stub(net_l, (ref, "2"), dy=2)
-            s.stub(net_n, (ref, "4"), dy=2)
-            s.text(x + 8, s.pin(ref, "2")[1] + 4, label)
+        s.stub(net_l, (ref, "2"), dy=8)
+        s.stub(net_n, (ref, "4"), dy=8)
     refs = [row[0] for row in branches]
     s.hrail("130_L", bus_l, [(lx, bus_l)] + [(ref, "1") for ref in refs])
     s.hrail("131_N", bus_n, [(nx, bus_n)] + [(ref, "3") for ref in refs])
-    s.text(8, bus_l - 8, "Sonic tap 6 mm2. S200 tap 2.5 mm2.")
-    s.place("G1", "PSU0", 150, 150, "VC-PW-5310 SDR-120-24", val_dx=18, val_dy=20, val_justify="left", ref_dy=-22)
-    s.place("G2", "PSU", 250, 150, "VC-PW-5320 SDR-480-24 slot", val_dx=18, val_dy=20, val_justify="left", ref_dy=-22)
-    gutter = nx + 8
-    gutter2 = gutter + 8
-    for ref, psu, net_l, net_n, gy, gx in (
-        ("F4", "G1", "160_L", "161_N", bus_l + 18, gutter),
-        ("F5", "G2", "170_L", "171_N", bus_l + 22, gutter2),
-    ):
-        load_l = s.pin(ref, "2")
-        load_n = s.pin(ref, "4")
-        dst_l = s.pin(psu, "L")
-        dst_n = s.pin(psu, "N")
-        s.wire(net_l, load_l, (load_l[0], gy), (dst_l[0], gy), dst_l)
-        s.wire(net_n, load_n, (load_n[0], dst_n[1] + 8), (dst_n[0], dst_n[1] + 8), dst_n)
+    pe_y = s.pin("X1.3", "2")[1] + 16
+    s.place_pin("PE1", "EARTH", "1", pe, pe_y, "PE", hide_value=True, hide_ref=True)
+    s.place_pin("PF0", "PWR", "1", pe - 16, pe_y, "PE", hide_value=True, hide_ref=True)
+    s.vrail("102_PE", pe, [("X1.3", "2"), ("PE1", "1")])
+    s.hrail("102_PE", pe_y, [("PF0", "1"), (pe, pe_y)])
+    s.add_note("Instagrid ONE max is the only AC source. Continuous current is 15.7 A.", s.pin("G0", "L"))
+    s.add_note("Q1 does not switch PE. QF1 is type B, 30 mA.", s.pin("Q1", "1"))
+    s.add_note("F2 is a Schneider GV2L20. NVE41289.09, IEC breaker table, enclosure, 240 V, one phase.", s.pin("F2", "1"))
+    s.add_note("The row is ATV320U15M2. Line current is 17.8 A at 200 V. Irm is 223 A. Pole 3 is open.", s.pin("F2", "5"))
+    s.add_note("The sonic feeder is 6 mm2. The terminal maximum is 6 mm2. The S200 feeder is 2.5 mm2.", s.pin("F3", "1"))
+    s.add_note("F4 feeds the S200 supply. F5 feeds the general 24 V supply. Both continue on the next sheet.", s.pin("F4", "2"))
+    s.add_note("A crossing without a dot is not a connection.")
+
+
+def build_supplies(s: Sheet) -> None:
+    """The two 24 V supplies. Kept off the mains sheet so the feeder poles stay readable."""
+    s.place("G1", "PSU0", 110, 56, "VC-PW-5310 SDR-120-24")
+    s.place("G2", "PSU", 230, 56, "VC-PW-5320 SDR-480-24 slot")
+    s.stub("160_L", ("G1", "L"), dx=-28)
+    s.stub("161_N", ("G1", "N"), dx=-36)
+    s.stub("170_L", ("G2", "L"), dx=-28)
+    s.stub("171_N", ("G2", "N"), dx=-36)
     for psu, net_in, net_out, fuse_ref, fuse_value, flag in (
         ("G1", "200_24S", "201_24S", "F14", "VC-PW-5800 6A", "PF1"),
         ("G2", "210_24C", "211_24C", "F24", "VC-PW-5810 20A", "PF2"),
     ):
         plus = s.pin(psu, "P")
-        s.place_pin(
-            fuse_ref, "FUSE", "1", plus[0] + 18, plus[1], fuse_value,
-            ref_dx=8, ref_dy=-4, ref_justify="left", val_dx=8, val_dy=6, val_justify="left",
-        )
+        s.place_pin(fuse_ref, "FUSE", "1", plus[0] + 22, plus[1], fuse_value)
         s.link(net_in, (psu, "P"), (fuse_ref, "1"))
         out = s.pin(fuse_ref, "2")
-        s.place_pin(flag, "PWR", "1", out[0], out[1] + 10, net_out, hide_value=True, ref_dx=8, ref_justify="left")
+        s.place_pin(flag, "PWR", "1", out[0] + 16, out[1], net_out, hide_value=True)
         s.link(net_out, (fuse_ref, "2"), (flag, "1"))
-    zero = 186
-    s.place_pin("X1.4", "TERM_H", "2", 120, zero, "X1:4", ref_dy=-6)
-    s.place_pin("W1", "BOND", "1", 300, zero, "W1 bond", ref_dy=-8)
+    zero = 148
+    s.place_pin("X1.4", "TERM_H", "2", 40, zero, "X1:4")
+    s.place_pin("W1", "BOND", "1", 270, zero, "W1 bond")
     s.hrail("001_0V", zero, [("G1", "M"), ("G2", "M"), ("X1.4", "1"), ("X1.4", "2"), ("W1", "1")])
-    s.place_pin("PE1", "EARTH", "1", pe, zero + 12, "PE", hide_value=True, hide_ref=True)
-    s.place_pin("PF0", "PWR", "1", pe + 12, zero + 12, "PE", hide_value=True, hide_ref=True)
-    s.vrail("102_PE", pe, [("X1.3", "2"), ("PE1", "1"), ("PF0", "1"), (pe, zero + 8)])
-    s.wire("102_PE", s.pin("W1", "2"), (s.pin("W1", "2")[0], zero + 12), (pe, zero + 12))
-    s.hrail("102_PE", zero + 8, [("G1", "PE"), ("G2", "PE"), (pe, zero + 8)])
-    s.text(78, zero - 4, "0 V star. W1 bonds 0 V to PE.")
-    s.note_at = (190, 8)
+    pe_y = zero - 14
+    s.hrail("102_PE", pe_y, [("G1", "PE"), ("G2", "PE")])
+    bond = s.pin("W1", "2")
+    s.wire("102_PE", bond, (bond[0], pe_y), (s.pin("G2", "PE")[0], pe_y))
+    s.add_note("The general 24 V rail is 2.5 mm2. The S200 24 V feed is 1.0 mm2. There is no 48 V rail.", s.pin("G1", "P"))
+    s.add_note("G2 is an open 24 V slot. SDR-480-24 is the slot size, not a purchase.", s.pin("G2", "P"))
+    s.add_note("Both 0 V rails meet at X1 pin 4. W1 is the only bond to PE. Confirm W1 in the S200 PTI manual.", s.pin("W1", "1"))
+    s.add_note("F14 is 6 A on the S200 rail. F24 is 20 A on the general rail.", s.pin("F14", "1"))
 
 
 def build_safety(s: Sheet) -> None:
-    s.notes = [
-        "Two NC channels go to the PNOZ. The third NC is DIO input 3 only.",
-        "Do not feed cabinet 24 V into S11 or S21. The PNOZ makes the test pulses.",
-        "Set two channels, short detection and a monitored reset.",
-        "The rotary-switch detent text is TBC. Do not adjust it during operation.",
-        "Contact 13-14 is STO channel 1 for both drives.",
-        "Contact 23-24 is STO channel 2 for both drives.",
-        "41-42 is the monitor. Do not use it in the safety path. Its state is TBC.",
-        "33-34 is spare. Do not load it. Y32 is not a safety output.",
-        "OPEN: the E-stop contact block is not chosen. Confirm the printed numbers.",
-        "OPEN: the reset button order code and colour are not chosen.",
-        "The RevPi only reads feedback. Do not claim an ISO 13849 PL.",
-    ]
-    # Notes sit in the empty top-left band, clear of the PNOZ.
     s.place("K1", "PNOZ", 168, 108, "VC-CT-6220 750104", unit=1)
     y11 = s.pin("K1", "S11")
     s.place_pin("S1", "ESTOP", "11", y11[0] - 16, y11[1], "VC-CT-6210 OPEN", unit=1, val_dy=-12)
@@ -163,24 +145,35 @@ def build_safety(s: Sheet) -> None:
     s.link("414_S34", ("S10", "2"), ("K1", "S34"))
     s.wire("411_S12", s.pin("S10", "1"), (s.pin("S10", "1")[0], s.pin("K1", "S12")[1]), s.pin("K1", "S12"))
     s.place_pin("F30", "FUSE", "2", 250, s.pin("K1", "A1")[1], "VC-PW-5820 2A", ref_dx=8)
-    s.place_pin("K1", "PNOZ", "13", s.pin("F30", "2")[0] + 24, s.pin("F30", "2")[1], "13-14", unit=2, hide_value=True, hide_ref=True, ref_dy=-10)
+    s.place_pin("K1", "PNOZ", "13", s.pin("F30", "2")[0] + 24, s.pin("F30", "2")[1], "13-14", unit=2, hide_value=False, hide_ref=False)
     s.link("430_F30", ("F30", "2"), ("K1", "13"))
     s.stub("431_STO1", ("K1", "14"), dx=16)
     s.place_pin("F31", "FUSE", "2", 250, s.pin("K1", "14")[1] + 24, "VC-PW-5820 2A", ref_dx=8)
-    s.place_pin("K1", "PNOZ", "23", s.pin("F31", "2")[0] + 24, s.pin("F31", "2")[1], "23-24", unit=3, hide_value=True, hide_ref=True, ref_dy=-10)
+    s.place_pin("K1", "PNOZ", "23", s.pin("F31", "2")[0] + 24, s.pin("F31", "2")[1], "23-24", unit=3, hide_value=False, hide_ref=False)
     s.link("432_F31", ("F31", "2"), ("K1", "23"))
     s.stub("433_STO2", ("K1", "24"), dx=16)
-    s.place_pin("K1", "PNOZ", "33", 300, s.pin("K1", "24")[1] + 22, "33-34 spare", unit=4, hide_value=True, hide_ref=True, ref_dy=-10)
-    s.text(300, s.pin("K1", "34")[1] + 6, "Spare. Do not load.")
-    s.place_pin("K1", "PNOZ", "41", 250, s.pin("K1", "33")[1] + 20, "41-42", unit=5, hide_value=True, hide_ref=True, ref_dy=-10)
+    s.place_pin("K1", "PNOZ", "33", 300, s.pin("K1", "24")[1] + 22, "33-34", unit=4, hide_value=False, hide_ref=False)
+    s.place_pin("K1", "PNOZ", "41", 250, s.pin("K1", "33")[1] + 20, "41-42", unit=5, hide_value=False, hide_ref=False)
     s.stub("421_PNOZ", ("K1", "42"), dx=16)
     s.stub("420_ESTOP", ("S1", "31"), dx=16)
     rail = 28
     s.vrail("211_24C", rail, [("K1", "A1"), ("F30", "1"), ("F31", "1"), ("K1", "41"), ("S1", "32")])
     s.vrail("001_0V", rail + 12, [("K1", "A2")])
-    s.text(250, s.pin("K1", "14")[1] - 4, "STO ch 1  0.75 mm2")
-    s.text(250, s.pin("K1", "24")[1] - 4, "STO ch 2  0.75 mm2")
-    s.note_at = (16, 8)
+    s.add_note("Two NC channels go to the PNOZ. The third NC is DIO input index 2 only.", s.pin("S1", "11"))
+    s.add_note("Do not feed cabinet 24 V into S11 or S21. The PNOZ makes the test pulses.", s.pin("K1", "S11"))
+    s.add_note("Set two channels, short detection and a monitored reset. The detent text is TBC.", s.pin("S10", "1"))
+    s.add_note("Contact 13-14 is STO channel 1. Contact 23-24 is STO channel 2. The section is 0.75 mm2.", s.pin("K1", "14"))
+    s.add_note("41-42 is the monitor. Do not use it in the safety path. Its state is TBC.", s.pin("K1", "41"))
+    s.add_note("33-34 is spare. Do not load it. Y32 is not a safety output.", s.pin("K1", "33"))
+    s.add_note("OPEN: the E-stop contact block and the reset button are not chosen.", s.pin("S1", "31"))
+    s.add_note("The RevPi only reads feedback. Do not claim an ISO 13849 PL.")
+
+
+def _shelf(s: Sheet, net: str, src, dst, dx: int) -> None:
+    """A side step between two pins, so the net name has a clear run."""
+    a = s.pin(*src)
+    b = s.pin(*dst)
+    s.wire(net, a, (a[0] + dx, a[1]), (b[0] + dx, b[1]), b)
 
 
 def side_net(s: Sheet, net: str, nodes, dx: int) -> None:
@@ -200,49 +193,36 @@ def _stub_left(s: Sheet, net: str, ref: str, pin: str, dx: int = -28) -> None:
 
 
 def build_hub(s: Sheet) -> None:
-    s.notes = [
-        "Order 6SL5510-1BB11-0AA0. This is the PTI standard drive, not the PROFINET code.",
-        "X131 pins are 1 STO1+, 2 STO1-, 3 STO-VS, 4 STO-M, 5 STO2+, 6 STO2-.",
-        "STO-VS and STO-M are TBC. Do not land 24 V on them until the figure is confirmed.",
-        "X130 is not on this PTI drive. STO status is status word bit STO_EP.",
-        "Do not land 440_S200FB until a digital output is assigned.",
-        "X124 screws are marked 24 V and 0 V. They are not numbered. Both screws are one node.",
-        "L2 is open. Mains uses L1 and L3. DCP, R1 and R2 stay open. Fit the blanking plug.",
-        "U1 is not a DIO pin. Pulse form and scale are TBC.",
-        "Encoder map, drive to motor: 7 A, 8 B, 4 C, 5 D, 1 E, 2 F.",
-        "The catalogue cable carries those cores. Siemens order code is TODO.",
-        "Power cable is 4G1.5 mm2 shielded. Brake pair is 2x0.75 mm2.",
-        "There is no second holding brake. The coil stays on X108.",
-    ]
     s.place("A2", "S200", 150, 118, "VC-HB-2300 6SL5510-1BB11-0AA0")
     for pin, net in (("L1", "150_L"), ("L3", "151_N"), ("1", "431_STO1"), ("5", "433_STO2"), ("FB", "440_S200FB")):
         _stub_left(s, net, "A2", pin)
     side_net(s, "201_24S", [("A2", "24V"), ("A2", "24Vb")], -12)
     side_net(s, "001_0V", [("A2", "0V"), ("A2", "0Vb"), ("A2", "2"), ("A2", "6")], -20)
     uy = s.pin("A2", "U")[1]
-    s.place_pin("M1", "MSRV", "U", s.pin("A2", "U")[0] + 78, uy, "VC-HB-2100 1FL2104")
-    s.place_pin(
-        "U1", "PULSE", "P", s.pin("A2", "36")[0] + 36, s.pin("A2", "36")[1],
-        "pulse source TODO", in_bom=False, ref_dy=-16, val_dx=10, val_dy=2, val_justify="left",
+    s.place_pin("M1", "MSRV", "U", s.pin("A2", "U")[0] + 96, uy, "VC-HB-2100 1FL2104")
+    fan = (
+        ("X4.1", "U", "540_U", "U"),
+        ("X4.2", "V", "541_V", "V"),
+        ("X4.3", "W", "542_W", "W"),
+        ("X4.4", "PE2", "102_PE", "PE"),
+        ("X6.1", "BRP", "543_BRP", "BRP"),
+        ("X6.2", "BRN", "544_BRN", "BRN"),
     )
-    pairs = (("U", "X4.1", "540_U", "U"), ("V", "X4.2", "541_V", "V"), ("W", "X4.3", "542_W", "W"))
-    for drive, term, net, motor in pairs:
-        dx, dy = s.pin("A2", drive)
-        s.place_pin(term, "TERM_H", "1", dx + 24, dy, term)
-        s.join(net, ("A2", drive), (term, "1"), (term, "2"), ("M1", motor))
-    s.place_pin("X4.4", "TERM_H", "1", s.pin("A2", "PE2")[0] + 24, s.pin("A2", "PE2")[1], "X4.4")
-    s.join("102_PE", ("A2", "PE2"), ("X4.4", "1"), ("X4.4", "2"), ("M1", "PE"))
-    s.place_pin("X6.1", "TERM_H", "1", s.pin("A2", "BRP")[0] + 24, s.pin("A2", "BRP")[1], "X6.1")
-    s.place_pin("X6.2", "TERM_H", "1", s.pin("A2", "BRN")[0] + 24, s.pin("A2", "BRN")[1], "X6.2")
-    s.join("543_BRP", ("A2", "BRP"), ("X6.1", "1"), ("X6.1", "2"), ("M1", "BRP"))
-    s.join("544_BRN", ("A2", "BRN"), ("X6.2", "1"), ("X6.2", "2"), ("M1", "BRN"))
-    s.place_pin("X5.1", "TERM_H", "1", s.pin("A2", "X120")[0] + 24, s.pin("A2", "X120")[1], "X5.1")
-    s.place_pin(
-        "X5.2", "TERM_H", "1", s.pin("X5.1", "2")[0] + 20, s.pin("A2", "X120")[1] + 14,
-        "X5.2", ref_dx=8, ref_dy=-2, ref_justify="left",
-    )
-    s.join("510_ENC", ("A2", "X120"), ("X5.1", "1"), ("X5.1", "2"))
-    s.stub("510_ENC", ("X5.1", "2"), dx=14)
+    for index, (term, pin, net, motor) in enumerate(fan):
+        src = s.pin("A2", pin)
+        ty = 40 + index * 16
+        lane = 184 + index * 4
+        s.place_pin(term, "TERM_H", "1", 220, ty, term)
+        s.wire(net, src, (lane, src[1]), (lane, ty), s.pin(term, "1"))
+        dest = s.pin("M1", motor)
+        out = s.pin(term, "2")
+        drop = dest[0] - 10 - index * 3
+        s.wire(net, out, (drop, out[1]), (drop, dest[1]), dest)
+    s.place_pin("X5.1", "TERM_H", "1", 220, 150, "X5.1")
+    s.place_pin("X5.2", "TERM_H", "1", 220, 168, "X5.2")
+    enc = s.pin("A2", "X120")
+    s.wire("510_ENC", enc, (174, enc[1]), (174, 150), s.pin("X5.1", "1"))
+    s.stub("510_ENC", ("X5.1", "2"), dy=12)
     left_pe = s.pin("A2", "PE")
     right_pe = s.pin("A2", "PE2")
     top = s.pin("A2", "L1")[1] - 10
@@ -255,37 +235,36 @@ def build_hub(s: Sheet) -> None:
         (right_pe[0] + 8, right_pe[1]),
         right_pe,
     )
-    shield = s.pin("X5.2", "1")
-    s.wire("102_PE", s.pin("X5.2", "2"), shield, (shield[0], right_pe[1]), right_pe)
-    s.text(s.pin("X5.1", "2")[0], s.pin("X5.1", "2")[1] - 6, "VC-HB-3450 catalogue cable. Order TODO.")
-    for src, dst, net in (("P", "36", "520_PULSP"), ("N", "37", "521_PULSN"), ("D", "38", "522_SIGNP"), ("E", "39", "523_SIGNN")):
-        s.link(net, ("U1", src), ("A2", dst))
-    s.place_pin("R1", "RES", "1", s.pin("A2", "23")[0] + 28, s.pin("A2", "23")[1], "VC-CT-6790 120R")
-    s.join("910_A", ("A2", "23"), ("R1", "1"))
-    s.join("911_B", ("A2", "25"), ("R1", "2"))
-    s.stub("910_A", ("R1", "1"), dy=16)
-    s.stub("911_B", ("R1", "2"), dy=16)
-    s.text(s.pin("A2", "U")[0] + 4, s.pin("A2", "U")[1] - 4, "4G1.5 shielded")
-    s.note_at = (16, 8)
+    shield = s.pin("X5.2", "2")
+    motor_pe = s.pin("M1", "PE")
+    s.wire("102_PE", shield, (248, shield[1]), (248, motor_pe[1]), motor_pe)
+    s.add_note("VC-HB-3450 is the catalogue encoder cable. The Siemens order code is TODO.", s.pin("X5.1", "2"))
+    s.place("U1", "PULSE", 78, 196, "pulse source TODO", in_bom=False)
+    for index, (src, dst, net) in enumerate((("P", "36", "520_PULSP"), ("N", "37", "521_PULSN"), ("D", "38", "522_SIGNP"), ("E", "39", "523_SIGNN"))):
+        a = s.pin("A2", dst)
+        b = s.pin("U1", src)
+        lane = 176 + index * 2
+        s.wire(net, a, (lane, a[1]), (lane, b[1]), b)
+    s.place_pin("R1", "RES", "1", 250, 142, "VC-CT-6790 120R")
+    a = s.pin("A2", "23")
+    b = s.pin("R1", "1")
+    s.wire("910_A", a, (250, a[1]), (250, b[1]), b)
+    a = s.pin("A2", "25")
+    c = s.pin("R1", "2")
+    s.wire("911_B", a, (c[0] + 14, a[1]), (c[0] + 14, c[1]), c)
+    s.stub("910_A", ("R1", "1"), dy=12)
+    s.stub("911_B", ("R1", "2"), dy=12)
+    s.add_note("Order 6SL5510-1BB11-0AA0. This is the PTI standard drive, not the PROFINET code.", s.pin("A2", "L1"))
+    s.add_note("X131 is 1 STO1+, 2 STO1-, 3 STO-VS, 4 STO-M, 5 STO2+, 6 STO2-. STO-VS and STO-M are TBC.", s.pin("A2", "3"))
+    s.add_note("X130 is not on this PTI drive. STO status is status word bit STO_EP. Do not land 440_S200FB yet.", s.pin("A2", "FB"))
+    s.add_note("X124 screws are marked 24 V and 0 V. They are not numbered. Both screws are one node.", s.pin("A2", "24Vb"))
+    s.add_note("L2 is open. Mains uses L1 and L3. DCP, R1 and R2 stay open. Fit the blanking plug.", s.pin("A2", "L2"))
+    s.add_note("U1 is not a DIO pin. Pulse form and scale are TBC.", s.pin("A2", "36"))
+    s.add_note("Encoder map, drive to motor: 7 A, 8 B, 4 C, 5 D, 1 E, 2 F.", s.pin("A2", "X120"))
+    s.add_note("Power cable is 4G1.5 mm2 shielded. Brake pair is 2x0.75 mm2. The coil stays on X108.", s.pin("A2", "U"))
 
 
 def build_sonic(s: Sheet) -> None:
-    s.notes = [
-        "One ATV320 output feeds both OLI MVE 400/6-HF motors. Each motor is 1.45 A.",
-        "Motor B swaps V and W at X3 so the motors turn in opposite directions.",
-        "OPEN: F21 and F22 need a PWM-rated protector. The order code is not chosen.",
-        "Do not fit a standard GV2. Do not invent an order code.",
-        "The drive STO screw is one terminal. DI3 is the second channel.",
-        "Assign DI3 in SoMove. The parameter name is TODO.",
-        "Do not tie P24 to the cabinet 24 V.",
-        "R1C is the fault-relay common. R1B is the NC contact. R1A is open.",
-        "The R1 logic assignment is still TODO. R2 parameter is TODO.",
-        "RJ45 pin numbers are TBC. See the Modbus manual NVE41308.",
-        "PA, PB, PC and P0 stay open. There is no braking resistor.",
-        "Supply wire is 6 mm2. NVE41289 frame 2, U15M2C, rated condition.",
-        "Each motor cable stays 4G1.5. The drive runs below rated output current.",
-        "Shield the motor cable at the drive end.",
-    ]
     s.place("A3", "ATV", 120, 130, "VC-SH-1210 ATV320U15M2C")
     for pin, net in (("L1", "140_L"), ("L2", "141_N"), ("STO", "431_STO1"), ("DI3", "433_STO2"), ("DI1", "450_RESET"), ("COM", "001_0V")):
         _stub_left(s, net, "A3", pin)
@@ -325,33 +304,42 @@ def build_sonic(s: Sheet) -> None:
         dx, dy = s.pin("F21", fout)
         s.place_pin(term, "TERM_H", "1", dx + 22, dy, term)
         s.join(net, ("F21", fout), (term, "1"), (term, "2"), ("M2", motor))
-    s.place_pin("X2.4", "TERM_H", "1", s.pin("M2", "PE")[0] - 24, s.pin("M2", "PE")[1], "X2.4", ref_dx=0, ref_dy=-8)
-    s.join("102_PE", ("A3", "PE2"), ("X2.4", "1"), ("X2.4", "2"), ("M2", "PE"))
+    s.place_pin("X2.4", "TERM_H", "1", 230, s.pin("M2", "PE")[1] + 18, "X2.4")
+    s.join("102_PE", ("A3", "PE2"), ("X2.4", "1"), ("X2.4", "2"))
+    shield = s.pin("X2.4", "2")
+    motor = s.pin("M2", "PE")
+    s.wire("102_PE", shield, (shield[0], 100), (motor[0], 100), motor)
     s.place_pin(
         "M3", "M3", "U", s.pin("F22", "2")[0] + 78, s.pin("F22", "2")[1],
         "VC-SH-1100 motor B", val_dx=14, val_dy=0, val_justify="left",
     )
     # Swap V and W on the way to motor B. The jogs sit side by side.
-    lanes = {"V": s.pin("F22", "4")[0] + 16, "W": s.pin("F22", "4")[0] + 24}
     mapping = (
         ("6", "X3.2", "622_WB", "V", "W"),
         ("4", "X3.3", "621_VB", "W", "V"),
-        ("2", "X3.1", "620_UB", "U", None),
+        ("2", "X3.1", "620_UB", "U", "U"),
     )
+    fan_y = {"U": 50, "V": 62, "W": 74}
+    side = {"U": 204, "V": 212, "W": 228}
+    hop_x = {"U": 251, "V": 257, "W": 263}
     for fout, term, net, motor, lane in mapping:
         dest = s.pin("M3", motor)
         src = s.pin("F22", fout)
-        s.place_pin(term, "TERM_H", "1", dest[0] - 28, dest[1], term)
-        if lane is None:
-            s.join(net, ("F22", fout), (term, "1"))
-        else:
-            s.wire(net, src, (lanes[lane], src[1]), (lanes[lane], dest[1]), s.pin(term, "1"))
-        s.link(net, (term, "2"), ("M3", motor))
+        ty = fan_y[motor]
+        s.place_pin(term, "TERM_H", "1", dest[0] - 46, ty, term)
+        s.wire(net, src, (side[lane], src[1]), (side[lane], ty), s.pin(term, "1"))
+        out = s.pin(term, "2")
+        s.wire(net, out, (hop_x[motor], ty), (hop_x[motor], dest[1]), dest)
     s.place_pin("X3.4", "TERM_H", "1", s.pin("M3", "PE")[0] - 24, s.pin("M3", "PE")[1], "X3.4", ref_dx=0, ref_dy=-8)
     s.join("102_PE", ("X3.4", "1"), ("X3.4", "2"), ("M3", "PE"), ("A3", "PE2"))
-    s.text(s.pin("M3", "U")[0] - 20, s.pin("M3", "U")[1] - 8, "Swap V and W at X3")
-    s.text(s.pin("M2", "U")[0] - 10, s.pin("M2", "U")[1] - 8, "4G1.5 shielded")
-    s.note_at = (16, 8)
+    s.add_note("One ATV320 output feeds both OLI MVE 400/6-HF motors. Each motor is 1.45 A.", s.pin("A3", "U"))
+    s.add_note("Motor B swaps V and W at X3 so the motors turn in opposite directions.", s.pin("M3", "U"))
+    s.add_note("OPEN: F21 and F22 need a PWM-rated protector. Do not fit a standard GV2.", s.pin("F21", "1"))
+    s.add_note("The drive STO screw is one terminal. DI3 is the second channel. The SoMove parameter is TODO.", s.pin("A3", "DI3"))
+    s.add_note("Do not tie P24 to the cabinet 24 V. PA, PB, PC and P0 stay open. There is no braking resistor.", s.pin("A3", "P24"))
+    s.add_note("R1C is the fault-relay common. R1B is the NC contact. R1A is open. The logic assignment is TODO.", s.pin("A3", "R1C"))
+    s.add_note("RJ45 pin numbers are TBC. See the Modbus manual NVE41308.", s.pin("A3", "RJA"))
+    s.add_note("Supply wire is 6 mm2. Each motor cable stays 4G1.5 shielded at the drive. The drive is below rated current.", s.pin("M2", "U"))
 
 
 def _contact_24(s: Sheet, ref: str, sym: str, signal: str, y: int, x_signal: int, value: str) -> None:
@@ -360,19 +348,6 @@ def _contact_24(s: Sheet, ref: str, sym: str, signal: str, y: int, x_signal: int
 
 
 def build_revpi(s: Sheet) -> None:
-    s.notes = [
-        "Controller 100378. DIO 100197. PiBridge plug is 100204.",
-        "I1 is I/O-list index 0. Channel names are not a confirmed plug order.",
-        "Confirm the 14-pin plug order on the Kunbus drawing before you wire it.",
-        "X4 order 24 V, 0 V, NC, FG is TBC. RS-485 order GND, N, P is TBC.",
-        "The signal names 24 V, 0 V, FG, P, N and GND are the documented names.",
-        "OPEN: the index sensor order code is not chosen. The symbol is PNP.",
-        "S4 and S5 are VC-CT-6200. S6 is the IDEC HE1B-M1.",
-        "S14 to S17 are the lift limit contacts.",
-        "Spare inputs and outputs stay open.",
-        "ETH1 is a service port. Do not put it in the harness.",
-        "There is no PFC200 and no CODESYS target on this drawing.",
-    ]
     s.place("A4", "REVPI", 48, 36, "VC-CT-6800 100378")
     s.place("A5", "DIO", 210, 120, "VC-CT-6810 100197")
     s.link("940_BRIDGE", ("A4", "BR"), ("A5", "BR"))
@@ -380,86 +355,98 @@ def build_revpi(s: Sheet) -> None:
     s.vrail("211_24C", 16, [("A4", "24"), ("A5", "X2_1"), ("A5", "X2_4"), ("A5", "X4_1")])
     s.vrail("001_0V", 28, [("A4", "0"), ("A4", "GND"), ("A5", "X2_2"), ("A5", "X2_3"), ("A5", "X4_2")])
     s.vrail("102_PE", 40, [("A4", "FG"), ("A5", "X4_4")])
-    s.stub("910_A", ("A4", "P"), dx=-14)
-    s.stub("911_B", ("A4", "N"), dx=-14)
-    field = [
-        ("I1", "460_LIM_UP", "SW_NC", "S4", "VC-CT-6200", "X7.1"),
-        ("I2", "461_LIM_DN", "SW_NC", "S5", "VC-CT-6200", "X7.2"),
-        ("I7", "462_ENABLE", "SW_NO", "S6", "VC-CT-6260 HE1B-M1", "X7.3"),
-    ]
-    for dio, net, sym, ref, value, term in field:
-        y = s.pin("A5", dio)[1]
-        x = s.pin("A5", dio)[0]
-        s.place_pin(term, "TERM_H", "2", x - 22, y, term)
-        s.place_pin(ref, sym, "2", x - 52, y, value, hide_value=True, ref_dy=-3)
-        s.join(net, ("A5", dio), (term, "2"), (term, "1"), (ref, "2"))
-        s.vrail("211_24C", 16, [(ref, "1")])
-    y = s.pin("A5", "I13")[1]
-    x = s.pin("A5", "I13")[0]
-    s.place_pin("X7.4", "TERM_H", "2", x - 22, y, "X7.4")
-    s.place_pin("B1", "PNP", "OUT", x - 60, y, "VC-CT-6250 OPEN", hide_value=True, ref_dx=10, ref_dy=-8, ref_justify="left")
-    s.join("480_INDEX", ("A5", "I13"), ("X7.4", "2"), ("X7.4", "1"), ("B1", "OUT"))
-    s.vrail("211_24C", 16, [("B1", "24")])
-    s.vrail("001_0V", 28, [("B1", "0")])
-    for dio, net, term in (("I8", "470_TILT_V", "X7.5"), ("I9", "471_TILT_F", "X7.6")):
-        x, y = s.pin("A5", dio)
-        s.place_pin(term, "TERM_H", "2", x - 22, y, term)
-        s.join(net, ("A5", dio), (term, "2"), (term, "1"))
-        s.stub(net, (term, "1"), dx=-12)
-    # Lift limits, two NC in series, then the terminal and the DIO pin.
-    for dio, net, mid, first, second, term in (
-        ("I10", "472_LIFT_D", "474_DMID", "S14", "S15", "X7.7"),
-        ("I11", "473_LIFT_R", "475_RMID", "S16", "S17", "X7.8"),
-    ):
-        x, y = s.pin("A5", dio)
-        s.place_pin(term, "TERM_H", "2", x - 20, y, term)
-        s.place_pin(second, "SW_NC", "2", x - 46, y, second + " NC", hide_value=True, ref_dy=-3)
-        s.place_pin(first, "SW_NC", "2", x - 74, y, first + " NC", hide_value=True, ref_dy=-3)
-        s.join(net, ("A5", dio), (term, "2"), (term, "1"), (second, "2"))
-        s.link(mid, (second, "1"), (first, "2"))
-        s.vrail("211_24C", 16, [(first, "1")])
-    for dio, net in (
+    s.stub("910_A", ("A4", "P"), dx=-8)
+    s.stub("911_B", ("A4", "N"), dx=-8)
+    for pin, net in (
+        ("I1", "460_LIM_UP"), ("I2", "461_LIM_DN"), ("I7", "462_ENABLE"), ("I13", "480_INDEX"),
+        ("I8", "470_TILT_V"), ("I9", "471_TILT_F"), ("I10", "472_LIFT_D"), ("I11", "473_LIFT_R"),
         ("I3", "420_ESTOP"), ("I4", "421_PNOZ"), ("I5", "440_S200FB"),
         ("I6", "452_SONSTO"), ("I12", "451_FAULT"),
     ):
-        _stub_left(s, net, "A5", dio)
-    outs = [
-        ("O1", "490_EXT", None), ("O2", "491_RET", None), ("O3", "492_TILTV", None),
-        ("O4", "493_TILTF", None), ("O6", "450_RESET", None), ("O7", "495_ROT_EN", None),
-    ]
-    for dio, net, _ in outs:
-        s.stub(net, ("A5", dio), dx=16)
-    x, y = s.pin("A5", "O5")
-    s.place_pin("X7.9", "TERM_H", "1", x + 24, y, "X7.9")
-    s.place_pin("H1", "LAMP", "1", x + 48, y - 8, "VC-CT-6230")
-    s.join("494_BEACON", ("A5", "O5"), ("X7.9", "1"), ("X7.9", "2"), ("H1", "1"))
-    s.vrail("001_0V", s.pin("H1", "2")[0], [("H1", "2")])
-    for ref, net, xrail in (("X7.10", "211_24C", 16), ("X7.11", "001_0V", 28), ("X7.12", "102_PE", 40)):
-        s.place_pin(ref, "TERM_V", "1", xrail, 188, ref, ref_dx=8, ref_dy=-6)
-        s.vrail(net, xrail, [(ref, "1"), (ref, "2")])
-    s.text(16, 8, "OPEN index sensor. DIO plug order is TBC.")
-    s.note_at = (230, 8)
+        _stub_left(s, net, "A5", pin)
+    for pin, net in (
+        ("O1", "490_EXT"), ("O2", "491_RET"), ("O3", "492_TILTV"), ("O4", "493_TILTF"),
+        ("O5", "494_BEACON"), ("O6", "450_RESET"), ("O7", "495_ROT_EN"),
+    ):
+        s.stub(net, ("A5", pin), dx=16)
+    s.add_note("Controller order 100378. DIO order 100197. The PiBridge plug is 100204.", s.pin("A4", "BR"))
+    s.add_note("I1 is I/O-list index 0. Channel names are not a confirmed plug order.", s.pin("A5", "I1"))
+    s.add_note("X4 order 24 V, 0 V, NC, FG is TBC. RS-485 order GND, N, P is TBC.", s.pin("A4", "FG"))
+    s.add_note("ETH1 is a service port. Do not put it in the harness. There is no PFC200 on this drawing.", s.pin("A4", "ETH1"))
+    s.add_note("Field devices and X7 are on the field sheet. Spare inputs and outputs stay open.", s.pin("A5", "O14"))
+
+
+def build_field(s: Sheet) -> None:
+    """Field contacts on a 18-step pitch so each product label has its own band."""
+    y = 28
+    step = 18
+
+    def contact(ref: str, sym: str, value: str, net: str, term: str, row: int) -> None:
+        py = y + row * step
+        s.place_pin(ref, sym, "2", 78, py, value)
+        s.place_pin(term, "TERM_H", "1", 118, py, term)
+        s.link(net, (ref, "2"), (term, "1"))
+        s.stub(net, (term, "2"), dx=14)
+        s.vrail("211_24C", 16, [(ref, "1")])
+
+    contact("S4", "SW_NC", "VC-CT-6200", "460_LIM_UP", "X7.1", 0)
+    contact("S5", "SW_NC", "VC-CT-6200", "461_LIM_DN", "X7.2", 1)
+    contact("S6", "SW_NO", "VC-CT-6260", "462_ENABLE", "X7.3", 2)
+    row_b = y + 3 * step
+    s.place("B1", "PNP", 70, row_b, "VC-CT-6250")
+    s.place_pin("X7.4", "TERM_H", "1", 118, s.pin("B1", "OUT")[1], "X7.4")
+    s.link("480_INDEX", ("B1", "OUT"), ("X7.4", "1"))
+    s.stub("480_INDEX", ("X7.4", "2"), dx=14)
+    s.vrail("211_24C", 16, [("B1", "24")])
+    b0 = s.pin("B1", "0")
+    s.wire("001_0V", b0, (10, b0[1]), (10, 192))
+    # Tilt limits are on the tilt sheet. These terminals only leave the cabinet.
+    for row, term, net in ((4, "X7.5", "470_TILT_V"), (5, "X7.6", "471_TILT_F")):
+        py = y + row * step
+        s.place_pin(term, "TERM_H", "1", 118, py, term)
+        s.stub(net, (term, "1"), dx=-16)
+        s.stub(net, (term, "2"), dx=14)
+    for row, first, second, mid, net, term in (
+        (6, "S14", "S15", "474_DMID", "472_LIFT_D", "X7.7"),
+        (7, "S16", "S17", "475_RMID", "473_LIFT_R", "X7.8"),
+    ):
+        py = y + row * step
+        s.place_pin(second, "SW_NC", "2", 78, py, "OPEN limit")
+        s.place_pin(term, "TERM_H", "1", 118, py, term)
+        s.link(net, (second, "2"), (term, "1"))
+        s.stub(net, (term, "2"), dx=14)
+        s.place_pin(first, "SW_NC", "2", 36, py, "OPEN limit")
+        s.link(mid, (first, "2"), (second, "1"))
+        s.vrail("211_24C", 16, [(first, "1")])
+    beacon = y + 8 * step
+    s.place_pin("X7.9", "TERM_H", "1", 118, beacon, "X7.9")
+    s.place_pin("H1", "LAMP", "1", 168, beacon, "VC-CT-6230")
+    s.stub("494_BEACON", ("X7.9", "1"), dx=-16)
+    s.link("494_BEACON", ("X7.9", "2"), ("H1", "1"))
+    h0 = s.pin("H1", "2")
+    s.wire("001_0V", h0, (h0[0], 192), (10, 192))
+    s.place_pin("X7.10", "TERM_V", "1", 16, 196, "X7.10")
+    s.vrail("211_24C", 16, [("X7.10", "1"), ("X7.10", "2")])
+    s.place_pin("X7.11", "TERM_V", "1", 36, 196, "X7.11")
+    s.wire("001_0V", s.pin("X7.11", "1"), (36, 192), (10, 192))
+    s.vrail("001_0V", 36, [("X7.11", "1"), ("X7.11", "2")])
+    s.place_pin("X7.12", "TERM_V", "1", 56, 196, "X7.12")
+    s.stub("102_PE", ("X7.12", "2"), dy=6)
+    s.vrail("102_PE", 56, [("X7.12", "1"), ("X7.12", "2")])
+    s.add_note("S4 and S5 are OPEN limit switches, article VC-CT-6200. S6 is an IDEC HE1B-M1.", s.pin("S4", "2"))
+    s.add_note("OPEN: the index sensor order code is not chosen. The symbol is PNP.", s.pin("B1", "OUT"))
+    s.add_note("S14 to S17 are lift limit contacts. The order code is not chosen.", s.pin("S14", "2"))
+    s.add_note("X7 is the field terminal strip. The purchased block is not chosen.", s.pin("X7.1", "1"))
+    s.add_note("DIO channel names are not a confirmed plug order. Confirm them on the Kunbus drawing.")
 
 
 def build_tilt(s: Sheet) -> None:
-    s.notes = [
-        "Each tilt coil is in series with the NC contact of the other relay.",
-        "The off state puts both motor leads on 0 V.",
-        "Do not command both tilt directions.",
-        "Do not command both lift directions.",
-        "The actuator current is not on a nameplate. Power section is TBC.",
-        "Confirm that both leads may sit on 0 V.",
-        "Confirm that Finder .4000 has no internal diode. D2 and D3 stay fitted.",
-        "Limit names inside the actuator are TODO.",
-        "The lift limits are on sheet 05. The H-bridge is VC-LT-9110.",
-        "Lift cable section is TBC.",
-    ]
-    s.place("K2", "REL", 80, 36, "VC-LT-9230 vertical", unit=1)
-    s.place("K3", "REL", 170, 36, "VC-LT-9230 fold", unit=1)
-    s.place_pin("K2", "REL", "11", 80, 70, "K2 contacts", unit=2, hide_value=True, hide_ref=True)
-    s.place_pin("K3", "REL", "11", 170, 86, "K3 contacts", unit=2, hide_value=True, hide_ref=True)
-    s.place_pin("K2", "REL", "21", 80, 112, "K2 power", unit=3, hide_value=True, hide_ref=True)
-    s.place_pin("K3", "REL", "21", 170, 128, "K3 power", unit=3, hide_value=True, hide_ref=True)
+    s.place("K2", "REL", 80, 36, "VC-LT-9230", unit=1)
+    s.place("K3", "REL", 170, 36, "VC-LT-9230", unit=1)
+    s.place_pin("K2", "REL", "11", 80, 70, "11-14", unit=2, hide_value=False, hide_ref=False)
+    s.place_pin("K3", "REL", "11", 170, 86, "11-14", unit=2, hide_value=False, hide_ref=False)
+    s.place_pin("K2", "REL", "21", 80, 112, "21-24", unit=3, hide_value=False, hide_ref=False)
+    s.place_pin("K3", "REL", "21", 170, 128, "21-24", unit=3, hide_value=False, hide_ref=False)
     s.place_pin("D2", "DIODE", "1", s.pin("K2", "A1")[0] + 16, s.pin("K2", "A1")[1], "VC-CT-6780")
     s.place_pin("D3", "DIODE", "1", s.pin("K3", "A1")[0] + 16, s.pin("K3", "A1")[1], "VC-CT-6780")
     s.link("496_K2", ("K2", "A1"), ("D2", "1"))
@@ -491,46 +478,44 @@ def build_tilt(s: Sheet) -> None:
     s.join("471_TILT_F", ("S8", "2"), ("X8.4", "1"), ("X8.4", "2"))
     s.stub("471_TILT_F", ("X8.4", "2"), dx=12)
     s.vrail("211_24C", 20, [("S7", "1"), ("S8", "1")])
-    s.place("A10", "HBR", 80, 200, "VC-LT-9110")
+    s.place("A10", "HBR", 80, 138, "VC-LT-9110")
     s.stub("490_EXT", ("A10", "E"), dx=-14)
     s.stub("491_RET", ("A10", "R"), dx=-14)
     s.vrail("211_24C", 20, [("A10", "P")])
     s.vrail("001_0V", 36, [("A10", "M")])
     s.place_pin("X10.1", "TERM_H", "1", 160, s.pin("A10", "MP")[1], "X10.1")
     s.place_pin("X10.2", "TERM_H", "1", 160, s.pin("A10", "MN")[1], "X10.2")
-    s.place_pin("M5", "ACT", "1", 230, s.pin("A10", "MP")[1], "VC-LT-9100 A")
-    s.place_pin("M6", "ACT", "1", 280, s.pin("A10", "MP")[1], "VC-LT-9100 B")
-    s.join("550_LIFTP", ("A10", "MP"), ("X10.1", "1"), ("X10.1", "2"), ("M5", "1"), ("M6", "1"))
-    s.wire(
-        "551_LIFTN",
-        s.pin("A10", "MN"),
-        s.pin("X10.2", "1"),
-    )
-    s.link("551_LIFTN", ("X10.2", "2"), ("M5", "2"))
-    s.link("551_LIFTN", ("M5", "2"), ("M6", "2"))
-    s.place_pin("X8.5", "TERM_H", "1", 100, 214, "X8.5")
-    s.place_pin("X10.3", "TERM_H", "1", 160, 214, "X10.3")
-    s.hrail("211_24C", 214, [(20, 214), ("X8.5", "1"), ("X8.5", "2"), ("X10.3", "1"), ("X10.3", "2")])
-    s.place_pin("X8.6", "TERM_H", "1", 100, 224, "X8.6")
-    s.place_pin("X10.4", "TERM_H", "1", 160, 224, "X10.4")
-    s.hrail("001_0V", 224, [(36, 224), ("X8.6", "1"), ("X8.6", "2"), ("X10.4", "1"), ("X10.4", "2")])
-    s.text(40, 34, "K2 coil")
-    s.text(120, 34, "K3 coil")
-    s.note_at = (210, 8)
+    s.place_pin("M5", "ACT", "1", 200, s.pin("A10", "MP")[1] + 24, "VC-LT-9100 A")
+    s.place_pin("M6", "ACT", "1", 250, s.pin("A10", "MP")[1] + 24, "VC-LT-9100 B")
+    s.join("550_LIFTP", ("A10", "MP"), ("X10.1", "1"), ("X10.1", "2"))
+    s.wire("551_LIFTN", s.pin("A10", "MN"), s.pin("X10.2", "1"))
+    plus = s.pin("M5", "1")
+    minus = s.pin("M5", "2")
+    out_p = s.pin("X10.1", "2")
+    out_n = s.pin("X10.2", "2")
+    s.wire("550_LIFTP", out_p, (190, out_p[1]), (190, plus[1]), plus, s.pin("M6", "1"))
+    s.wire("551_LIFTN", out_n, (194, out_n[1]), (194, minus[1]), minus, s.pin("M6", "2"))
+    low24, low0 = 164, 176
+    s.place_pin("X8.5", "TERM_H", "1", 48, low24, "X8.5")
+    s.place_pin("X10.3", "TERM_H", "1", 88, low24, "X10.3")
+    feed = s.pin("A10", "P")
+    s.wire("211_24C", (20, feed[1]), (20, low24))
+    s.hrail("211_24C", low24, [(20, low24), ("X8.5", "1"), ("X8.5", "2"), ("X10.3", "1"), ("X10.3", "2")])
+    s.place_pin("X8.6", "TERM_H", "1", 48, low0, "X8.6")
+    s.place_pin("X10.4", "TERM_H", "1", 88, low0, "X10.4")
+    ret = s.pin("A10", "M")
+    s.wire("001_0V", (36, ret[1]), (36, low0))
+    s.hrail("001_0V", low0, [(36, low0), ("X8.6", "1"), ("X8.6", "2"), ("X10.4", "1"), ("X10.4", "2")])
+    s.add_note("K2 is the vertical tilt contactor. Each coil is in series with the NC contact of the other relay.", s.pin("K2", "A1"))
+    s.add_note("K3 is the fold contactor. The off state puts both motor leads on 0 V.", s.pin("K3", "A1"))
+    s.add_note("Do not command both tilt directions. Do not command both lift directions.", s.pin("A10", "E"))
+    s.add_note("Confirm that Finder 62.32 .4000 has no internal diode. D2 and D3 stay fitted.", s.pin("D2", "1"))
+    s.add_note("The actuator current is not on a nameplate. The power section is TBC.", s.pin("M4", "1"))
+    s.add_note("S7 and S8 order codes are not chosen. Limit names inside the actuator are TODO.", s.pin("S7", "1"))
+    s.add_note("Lift limits are on the field sheet. The H-bridge is VC-LT-9110. The lift cable section is TBC.", s.pin("A10", "MP"))
 
 
 def build_rotation(s: Sheet) -> None:
-    s.notes = [
-        "Nanotec PD2-C4118L1804-E-01 is a proposal. It is not released.",
-        "This order code speaks USB, not Modbus. USB is a service plug.",
-        "Clock and direction come from U2. U2 is not a DIO pin.",
-        "Enable is DIO output 7, on +Release b4.",
-        "Minus clock and minus direction stay open at the drive.",
-        "Park those two cores on 0 V at X9. Do not land them on b5 or b7.",
-        "24 V is inside the 12 V to 48 V range. The fuse is 2 A. The wire is 0.75 mm2.",
-        "The drive PE screw is TBC. The cable shield uses X9 pin 8.",
-        "The index sensor is B1 on sheet 05.",
-    ]
     s.place("A6", "NANO", 160, 90, "VC-CT-6280 proposal")
     s.place_pin("F6", "FUSE", "1", 40, 40, "VC-PW-5790 2A", val_dx=8, val_dy=0, val_justify="left", ref_dy=-10)
     s.place_pin("PF3", "PWR", "1", s.pin("F6", "2")[0], s.pin("F6", "2")[1] + 12, "24V R", hide_value=True, ref_dx=8, ref_justify="left")
@@ -539,7 +524,7 @@ def build_rotation(s: Sheet) -> None:
     s.place_pin("X9.1", "TERM_H", "1", 90, s.pin("A6", "a2")[1], "X9.1")
     s.join("500_24R", ("PF3", "1"), ("X9.1", "1"), ("X9.1", "2"), ("A6", "a2"))
     bx = s.pin("A6", "b8")[0]
-    s.place_pin("U2", "PULSE", "P", bx + 56, s.pin("A6", "b8")[1], "clock source TODO", in_bom=False)
+    s.place_pin("U2", "PULSE", "P", bx + 56, s.pin("A6", "b8")[1], "OPEN clock", in_bom=False)
     s.place_pin("X9.3", "TERM_H", "2", s.pin("A6", "b4")[0] - 50, s.pin("A6", "b4")[1], "X9.3")
     s.stub("495_ROT_EN", ("X9.3", "1"), dx=-14)
     s.link("495_ROT_EN", ("X9.3", "2"), ("A6", "b4"))
@@ -558,38 +543,28 @@ def build_rotation(s: Sheet) -> None:
     s.hrail("001_0V", 150, [(36, 150), ("X9.2", "1"), ("X9.2", "2"), ("X9.5", "1"), ("X9.5", "2"), ("X9.7", "1"), ("X9.7", "2")])
     s.place_pin("PE2", "EARTH", "1", 210, 150, "PE", hide_value=True, hide_ref=True)
     s.join("102_PE", ("X9.8", "1"), ("X9.8", "2"), ("PE2", "1"))
-    s.text(80, 136, "CLK- and DIR- are parked on 0 V.")
-    s.note_at = (12, 180)
+    s.add_note("Nanotec PD2-C4118L1804-E-01 is a proposal. It is not released. This order code speaks USB, not Modbus.", s.pin("A6", "a2"))
+    s.add_note("Clock and direction come from U2. U2 is not a DIO pin. Enable is DIO output 7, on +Release b4.", s.pin("U2", "P"))
+    s.add_note("CLK- and DIR- are parked on 0 V at X9. Do not land them on b5 or b7.", s.pin("X9.2", "1"))
+    s.add_note("24 V is inside the 12 V to 48 V range. The fuse is 2 A. The wire is 0.75 mm2.", s.pin("F6", "1"))
+    s.add_note("The drive PE screw is TBC. The cable shield uses X9 pin 8. The index sensor is B1 on the field sheet.", s.pin("X9.8", "1"))
 
 
 def build_network(s: Sheet) -> None:
-    s.notes = [
-        "RUT241 runs from the general 24 V rail. There is no 9 V converter.",
-        "Power pins are 1 +V and 2 0 V. DIN and DOUT are open.",
-        "There is no PE screw on the router.",
-        "ETH0 of the RevPi goes to the router LAN port. ETH1 is service.",
-        "The cable is Cat5e. Assume 0.5 m.",
-        "Modbus slave 1 is the ATV320. Modbus slave 2 is the S200.",
-        "Baud and parity are TODO.",
-        "R1, 120 ohm, is drawn at the S200 on sheet 03.",
-        "The shield lands on PE at the RevPi only.",
-        "The rotation drive is not on this bus.",
-    ]
     s.place("A7", "RUT", 80, 60, "VC-CT-6600 RUT241")
     s.vrail("211_24C", 30, [("A7", "1")])
     s.vrail("001_0V", 42, [("A7", "2")])
     s.stub("930_ETH", ("A7", "LAN"), dx=18)
-    s.text(s.pin("A7", "LAN")[0] + 4, s.pin("A7", "LAN")[1] - 4, "Cat5e to RevPi ETH0")
-    s.note_at = (12, 120)
+    s.add_note("RUT241 runs from the general 24 V rail. There is no 9 V converter and no PE screw.", s.pin("A7", "1"))
+    s.add_note("Cat5e from RevPi ETH0 to the router LAN. Assume 0.5 m. ETH1 is service.", s.pin("A7", "LAN"))
+    s.add_note("Modbus slave 1 is the ATV320. Slave 2 is the S200. Baud and parity are TODO.", s.pin("A7", "1"))
+    s.add_note("R1, 120 ohm, is drawn at the S200. The shield lands on PE at the RevPi only.", s.pin("A7", "LAN"))
+    s.add_note("The rotation drive is not on this bus.")
 
 
 def build_terminals(s: Sheet) -> None:
-    s.notes = [
-        "This sheet is the terminal plan. The terminal symbols are on the circuit sheets.",
-        "Do not fit a second symbol with the same reference.",
-        "The purchased terminal block is not chosen.",
-        "Wire numbers match the labels on the circuit sheets.",
-    ]
+    s.add_note("This sheet is the terminal plan. The symbols are on the circuit sheets. Do not fit a second symbol.")
+    s.add_note("The purchased terminal block is not chosen. Wire numbers match the circuit sheets.")
     s.text(12, 16, "Strip  Pin  Wire          Section                 Function")
     col_x = (12, 190)
     rows = list(TERMINALS)
@@ -600,24 +575,25 @@ def build_terminals(s: Sheet) -> None:
         for strip, pin, wire, function, note in chunk:
             s.text(x, y, f"{strip}.{pin}  {wire}  {note}")
             y += 4
-    s.note_at = (12, 200)
 
 
 def build_sheets() -> list[Sheet]:
     sheets = [
-        Sheet("01-power.kicad_sch", "01 Mains and 24 V", "2"),
-        Sheet("02-safety.kicad_sch", "02 E-stop and STO", "3"),
-        Sheet("03-hub.kicad_sch", "03 S200 and 1FL2", "4"),
-        Sheet("04-sonic.kicad_sch", "04 ATV320 and two MVE", "5"),
-        Sheet("05-revpi.kicad_sch", "05 RevPi Connect 4 and DIO", "6"),
-        Sheet("06-tilt.kicad_sch", "06 Tilt and lift", "7"),
-        Sheet("07-rotation.kicad_sch", "07 Rod rotation proposal", "8"),
-        Sheet("08-network.kicad_sch", "08 RUT241 and Modbus", "9"),
-        Sheet("09-terminals.kicad_sch", "09 Terminal strips", "10"),
+        Sheet("01-power.kicad_sch", "01 Mains distribution", "2"),
+        Sheet("01b-supplies.kicad_sch", "02 24 V supplies", "3"),
+        Sheet("02-safety.kicad_sch", "03 E-stop and STO", "4"),
+        Sheet("03-hub.kicad_sch", "04 S200 and 1FL2", "5"),
+        Sheet("04-sonic.kicad_sch", "05 ATV320 and two MVE", "6"),
+        Sheet("05-revpi.kicad_sch", "06 RevPi Connect 4 and DIO", "7"),
+        Sheet("06-field.kicad_sch", "07 Field devices", "8"),
+        Sheet("06-tilt.kicad_sch", "08 Tilt and lift", "9"),
+        Sheet("07-rotation.kicad_sch", "09 Rod rotation proposal", "10"),
+        Sheet("08-network.kicad_sch", "10 RUT241 and Modbus", "11"),
+        Sheet("09-terminals.kicad_sch", "11 Terminal strips", "12"),
     ]
     builders = (
-        build_power, build_safety, build_hub, build_sonic, build_revpi,
-        build_tilt, build_rotation, build_network, build_terminals,
+        build_power, build_supplies, build_safety, build_hub, build_sonic, build_revpi,
+        build_field, build_tilt, build_rotation, build_network, build_terminals,
     )
     for sheet, builder in zip(sheets, builders):
         builder(sheet)
@@ -773,6 +749,20 @@ def validate(sheets: list[Sheet]) -> None:
                 errors.append(f"{sheet.filename} {ref}.{num} on {sorted(owners)}")
     if errors:
         raise SystemExit("Layout check failed:\n- " + "\n- ".join(errors[:40]))
+    from annotate import overlap_errors, prepare
+
+    pages = defaultdict(list)
+    for sheet in sheets:
+        for net in {name for name, _pts in sheet.wires}:
+            if sheet.page not in pages[net]:
+                pages[net].append(sheet.page)
+    gate = []
+    for sheet in sheets:
+        pointer = "Nets that leave this sheet are listed on the notes sheet."
+        gate.extend(prepare(sheet, pointer))
+        gate.extend(overlap_errors(sheet))
+    if gate:
+        raise SystemExit("Overlap gate failed (" + str(len(gate)) + " hits):\n- " + "\n- ".join(gate[:40]))
 
 
 def net_map(sheet: Sheet) -> dict[str, list[tuple[str, str]]]:
@@ -847,34 +837,12 @@ def check_electrical(sheets: list[Sheet]) -> None:
 
 
 def label_spot(sheet: Sheet, net: str):
-    """Put the label on a real wire end. A label in the middle leaves that end dangling."""
-    degree = defaultdict(int)
-    segments = []
-    for name, left, right in _segments(sheet):
-        if name != net:
-            continue
-        degree[left] += 1
-        degree[right] += 1
-        segments.append((left, right))
-    if not segments:
+    """The anchor chosen while the sheet was placed. It lies on the wire."""
+    stored = getattr(sheet, "net_labels", {}).get(net)
+    if stored is None:
         return None
-    pins = set()
-    for inst in sheet.insts:
-        for pin in SYMS[inst.sym].pins:
-            if pin.unit == inst.unit:
-                pins.add((inst.x + pin.x, inst.y - pin.y))
-    free = [pt for pt, count in degree.items() if count == 1 and pt not in pins]
-    candidates = free or [pt for pt, count in degree.items() if count == 1]
-    if not candidates:
-        candidates = [segments[0][0]]
-    point = candidates[0]
-    for left, right in segments:
-        other = right if left == point else left if right == point else None
-        if other is None:
-            continue
-        angle = 0 if left[1] == right[1] else 90
-        return (point[0], point[1], angle)
-    return (point[0], point[1], 0)
+    x, y, justify = stored
+    return (x, y, 0, justify)
 
 
 def sym_body(sym: Sym, prefixed: bool) -> str:
@@ -954,19 +922,21 @@ def emit_sheet(sheet: Sheet, path: str, global_nets: dict[str, list[str]]) -> st
         spot = label_spot(sheet, net)
         if spot is None:
             continue
-        x, y, angle = spot
+        x, y, angle, justify = spot
         labelled.add(net)
         kind = "global" if net in global_nets else "local"
+        shown = sexpr_justify(justify)
+        clause = f" (justify {shown})" if shown else ""
         if kind == "global":
             chunks.append(
                 f"  (global_label {q(net)} (shape passive) (at {f(x)} {f(y)} {angle}) "
-                f"(effects (font (size 1.27 1.27)) (justify left bottom)) "
+                f"(effects (font (size 1.27 1.27)){clause}) "
                 f"(uuid {q(uid(sheet.filename + 'g' + net))}))"
             )
         else:
             chunks.append(
                 f"  (label {q(net)} (at {f(x)} {f(y)} {angle}) "
-                f"(effects (font (size 1.27 1.27)) (justify left bottom)) "
+                f"(effects (font (size 1.27 1.27)){clause}) "
                 f"(uuid {q(uid(sheet.filename + 'l' + net))}))"
             )
     wired = defaultdict(set)
@@ -994,8 +964,10 @@ def emit_sheet(sheet: Sheet, path: str, global_nets: dict[str, list[str]]) -> st
         bom = "yes" if inst.in_bom else "no"
         ref_hide = " hide" if inst.hide_ref else ""
         val_hide = " hide" if inst.hide_value else ""
-        ref_just = f" (justify {inst.ref_justify})" if inst.ref_justify else ""
-        val_just = f" (justify {inst.val_justify})" if inst.val_justify else ""
+        ref_shown = sexpr_justify(inst.ref_justify)
+        val_shown = sexpr_justify(inst.val_justify)
+        ref_just = f" (justify {ref_shown})" if ref_shown else ""
+        val_just = f" (justify {val_shown})" if val_shown else ""
         chunks.append(
             f"""  (symbol (lib_id {q("vibrocore:" + inst.sym)}) (at {f(inst.x)} {f(inst.y)} 0) (unit {inst.unit})
     (exclude_from_sim no) (in_bom {bom}) (on_board yes) (dnp no)
@@ -1019,18 +991,45 @@ def emit_sheet(sheet: Sheet, path: str, global_nets: dict[str, list[str]]) -> st
             f"(effects (font (size 1.27 1.27)) (justify left)) "
             f"(uuid {q(uid(sheet.filename + 't' + str(index) + text[:12]))}))"
         )
-    xref = []
-    for net, pages in sorted(global_nets.items()):
-        if sheet.page in pages and len(pages) > 1:
-            others = [page for page in pages if page != sheet.page]
-            xref.append(f"{net} also on sheet {', '.join(others)}.")
-    notes = "\n".join(sheet.notes + xref)
-    nx, ny = sheet.note_at
-    note = (
-        f"  (text {q(notes)} (exclude_from_sim no) (at {f(nx)} {f(ny)} 0) "
-        f"(effects (font (size 1.27 1.27)) (justify left top)) "
-        f"(uuid {q(uid(sheet.filename + 'note'))}))"
-    )
+    note_chunks = []
+    for index, (x0, y0, x1, y1) in enumerate(getattr(sheet, "frames", [])):
+        note_chunks.append(
+            "  (polyline (pts "
+            f"(xy {x0:.2f} {y0:.2f}) (xy {x1:.2f} {y0:.2f}) "
+            f"(xy {x1:.2f} {y1:.2f}) (xy {x0:.2f} {y1:.2f}) "
+            f"(xy {x0:.2f} {y0:.2f})) "
+            f"(stroke (width 0.3) (type default)) (uuid {q(uid(sheet.filename + 'frame' + str(index)))}))"
+        )
+    if getattr(sheet, "band_lines", None):
+        from annotate import BAND
+        x0, y0, x1, y1 = BAND
+        note_chunks.append(
+            "  (polyline (pts "
+            f"(xy {x0:.2f} {y0:.2f}) (xy {x1:.2f} {y0:.2f}) "
+            f"(xy {x1:.2f} {y1:.2f}) (xy {x0:.2f} {y1:.2f}) "
+            f"(xy {x0:.2f} {y0:.2f})) "
+            "(stroke (width 0.3) (type default)) "
+            f"(uuid {q(uid(sheet.filename + 'band'))}))"
+        )
+        ox, oy = sheet.band_origin
+        note_chunks.append(
+            f"  (text {q(chr(10).join(sheet.band_lines))} (exclude_from_sim no) (at {ox:.2f} {oy:.2f} 0) "
+            f"(effects (font (size 1.27 1.27)) (justify left top)) "
+            f"(uuid {q(uid(sheet.filename + 'note'))}))"
+        )
+    for index, (mx, my, marker) in enumerate(getattr(sheet, "markers", [])):
+        note_chunks.append(
+            f"  (text {q(marker)} (exclude_from_sim no) (at {mx:.2f} {my:.2f} 0) "
+            f"(effects (font (size 1.27 1.27)) (justify left)) "
+            f"(uuid {q(uid(sheet.filename + 'm' + str(index)))}))"
+        )
+    for index, (x, y, text) in enumerate(getattr(sheet, "notes_columns", []) or []):
+        note_chunks.append(
+            f"  (text {q(text)} (exclude_from_sim no) (at {x:.2f} {y:.2f} 0) "
+            f"(effects (font (size 1.27 1.27)) (justify left top)) "
+            f"(uuid {q(uid(sheet.filename + 'col' + str(index)))}))"
+        )
+    note = "\n".join(note_chunks)
     return f"""(kicad_sch
   (version 20231120)
   (generator "eeschema")
@@ -1040,9 +1039,9 @@ def emit_sheet(sheet: Sheet, path: str, global_nets: dict[str, list[str]]) -> st
   (title_block
     (title {q(sheet.title)})
     (date "2026-11-20")
-    (rev "0B")
+    (rev "0C")
     (company "Ground UP GmbH")
-    (comment 1 "VC-SCH-5000. Wires are drawn. Global labels leave the sheet.")
+    (comment 1 "VC-SCH-5000. Notes are numbered in the band above the title block.")
     (comment 2 "Safety is hard-wired. The RevPi only reads feedback.")
   )
   (lib_symbols
@@ -1064,33 +1063,40 @@ def globals_of(sheets: list[Sheet]) -> dict[str, list[str]]:
     return {net: pages for net, pages in found.items() if len(pages) > 1}
 
 
-def root_text(sheets: list[Sheet], uuids: dict[str, str], columns: tuple[str, str]) -> str:
+def root_text(sheets: list[Sheet], uuids: dict[str, str]) -> str:
+    from annotate import BAND, index_positions
+
     blocks = []
-    for index, sheet in enumerate(sheets):
-        y = 16 + index * 18
+    for (x, y), sheet in zip(index_positions(len(sheets)), sheets):
         su = uuids[sheet.filename]
         blocks.append(
-            f"""  (sheet (at {f(12)} {f(y)}) (size {f(120)} {f(14)})
+            f"""  (sheet (at {x:.2f} {y:.2f}) (size 150.00 16.00)
     (stroke (width 0.1524) (type solid))
     (fill (color 0 0 0 0.0000))
     (uuid {q(su)})
-    (property "Sheetname" {q(sheet.title)} (at {f(12)} {f(y - 2)} 0) (effects (font (size 1.27 1.27)) (justify left bottom)))
-    (property "Sheetfile" {q(sheet.filename)} (at {f(12)} {f(y + 14)} 0) (effects (font (size 1.27 1.27)) (justify left top)))
+    (property "Sheetname" {q(sheet.title)} (at {x:.2f} {y - 0.60:.2f} 0) (effects (font (size 1.27 1.27)) (justify left bottom)))
+    (property "Sheetfile" {q(sheet.filename)} (at {x:.2f} {y + 16.00:.2f} 0) (effects (font (size 1.27 1.27)) (justify left top)))
     (instances (project {q(PROJECT)} (path "/" (page {q(sheet.page)}))))
   )"""
         )
     intro = "\n".join([
-        "Vibrocore cabinet schematic VC-SCH-5000, revision 0B.",
-        "Controller: RevPi Connect 4, order 100378, plus DIO 100197.",
-        "The PFC200 is not on this drawing.",
-        "Safety: PNOZ s4 750104 drops STO on the S200 and on the ATV320.",
-        "Wires are drawn on each sheet.",
-        "A global label is a wire that continues on another sheet.",
-        "A crossing without a dot is not a connection.",
-        "OPEN marks an order code that is not chosen.",
-        "TBC marks a pin whose landing is not confirmed.",
-        "Cross references:",
+        "(1) VC-SCH-5000 revision 0C. Wires are drawn on the circuit sheets.",
+        "(2) A global label is a wire that continues on another sheet.",
+        "(3) OPEN means the order code is not chosen. TBC means the pin is not confirmed.",
+        "(4) Product text is the maker and the short type, then the Ground UP article.",
+        "(5) Numbered notes sit in this band. A marker such as (1) is the only note in the circuit.",
+        "(6) The notes sheet lists the nets that leave a sheet.",
     ])
+    x0, y0, x1, y1 = BAND
+    band = (
+        "  (polyline (pts "
+        f"(xy {x0:.2f} {y0:.2f}) (xy {x1:.2f} {y0:.2f}) "
+        f"(xy {x1:.2f} {y1:.2f}) (xy {x0:.2f} {y1:.2f}) (xy {x0:.2f} {y0:.2f})) "
+        f"(stroke (width 0.3) (type default)) (uuid {q(uid('root-band'))}))\n"
+        f"  (text {q(intro)} (exclude_from_sim no) (at {x0 + 1.6:.2f} {y0 + 1.4:.2f} 0)\n"
+        f"    (effects (font (size 1.27 1.27)) (justify left top)) (uuid {q(uid('root-intro'))}))"
+    )
+    total = len(sheets) + 1
     return f"""(kicad_sch
   (version 20231120)
   (generator "eeschema")
@@ -1100,18 +1106,13 @@ def root_text(sheets: list[Sheet], uuids: dict[str, str], columns: tuple[str, st
   (title_block
     (title "Vibrocore cabinet schematic")
     (date "2026-11-20")
-    (rev "0B")
+    (rev "0C")
     (company "Ground UP GmbH")
-    (comment 1 "VC-SCH-5000 sheet 01 of 10")
+    (comment 1 "VC-SCH-5000 sheet 01 of {total}")
     (comment 2 "Hard-wired STO. RevPi reads feedback only.")
   )
   (lib_symbols)
-  (text {q(intro)} (exclude_from_sim no) (at 190.50 15.24 0)
-    (effects (font (size 1.27 1.27)) (justify left top)) (uuid {q(uid("root-intro"))}))
-  (text {q(columns[0])} (exclude_from_sim no) (at 190.50 50.80 0)
-    (effects (font (size 1.27 1.27)) (justify left top)) (uuid {q(uid("root-xref-a"))}))
-  (text {q(columns[1])} (exclude_from_sim no) (at 292.10 50.80 0)
-    (effects (font (size 1.27 1.27)) (justify left top)) (uuid {q(uid("root-xref-b"))}))
+{band}
 {chr(10).join(blocks)}
   (sheet_instances (path "/" (page "1")))
 )
@@ -1147,10 +1148,34 @@ def project_text() -> str:
 """
 
 
+def build_notes_sheet(sheets: list[Sheet]) -> Sheet:
+    from annotate import layout_notes_page
+
+    page = len(sheets) + 2
+    sheet = Sheet("10-notes.kicad_sch", f"{page - 1:02d} Notes and net list", str(page))
+    for source in sheets:
+        for line in source.overflow:
+            sheet.add_note(f"{source.title}. {line}")
+    nets = globals_of(sheets)
+    sheet.add_note("Nets that leave their sheet. The numbers are the sheet pages.")
+    for net, pages in sorted(nets.items()):
+        sheet.add_note(f"{net} is also on sheet {', '.join(pages)}.")
+    layout_notes_page(sheet)
+    return sheet
+
+
 def write_tree(directory: Path) -> None:
+    from annotate import index_errors, overlap_errors
+
     sheets = build_sheets()
     validate(sheets)
     check_electrical(sheets)
+    notes = build_notes_sheet(sheets)
+    gate = overlap_errors(notes)
+    gate.extend(index_errors([sheet.title for sheet in sheets + [notes]], [sheet.filename for sheet in sheets + [notes]]))
+    if gate:
+        raise SystemExit("Overlap gate failed:\n- " + "\n- ".join(gate[:40]))
+    sheets.append(notes)
     directory.mkdir(parents=True, exist_ok=True)
     (directory / "vibrocore.kicad_sym").write_text(library_text(), encoding="utf-8")
     (directory / "sym-lib-table").write_text(
@@ -1165,7 +1190,7 @@ def write_tree(directory: Path) -> None:
         path = "/" + uuids[sheet.filename]
         (directory / sheet.filename).write_text(emit_sheet(sheet, path, global_nets), encoding="utf-8")
     (directory / "vibrocore-control.kicad_sch").write_text(
-        root_text(sheets, uuids, cross_columns(global_nets)), encoding="utf-8"
+        root_text(sheets, uuids), encoding="utf-8"
     )
     (directory / "vibrocore-control.kicad_pro").write_text(project_text(), encoding="utf-8")
 

@@ -59,10 +59,14 @@ class Sheet:
     page: str
     insts: list[Inst] = field(default_factory=list)
     wires: list[tuple[str, list[tuple[int, int]]]] = field(default_factory=list)
-    notes: list[str] = field(default_factory=list)
+    notes: list = field(default_factory=list)
     texts: list[tuple[int, int, str]] = field(default_factory=list)
     dashes: list[tuple[tuple[int, int], tuple[int, int]]] = field(default_factory=list)
     note_at: tuple[int, int] = (12, 188)
+    markers: list = field(default_factory=list)
+    band_lines: list = field(default_factory=list)
+    overflow: list = field(default_factory=list)
+    frames: list = field(default_factory=list)
     rail_x: list[tuple[str, int]] = field(default_factory=list)
     rail_y: list[tuple[str, int]] = field(default_factory=list)
 
@@ -171,6 +175,10 @@ class Sheet:
     def text(self, x: int, y: int, text: str) -> None:
         self.texts.append((x, y, text))
 
+    def add_note(self, text: str, at=None) -> None:
+        """A numbered note. `at` is a point in steps where the marker (n) is placed."""
+        self.notes.append((at, text))
+
     def dash(self, ref: str) -> None:
         centers = [(inst.x, inst.y) for inst in self.insts if inst.ref == ref]
         centers.sort()
@@ -179,12 +187,16 @@ class Sheet:
 
 
 def pair(sheet: Sheet, ref: str, sym: str, x: int, y: int, value: str, dx: int = 20) -> None:
-    """Two-pole device. The reference sits above the line pole. The value sits to its right."""
+    """Two-pole device. The product name sits on the outer pole."""
+    right_is_second = dx >= 0
     sheet.place_pin(
         ref, sym, "1", x, y, value, unit=1,
-        ref_dy=-14, ref_justify="left", val_dx=8, val_dy=6, val_justify="left",
+        hide_value=right_is_second, hide_ref=right_is_second,
     )
-    sheet.place_pin(ref, sym, "3", x + dx, y, value, unit=2, hide_value=True, hide_ref=True)
+    sheet.place_pin(
+        ref, sym, "3", x + dx, y, value, unit=2,
+        hide_value=not right_is_second, hide_ref=not right_is_second,
+    )
     sheet.dash(ref)
 
 
@@ -301,6 +313,7 @@ def main() -> None:
                 "vibrocore-control.kicad_sch",
                 "vibrocore-control.kicad_pro",
                 *sheet_names(),
+                "10-notes.kicad_sch",
             ]
             bad = [name for name in names if not filecmp.cmp(tmp_path / name, OUT / name, shallow=False)]
             for name in ("terminal-list.csv", "terminal-list.md", "cable-list.csv", "cable-list.md"):

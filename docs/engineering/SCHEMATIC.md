@@ -8,7 +8,12 @@ A wire is a drawn segment.
 A label names that wire.
 A global label is used only when the net leaves the sheet.
 The same global label on two sheets is one net.
-Sheet 1 lists every wire number that leaves its sheet.
+The notes sheet lists every wire number that leaves its sheet.
+Each circuit sheet keeps its notes in one band above the title block.
+A marker such as (1) is the only note in the drawing area.
+A note that does not fit in the band moves to the notes sheet.
+Each symbol shows the reference, the maker and the short type, and the Ground UP article.
+The title block revision is 0C.
 Regenerate the sheets with `python3 cad/kicad/vibrocore-control/generate_schematic.py`.
 Run ERC with `kicad-cli sch erc --severity-all --exit-code-violations`.
 
@@ -16,16 +21,19 @@ Run ERC with `kicad-cli sch erc --severity-all --exit-code-violations`.
 
 | Sheet | File | Content |
 | --- | --- | --- |
-| 1 | `vibrocore-control.kicad_sch` | Index and wire-number cross reference |
-| 2 | `01-power.kicad_sch` | Mains, isolator, RCD, branch MCBs, both 24 V supplies, 0 V and PE |
-| 3 | `02-safety.kicad_sch` | E-stop, PNOZ s4, STO, reset and feedback |
-| 4 | `03-hub.kicad_sch` | S200, 1FL2104, encoder, brake, pulse and direction |
-| 5 | `04-sonic.kicad_sch` | ATV320 and two OLI motors |
-| 6 | `05-revpi.kicad_sch` | RevPi Connect 4, one DIO, limits, enabling switch and index |
-| 7 | `06-tilt.kicad_sch` | Tilt contactors and the lift H-bridge |
-| 8 | `07-rotation.kicad_sch` | Proposed rod-rotation drive |
-| 9 | `08-network.kicad_sch` | RUT241, Ethernet and RS-485 |
-| 10 | `09-terminals.kicad_sch` | Terminal strips X1 to X10, with the wire number and the section |
+| 1 | `vibrocore-control.kicad_sch` | Index |
+| 2 | `01-power.kicad_sch` | Mains, isolator, RCD and the branch MCBs |
+| 3 | `01b-supplies.kicad_sch` | Both 24 V supplies, 0 V and the PE bond |
+| 4 | `02-safety.kicad_sch` | E-stop, PNOZ s4, STO, reset and feedback |
+| 5 | `03-hub.kicad_sch` | S200, 1FL2104, encoder, brake, pulse and direction |
+| 6 | `04-sonic.kicad_sch` | ATV320 and two OLI motors |
+| 7 | `05-revpi.kicad_sch` | RevPi Connect 4 and one DIO |
+| 8 | `06-field.kicad_sch` | Limits, enabling switch, index sensor and beacon |
+| 9 | `06-tilt.kicad_sch` | Tilt contactors and the lift H-bridge |
+| 10 | `07-rotation.kicad_sch` | Proposed rod-rotation drive |
+| 11 | `08-network.kicad_sch` | RUT241, Ethernet and RS-485 |
+| 12 | `09-terminals.kicad_sch` | Terminal strips X1 to X10, with the wire number and the section |
+| 13 | `10-notes.kicad_sch` | Notes that do not fit on a sheet, and the net list |
 
 ## Controller
 
@@ -118,7 +126,7 @@ The off state puts both motor leads on 0 V.
 Do not command both tilt directions.
 Do not command both lift directions.
 The lift power stage is the existing H-bridge VC-LT-9110.
-The lift limit contacts are on sheet 6.
+The lift limit contacts are on the field-device sheet.
 DI7 and DI8 are drawn as separate contacts.
 Confirm the actuator terminal names.
 
@@ -130,7 +138,7 @@ This order code speaks USB, not Modbus.
 Clock and direction come from U2.
 U2 is not a DIO pin.
 The enable bit is DIO output 6.
-The index sensor is B1 on sheet 6.
+The index sensor is B1 on the field-device sheet.
 The RUT241 runs from the general 24 V rail.
 RevPi ETH0 goes to the router LAN port.
 Modbus slave 1 is the ATV320.

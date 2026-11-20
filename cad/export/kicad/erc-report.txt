@@ -1,23 +1,29 @@
-ERC report (2026-11-20T19:03:29+0000, Encoding UTF8)
+ERC report (2026-11-20T20:41:38+0000, Encoding UTF8)
 
 ***** Sheet /
 
-***** Sheet /01 Mains and 24 V/
+***** Sheet /01 Mains distribution/
 
-***** Sheet /02 E-stop and STO/
+***** Sheet /02 24 V supplies/
 
-***** Sheet /03 S200 and 1FL2/
+***** Sheet /03 E-stop and STO/
 
-***** Sheet /04 ATV320 and two MVE/
+***** Sheet /04 S200 and 1FL2/
 
-***** Sheet /05 RevPi Connect 4 and DIO/
+***** Sheet /05 ATV320 and two MVE/
 
-***** Sheet /06 Tilt and lift/
+***** Sheet /06 RevPi Connect 4 and DIO/
 
-***** Sheet /07 Rod rotation proposal/
+***** Sheet /07 Field devices/
 
-***** Sheet /08 RUT241 and Modbus/
+***** Sheet /08 Tilt and lift/
 
-***** Sheet /09 Terminal strips/
+***** Sheet /09 Rod rotation proposal/
+
+***** Sheet /10 RUT241 and Modbus/
+
+***** Sheet /11 Terminal strips/
+
+***** Sheet /12 Notes and net list/
 
  ** ERC messages: 0  Errors 0  Warnings 0
