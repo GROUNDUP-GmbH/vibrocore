@@ -52,5 +52,5 @@ Shaft check:
 
 The two housings sit on the chain axis, one on each side of the sprocket.
 The axis is at X = 32.5 mm. The rear of the 165 mm foot is on X = −50 mm.
-Both soles sit on seats in VC-FR-4183. The sole is at Z = 36.6 mm.
+Both soles sit on 25 mm flats, VC-FR-4183. The sole is at Z = 40.0 mm.
 The placed solid is a faceted copy. Two small cubes stay analytic if the facet fails the check.

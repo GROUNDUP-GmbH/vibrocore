@@ -200,7 +200,6 @@ parts:
   legacy_ref: '3'
   unknowns:
   - Stabiliser feet have no selected order codes.
-  - mk 5104 end-thread coordinates are not in the 01/2024 price list. The model uses the inner ribs. Confirm the drawing.
   notes: V1.1 electric tilt is VC-ASM-8200, not the obsolete gas-spring VC-FR-4700.
 - part_number: VC-ASM-4000
   name: Power system assembly
@@ -794,8 +793,7 @@ parts:
   category: Frame
   spec: mk 2004 profile, order type 51.04.2004, configured file 51.04.1500. 50 x 100 mm, length
     1500 mm. Alloy AlMgSi0.7 F28 / EN AW-6005A T6. Slot 10, opening 10.10 mm. Two profiles.
-    End threads 4x M8, mk machining 5104AC on the idle bar. The drive bar is cut to 1365.5 mm
-    and needs the same four threads on the cut end.
+    No end-thread machining. The drive bar is cut to 1372.6 mm. Slot nuts hold the cap and the stiffener.
   legacy_ref: '3.32'
   supplier_id: mk
   mass_kg: 7.275
@@ -809,8 +807,6 @@ parts:
     height_mm: 1500
     fidelity: envelope
     source: docs/engineering/BOM.md#3
-  unknowns:
-  - mk machining 5104 gives 4x M8, but the hole coordinates are not in the price list. Confirm the drawing.
   notes: The machine pose loads cad/vendor/VC-FR-4100/51.04.1500.stp. The box above is the fallback envelope.
 - part_number: VC-FR-4150
   name: Bottom frame gusset
@@ -876,52 +872,54 @@ parts:
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: S355 plate, 12 mm, on the PLE120 output flange. Pilot bore Ø84 mm. Four holes Ø6.6 mm
-    on PCD 90 mm. A foot on the bottom plate takes two M8 screws. No weld. The plate is notched
-    for the rail and for the carriage at stroke 0. The sprocket is not on this shaft.
+  spec: One laser-cut S355 plate, 10 mm, one bend. Vertical leg on the PLE120 flange.
+    Pilot bore Ø84 mm. Four holes Ø6.6 mm on PCD 90 mm for ISO 4762 M6x20 screws. The outline
+    stops under the carriage. A narrow ear behind the rail reaches the upper screw. The foot
+    takes two M8x30 through bolts and ISO 4032 nuts. No weld and no notch.
   legacy_ref: draft-fr-4182
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  mass_kg: 0.913
-  mass_note: Solid volume at 7850 kg/m3. Holes and the carriage notch are already cut.
+  mass_kg: 0.609
+  mass_note: Solid volume at 7850 kg/m3. The bore and the six holes are already cut.
   unknowns:
   - M6 property class. The study uses 8.8. Not in BOM.md v1.
-  notes: Draft. Made part. No weld. The foot is tapped M8. Do not manufacture from this revision.
+  notes: Draft. Made part. One bend, no weld. Do not manufacture from this revision.
 - part_number: VC-FR-4183
-  name: Gearbox side frame
+  name: Bearing seat flat
   revision_index: 0
   revision_letter: A
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: S355 lower mount. Two bearing seats with Ø13 mm holes for the SYJ M12 bolts. An end plate
-    on the cut drive profile, 12 mm, with four M8 clearance holes. Inner-face tabs on both profiles
-    over the side slots. A rear bridge behind the chain joins the tabs. No weld. Bolted with mk
-    Lasche 1 and M8 screws.
+  spec: Two sawn S355 flats, cut from 40 x 25 mm bar to 36 mm so they stay clear of the chain.
+    Length about 148 mm. One under each SYJ 30 TF. Two Ø13 mm holes per flat for the M12 foot bolts,
+    which pass through the bottom plate. No weld and no tabs.
   legacy_ref: draft-fr-4183
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  mass_kg: 2.984
-  mass_note: Solid volume at 7850 kg/m3. Seats, the end plate and the tabs are included.
-  notes: Draft. Made part. No weld. The mk nuts and screws are VC-FR-4120 and VC-FR-4121. Do not manufacture from this revision.
+  mass_kg: 0.997
+  mass_note: Solid volume of one flat at 7850 kg/m3. The two M12 holes are already cut.
+  notes: Draft. Made part. Two pieces. No weld. Do not manufacture from this revision.
 - part_number: VC-FR-4184
-  name: Gearbox rear anchor
+  name: Profile stiffener angle
   revision_index: 0
   revision_letter: A
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: S355 side brace at the gearbox. Bolted, removable, no weld. It leaves the input face clear
-    so the motor can come off. Two M8 holes. It does not enter the tilt volume.
+  spec: One sawn length of S355 angle 40 x 40 x 6 mm, 80 mm long. The upright leg bolts to the idle profile inner side slots
+    with two Lasche 1 nuts, order 34.01.0050, and two M8x20 slot screws. The measured throat is
+    10.10 mm. The foot leg takes two M8x30 through bolts and ISO 4032 nuts in the bottom plate.
+    No weld.
   legacy_ref: draft-fr-4184
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  mass_kg: 0.687
-  mass_note: Solid volume at 7850 kg/m3.
-  notes: Draft. Made part. Unbolt it for access to the motor. Do not manufacture from this revision.
+  mass_kg: 0.284
+  mass_note: Solid volume at 7850 kg/m3. The four clearance holes are already cut.
+  notes: Draft. Stock angle, sawn and drilled. No weld. Do not manufacture from this revision.
 - part_number: VC-FR-4185
   name: Lower front stiffener
   revision_index: 0
@@ -929,13 +927,13 @@ parts:
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: Draft S355 sheet, 4 mm. One pad on the idle profile front face, below the rail. A window
-    clears the low Winkel 40. The drive side has no pad. The gearbox occupies that bay.
+  spec: Draft S355 sheet, 4 mm. One pad on the idle profile front face, below the rail. No window.
+    The drive side has no pad. The gearbox occupies that bay.
   legacy_ref: draft-fr-4185
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  notes: Draft. Made part. The Winkel screws are VC-FR-4121. Do not manufacture from this revision.
+  notes: Draft. Made part. Do not manufacture from this revision.
 - part_number: VC-FR-4186
   name: Lower rear stiffener
   revision_index: 0
@@ -989,8 +987,9 @@ parts:
   supply: purchase
   subsystem: frame
   category: Frame
-  spec: mk Lasche 1 mit Feder, M8, order 34.01.0050. Slot 10. Twelve nuts. The solid is a 8 x 6 x 5 mm
-    box in the slot throat, not the full T-head. Price list 01/2024, 0.79 EUR.
+  spec: mk Lasche 1 mit Feder, M8, order 34.01.0050. Slot 10. Four nuts. Two hold the stiffener
+    angle in the idle inner slots. Two hold the cap lips. The solid is an 8 x 6 x 5 mm box in the
+    10.10 mm throat, not the full T-head. Price list 01/2024, 0.79 EUR.
   legacy_ref: draft-fr-4120
   supplier_id: mk
   manufacturer_pn: 34.01.0050
@@ -1014,8 +1013,9 @@ parts:
   supply: purchase
   subsystem: frame
   category: Frame
-  spec: mk Zylinderschraube M8. Slot joints use M8x20, order D0912820. End joints use M8x25, order
-    D0912825. Thirty screws. The solid is the shank, diameter 7.8 mm, so it clears the Ø9 hole.
+  spec: mk Zylinderschraube M8. Four slot screws M8x20, order D0912820. Four through bolts M8x30,
+    order D0912830, in the bottom plate. Eight screws. The solid is the shank, diameter 7.8 mm,
+    so it clears the Ø9 hole.
   legacy_ref: draft-fr-4121
   supplier_id: mk
   manufacturer_pn: D0912820
@@ -1029,7 +1029,7 @@ parts:
     length_mm: 20
     fidelity: envelope
     source: docs/engineering/MAST-LAYOUT.md
-  notes: 'Source: mk Preisliste Profiltechnik-Komponenten 01/2024. D0912820 is 0.07 EUR. D0912825 is 0.11 EUR.
+  notes: 'Source: mk Preisliste Profiltechnik-Komponenten 01/2024. D0912820 is 0.07 EUR. D0912830 is 0.12 EUR.
     https://www.mk-group.com/fileadmin/media/documents/Preisliste_Profltechnik-Komponenten_01_2024.pdf'
 - part_number: VC-FR-4122
   name: mk angle bracket 40
@@ -1038,9 +1038,7 @@ parts:
   supply: purchase
   subsystem: frame
   category: Frame
-  spec: mk Winkel 40, order 25.50.1001. Slot 10. Three brackets. Each clamps the front face and the
-    inner side face. The solid is a 40 mm by 40 mm by 6 mm angle, not the full catalogue section.
-    Price list 01/2024, 4.85 EUR.
+  spec: mk Winkel 40, order 25.50.1001. Not used. The stiffener is the stock angle VC-FR-4184.
   legacy_ref: draft-fr-4122
   supplier_id: mk
   manufacturer_pn: 25.50.1001
@@ -1055,8 +1053,55 @@ parts:
     height_mm: 6
     fidelity: envelope
     source: docs/engineering/MAST-LAYOUT.md
-  notes: 'Source: mk Preisliste Profiltechnik-Komponenten 01/2024, article 25.50.1001.
+  lifecycle: obsolete
+  notes: Obsolete. One stock angle VC-FR-4184 replaces the three brackets. Not placed.
+- part_number: VC-FR-4124
+  name: Hex nut M8
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: frame
+  category: Frame
+  spec: ISO 4032 hex nut M8. Four nuts, under the bottom plate. Two on the gearbox-plate foot and
+    two on the stiffener angle. mk order D09348. Price list 01/2024, 0.06 EUR.
+  legacy_ref: draft-fr-4124
+  supplier_id: mk
+  manufacturer_pn: D09348
+  mass_kg: 0.01
+  mass_note: Catalogue mass is not stated. 0.01 kg is a placeholder per nut.
+  estimate_eur_low: 1
+  estimate_eur_high: 1
+  geometry:
+    kind: box
+    length_mm: 13
+    width_mm: 13
+    height_mm: 6.8
+    fidelity: envelope
+    source: docs/engineering/MAST-LAYOUT.md
+  notes: 'Source: mk Preisliste Profiltechnik-Komponenten 01/2024, article D09348.
     https://www.mk-group.com/fileadmin/media/documents/Preisliste_Profltechnik-Komponenten_01_2024.pdf'
+- part_number: VC-FR-4125
+  name: Cylinder screw M6x20
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: frame
+  category: Frame
+  spec: ISO 4762 cylinder screw M6x20. Four screws on the PLE120 flange, PCD 90 mm. The solid is
+    the shank, diameter 5 mm, inside the Ø6.6 mm hole.
+  legacy_ref: draft-fr-4125
+  supplier_id: mk
+  mass_kg: 0.01
+  mass_note: Catalogue mass is not stated. 0.01 kg is a placeholder per screw.
+  estimate_eur_low: 1
+  estimate_eur_high: 1
+  geometry:
+    kind: cylinder
+    diameter_mm: 6
+    length_mm: 20
+    fidelity: envelope
+    source: docs/engineering/MAST-LAYOUT.md
+  notes: Standard fastener. Property class is an open point on VC-FR-4182.
 - part_number: VC-FR-4198
   name: Upper profile mount
   revision_index: 0
@@ -1064,14 +1109,14 @@ parts:
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: S355 cap on both profile ends, 8 mm, plus a rear bridge behind the chain. Four M8 clearance
-    holes in each cap. No weld. The end threads are the mk 5104 pattern.
+  spec: S355 cap on both profile ends, 8 mm, plus a rear bridge behind the chain. One lip on each
+    inner side slot. Two M8 slot screws and two Lasche 1 nuts. No end threads and no weld.
   legacy_ref: draft-fr-4198
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  mass_kg: 1.072
-  mass_note: Solid volume at 7850 kg/m3. The cap holes are already cut.
+  mass_kg: 1.195
+  mass_note: Solid volume at 7850 kg/m3. The two slot holes are already cut.
   geometry:
     kind: box
     length_mm: 100
@@ -2385,11 +2430,12 @@ boms:
   mrp_type: normal
   lines:
   - {part_number: VC-FR-4100, qty: 2}
-  - {part_number: VC-FR-4120, qty: 12}
-  - {part_number: VC-FR-4121, qty: 30}
-  - {part_number: VC-FR-4122, qty: 3}
+  - {part_number: VC-FR-4120, qty: 4}
+  - {part_number: VC-FR-4121, qty: 8}
+  - {part_number: VC-FR-4124, qty: 4}
+  - {part_number: VC-FR-4125, qty: 4}
   - {part_number: VC-FR-4182, qty: 1}
-  - {part_number: VC-FR-4183, qty: 1}
+  - {part_number: VC-FR-4183, qty: 2}
   - {part_number: VC-FR-4184, qty: 1}
   - {part_number: VC-FR-4185, qty: 1}
   - {part_number: VC-FR-4186, qty: 1}

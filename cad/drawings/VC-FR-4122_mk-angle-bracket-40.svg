@@ -15,7 +15,7 @@
 <text x="210" y="156.5" font-size="3.4" font-family="sans-serif">6 mm thick</text>
 <text x="20" y="40" font-size="3" font-family="sans-serif">Fidelity: envelope. Source: docs/engineering/MAST-LAYOUT.md.</text>
 <text x="20" y="44.5" font-size="3" font-family="sans-serif">Mass: 0.05 kg. Catalogue mass is not stated. 0.05 kg is a placeholder per bracket.</text>
-<text x="20" y="49.0" font-size="3" font-family="sans-serif">Source: mk Preisliste Profiltechnik-Komponenten 01/2024, article 25.50.1001. https://www.mk-group.com/fileadmin/media/documents/Preisliste_P</text>
+<text x="20" y="49.0" font-size="3" font-family="sans-serif">Obsolete. One stock angle VC-FR-4184 replaces the three brackets. Not placed.</text>
 <text x="20" y="53.5" font-size="3" font-family="sans-serif">General tolerances: TODO. No tolerance class is specified in the design documents.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>

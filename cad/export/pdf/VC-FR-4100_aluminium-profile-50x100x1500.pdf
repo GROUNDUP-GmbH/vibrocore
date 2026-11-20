@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 619 >>
+<< /Length 501 >>
 stream
 BT
 /F1 11 Tf
@@ -22,8 +22,6 @@ T*
 (Source: docs/engineering/BOM.md#3) Tj
 T*
 (Box 50 x 100 x 1500 mm) Tj
-T*
-(TODO: mk machining 5104 gives 4x M8, but the hole coordinates are not in the price list. Confirm the drawing.) Tj
 T*
 (Owner: Ground UP GmbH) Tj
 T*
@@ -54,8 +52,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000000918 00000 n 
+0000000800 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-988
+870
 %%EOF

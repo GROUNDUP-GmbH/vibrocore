@@ -30,7 +30,6 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-ASM-2000` Hub system assembly: Carriage plate length and width are not given, only the 10 mm thickness.
 - `VC-ASM-2000` Hub system assembly: The placed ROTEX spider is 92 Sh-A. Its TKmax is 190 Nm. Gearbox T2max is 365 Nm. Confirm spider 64 Sh-D and hub 020285103000.
 - `VC-ASM-3000` Frame assembly: Stabiliser feet have no selected order codes.
-- `VC-ASM-3000` Frame assembly: mk 5104 end-thread coordinates are not in the 01/2024 price list. The model uses the inner ribs. Confirm the drawing.
 - `VC-ASM-4000` Power system assembly: no solid. Dimensions were not complete enough to model.
 - `VC-ASM-5000` Control system assembly: no solid. Dimensions were not complete enough to model.
 - `VC-ASM-8000` Field subsystems assembly: no solid. Dimensions were not complete enough to model.
@@ -85,14 +84,13 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-CT-6700` Wiring harness: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6800` RevPi Connect 4: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6810` RevPi DIO module: no solid. Dimensions were not complete enough to model.
-- `VC-FR-4100` Aluminium profile 50x100x1500: mk machining 5104 gives 4x M8, but the hole coordinates are not in the price list. Confirm the drawing.
 - `VC-FR-4150` Bottom frame gusset: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4160` Top frame gusset: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4170` Mid frame gusset: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4180` Drive crossbar mk 2004: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4182` Gearbox mount plate: M6 property class. The study uses 8.8. Not in BOM.md v1.
-- `VC-FR-4183` Gearbox side frame: no solid. Dimensions were not complete enough to model.
-- `VC-FR-4184` Gearbox rear anchor: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4183` Bearing seat flat: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4184` Profile stiffener angle: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4185` Lower front stiffener: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4186` Lower rear stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4190` Front top stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
@@ -208,6 +206,8 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-FR-4120` mk T-slot nut M8: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4121` mk cylinder screw M8: cylinder, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4122` mk angle bracket 40: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
+- `VC-FR-4124` Hex nut M8: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
+- `VC-FR-4125` Cylinder screw M6x20: cylinder, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4198` Upper profile mount: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4300` Bottom steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).
 - `VC-FR-4400` Top steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).

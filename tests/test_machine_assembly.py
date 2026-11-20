@@ -44,7 +44,8 @@ PART_NUMBERS = (
     "VC-FR-4100",
     "VC-FR-4120",
     "VC-FR-4121",
-    "VC-FR-4122",
+    "VC-FR-4124",
+    "VC-FR-4125",
     "VC-FR-4182",
     "VC-FR-4183",
     "VC-FR-4184",
@@ -163,7 +164,7 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
     centres = []
     for item in bearings:
         foot = item.shape.bounding_box()
-        assert abs(float(foot.min.Z) - 36.6) < 0.2
+        assert abs(float(foot.min.Z) - 40.0) < 0.2
         assert abs(float(foot.center().X) - float(shaft_box.center().X)) < 0.5
         assert abs(float(shaft_box.center().Z) - (float(foot.min.Z) + 42.9)) < 0.2
         centres.append(float(foot.center().Y))

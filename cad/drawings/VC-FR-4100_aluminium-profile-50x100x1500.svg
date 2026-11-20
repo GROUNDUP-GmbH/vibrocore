@@ -15,9 +15,8 @@
 <text x="210" y="216.0" font-size="3.4" font-family="sans-serif">1500 mm thick</text>
 <text x="20" y="40" font-size="3" font-family="sans-serif">Fidelity: envelope. Source: docs/engineering/BOM.md#3.</text>
 <text x="20" y="44.5" font-size="3" font-family="sans-serif">Mass: 7.275 kg. 4.850 kg/m times 1.5 m. Catalogue section 1805.51 mm2. The STEP volume gives about 1797.7 mm2.</text>
-<text x="20" y="49.0" font-size="3" font-family="sans-serif">TODO: mk machining 5104 gives 4x M8, but the hole coordinates are not in the price list. Confirm the drawing.</text>
-<text x="20" y="53.5" font-size="3" font-family="sans-serif">The machine pose loads cad/vendor/VC-FR-4100/51.04.1500.stp. The box above is the fallback envelope.</text>
-<text x="20" y="58.0" font-size="3" font-family="sans-serif">General tolerances: TODO. No tolerance class is specified in the design documents.</text>
+<text x="20" y="49.0" font-size="3" font-family="sans-serif">The machine pose loads cad/vendor/VC-FR-4100/51.04.1500.stp. The box above is the fallback envelope.</text>
+<text x="20" y="53.5" font-size="3" font-family="sans-serif">General tolerances: TODO. No tolerance class is specified in the design documents.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>
 <text x="268" y="278.2" font-size="2.4" font-family="sans-serif">Document title</text>

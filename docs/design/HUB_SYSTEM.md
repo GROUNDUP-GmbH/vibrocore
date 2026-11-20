@@ -108,8 +108,8 @@ The chain radial load is 5.8 kN. The PLE120 Fr max is 2000 N, so the sprocket mu
 The numbers are in [LIFT-DRIVE-SIZING.md](../engineering/LIFT-DRIVE-SIZING.md).
 No pretension is stated. The bearing load is half of the pull when the sprocket is centred.
 
-The bearing feet bolt to seats on VC-FR-4183. The bolts are M12. The slots are 24 mm by 17 mm.
-The gearbox flange bolts to VC-FR-4182. A foot of that plate bolts to the bottom plate.
+The bearing feet bolt to two 25 mm flats, VC-FR-4183. The bolts are M12 and pass through the bottom plate.
+The gearbox flange bolts to one bent plate, VC-FR-4182. The foot of that plate bolts through the bottom plate.
 There is no weld in this mount.
 
 | Parameter              | Value                              |

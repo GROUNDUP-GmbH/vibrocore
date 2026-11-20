@@ -215,24 +215,6 @@ def _pillow_solid():
     return Pos(0.0, center_y, center_z) * Box(PILLOW_WIDTH_MM, PILLOW_LENGTH_MM, PILLOW_HEIGHT_MM)
 
 
-def _profile_end_xy(sign: float):
-    """Four M8 positions on one profile end, in world X and Y.
-
-    Local x is the 50 mm axis. Positive local x is world +Y. The 300 mm plate
-    ends on the profile centre line, so every hole is on the inner half.
-    Local y is the 100 mm axis. World X is the opposite of local y.
-    The mk 5104 drawing is not in the price list. These points sit on the
-    inner ribs of the section. Confirm them against that drawing.
-    """
-    # 8 mm and 16 mm inboard of the centre. 22 mm would put the screw
-    # through the inner edge of the end plate.
-    local_xs = (8.0, 16.0) if sign < 0.0 else (-8.0, -16.0)
-    centre_y = sign * PROFILE_SPACING_MM / 2.0
-    for local_x in local_xs:
-        for local_y in (36.0, -36.0):
-            yield -local_y, centre_y + local_x
-
-
 def chain_axis_x_mm() -> float:
     """Sprocket, shaft, coupling and gearbox share this X.
 
@@ -265,7 +247,8 @@ def _drive_bay() -> dict:
     gap = 2.0
     half = GEARBOX_FLANGE_MM / 2.0
     motor_x = chain_axis_x_mm()
-    z_lift = plate_top + 7.0 + half
+    # 25 mm flat bar under the bearings. The sole sits on that bar.
+    z_lift = plate_top + 25.0 + PILLOW_CENTER_HEIGHT_MM
     if sprocket is None:
         sprocket_half = SPROCKET_WIDTH_MM / 2.0
     else:
@@ -317,8 +300,8 @@ def _drive_bay() -> dict:
         "motor_y": (motor_y0 + motor_y1) / 2.0,
         "motor_y0": motor_y0,
         "motor_y1": motor_y1,
-        # 12 mm end plate plus 0.5 mm clearance above the gearbox.
-        "short_z0": z_lift + half + 12.5,
+        # The short upright clears the gearbox. No end plate.
+        "short_z0": z_lift + half + 2.0,
         "plate_top": plate_top,
         "shaft_y0": coupling_y + 8.0,
         "shaft_y1": idle_max_y + 2.0,
@@ -452,13 +435,20 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         40.0, 44.0, BOTTOM_PLATE_THICKNESS_MM + 4.0
     )
     plate = bottom - bore - drop_slot
-    # Idle profile only. Its outer half overhangs the plate, so the four M8
-    # holes sit in the inner half. The drive profile ends above the gearbox.
-    for hole_x, hole_y in _profile_end_xy(1.0):
-        plate = plate - Pos(hole_x - plate_x, hole_y, 0.0) * Cylinder(4.5, BOTTOM_PLATE_THICKNESS_MM + 4.0)
-    # Flange-plate foot. Two M8, on the plate, inboard of the drive upright.
-    for hole_x in (chain_axis_x_mm() - 40.0, chain_axis_x_mm() + 40.0):
-        plate = plate - Pos(hole_x - plate_x, -145.0, 0.0) * Cylinder(4.5, BOTTOM_PLATE_THICKNESS_MM + 4.0)
+    # Gearbox-plate foot, stiffener angle, and the four SYJ M12 bolts.
+    bolt_dx = PILLOW_BOLT_SPAN_MM / 2.0
+    hole_xy = [
+        (chain_axis_x_mm() - 40.0, -143.0),
+        (chain_axis_x_mm() + 40.0, -143.0),
+        (-10.0, 100.0),
+        (10.0, 100.0),
+    ]
+    for center_y in (bay["drive_bearing_y"], bay["idle_bearing_y"]):
+        for sign in (-1.0, 1.0):
+            hole_xy.append((chain_axis_x_mm() + sign * bolt_dx, center_y))
+    for hole_x, hole_y in hole_xy:
+        radius = 6.5 if abs(hole_y) < 80.0 else 4.5
+        plate = plate - Pos(hole_x - plate_x, hole_y, 0.0) * Cylinder(radius, BOTTOM_PLATE_THICKNESS_MM + 4.0)
     add(
         "VC-FR-4300",
         plate,
@@ -851,29 +841,27 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         coupling = Compound(children=opened)
     add("VC-HB-2400", coupling, motor_x, bay["coupling_y"], z_lift)
 
-    # Output flange plate on the PLE120 flange, plus a foot on the bottom plate.
-    # No weld. Four M6 on the measured PCD 90. The bore clears the Ø80 pilot.
-    # The plate stays below the drive upright and is notched around the rail.
+    # One laser-cut 10 mm plate, one bend. No weld and no notch.
+    # The upright stops under the carriage. A narrow ear reaches the upper M6
+    # behind the rail. The foot lies under the gearbox, in the 10 mm gap.
     face_y = bay["face_y"]
-    outer_y = bay["plate_outer_y"]
-    mount_mid_y = (face_y + outer_y) / 2.0
     plate_top = bay["plate_top"]
     short_z0 = bay["short_z0"]
-    mount = span(motor_x - 70.0, motor_x + 58.0, face_y, outer_y, plate_top + 0.2, z_lift + 52.0)
-    mount = mount - Pos(drive_x, mount_mid_y, z_lift) * along_y(42.0, 30.0)
+    bend_z = 25.0
+    mount = span(motor_x - 55.0, motor_x + 54.0, face_y, face_y + 10.0, bend_z, 100.0)
+    ear = span(motor_x - 16.0, motor_x + 15.0, face_y, face_y + 10.0, 100.0, z_lift + 52.0)
+    mount = fuse([mount, ear])
+    mount = mount - Pos(drive_x, face_y + 5.0, z_lift) * along_y(42.0, 30.0)
     for deg in (0.0, 90.0, 180.0, 270.0):
         angle = math.radians(deg)
         mount = mount - Pos(
             drive_x + 45.0 * math.cos(angle),
-            mount_mid_y,
+            face_y + 5.0,
             z_lift + 45.0 * math.sin(angle),
         ) * along_y(3.3, 30.0)
-    mount = mount - span(48.5, 69.0, face_y - 1.0, outer_y + 1.0, 113.0, z_lift + 54.0)
-    # The carriage at stroke 0 occupies X beyond 54 mm and Z above 103 mm.
-    mount = mount - span(54.0, 96.0, face_y - 1.0, outer_y + 1.0, 103.0, z_lift + 56.0)
-    foot_plate = span(motor_x - 50.0, motor_x + 50.0, face_y, -140.0, plate_top + 0.2, 21.0)
+    foot_plate = span(motor_x - 50.0, motor_x + 50.0, face_y, -136.0, plate_top + 0.2, bend_z)
     for hole_x in (motor_x - 40.0, motor_x + 40.0):
-        foot_plate = foot_plate - Pos(hole_x, -145.0, plate_top + 6.0) * Cylinder(4.5, 16.0)
+        foot_plate = foot_plate - Pos(hole_x, -143.0, plate_top + 6.0) * Cylinder(4.5, 16.0)
     add("VC-FR-4182", fuse([mount, foot_plate]), 0.0, 0.0, 0.0)
 
     pillow = _pillow_solid()
@@ -895,43 +883,20 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
                 6.5, sole_z - bay["plate_top"] + 4.0
             )
         seats.append(seat)
-    # Drive profile end plate, above the gearbox, plus clamps on the inner faces.
-    # The rail covers the drive front, so that end uses the side slots, not a Winkel.
-    mount_parts = list(seats)
-    end_z0 = short_z0 - 12.0
-    end_plate = span(
-        rear_face_x_mm() + 0.5,
-        front - 0.5,
-        -profile_outer_y,
-        -profile_inner_y,
-        end_z0,
-        short_z0 - 0.2,
-    )
-    for hole_x, hole_y in _profile_end_xy(-1.0):
-        end_plate = end_plate - Pos(hole_x, hole_y, end_z0 + 6.0) * Cylinder(4.5, 16.0)
-    mount_parts.append(end_plate)
-    drive_inner = -profile_inner_y
-    idle_inner = profile_inner_y
-    drive_tab = span(-40.0, 46.0, drive_inner, drive_inner + 6.0, end_z0, short_z0 + 40.0)
-    for slot_x in (25.0, -25.0):
-        drive_tab = drive_tab - Pos(slot_x, drive_inner + 3.0, short_z0 + 20.0) * along_y(4.5, 16.0)
-    idle_low = span(-40.0, -10.0, idle_inner - 6.0, idle_inner, 22.0, 58.0)
-    idle_low = idle_low - Pos(-25.0, idle_inner - 3.0, 32.0) * along_y(4.5, 16.0)
-    idle_low = idle_low - Pos(-25.0, idle_inner - 3.0, 48.0) * along_y(4.5, 16.0)
-    idle_foot = span(-36.0, -14.0, idle_inner - 28.0, idle_inner - 6.0, plate_top + 0.2, plate_top + 8.0)
-    idle_mid = span(-40.0, 46.0, idle_inner - 6.0, idle_inner, end_z0, end_z0 + 32.0)
-    for slot_x in (25.0, -25.0):
-        idle_mid = idle_mid - Pos(slot_x, idle_inner - 3.0, end_z0 + 16.0) * along_y(4.5, 16.0)
-    # Rear bridge, behind the chain, joins the two inner clamps.
-    low_bridge = span(-46.0, -18.0, drive_inner, idle_inner, end_z0, end_z0 + 8.0)
-    mount_parts.extend((drive_tab, idle_low, idle_foot, idle_mid, low_bridge))
-    add("VC-FR-4183", fuse(mount_parts), 0.0, 0.0, 0.0)
+    for index, seat in enumerate(seats, start=1):
+        add(f"VC-FR-4183-{index}", seat, 0.0, 0.0, 0.0)
 
-    # Removable side brace. Bolted. It leaves the input face clear.
-    brace = span(motor_x + 58.0, motor_x + 66.0, bay["gear_y0"] + 16.0, face_y, bay["plate_top"], z_lift + 20.0)
-    for brace_y in (bay["gear_y0"] + 40.0, face_y - 6.0):
-        brace = brace - Pos(motor_x + 62.0, brace_y, bay["plate_top"] + 8.0) * Cylinder(4.5, 24.0)
-    add("VC-FR-4184", brace, 0.0, 0.0, 0.0)
+    # One 40 x 40 x 6 angle. Inner side slots of the idle profile, and two
+    # M8 through the bottom plate. No weld. The measured throat is 10.10 mm.
+    idle_inner = profile_inner_y
+    # Sawn 40 x 40 x 6 angle, 80 mm long. Both legs share that width.
+    upright = span(-40.0, 40.0, idle_inner - 6.0, idle_inner - 0.2, 21.2, 61.2)
+    sole = span(-40.0, 40.0, idle_inner - 40.0, idle_inner - 0.2, plate_top + 0.2, 21.2)
+    for slot_x in (25.0, -25.0):
+        upright = upright - Pos(slot_x, idle_inner - 3.0, 48.0) * along_y(4.5, 20.0)
+    for hole_x in (-10.0, 10.0):
+        sole = sole - Pos(hole_x, 100.0, plate_top + 4.0) * Cylinder(4.5, 16.0)
+    add("VC-FR-4184", upright + sole, 0.0, 0.0, 0.0)
 
     add("VC-HB-2600-1", pillow, motor_x, bay["drive_bearing_y"], z_lift)
     add("VC-HB-2600-2", pillow, motor_x, bay["idle_bearing_y"], z_lift)
@@ -960,9 +925,11 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
 
     profile_top = station["profile_top"]
     cap = 8.0
-    # Upper mount. Two end caps and a rear bridge. The bridge stays behind the chain.
+    # Upper mount. Two caps, a rear bridge, and one lip on each inner side slot.
+    # Slot bolts replace the end threads. No weld.
     caps = []
     for sign in (-1.0, 1.0):
+        inner = sign * profile_inner_y
         cap_solid = span(
             rear_face_x_mm(),
             front,
@@ -971,9 +938,10 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
             profile_top + 0.2,
             profile_top + cap,
         )
-        for hole_x, hole_y in _profile_end_xy(sign):
-            cap_solid = cap_solid - Pos(hole_x, hole_y, profile_top + 4.0) * Cylinder(4.5, 12.0)
-        caps.append(cap_solid)
+        hanger = span(10.0, 40.0, inner - sign * 6.0, inner - sign * 0.2, profile_top - 28.0, profile_top + 0.2)
+        tab = span(10.0, 40.0, inner - sign * 6.0, inner + sign * 5.0, profile_top + 0.2, profile_top + cap - 0.2)
+        hanger = hanger - Pos(25.0, inner - sign * 3.0, profile_top - 16.0) * along_y(4.5, 20.0)
+        caps.append(fuse([cap_solid, hanger, tab]))
     caps.append(
         span(
             rear_face_x_mm() + 2.0,
@@ -1011,88 +979,72 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     # One box. The old disc was the grey wire frame in FreeCAD.
     add("VC-HB-2900", Box(40.0, 30.0, 57.0), drive_x + 90.0, chain_y, profile_top + cap + 70.0)
 
-    # mk Winkel 40. Legs sit outside the profile: front face and inner side face.
-    # The drive front is covered by the rail, so that upright has no low Winkel.
-    # Lasche 1 sits in the slot. The M8 screw stops in the slot, short of the nut.
+    # Slot nuts in the 10.10 mm throats. Screws stop short of the nuts.
+    # Through-bolt nuts sit under the plate, clear of the 0.5 mm datum skin.
     nut_i = 0
     screw_i = 0
-    angle_i = 0
-    angle_windows = []
+    hex_i = 0
+    m6_i = 0
 
-    def add_screw(x0, y0, z0, x1, y1, z1):
+    def add_screw(x0, y0, z0, x1, y1, z1, radius=3.9, prefix="VC-FR-4121"):
         nonlocal screw_i
         screw_i += 1
         length = math.dist((x0, y0, z0), (x1, y1, z1))
         mx, my, mz = (x0 + x1) / 2.0, (y0 + y1) / 2.0, (z0 + z1) / 2.0
         dx, dy, dz = abs(x1 - x0), abs(y1 - y0), abs(z1 - z0)
         if dz >= dx and dz >= dy:
-            blank = Cylinder(3.9, length)
+            blank = Cylinder(radius, length)
         elif dx >= dy:
-            blank = Rot(0, 90, 0) * Cylinder(3.9, length)
+            blank = Rot(0, 90, 0) * Cylinder(radius, length)
         else:
-            blank = along_y(3.9, length)
-        add(f"VC-FR-4121-{screw_i}", blank, mx, my, mz)
+            blank = along_y(radius, length)
+        add(f"{prefix}-{screw_i}", blank, mx, my, mz)
 
-    def add_slot_nut(x, y, z, along_x):
+    def add_slot_nut(x, y, z):
         nonlocal nut_i
         nut_i += 1
-        # 8 mm across the throat, 6 mm into the slot, 5 mm along the profile.
-        blank = Box(8.0, 6.0, 5.0) if along_x else Box(6.0, 8.0, 5.0)
-        add(f"VC-FR-4120-{nut_i}", blank, x, y, z)
+        # 8 mm across the 10.10 mm throat, 6 mm into the slot, 5 mm along Z.
+        add(f"VC-FR-4120-{nut_i}", Box(8.0, 6.0, 5.0), x, y, z)
 
-    def add_angle(sign, z0, z1, z_nut):
-        nonlocal angle_i
-        angle_i += 1
-        inner = sign * profile_inner_y
-        center_y = sign * half_pitch
-        leg_front = span(front, front + 6.0, inner, inner + sign * 40.0, z0, z1)
-        leg_side = span(front - 40.0, front, inner, inner - sign * 6.0, z0, z1)
-        leg = leg_front + leg_side
-        leg = leg - Pos(front + 3.0, center_y, z_nut) * (Rot(0, 90, 0) * Cylinder(4.5, 20.0))
-        leg = leg - Pos(25.0, inner - sign * 3.0, z_nut) * along_y(4.5, 20.0)
-        add(f"VC-FR-4122-{angle_i}", leg, 0.0, 0.0, 0.0)
-        angle_windows.append((sign, z0, z1))
-        add_slot_nut(front - 4.0, center_y, z_nut, False)
-        add_screw(front + 12.0, center_y, z_nut, front - 1.0, center_y, z_nut)
-        add_slot_nut(25.0, inner + sign * 4.0, z_nut, True)
-        bay_y = inner - sign * 12.0
-        slot_y = inner + sign * 1.0
-        add_screw(25.0, bay_y, z_nut, 25.0, slot_y, z_nut)
+    def add_hex_nut(x, y):
+        nonlocal hex_i
+        hex_i += 1
+        add(f"VC-FR-4124-{hex_i}", Box(13.0, 13.0, 6.8), x, y, -4.4)
 
-    add_angle(1.0, 24.0, 64.0, 44.0)
-    add_angle(1.0, profile_top - 52.0, profile_top - 12.0, profile_top - 32.0)
-    add_angle(-1.0, profile_top - 52.0, profile_top - 12.0, profile_top - 32.0)
-    # Side-slot screws on the lower clamps. One screw in each slot.
-    for slot_x, face_y, sign, z_nut in (
-        (25.0, drive_inner, -1.0, short_z0 + 20.0),
-        (-25.0, drive_inner, -1.0, short_z0 + 20.0),
-        (25.0, idle_inner, 1.0, end_z0 + 16.0),
-        (-25.0, idle_inner, 1.0, end_z0 + 16.0),
-        (-25.0, idle_inner, 1.0, 32.0),
-        (-25.0, idle_inner, 1.0, 48.0),
-    ):
-        add_slot_nut(slot_x, face_y + sign * 4.0, z_nut, True)
-        add_screw(slot_x, face_y - sign * 12.0, z_nut, slot_x, face_y + sign * 1.0, z_nut)
-    # End screws. They stay in the plate or the cap and stop on the profile face.
-    for hole_x, hole_y in _profile_end_xy(1.0):
-        add_screw(hole_x, hole_y, 2.0, hole_x, hole_y, plate_top - 0.5)
-    for hole_x, hole_y in _profile_end_xy(-1.0):
-        add_screw(hole_x, hole_y, end_z0 + 1.0, hole_x, hole_y, short_z0 - 0.6)
     for sign in (-1.0, 1.0):
-        for hole_x, hole_y in _profile_end_xy(sign):
-            add_screw(hole_x, hole_y, profile_top + cap - 0.5, hole_x, hole_y, profile_top + 0.6)
-    for hole_x in (motor_x - 40.0, motor_x + 40.0):
-        add_screw(hole_x, -145.0, 3.0, hole_x, -145.0, 20.5)
-
-    # Sheets above the rails. Windows clear the Winkel legs.
-    stiffener_z0 = station["rail_top"] + 15.0
-    upper_front = span(
-        front, front + GUSSET_SHEET_THICKNESS_MM, -profile_outer_y, profile_outer_y, stiffener_z0, profile_top
-    )
-    for sign, z0, z1 in angle_windows:
         inner = sign * profile_inner_y
-        upper_front = upper_front - span(front - 1.0, front + 8.0, inner, inner + sign * 42.0, z0 - 1.0, z1 + 1.0)
-    add("VC-FR-4190", upper_front, 0.0, 0.0, 0.0)
+        z_nut = profile_top - 16.0
+        add_slot_nut(25.0, inner + sign * 4.0, z_nut)
+        add_screw(25.0, inner - sign * 12.0, z_nut, 25.0, inner + sign * 1.0, z_nut)
+    for slot_x in (25.0, -25.0):
+        add_slot_nut(slot_x, idle_inner + 4.0, 48.0)
+        add_screw(slot_x, idle_inner - 12.0, 48.0, slot_x, idle_inner + 1.0, 48.0)
+    for hole_x in (motor_x - 40.0, motor_x + 40.0):
+        add_screw(hole_x, -143.0, 2.0, hole_x, -143.0, 24.5)
+        add_hex_nut(hole_x, -143.0)
+    for hole_x in (-10.0, 10.0):
+        add_screw(hole_x, 100.0, 2.0, hole_x, 100.0, 20.5)
+        add_hex_nut(hole_x, 100.0)
+    for deg in (0.0, 90.0, 180.0, 270.0):
+        angle = math.radians(deg)
+        m6_i += 1
+        add(
+            f"VC-FR-4125-{m6_i}",
+            along_y(2.5, 8.0),
+            drive_x + 45.0 * math.cos(angle),
+            face_y + 5.0,
+            z_lift + 45.0 * math.sin(angle),
+        )
+
+    # Sheets above the rails. No bracket windows.
+    stiffener_z0 = station["rail_top"] + 15.0
+    add(
+        "VC-FR-4190",
+        span(front, front + GUSSET_SHEET_THICKNESS_MM, -profile_outer_y, profile_outer_y, stiffener_z0, profile_top),
+        0.0,
+        0.0,
+        0.0,
+    )
     add(
         "VC-FR-4195",
         span(
@@ -1109,9 +1061,13 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     )
     front_top = station["rail_bottom"] - CARRIAGE_PLATE_THICKNESS_MM - 2.0
     # Idle front only. The drive front is the gearbox bay, under the short upright.
-    idle_pad = span(front, front + GUSSET_SHEET_THICKNESS_MM, profile_inner_y, profile_outer_y, plate_top, front_top)
-    idle_pad = idle_pad - span(front - 1.0, front + 8.0, profile_inner_y, profile_inner_y + 42.0, 23.0, 65.0)
-    add("VC-FR-4185", idle_pad, 0.0, 0.0, 0.0)
+    add(
+        "VC-FR-4185",
+        span(front, front + GUSSET_SHEET_THICKNESS_MM, profile_inner_y, profile_outer_y, plate_top, front_top),
+        0.0,
+        0.0,
+        0.0,
+    )
     add(
         "VC-FR-4186",
         span(
@@ -1460,7 +1416,9 @@ def export_machine_assembly(bom, step_dir: Path, render_dir: Path) -> list[Path]
         _render_png(parts, view, path)
         written.append(path)
     # Close-ups of the gearbox, the sprocket and the mount. X, Y, Z limits in mm.
-    drive_clip = (-80.0, 180.0, -560.0, 120.0, 0.0, 220.0)
+    # Z starts above the datum so the ground plane does not fight the plate.
+    # Z stops just above the sprocket so the chain strands do not hide the train.
+    drive_clip = (-80.0, 180.0, -560.0, 120.0, 12.0, 145.0)
     for view in ("drive-iso", "drive-front"):
         path = render_dir / f"{ASSEMBLY_ID}-{view}.png"
         _render_png(parts, view, path, clip=drive_clip)
@@ -1498,8 +1456,9 @@ def _render_png(parts: list[Placed], view: str, path: Path, clip: tuple[float, .
         "iso": (np.array([1.0, -1.0, 0.72]), np.array([0.0, 0.0, 1.0])),
         "side": (np.array([1.0, 0.0, 0.0]), np.array([0.0, 0.0, 1.0])),
         "top": (np.array([0.0, 0.0, 1.0]), np.array([0.0, 1.0, 0.0])),
-        "drive-iso": (np.array([0.85, 0.95, 0.5]), np.array([0.0, 0.0, 1.0])),
-        "drive-front": (np.array([1.0, -0.25, 0.12]), np.array([0.0, 0.0, 1.0])),
+        # Mostly along +X so the shaft axis (Y) reads left to right.
+        "drive-iso": (np.array([0.90, 0.15, 0.35]), np.array([0.0, 0.0, 1.0])),
+        "drive-front": (np.array([1.0, 0.0, 0.0]), np.array([0.0, 0.0, 1.0])),
     }
     eye, up = eyes[view]
     forward = -eye / np.linalg.norm(eye)
@@ -1527,27 +1486,33 @@ def _render_png(parts: list[Placed], view: str, path: Path, clip: tuple[float, .
                 tri = points[list(face)]
                 normal = np.cross(tri[1] - tri[0], tri[2] - tri[0])
                 norm = np.linalg.norm(normal)
-                if norm < 1e-9:
-                    continue
-                if clip is not None:
-                    center = tri.mean(axis=0)
-                    if not (
-                        clip[0] <= float(center[0]) <= clip[1]
-                        and clip[2] <= float(center[1]) <= clip[3]
-                        and clip[4] <= float(center[2]) <= clip[5]
-                    ):
-                        continue
-                shade = 0.38 + 0.62 * abs(float(np.dot(normal / norm, light)))
-                # The third column grows toward the camera so a nearer face wins the depth test.
-                cam = np.column_stack(
-                    (
-                        tri @ right,
-                        tri @ true_up,
-                        tri @ -forward,
-                    )
+                longest = max(
+                    float(np.linalg.norm(tri[1] - tri[0])),
+                    float(np.linalg.norm(tri[2] - tri[1])),
+                    float(np.linalg.norm(tri[0] - tri[2])),
                 )
-                triangles.append(cam)
-                shades.append((color[0] * shade, color[1] * shade, color[2] * shade))
+                # A sliver from a cone or a spline seam. Its area is ~0.
+                # The painter then fills a long needle.
+                if longest < 1e-9 or norm < 1e-3 * longest * longest:
+                    continue
+                shade = 0.38 + 0.62 * abs(float(np.dot(normal / norm, light)))
+                pieces = [tri]
+                if clip is not None:
+                    # Keep the part of the triangle that sits in the window.
+                    # A centre test draws the whole triangle, including the
+                    # ground plane and any sliver whose centre happens to fall inside.
+                    pieces = _clip_triangle(tri, clip)
+                rgb = (color[0] * shade, color[1] * shade, color[2] * shade)
+                for piece in pieces:
+                    cam = np.column_stack(
+                        (
+                            piece @ right,
+                            piece @ true_up,
+                            piece @ -forward,
+                        )
+                    )
+                    triangles.append(cam)
+                    shades.append(rgb)
 
     width, height = 960, 720
     image = np.zeros((height, width, 3), dtype=np.uint8)
@@ -1573,6 +1538,50 @@ def _render_png(parts: list[Placed], view: str, path: Path, clip: tuple[float, .
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     Image.fromarray(image, mode="RGB").save(path, format="PNG", compress_level=9, optimize=False)
+
+
+def _clip_triangle(tri, clip):
+    """Cut one triangle to an axis-aligned box. Return zero or more triangles."""
+    import numpy as np
+
+    poly = [tri[0], tri[1], tri[2]]
+    planes = (
+        (0, clip[0], True),
+        (0, clip[1], False),
+        (1, clip[2], True),
+        (1, clip[3], False),
+        (2, clip[4], True),
+        (2, clip[5], False),
+    )
+    for axis, limit, keep_above in planes:
+        if len(poly) < 3:
+            return []
+        nxt = []
+        for index, curr in enumerate(poly):
+            prev = poly[index - 1]
+            if keep_above:
+                curr_in = float(curr[axis]) >= limit - 1e-7
+                prev_in = float(prev[axis]) >= limit - 1e-7
+            else:
+                curr_in = float(curr[axis]) <= limit + 1e-7
+                prev_in = float(prev[axis]) <= limit + 1e-7
+            if curr_in != prev_in:
+                delta = float(curr[axis] - prev[axis])
+                if abs(delta) > 1e-12:
+                    t = (limit - float(prev[axis])) / delta
+                    nxt.append(prev + (curr - prev) * t)
+            if curr_in:
+                nxt.append(curr)
+        poly = nxt
+    if len(poly) < 3:
+        return []
+    out = []
+    for index in range(1, len(poly) - 1):
+        piece = np.stack((poly[0], poly[index], poly[index + 1]))
+        if np.linalg.norm(np.cross(piece[1] - piece[0], piece[2] - piece[0])) < 1e-6:
+            continue
+        out.append(piece)
+    return out
 
 
 def _paint_triangle(image, depth, px, py, z, color) -> None:
@@ -1618,7 +1627,8 @@ def _color_for(name: str) -> tuple[int, int, int]:
         ("VC-FR-4184", (30, 41, 59)),
         ("VC-FR-4183", (51, 65, 85)),
         ("VC-FR-4198", (71, 85, 105)),
-        ("VC-FR-4122", (100, 116, 139)),
+        ("VC-FR-4125", (30, 41, 59)),
+        ("VC-FR-4124", (203, 213, 225)),
         ("VC-FR-4121", (30, 41, 59)),
         ("VC-FR-4120", (203, 213, 225)),
         ("VC-FR-4182", (71, 85, 105)),

@@ -290,7 +290,7 @@ The separate brake is not in this pose.
 The chain lift is VC-ASM-2000, not the VC-ASM-8100 actuators.
 The drive sprocket sits on the gearbox output shaft.
 The chain and the idler share that axis.
-The axis is at X = 7.5 mm and Z = 79.5 mm.
+The axis is at X = 32.5 mm and Z = 82.9 mm.
 The rear strand stays at X = −35.5 mm, 14.5 mm in front of the rear face.
 The chain is an ISO 606 section on the pitch radius.
 The wrap is a shell outside the tooth tip. It is not a meshed link.
@@ -303,12 +303,15 @@ The sprocket is at Y = 0, between the uprights.
 The order along the shaft, from the gearbox toward the idle upright, is the PLE120, the ROTEX 28, the drive-side SYJ 30 TF, the sprocket, and the idle-side SYJ 30 TF.
 The bearing centres are 72.7 mm apart. The sprocket is in the middle.
 The gearbox shaft sees torque only. It does not see the chain radial load.
-VC-FR-4182 is a 12 mm plate on the output flange, with a foot on the bottom plate.
-Four M6 screws on PCD 90 mm hold the flange. The bore is Ø84 mm.
-There is no weld. The plate is notched so the rail and the carriage at stroke 0 stay clear.
-VC-FR-4184 is a removable bolted brace on the input side. The motor bolts to the input face.
+VC-FR-4182 is one 10 mm laser-cut plate with one bend. No weld and no notch.
+The vertical leg sits on the output flange. Four M6 screws on PCD 90 mm hold it. The bore is Ø84 mm.
+The plate stops at Z = 100 mm, under the carriage. A narrow ear behind the rail reaches the upper screw.
+The foot sits on the bottom plate and takes two M8 through bolts.
+VC-FR-4183 is two 25 mm flats, one under each bearing. The M12 bolts pass through the bottom plate.
+VC-FR-4184 is one 40 mm by 40 mm by 6 mm angle. No weld.
+It bolts to the idle profile inner side slots and to the bottom plate with two through bolts.
 The drive-side upright is cut short.
-It starts at Z = 149.5 mm, above a 12 mm end plate, and reaches the same top as the idle upright.
+It starts at Z = 142.4 mm and reaches the same top as the idle upright.
 The idle upright stays 1500 mm and stands on the bottom plate.
 The purchased length of VC-FR-4100 stays 1500 mm.
 VC-FR-4185 is a 4 mm pad on the idle front face only.
@@ -323,7 +326,6 @@ The top steel plate VC-FR-4400 is not fitted in this pose.
 The blank stays on the BOM.
 Two 4 mm sheets, VC-FR-4190 on the front face and VC-FR-4195 on the rear face, bolt to both profiles above the rails.
 They replace the stiffness the top plate gave.
-Windows in the front sheet clear the Winkel 40 brackets.
 The chain path still uses the published 83 mm tip diameter.
 The placed G&G sprocket tip is about 82.7 mm and its width is 25.5 mm.
 The pitch radius is the documented 37.9 mm.
@@ -385,29 +387,21 @@ The mk 2004 section is type 51.04. The slot is slot 10. The measured throat is 1
 The price list is mk Profiltechnik-Komponenten 01/2024.
 https://www.mk-group.com/fileadmin/media/documents/Preisliste_Profltechnik-Komponenten_01_2024.pdf
 
-Each upright is clamped on two faces, so the pair resists racking and twist.
-The chain pull is vertical. The fasteners carry the shear that the three gussets used to carry.
-
-The end face takes the vertical tension and compression, and the peel moment.
-Four M8 threads are the mk machining 5104AC, or 5104AA on one end.
-The idle profile bolts through the bottom plate and through the top cap VC-FR-4198.
-The drive profile is cut short, so its lower end bolts through the end plate on VC-FR-4183, and its top bolts through the same cap.
-The hole coordinates are not in the price list. The model puts all four screws on the inner ribs, so they meet the 300 mm plate. Confirm the 5104 drawing.
+The chain pull is vertical. The bolted angle and the cap lips carry the shear that the three gussets used to carry.
+There is no end-thread machining.
 
 The front face is the 50 mm face at world +X. It has one slot on the profile centre line.
-A Winkel 40, order 25.50.1001, clamps that slot and the forward side slot.
-It takes the fore-aft force and it helps the torsion about Z.
-The rail covers this face from Z = 115 mm to Z = 1415 mm.
-The idle profile has a Winkel below the rail and one above the rail.
-The drive profile has a Winkel only above the rail. Below the rail the gearbox occupies the front.
+The rail covers this face from Z = 115 mm to Z = 1415 mm, so the stiffener does not use it.
 
 The inner side face is the 100 mm face toward the bay. It has two slots, at world X = +25 mm and X = −25 mm.
-The forward slot takes the Winkel side leg.
-The rear slot takes the lower tab on VC-FR-4183.
-The two slots are 50 mm apart in X, so the pair resists twist.
+The measured throat is 10.10 mm. The two slots are 50 mm apart in X, so the pair resists twist.
+VC-FR-4184 uses both idle slots at Z = 48 mm.
+VC-FR-4198 uses the forward slot of each profile, at X = +25 mm, just under the cap.
 The nuts are Lasche 1 mit Feder, M8, order 34.01.0050.
-The screws are mk cylinder screws M8x20, order D0912820, in the slots, and M8x25, order D0912825, in the end plates.
-Each nut is a plain box in the throat. It is not the full T-head.
+The slot screws are M8x20, order D0912820.
+Each nut is a plain 8 mm box in the throat. It is not the full T-head.
+The through bolts are M8x30, order D0912830, with ISO 4032 nuts under the bottom plate.
+The flange screws are ISO 4762 M6x20.
 
 The rear-face slot is not used. The volume behind X = −50 mm is reserved for the tilt mechanism.
 
