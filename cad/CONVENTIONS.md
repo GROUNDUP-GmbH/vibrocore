@@ -75,7 +75,7 @@ cad/export/layout/mast-stack.pdf    same chain as text
 cad/export/layout/mast-stack.step   study solid, not for manufacture
 cad/export/step/VC-ASM-0000-layout.step   machine study assembly, not a BOM solid
 cad/export/renders/VC-ASM-0000-layout-*.png   views of that assembly
-cad/kicad/vibrocore-control/        wiring skeleton
+cad/kicad/vibrocore-control/        cabinet schematic VC-SCH-5000
 cad/freecad/make_plate.py           optional freecadcmd check
 ```
 

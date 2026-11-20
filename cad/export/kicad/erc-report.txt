@@ -1,0 +1,21 @@
+ERC report (2026-11-20T14:36:20+0000, Encoding UTF8)
+
+***** Sheet /
+
+***** Sheet /01 Mains and 24 V/
+
+***** Sheet /02 E-stop and STO/
+
+***** Sheet /03 S200 and 1FL2/
+
+***** Sheet /04 ATV320 and two MVE/
+
+***** Sheet /05 RevPi Connect 4 and DIO/
+
+***** Sheet /06 Tilt and lift/
+
+***** Sheet /07 Rod rotation proposal/
+
+***** Sheet /08 RUT241 and Modbus/
+
+ ** ERC messages: 0  Errors 0  Warnings 0
