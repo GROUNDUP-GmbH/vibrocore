@@ -9,20 +9,21 @@ The inputs are the drive data already in this repository.
 
 | Input | Value | Source |
 |---|---|---|
-| Chain pitch | 15.875 mm | HUB_SYSTEM.md, DIN 8187, size 10B |
+| Chain pitch | 15.875 mm | ISO 606, size 10B |
 | Sprocket teeth | 15 | HUB_SYSTEM.md and the BOM |
-| Gear ratio | 40 | Neugart PLPE120-040 in the BOM |
+| Gear ratio | 40 | Neugart PLE120-040, article 100460948 |
 | Gearbox efficiency used below | 0.90 | HUB_SYSTEM.md. This is not a measured Neugart value. |
 | Gearbox nominal output torque | 220 Nm | HUB_SYSTEM.md |
 | Gearbox emergency torque | 360 Nm | HUB_SYSTEM.md |
 | Motor torque used as nominal | 15 Nm | HUB_SYSTEM.md. The range there is 12-20 Nm. |
 | Motor torque on the BOM line | about 20 Nm | BOM. The catalogue number is not selected. |
-| Chain breaking load | about 44.5 kN | HUB_SYSTEM.md |
-| Chain working load | about 4.5 kN | HUB_SYSTEM.md, breaking load divided by 10 |
+| Chain working load | 4.5 kN | Design limit used by the bracket calculation. |
+| Chain breaking load | not stated | G&G does not state a value for 600-302-0000. |
 | Load cell rating | 5 kN | VC-PN-9300 |
 
-44.5 kN / 10 = 4.45 kN.
-The design note rounds that working load to 4.5 kN.
+The design working load is 4.5 kN.
+It is not a G&G breaking load divided by ten.
+G&G does not state a breaking load for chain 600-302-0000.
 This note keeps 4.5 kN.
 
 ## Formulas
@@ -55,7 +56,7 @@ Use metres for R when T is in newton-metres.
 | Motor 15 Nm x 40 x 0.90 | 540 Nm | 14248 N (14.25 kN) |
 | Motor 20 Nm x 40 x 0.90 | 720 Nm | 18998 N (19.00 kN) |
 | Chain working load | — | 4.5 kN |
-| Chain breaking load | — | about 44.5 kN |
+| Chain breaking load | — | not stated by G&G |
 
 540 Nm and 720 Nm are above the gearbox emergency torque of 360 Nm.
 The gearbox cannot deliver the motor-times-ratio torque.
@@ -91,9 +92,8 @@ Margin of the allowable pull force on the upper required pull:
 ```
 
 The margin is small.
-The chain breaking load divided by 4.0 kN is about 11.
-Do not add that 11 on top of the working-load factor of 10.
-The working load already includes that factor.
+Do not invent a breaking load to enlarge that margin.
+The working load is the limit used here.
 
 ## Load cell
 
@@ -103,7 +103,7 @@ The cell sits in the pull path, between the carriage and the casing adapter.
 The gearbox can put 5805 N into that path at nominal torque.
 It can put 9499 N into that path at emergency torque.
 The chain does not stop the rise at 4.5 kN.
-The chain breaks near 44.5 kN.
+G&G does not state the load at which this chain breaks.
 
 5 kN is below both gearbox tensions.
 A stall can overload the cell.

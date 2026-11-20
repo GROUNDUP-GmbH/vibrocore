@@ -29,26 +29,26 @@ complexity reduction vs. V1 custom design.*
 |17 | Servo motor 1FL2104     | 3.2 Nm, 1 kW, brake, encoder |   1 |  250–400 | Siemens. Band is not a quote. |
 |18 | Planetary gearbox       | PLE120-040, 7.65 kg, article 100460948 |   1 |  600–900 | Neugart. Band is not a quote. |
 |19 | SINAMICS S200           | 6SL5510-1BB11-0AA0, cabinet      |   1 |   80–150 | Siemens. Band is not a quote. |
-|20 | Elastomer coupling      | R+W EKH or KTR ROTEX 28          |   1 |   60–100 | R+W (DE) / KTR (DE)       |
-|21 | Drive shaft             | Ø25–30 mm, keyed                  |   1 |   30–50  | Custom / standard (EU)     |
-|22 | Pillow block UCP 206    | Self-aligning, Ø30 bore           |   2 |   30–50  | SKF / Schaeffler (EU)      |
-|23 | Chain 10B-2 duplex      | 3.2 m, pre-greased                |   1 |   30–50  | iwis / Wippermann (DE)     |
-|24 | Sprocket 10B-2 15T      | Taper-lock, drive                 |   1 |   25–40  | z24.de / ETKF (DE)         |
-|25 | Sprocket 10B-2 15T      | Bearing-mounted, idle             |   1 |   30–50  | z24.de / ETKF (DE)         |
-|26 | Chain tensioner          | Spring-type or adjustable         |   1 |   20–40  | Standard (EU)              |
+|20 | Elastomer coupling      | ROTEX 28, placed between gearbox and Ø30 shaft. |   1 |   60–100 | KTR. Band is not a quote. |
+|21 | Chain bearing shaft     | Ø30 mm C45. Carries the sprocket between two SYJ 30 TF. |   1 |   30–50  | Custom (EU)                |
+|22 | Pillow block SYJ 30 TF  | SKF, bore 30 mm, two M12, 1.1 kg |   2 |   30–50  | SKF. Band is not a quote. |
+|23 | Chain 10B-2 duplex      | G&G 600-302-0000, 3.2 m placeholder |   1 |   30–50  | G&G                        |
+|24 | Sprocket 10B-2 15T      | G&G 501-302-0515, drive           |   1 |   25–40  | G&G                        |
+|25 | Sprocket 10B-2 15T      | Same solid, idle                  |   1 |   30–50  | G&G                        |
+|26 | Chain tensioner          | G&G 681-302-1504, 36–57 mm        |   1 |   20–40  | G&G                        |
 |27 | Power-off brake         | Obsolete. Motor brake is used.    |   0 |  100–180 | History only. Not in the rollup. |
 |28 | Linear guide rail HGR20 | 1,300 mm length                   |   2 |  100–180 | Hiwin / Bosch Rexroth      |
 |29 | Linear slider HGH20     | Ball bearing type                  |   4 |   80–140 | Hiwin / Bosch Rexroth      |
 |30 | Carriage plate          | 10 mm steel, machined             |   1 |   80–120 | Custom (EU)                |
 |31 | Fasteners (hub)         | M6–M12, various                   |   1 |   20–40  | Würth / Bossard (EU)       |
 
-**Hub System Subtotal: ~1,435–2,310 €**
+**Hub System Subtotal: ~1,441–2,316 €**
 
 ## 3. Frame & Mounting
 
 | # | Component               | Spec                              | Qty | Est. €   | Supplier / Source          |
 |---|-------------------------|-----------------------------------|-----|----------|----------------------------|
-|32 | Al profile 50×100       | mk 2004, 1,500 mm                 |   2 |  120–180 | mk Technology (DE)         |
+|32 | Al profile 50×100       | mk 2004, 51.04.2004, 1,500 mm, 7.275 kg |   2 |  120–180 | mk Technology (DE)         |
 |33 | Profile connectors      | mk standard corners/T-slot        |   8 |   40–80  | mk Technology (DE)         |
 |34 | Bottom steel plate      | S355, 400×300×15 mm, machined     |   1 |   80–120 | Custom (EU)                |
 |35 | Top steel plate         | S355, 300×200×12 mm, machined     |   1 |   50–80  | Custom (EU)                |
@@ -58,7 +58,7 @@ complexity reduction vs. V1 custom design.*
 |39 | Stabiliser feet         | Adjustable screw jacks            |   4 |   40–80  | Standard (EU)              |
 |40 | Fasteners (frame)       | M8–M16, various                   |   1 |   30–50  | Würth / Bossard (EU)       |
 
-**Frame Subtotal (V1.1 live lines, without #38): ~440–730 €**
+**Frame Subtotal (V1.1 live lines, without #38): ~468–766 €.** The rollup includes eight Lasche 1 nuts, twelve M8 screws, four ISO 4032 nuts and four M6x20 screws. The Winkel 40, the three gussets and the drive crossbar are obsolete and are not included.
 
 > **#38 vs §8b:** V1.1 firmware drives the electric tilt actuator (`FB_TiltControl`).
 > The gas-spring / hinge line #38 is retained as an obsolete alternative only and is
@@ -192,6 +192,7 @@ The kit rollup is EUR 2,007.85.
 That sum is two rods, four shoes and one O-ring pack.
 The half-shells have no price yet.
 Drive head 201385 and retainer HD 208472 are obsolete history. They are not kit lines.
+The DT325 sheath and the two drive heads also have approximation solids. Those solids are not kit lines. See `cad/vendor/DT325/SOURCE.md`.
 
 ## 7. Positioning System
 
@@ -427,12 +428,12 @@ Do not add the §8e I/O cost again. Those modules are already inside VC-ASM-5000
 | Subsystem             | Low Est. (€) | High Est. (€) | Notes                              |
 |-----------------------|-------------|---------------|------------------------------------|
 | Sonic head VC-ASM-1000 | 1,185 | 1,900 | YAML rollup |
-| Hub VC-ASM-2000 | 1,435 | 2,310 | YAML rollup. The obsolete brake is not included. |
-| Frame VC-ASM-3000 | 440 | 730 | Live lines. The obsolete gas spring is not included. |
+| Hub VC-ASM-2000 | 1,441 | 2,316 | YAML rollup. The ROTEX coupling is included. The obsolete brake is not. |
+| Frame VC-ASM-3000 | 468 | 766 | Live lines. Gussets, the crossbar, the Winkel 40 and the gas spring are not included. |
 | Power VC-ASM-4000 | 2,655 | 2,780 | Includes Instagrid at EUR 2,500. Supply price is unknown. |
 | Control VC-ASM-5000 | 1,565 | 2,460 | Option A. SE050 and the 9 V converter are not included. |
 | Field VC-ASM-8000 | 1,259 | 2,300 | Lift, tilt, penetrometer, scanner. |
-| **Machine VC-ASM-0000** | **8,539** | **12,480** | Sum of the six rollups above. |
+| **Machine VC-ASM-0000** | **8,573** | **12,522** | Sum of the six rollups above. |
 | Casing kit VC-KIT-6000 | 2,007.85 | 2,007.85 | Offer prices. Half-shell price is unknown. |
 | Positioning kit VC-KIT-7000 | 2,020 | 2,040 | viDoc plus WLAN bridge. |
 

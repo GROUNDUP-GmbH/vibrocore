@@ -16,7 +16,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `gas-spring-vs-electric-tilt`: BOM.md §3 #38 gas-spring tilt (VC-FR-4700) conflicts with §8b electric tilt (#73-75). V1.1 firmware drives the electric tilt. VC-FR-4700 is obsolete/alternative and is not on the live frame BOM.
 - `option-b-savings-v1-vs-v11`: Realistic budget is a rounded scenario, not the YAML rollup. Option B is EUR 530 less than Option A for V1 (8968-8438) and EUR 680 less for V1.1 (10718-10038).
 - `core-scanner-subtotal-mismatch`: Closed 2026-11-19. The scanner subtotal is the VC-ASM-8400 rollup, EUR 429-780.
-- `sampling-concept-2026-11-19`: The sampling string is the 3.25 in outer casing and cutting shoe 205449. Open tubes sit in the split carrier. O-ring 201325 stays, because it seals casing joints. Drive head 201385 and retainer 208472 are obsolete and are not on a BOM.
+- `sampling-concept-2026-11-19`: The sampling string is the 3.25 in outer casing and cutting shoe 205449. Open tubes sit in the split carrier. O-ring 201325 stays, because it seals casing joints. Drive head 201385 and retainer 208472 are obsolete and are not on a BOM. Approximation solids of the DT325 sheath and the drive heads are a study on that casing. They are not kit lines.
 - `mast-height-deficit`: The 1500 mm profile is unchanged. The study layout in docs/engineering/MAST-LAYOUT.md and cad/export/layout/mast-stack.svg computes the deficit for one 1219.2 mm casing plus the head, the shoe and the adapter. Shoe length, adapter length, carriage height and ground clearance are TBD.
 - `se050-double-count`: Closed 2026-11-19. VC-CT-6410 is obsolete. The SE050 breakout is inside VC-CT-6400 and is not a second purchase.
 - `rut241-9v-converter`: Closed 2026-11-19. VC-CT-6620 is obsolete. The RUT241 input is 9-30 V DC. The router runs from the 24 V rail.
@@ -28,8 +28,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-ASM-1000` Sonic head assembly: Motor centre distance is only a minimum of 170 mm. It is not a frozen pitch, so the motors are not placed in the 3D model.
 - `VC-ASM-1000` Sonic head assembly: Isolator coordinates are not given.
 - `VC-ASM-2000` Hub system assembly: Carriage plate length and width are not given, only the 10 mm thickness.
-- `VC-ASM-2000` Hub system assembly: Drive-shaft length is not given. Diameter is published as a range, 25-30 mm.
-- `VC-ASM-3000` Frame assembly: Profile connector types are not identified beyond mk standard corners or T-slot nuts.
+- `VC-ASM-2000` Hub system assembly: The placed ROTEX spider is 92 Sh-A. Its TKmax is 190 Nm. Gearbox T2max is 365 Nm. Confirm spider 64 Sh-D and hub 020285103000.
 - `VC-ASM-3000` Frame assembly: Stabiliser feet have no selected order codes.
 - `VC-ASM-4000` Power system assembly: no solid. Dimensions were not complete enough to model.
 - `VC-ASM-5000` Control system assembly: no solid. Dimensions were not complete enough to model.
@@ -85,16 +84,15 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-CT-6700` Wiring harness: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6800` RevPi Connect 4: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6810` RevPi DIO module: no solid. Dimensions were not complete enough to model.
-- `VC-FR-4100` Aluminium profile 50x100x1500: mk 2004 slot geometry is not in the repository. The solid is the outer envelope only and is not a machining model.
-- `VC-FR-4100` Aluminium profile 50x100x1500: Alloy and the exact mk order code.
-- `VC-FR-4100` Aluminium profile 50x100x1500: Cut length of the drive-side upright. The purchased length stays 1500 mm. The pose starts that tube above the gearbox.
-- `VC-FR-4150` Bottom frame gusset: Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
-- `VC-FR-4160` Top frame gusset: Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
-- `VC-FR-4170` Mid frame gusset: Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
-- `VC-FR-4180` Drive crossbar mk 2004: Final cut length follows the profile pitch. The 300 mm pitch is TBD. Not in BOM.md v1.
-- `VC-FR-4182` Gearbox flange: Thickness, outline and the bolt pattern. Not in BOM.md v1.
-- `VC-FR-4185` Lower front stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
-- `VC-FR-4186` Lower rear stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
+- `VC-FR-4125` Cylinder screw M6x20: The Neugart STEP output holes lie on a 100 mm circle and are about 16 mm deep. These screws stay on the specified 90 mm circle and do not enter those bores.
+- `VC-FR-4150` Bottom frame gusset: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4160` Top frame gusset: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4170` Mid frame gusset: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4180` Drive crossbar mk 2004: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4182` Gearbox mount plate: M6 property class. The study uses 8.8. Not in BOM.md v1.
+- `VC-FR-4183` Bearing seat flat: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4184` Profile stiffener angle: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4185` Lower front stiffener: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4190` Front top stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4195` Rear top stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4200` Profile connector: Which mk connector.
@@ -110,22 +108,31 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-FR-4900` Fastener kit, frame: no solid. Dimensions were not complete enough to model.
 - `VC-GP-7100` Probe rod 3.25 in x 48 in: no solid. Dimensions were not complete enough to model.
 - `VC-GP-7150` Probe rod O-ring pack: no solid. Dimensions were not complete enough to model.
-- `VC-GP-7200` Cutting shoe 3.25 in: no solid. Dimensions were not complete enough to model.
+- `VC-GP-7200` Cutting shoe 3.25 in, approximation: Thread form, pitch and engagement are not stated by Geoprobe.
+- `VC-GP-7200` Cutting shoe 3.25 in, approximation: Length is the existing 80 mm placeholder. The SOP does not state a length.
 - `VC-GP-7300` Drive cap GH60: no solid. Dimensions were not complete enough to model.
-- `VC-GP-7310` DT325 drive head: no solid. Dimensions were not complete enough to model.
+- `VC-GP-7310` DT325 drive head, approximation: Thread form, pitch and engagement are not stated by Geoprobe.
+- `VC-GP-7310` DT325 drive head, approximation: Body diameter, body length and pin length are assumptions. See cad/vendor/DT325/SOURCE.md.
+- `VC-GP-7320` DT325 sheath drive head, approximation: Thread form, pitch and engagement are not stated by Geoprobe.
+- `VC-GP-7320` DT325 sheath drive head, approximation: Body diameter, body length and pin length are assumptions. See cad/vendor/DT325/SOURCE.md.
+- `VC-GP-7330` DT325 sample sheath 60 in, approximation: Thread form, pitch and engagement are not stated by Geoprobe.
+- `VC-GP-7330` DT325 sample sheath 60 in, approximation: Outside diameter, inside diameter and wall thickness are assumptions. See cad/vendor/DT325/SOURCE.md.
 - `VC-GP-7400` Core liner 3.25 inch: no solid. Dimensions were not complete enough to model.
 - `VC-GP-7410` DT325 liner retainer HD: no solid. Dimensions were not complete enough to model.
-- `VC-HB-2100` Servo motor 1FL2104: Vendor STEP is not in the repository. The shaft is inside the gearbox envelope and is not a second solid.
-- `VC-HB-2110` Lift motor bracket: Plate thickness, bolt size and weld sizes. Not in BOM.md v1.
+- `VC-HB-2110` Lift motor bracket: Not placed. VC-FR-4182 carries the gearbox. The motor bolts to the input.
+- `VC-HB-2122` Gearbox clamp screw: Clamp-screw size is TBD. The PLE manual PDF is not in cad/vendor/VC-HB-2200.
+- `VC-HB-2122` Gearbox clamp screw: Clamp-screw tightening torque is TBD. The same PDF is not in the repository.
+- `VC-HB-2124` Adapter access plug: Access-plug order code is TBD. The PLE manual PDF is not in cad/vendor/VC-HB-2200.
+- `VC-HB-2200` Planetary gearbox PLE120-040: Input adapter of article 100460948 was configured for 1FL2104-4AG10. Re-check it for the current oil seal and for successor 1FL2104-4BG. The STEP recess is 4.4 mm deep and has no keyway.
 - `VC-HB-2300` SINAMICS S200 servo drive: PROFINET order 6SL5510-1BB11-0AF0 if the PLC does not use pulse and direction. The price is not a quote.
-- `VC-HB-2400` Elastomer coupling: Gearbox output is Ø25 mm. The STEP hub is 32H7, so the bore is not a fit. The hub is seated on the journal. The chain-side hub is unbored.
-- `VC-HB-2500` Hub drive shaft: Diameter inside the 25-30 mm range, length, key size and sprocket seat.
-- `VC-HB-2600` Pillow block UCP 206: Confirm 30 mm bore against the final shaft diameter. HUB_SYSTEM.md also mentions UCP 205/206.
-- `VC-HB-2700` Duplex chain 10B-2: no solid. Dimensions were not complete enough to model.
+- `VC-HB-2500` Chain bearing shaft: no solid. Dimensions were not complete enough to model.
+- `VC-HB-2700` Duplex chain 10B-2: Purchase length 3.2 m stays a placeholder until the lift height is decided.
+- `VC-HB-2700` Duplex chain 10B-2: Breaking load is not stated by G&G. Do not assign a value.
+- `VC-HB-2800` Sprocket 10B-2 15T drive: Finish taper bush 1210 to Ø25 h7 for the output shaft and the 8x7x40 key. Not in BOM.md v1.
 - `VC-HB-2810` Sprocket 10B-2 15T idle: no solid. Dimensions were not complete enough to model.
 - `VC-HB-2820` Idler shaft: Key size and the bearing catalogue number. Not in BOM.md v1.
 - `VC-HB-2830` Idler bearing bracket: Bearing catalogue number, slot length and bolt size. Not in BOM.md v1.
-- `VC-HB-2900` Chain tensioner: Selected model.
+- `VC-HB-2900` Chain tensioner: Housing outline beyond the 36 mm to 57 mm catalogue range. Not a measured drawing.
 - `VC-HB-3000` Power-off brake 24 V: Obsolete. Do not buy. The motor holding brake replaces this part.
 - `VC-HB-3200` Carriage plate: Length, width, hole pattern and chain-pin position. Thickness alone is not enough to model a blank.
 - `VC-HB-3300` Fastener kit, hub: no solid. Dimensions were not complete enough to model.
@@ -205,8 +212,22 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 ## Modelled in this revision
 
 - `VC-FR-4100` Aluminium profile 50x100x1500: box, fidelity `envelope` (docs/engineering/BOM.md#3).
+- `VC-FR-4186` Lower rear stiffener: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
+- `VC-FR-4120` mk T-slot nut M8: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
+- `VC-FR-4121` mk cylinder screw M8: cylinder, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
+- `VC-FR-4122` mk angle bracket 40: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
+- `VC-FR-4124` Hex nut M8: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
+- `VC-FR-4125` Cylinder screw M6x20: cylinder, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
+- `VC-FR-4198` Upper profile mount: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4300` Bottom steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).
 - `VC-FR-4400` Top steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).
+- `VC-GP-7200` Cutting shoe 3.25 in, approximation: dt325, fidelity `partial` (cad/vendor/DT325/SOURCE.md).
+- `VC-GP-7310` DT325 drive head, approximation: dt325, fidelity `partial` (cad/vendor/DT325/SOURCE.md).
+- `VC-GP-7320` DT325 sheath drive head, approximation: dt325, fidelity `partial` (cad/vendor/DT325/SOURCE.md).
+- `VC-GP-7330` DT325 sample sheath 60 in, approximation: dt325, fidelity `partial` (cad/vendor/DT325/SOURCE.md).
+- `VC-HB-2120` Motor flange screw M6x16: cylinder, fidelity `envelope` (docs/engineering/LIFT-DRIVE-SIZING.md).
+- `VC-HB-2122` Gearbox clamp screw: cylinder, fidelity `envelope` (cad/vendor/VC-HB-2200/SOURCE.md).
+- `VC-HB-2124` Adapter access plug: cylinder, fidelity `envelope` (cad/vendor/VC-HB-2200/SOURCE.md).
 - `VC-SH-1100` OLI MVE 400/6-HF: box, fidelity `envelope` (docs/design/SONIC_HEAD.md#2.2).
 - `VC-SH-1301` Vibrating plate blank: box, fidelity `partial` (docs/engineering/DIMENSIONING.md#3.1).
 - `VC-SH-1302` Stiffener rib: box, fidelity `solid` (docs/engineering/DIMENSIONING.md#3.1).

@@ -86,30 +86,41 @@ The sizing and the torque limit are in [LIFT-DRIVE-SIZING.md](../engineering/LIF
 
 | Parameter              | Value                              |
 |------------------------|------------------------------------|
-| Chain type             | 10B-2 duplex roller chain          |
-| Pitch                  | 15.875 mm (5/8″)                  |
-| Breaking load          | ~44.5 kN (10B-2)                  |
-| Working load (10:1 SF) | ~4.5 kN                           |
-| Sprocket (drive)       | 10B-2, 15 teeth, taper-lock bore   |
-| Sprocket (idle)        | 10B-2, 15 teeth, bearing-mounted   |
-| Chain length           | ~3.2 m (for 1.5 m stroke + wrap)   |
+| Chain type             | G&G 600-302-0000, 10B-2 duplex     |
+| Connecting link        | G&G 600-302-0001                   |
+| Pitch                  | 15.875 mm (ISO 606)                |
+| Roller / inner width   | 10.16 mm / 9.65 mm                 |
+| Transverse pitch       | 16.59 mm                           |
+| Breaking load          | Not stated by G&G. Open point.     |
+| Working load           | 4.5 kN                             |
+| Sprocket (drive)       | G&G 501-302-0515, 10B-2, 15 teeth  |
+| Sprocket (idle)        | Same solid, bearing-mounted        |
+| Tensioner              | G&G 681-302-1504, range 36–57 mm   |
+| Chain length           | 3.2 m placeholder until lift height |
 | Lubrication            | Pre-greased + periodic oil          |
 
-### 3.4 Drive Shaft (Separate from Gearbox Output)
+### 3.4 Drive sprocket between two bearings
 
-The gearbox output connects to a **separately mounted drive shaft** via an
-elastomer coupling. This shaft carries the drive sprocket and is supported by
-two self-aligning ball bearings in pillow blocks bolted to the base plate.
+The drive sprocket sits on a Ø30 mm C45 shaft, between two SKF SYJ 30 TF bearings.
+A ROTEX 28 coupling joins that shaft to the PLE120 output.
+The gearbox shaft is Ø25 h7 by 55 mm. It does not carry the sprocket.
+The chain radial load is 5.8 kN. The PLE120 Fr max is 2000 N, so the sprocket must not load that shaft.
+The numbers are in [LIFT-DRIVE-SIZING.md](../engineering/LIFT-DRIVE-SIZING.md).
+No pretension is stated. The bearing load is half of the pull when the sprocket is centred.
+
+The bearing feet bolt to two 25 mm flats, VC-FR-4183. The bolts are M12 and pass through the bottom plate.
+The gearbox flange bolts to one bent plate, VC-FR-4182. The foot of that plate bolts through the bottom plate.
+Two gussets and one ear rib are fillet-welded to that plate, weld a5 on both sides.
+The welds stop at the plate. The profile joints and the bottom-plate joints stay bolted.
 
 | Parameter              | Value                              |
 |------------------------|------------------------------------|
-| Shaft diameter         | 25–30 mm                           |
-| Coupling               | R+W EKH / KTR ROTEX 28            |
-| Bearings               | UCP 205/206 pillow blocks          |
-| Sprocket mount         | Taper-lock bush                    |
-
-**Rationale:** The chain sprocket applies radial loads that would damage the
-gearbox output bearings if directly mounted. The separate shaft absorbs these loads.
+| Gearbox shaft          | Ø25 h7 × 55 mm, torque only        |
+| Chain shaft            | Ø30 mm C45, key 8 × 7              |
+| Sprocket mount         | On the Ø30 shaft, between the bearings |
+| Coupling               | ROTEX 28, hubs 25/30               |
+| Chain bearings         | Two SKF SYJ 30 TF, M12             |
+| Bearing load           | 2.9 kN each, C0 11.2 kN            |
 
 ## 4. Force Analysis
 

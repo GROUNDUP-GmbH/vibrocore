@@ -137,9 +137,7 @@ HEAD_FRONT_GAP_MM = 10.0
 BOTTOM_PLATE_REAR_OVERHANG_MM = 0.0
 # VC-FR-4500 closed bore. It guides the 82.55 mm casing VC-GP-7100, not the column.
 CASING_GUIDE_BORE_DIAMETER_MM = 83.0
-# The chain axis is the mast mid-plane (X = 0), in the gap between the uprights.
-# The lift motor sits above the bottom plate, outside the head sweep on the drive side.
-# The brake body is flush with the profile rear face and does not enter the tilt zone.
+# Old chain mid-plane. The drive sprocket now shares the gearbox axis.
 CHAIN_AXIS_X_MM = 0.0
 # Draft sheet for the frame gussets. Not a shop measurement.
 GUSSET_SHEET_THICKNESS_MM = 4.0
@@ -164,22 +162,37 @@ GEARBOX_FLANGE_MM = 115.0
 GEARBOX_LENGTH_MM = 204.0
 # Output shaft, from the output flange face to the tip. It is inside the 204 mm.
 OUTPUT_SHAFT_LENGTH_MM = 55.0
-# Siemens 1FL2104-4AG11-1MC0. Datasheet flange AB and overall length LB.
-# The Ø19 x 40 mm shaft enters the gearbox and is not a second solid.
+# VC-FR-4182. The output flange bolts to this plate. The sprocket sits outside it.
+MOUNT_PLATE_THICKNESS_MM = 12.0
+# Siemens 1FL2104-4AG11-1MC0. Flange AB is 81 mm.
+# 186.6 mm is the body behind the flange face. The STEP shaft adds 40 mm.
+# Overall length including that shaft is 226.6 mm.
 SERVO_FLANGE_MM = 81.0
 SERVO_BODY_LENGTH_MM = 186.6
+SERVO_SHAFT_LENGTH_MM = 40.0
+# Throat opening measured on the mk 2004 STEP. The T-slot undercut is wider.
+PROFILE_SLOT_WIDTH_MM = 10.10
 # Fallback coupling envelope. The placed solid is the ROTEX 28 STEP set. TBD when those files are absent.
 COUPLING_DIAMETER_MM = 65.0
 COUPLING_LENGTH_MM = 50.0
-# Shaft diameter at the top of the 25-30 mm range. It matches the UCP 206 bore.
+# Shaft diameter at the top of the 25-30 mm range. It matches the SYJ 30 TF bore.
+# The gearbox output is Ø25 h7. The ROTEX hub is 32H7. Neither fits this bore.
 SHAFT_DIAMETER_MM = 30.0
-# Pillow-block envelope. TBD. The bore is the 30 mm UCP 206 bore.
-PILLOW_LENGTH_MM = 30.0
-PILLOW_WIDTH_MM = 70.0
-PILLOW_HEIGHT_MM = 45.0
-# Chain strand section. TBD. The pitch is documented. The link CAD was not downloaded.
+# SKF SYJ 30 TF. Measured on the 3Dfindit STEP. Catalogue values are in SOURCE.md.
+# Length is along the shaft. Width is the foot. Height is the overall housing.
+PILLOW_CENTER_HEIGHT_MM = 42.9
+PILLOW_LENGTH_MM = 43.2
+PILLOW_WIDTH_MM = 165.0
+PILLOW_HEIGHT_MM = 82.5
+PILLOW_BOLT_SPAN_MM = 118.0
+# Old strand envelope. The placed chain uses the ISO 606 section below.
 CHAIN_SECTION_X_MM = 16.0
 CHAIN_SECTION_Y_MM = 32.0
+# ISO 606 size 10B-2. G&G publishes no chain CAD, so the section is these sizes.
+CHAIN_PITCH_MM = 15.875
+CHAIN_ROLLER_DIAMETER_MM = 10.16
+CHAIN_INNER_WIDTH_MM = 9.65
+CHAIN_TRANSVERSE_PITCH_MM = 16.59
 # VC-SH-1302 weld position along the plate length. TBD.
 # The ribs hang under the plate and must stay outside the top plate.
 RIB_CENTRE_X_MM = 170.0
@@ -287,7 +300,7 @@ PLACEHOLDERS: dict[str, tuple[float, str]] = {
     ),
     "servo_body_length_mm": (
         SERVO_BODY_LENGTH_MM,
-        "Siemens 1FL2104 overall length LB. The envelope is that square prism. No STEP yet.",
+        "Body length of Siemens 1FL2104 behind the flange face. The STEP shaft adds 40 mm.",
     ),
     "coupling_diameter_mm": (
         COUPLING_DIAMETER_MM,
@@ -299,23 +312,23 @@ PLACEHOLDERS: dict[str, tuple[float, str]] = {
     ),
     "pillow_length_mm": (
         PILLOW_LENGTH_MM,
-        "TBD. Envelope length of UCP 206 along the shaft. The 30 mm bore is the selected size.",
+        "SYJ 30 TF along the shaft. Catalogue base width A is 42 mm. The STEP bounding box is 43.2 mm.",
     ),
     "pillow_width_mm": (
         PILLOW_WIDTH_MM,
-        "TBD. Envelope width of UCP 206. The housing outline was not downloaded.",
+        "SYJ 30 TF foot length L. Bolt spacing J is 118 mm.",
     ),
     "pillow_height_mm": (
         PILLOW_HEIGHT_MM,
-        "TBD. Envelope height of UCP 206. The housing outline was not downloaded.",
+        "SYJ 30 TF overall height. Catalogue H is 82 mm. Centre height H1 is 42.9 mm.",
     ),
     "chain_section_x_mm": (
         CHAIN_SECTION_X_MM,
-        "TBD. Chain strand thickness. The 15.875 mm pitch is documented. The link CAD was not downloaded.",
+        "Old envelope thickness. The placed chain uses the ISO 606 roller diameter 10.16 mm.",
     ),
     "chain_section_y_mm": (
         CHAIN_SECTION_Y_MM,
-        "TBD. Chain strand width. Duplex 10B-2. The link CAD was not downloaded.",
+        "Old envelope width. The placed duplex rows use inner width 9.65 mm and transverse pitch 16.59 mm.",
     ),
     "rail_bottom_offset_mm": (
         RAIL_BOTTOM_OFFSET_MM,

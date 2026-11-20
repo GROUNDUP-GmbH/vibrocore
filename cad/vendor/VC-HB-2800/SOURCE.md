@@ -22,7 +22,8 @@ The tooth tip is about 82.7 mm.
 The published envelope tip is 83 mm.
 The width is 25.5 mm.
 The envelope width is 40 mm.
-The drive sprocket is placed on the envelope centre, at Z = 61.5 mm.
+The drive sprocket is placed on the Ø30 shaft at the machine centre.
+The exported solid is a faceted copy of this file.
 The idler VC-HB-2810 reuses this solid.
 It has no second file.
 The chain strands still stop outside the 83 mm envelope, so they stay clear of the teeth.

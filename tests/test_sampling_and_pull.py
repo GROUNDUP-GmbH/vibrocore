@@ -1,7 +1,9 @@
 """Decisions from the 2026-11-19 BOM review."""
 
+from cad.models.dt325 import SHOE_ID_MM
+from cad.models.mast_layout import SHOE_LENGTH_MM, SHOE_OD_MM
 from cad.models.split_carrier import bbox_mm, validate_split_carrier
-from cad.tools.bom import load_bom
+from cad.tools.bom import ROOT, load_bom
 from cad.tools.geometry import shape_for
 from cad.tools.pull_force import (
     allowable_pull_n,
@@ -36,6 +38,24 @@ def test_sampling_string_is_the_outer_casing_only():
         assert part.part_number not in children
         for assembly in bom.assemblies.values():
             assert part.part_number not in {line.part_number for line in assembly.lines}
+    assert "approximation" in drive_head.name
+    shoe = bom.part("VC-GP-7200")
+    assert "approximation" in shoe.name
+    assert shoe.geometry["diameter_mm"] == SHOE_OD_MM
+    assert shoe.geometry["length_mm"] == SHOE_LENGTH_MM
+    assert shoe.geometry["id_mm"] == SHOE_ID_MM
+    for number in ("VC-GP-7320", "VC-GP-7330"):
+        part = bom.part(number)
+        assert "approximation" in part.name
+        assert part.spec.startswith("Approximation.")
+        assert part.part_number not in children
+        for assembly in bom.assemblies.values():
+            assert part.part_number not in {line.part_number for line in assembly.lines}
+    source = (ROOT / "cad/vendor/DT325/SOURCE.md").read_text(encoding="utf-8")
+    assert "| Dimension | Value | Basis |" in source
+    assert "Assumed" in source
+    assert "9742" in source and "37708" in source
+    assert "not in the assembly" in source
 
 
 def test_casing_rod_is_one_rod_and_the_gh60_cap_is_off_the_kit():

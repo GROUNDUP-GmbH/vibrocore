@@ -21,7 +21,9 @@ The supply is 230 V single phase through the S200 drive.
 The shaft is Ø19 mm by 40 mm. The flange is 81 mm square.
 The centering diameter is 70 mm. The pitch circle is 90 mm.
 The holding brake is 3.3 Nm. The encoder is a multiturn absolute encoder.
-The mass is about 4.1 kg. The overall length is 186.6 mm.
+The mass is about 4.1 kg.
+The body behind the flange face is 186.6 mm.
+The SiePortal STEP adds the 40 mm shaft, so the overall length is 226.6 mm.
 
 The gearbox torques are from the Neugart PLE catalogue, 2026-10.
 The sizes and the mass are from the vendor solid of article 100460948.
@@ -64,7 +66,12 @@ That is above T2max.
 The previous PLPE120 at i = 40 has a cyclic torque of 172 Nm.
 A hard extraction is about 187 Nm. That gearbox is above its cyclic torque.
 PLE120 at i = 40 stays below T2Z for the same case.
-The chain load goes into the separate shaft, not into the gearbox.
+The sprocket does not sit on the gearbox shaft.
+Neugart PLE_2026_05_EN.pdf rates the PLE120 output at Fr max 2000 N, Fa max 3800 N and MK max 115 Nm.
+The design chain pull is 5.8 kN. That is above Fr max.
+At 25 mm from the flange, 5.8 kN gives 145 Nm, which is above MK max.
+The chain radial load goes into the two SYJ bearings. The gearbox shaft sees torque only.
+No chain pretension is stated. The radial load used here is the pull itself. Pretension would add twice the slack-side tension.
 
 ## 4. Power loss during pull-out
 
@@ -83,7 +90,70 @@ A second brake, if one is required, must satisfy brake torque × 40 ≤ 500 Nm.
 The old 16 Nm brake gives 640 Nm at the output.
 That is above T2Stop. Do not use it.
 
-## 5. Sources
+## 5. Phase-out
+
+1FL2104-4AG11-1MC0 is Phase Out Announce.
+The Siemens successor is SH40 New, order pattern 1FL2104-4BG□1-□□C0.
+The announcement is Siemens document 109997329, dated 2026-01-29.
+The S200 PN / 1FL2 operating instructions are 06/2026, document 110005040.
+The S200 drive 6SL5510-1BB11-0AA0 stays.
+
+| Item | Successor | This motor |
+|---|---|---|
+| Length with brake | 192.6 mm | 226.6 mm |
+| Flange thickness | 8 mm | 6.4 mm |
+| Usable IP65 shaft | 19 mm by 37 mm | 19 mm by 32 mm |
+| Mass | 3.2 kg | 4.1 kg |
+| Inertia | 0.97 kgcm² | not used here |
+| Maximum torque | 11.2 Nm | 10.8 Nm |
+| Enclosure | always IP65 | IP65 on this order |
+
+These items stay the same.
+Flange 81 mm square. Centering diameter 70 mm. Pitch circle 90 mm. Four holes Ø6.6 mm.
+Shaft 19 h6. Key 6 mm by 6 mm by 25 mm. Holding brake 3.3 Nm.
+
+The selected mass stays 4.1 kg. Do not switch the model to 3.2 kg.
+The Neugart input adapter of article 100460948 was configured for 1FL2104-4AG10.
+Re-check that adapter for the successor.
+The current STEP oil seal extends about 8 mm. The gearbox recess is 4.4 mm deep and has no keyway.
+
+## 6. Mount
+
+VC-FR-4182 is one 10 mm S355 plate, laser cut, with one bend and three welded gussets.
+Fillet weld a5 on both sides of each gusset, along the joint with the plate.
+The profile joints and the bottom-plate joints stay bolted. VC-FR-4186 stays a bolted sheet.
+Four ISO 4762 M6x20 screws on PCD 90 mm hold the flange.
+The plate is 10 mm. The specified thread depth is 15 mm. The engagement is 10 mm.
+The output pilot is Ø80 mm. The plate bore is Ø84 mm.
+The plate has no inspection window. Remove VC-FR-4186 to reach this joint.
+The motor uses four ISO 4762 M6x16 screws. The flange is 6.4 mm. The thread engagement is 9.6 mm.
+The clamp-screw size and the tightening torque are TBD.
+The foot uses two M8x30 through bolts. VC-FR-4184 is one 40 x 40 x 6 angle on the idle inner slots.
+
+T2max is 365 Nm.
+Each bolt sees 365000 N·mm / (4 × 45 mm) = 2028 N.
+An M6-8.8 proof load is about 11.6 kN. The bolts are inside that load.
+
+The chain shaft is Ø30 mm, C45, between the two bearings.
+The bearing centres are 72.7 mm apart and the sprocket is centred, so the bending moment is 5800 N × 72.7 mm / 4 = 105415 N·mm.
+The full section modulus is 2651 mm³. With one DIN 6885 keyway, 8 mm by 4 mm, it is about 2290 mm³.
+At T2max 365 Nm the von Mises stress is 126 MPa on the full section and 146 MPa with the keyway.
+EN 10083-2 gives C45E, normalized, 16 mm to 100 mm, a minimum yield of 305 MPa.
+The safety factor is 2.4 on the full section and 2.1 with the keyway.
+The chain torque at 5.8 kN and 37.9 mm is 220 Nm. That case is lower.
+A quenched shaft is stronger than this normalized figure.
+
+Each SYJ 30 TF sees 2.9 kN. C0 is 11.2 kN, so the static safety factor is 3.86.
+C is 19.5 kN. No pretension is included. Pretension would raise both loads.
+Each foot takes two M12 bolts. The slot is 17 mm wide, so M12 leaves the J adjustment.
+
+The ROTEX 28 spider in the model is 92 Sh-A. KTR lists TKN 95 Nm and TKmax 190 Nm for that spider.
+Both the 220 Nm chain torque and T2max 365 Nm are above 190 Nm.
+The 64 Sh-D spider lists TKmax 400 Nm. That covers 365 Nm. The placed spider file is unchanged.
+Purchase hubs are Ø25H7 020285102500 and Ø30 020285103000. Confirm 020285103000 on the KTR page.
+The placed STEP is the 32H7 hub and an unbored hub with a Ø30.4 bore cut.
+
+## 7. Sources
 
 1. Siemens datasheet 1FL2104-4AG11-1MC0, generated 2026-11-20.
    https://mall.industry.siemens.com/spice/docuservice/rest/document.spring?articleNumber=1FL21044AG111MC0&documentGroup=TED&documentId=DCS_DATASHEET_CLEANED&language=en&region=ww
@@ -94,3 +164,10 @@ That is above T2Stop. Do not use it.
 4. Neugart CAD for article 100460948, generated 2026-11-20.
    The PDF and the DXF from that mail are not stored here.
    See cad/vendor/VC-HB-2200/SOURCE.md.
+5. Siemens SiePortal STEP 1FL2104-4AG11-1MC0_3D_en.STP.
+   See cad/vendor/VC-HB-2100/SOURCE.md.
+6. Siemens document 109997329, 2026-01-29. Successor announcement.
+7. Siemens document 110005040. S200 PN / 1FL2 operating instructions, 06/2026.
+8. Neugart PLE operating instructions PLE_2026_05_EN.pdf. PLE120 Fr max 2000 N, Fa max 3800 N, MK max 115 Nm.
+9. EN 10083-2. C45E normalized, 16 mm to 100 mm, Re min 305 MPa.
+10. KTR ROTEX catalogue, size 28. 92 Sh-A TKmax 190 Nm. 64 Sh-D TKmax 400 Nm.

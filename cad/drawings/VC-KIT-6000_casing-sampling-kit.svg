@@ -10,7 +10,7 @@
 <text x="20" y="42" font-size="2.8" font-family="sans-serif">Item  Part number   Rev  Qty  Name</text>
 <text x="20" y="47" font-size="2.8" font-family="sans-serif">1      VC-GP-7100     A    2    Probe rod 3.25 in x 48 in</text>
 <text x="20" y="51.2" font-size="2.8" font-family="sans-serif">2      VC-GP-7150     A    1    Probe rod O-ring pack</text>
-<text x="20" y="55.400000000000006" font-size="2.8" font-family="sans-serif">3      VC-GP-7200     A    4    Cutting shoe 3.25 in</text>
+<text x="20" y="55.400000000000006" font-size="2.8" font-family="sans-serif">3      VC-GP-7200     A    4    Cutting shoe 3.25 in, approximation</text>
 <text x="20" y="59.60000000000001" font-size="2.8" font-family="sans-serif">4      VC-SP-7620     A    1    Split carrier half A</text>
 <text x="20" y="63.80000000000001" font-size="2.8" font-family="sans-serif">5      VC-SP-7621     A    1    Split carrier half B</text>
 <text x="20" y="68.00000000000001" font-size="2.8" font-family="sans-serif">6      VC-SP-7630     A    1    Split carrier fasteners</text>
