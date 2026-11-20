@@ -16,20 +16,20 @@ The Vibrocore V1 control system is built around the **WAGO PFC200 XTR (750-8212)
   │  must have STO │◄───────────►│  SDR-120-24 dedicated │
   │  order open    │  RS-485     │  plus an open 24 V slot │
   └──────┬──────┘ Slave addr 1   └────────┬──────────┘
-         │ 3× AC                          │ 48V DC
+         │ 3× AC                          │ 24 V DC
          ▼                       ┌────────┴──────────┐
-  ┌─────────────┐                │  Mean Well         │
-  │ 2× OLI MVE │                │  SDR-120-24 (V1.1) │
-  │ 400/6-HF   │                │  230V to 24V/5A    │
+  ┌─────────────┐                │  24 V rail         │
+  │ 2× OLI MVE │                │  dedicated SDR-120 │
+  │ 400/6-HF   │                │  plus open slot    │
   │ 7.2 kg ea. │                └────────┬──────────┘
-  └─────────────┘                        │ 24V DC
+  └─────────────┘                        │ 24 V DC
                                   ┌──────▼──────────────────────────────┐
-                                  │       WAGO PFC200 XTR (750-8212)    │
-                                  │  Slot 1: 750-430 XTR  4× DI 24V DC │
-                                  │  Slot 2: 750-530 XTR  4× DO 24V DC │
-                                  │  Slot 3: 750-637      Encoder IF    │
-                                  │  Slot 4: 750-826      RS-485        │
-                                  │  Slot 5: 750-600      End module    │
+                                  │       WAGO PFC200 XTR               │
+                                  │  Slot 1: 750-430/040-000  8× DI    │
+                                  │  Slot 2: 750-537/040-000  8× DO    │
+                                  │  No encoder slot. 1FL2 via S200    │
+                                  │  Slot 3: 750-652 candidate RS-485  │
+                                  │  Slot 4: 750-600 end module        │
                                   └──────┬──────────────────────────────┘
                                          │ RS-485 Modbus RTU
                                ┌─────────┴──────────────┐
@@ -69,23 +69,17 @@ The Vibrocore V1 control system is built around the **WAGO PFC200 XTR (750-8212)
 | DO 2    | `xVFD_Reset`     | HIGH   | VFD fault reset pulse (200ms)        |
 | DO 3    | `xAlarmBeacon`   | HIGH   | VC-CT-6230, 24 V, current at or below 0.5 A |
 
-### Slot 3 — 750-637: Incremental Encoder Interface
+### Position — 1FL2 absolute encoder through the S200
 
-| Parameter | Value                                |
-|-----------|--------------------------------------|
-| Encoder   | 1000 ppr quadrature. VC-HB-3410 is specified on the chain shaft. |
-| Register  | `%IW4` (low word) + `%IW5` (high word). FB_HubControl does not read these words. |
-| Scale     | `rENCODER_PULSES_PER_MM` stays 671.9. Do not change it in this revision. |
-| Zero      | Set in Nanotec C5-E on home (upper limit) |
+VC-HB-3410 is obsolete.
+Do not fit a 1000 ppr chain-shaft encoder.
+WAGO 750-637 is obsolete.
+There is no encoder slot and no `%IW4` / `%IW5` mapping.
+Position comes from the 1FL2 absolute encoder through the S200.
+`rENCODER_PULSES_PER_MM` stays 671.9.
+Do not change that constant in this revision.
 
-671.9 equals (1000 x 4 x 40) / (15 x 15.875). The factor 40 is the gearbox ratio.
-That scale fits an encoder on the motor shaft.
-A chain-shaft encoder at 1000 ppr is (1000 x 4) / (15 x 15.875) = 16.80 counts per mm.
-The hub position in firmware comes from the C5-E Modbus word, divided by 671.9.
-The chain-shaft encoder is the 750-637 input. The two scales are not the same.
-Do not retune 671.9 until one encoder location is chosen.
-
-### Slot 4 — 750-826: RS-485 Modbus RTU
+### Slot 3 — 750-652 candidate: RS-485 Modbus RTU
 
 | Parameter    | Value            |
 |--------------|------------------|
@@ -98,7 +92,7 @@ Do not retune 671.9 until one encoder location is chosen.
 **Bus topology (V1.1 — with penetrometer ADC):**
 
 ```
-WAGO 750-826 ── Siemens V20 (addr 1) ── Nanotec C5-E (addr 2) ── Force ADC (addr 3)
+WAGO 750-652 candidate ── sonic inverter (addr 1) ── S200 (addr 2) ── Force ADC (addr 3)
                                                                    [120Ω term. here]
 ```
 
@@ -152,7 +146,7 @@ The RevPi DIO module has 14 DI and 14 DO. After base system and V1.1 additions:
 
 | Signals | Base (V1) | +V1.1 | Total used | DIO capacity |
 |---------|-----------|--------|------------|--------------|
-| DI (digital in) | 6 (4 limits + 2 encoder) | +4 (actuator limits) | **10** | 14 ✓ |
+| DI (digital in) | 4 (limits, E-stop, alarm) | +4 (actuator limits) | **8** | 14 ✓ |
 | DO (digital out) | 4 | +4 (actuator control) | **8** | 14 ✓ |
 
 RevPi only needs the **PSU upgrade** (SDR-120-24) for actuator current.
@@ -475,7 +469,7 @@ well-suited for prototyping or cost-sensitive builds.
 | Flash | 4 GB eMMC | 8 / 32 GB eMMC |
 | **Temp range** | **−40 °C … +70 °C** | −25 °C … +55 °C |
 | **Vibration** | **5g (EN 60068-2-6)** | EN 61131-2 (less explicit) |
-| RS-485 | Via 750-826 module | **Built-in** (4-pin screw) |
+| RS-485 | Via 750-652 candidate | **Built-in** (4-pin screw) |
 | Ethernet | 2× 10/100 | 2× Gigabit |
 | Docker | FW ≥ 23 (built-in) | **Native** (full Raspberry Pi OS) |
 | CODESYS | Dedicated Runtime (licensed w/ HW) | Soft PLC on PREEMPT_RT Linux |
@@ -491,23 +485,24 @@ well-suited for prototyping or cost-sensitive builds.
 |-------------|-----------------|------------------|
 | 4× DI 24V | 750-430 XTR (€60–90) | **RevPi DIO** covers all → |
 | 4× DO 24V | 750-530 XTR (€60–90) | **RevPi DIO** covers all → |
-| Encoder (quadrature) | 750-637 (€100–150) | **RevPi DIO** (built-in counter/encoder mode) |
-| RS-485 Modbus RTU | 750-826 (€80–120) | **Built into Connect 4 base** |
+| Chain encoder | Obsolete. VC-HB-3410 and 750-637 are not fitted. | Position is the 1FL2 through the S200 |
+| RS-485 Modbus RTU | 750-652 candidate (€80–120) | **Built into Connect 4 base** |
 | End module | 750-600 (€10–20) | Not required |
-| **I/O total** | **€310–470** (4 modules) | **€196** (1× RevPi DIO) |
+| **I/O total** | **€210–320** (DI, DO, serial, end) | **€196** (1× RevPi DIO) |
 
-The RevPi DIO (€196) replaces four WAGO modules in one unit because its 14 DI
-channels are individually configurable as digital input, counter, or **quadrature
-encoder** — sufficient for the 1000 ppr chain encoder at max ~10 kHz count rate.
+The RevPi DIO replaces the digital input and output modules.
+It does not replace an encoder module.
+The chain encoder is obsolete.
+Do not use the DIO encoder mode for a chain encoder.
 
 ### Controller cost summary
 
 | Item | WAGO Option A | RevPi Option B |
 |------|--------------|----------------|
 | Base controller | €600–900 | ~€450 (Connect 4 4 GB + RAM surcharge) |
-| I/O modules | €310–470 | €196 (1× DIO) |
-| **Controller subtotal** | **€910–1,370** | **~€646** |
-| Savings vs. WAGO | — | **~€270–720** |
+| I/O modules | €210–320 | €196 (1× DIO) |
+| **Controller subtotal** | **€810–1,220** | **~€646** |
+| Savings vs. WAGO | — | **€164–574** |
 
 ### Decision guidance
 

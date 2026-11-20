@@ -87,8 +87,8 @@ complexity reduction vs. V1 custom design.*
 |47 | WAGO PFC200 XTR             | 750-8212, 1 GHz Cortex-A8, 512 MB RAM, 4 GB Flash, −40..+70°C, 5g vib, 2×ETH, RS-485, Docker built-in (FW ≥ 23) | 1 | 600–900 | wago.com (DE) |
 |48 | WAGO 750-430 XTR            | 4× DI 24V DC, CAGE CLAMP                                 |   1 |   60–90   | wago.com (DE)                |
 |49 | WAGO 750-530 XTR            | 4× DO 24V DC, 0.5A, CAGE CLAMP                           |   1 |   60–90   | wago.com (DE)                |
-|50 | WAGO 750-637                | Incremental encoder interface                             |   1 |  100–150  | wago.com (DE)                |
-|51 | WAGO 750-826                | RS-485 Modbus RTU serial interface                        |   1 |   80–120  | wago.com (DE)                |
+|50 | WAGO 750-637                | Obsolete. Position comes from the 1FL2 absolute encoder through the S200. | 0 | — | Do not buy |
+|51 | WAGO 750-652                | RS-485 candidate. Article 750-826 does not exist. Order is not frozen. | 1 | 80–120 | wago.com (DE) |
 |52 | WAGO 750-600                | End module                                                |   1 |   10–20   | wago.com (DE)                |
 |53 | Limit switches              | Inductive, M12, NC, IP67                                 |   2 |   30–60   | ifm / Sick (DE)              |
 |54 | Emergency stop              | 2-NC mushroom. One contact is hard-wired to the safety relay. | 1 | 40–70 | Eaton / Schneider (EU) |
@@ -124,7 +124,7 @@ Recommended for V1 prototype / cost-sensitive builds.*
 | # | Component | Spec | Qty | Est. € | Supplier |
 |---|-----------|------|-----|--------|----------|
 |47b| RevPi Connect 4 | CM4 Quad-Core A72 1.5 GHz, 4 GB RAM, 32 GB eMMC, 2× GbE, RS-485 built-in, Docker-native, −25..+55 °C, DIN rail | 1 | 450–520 | [revolutionpi.com](https://revolutionpi.com/shop/en/revpi-connect4) (DE) |
-|48b| RevPi DIO module | 14× DI 24V + 14× DO 24V; DI configurable as quadrature encoder/counter — replaces WAGO 750-430 + 750-530 + 750-637 in one unit | 1 | 196–220 | revolutionpi.com (DE) |
+|48b| RevPi DIO module | 14× DI 24V + 14× DO 24V. Replaces the DI and DO modules. The chain encoder is obsolete. | 1 | 196 | revolutionpi.com (DE) |
 |49b| *(RS-485 built-in)* | Modbus RTU to Siemens V20 + Nanotec C5-E — no separate module needed | — | 0 | — |
 |50b–64b| Shared Option A lines, without the WAGO rack and without the obsolete SE050 and 9 V lines | | | inside the total below | same as §5 |
 
@@ -143,8 +143,8 @@ Arithmetic: Option A rollup EUR 1,465–2,310, minus the WAGO rack EUR 930–1,4
 
 **Control Subtotal Option B (RevPi): ~1,521–2,430 € (hardware only; software €0)**
 
-> **Option B savings vs. Option A: ~€300–600 less for the controller sub-system**
-> (RevPi base €646 vs. WAGO system €910–1,370)
+> **Option B savings vs. Option A:** use the subtotals above, EUR 1,224–1,599 against EUR 1,465–2,310.
+> The old WAGO band of EUR 910–1,370 included the obsolete 750-637 and is withdrawn.
 
 > **Key tradeoffs:**
 > - Temperature: RevPi −25 °C vs. WAGO −40 °C. For EU field use (March–November) this
@@ -153,9 +153,10 @@ Arithmetic: Option A rollup EUR 1,465–2,310, minus the WAGO rack EUR 930–1,4
 >   from drilling vibrations via rubber mounts — in practice both are adequate.
 > - CODESYS real-time: RevPi uses PREEMPT_RT Linux (soft PLC). For Vibrocore's
 >   500ms Modbus polling cycles this is more than sufficient.
-> - Encoder: RevPi DIO quadrature encoder mode handles 10 kHz count rate comfortably
->   (1000ppr × 10 mm/s = ~6.7 kHz max at drilling speed).
-> - I/O advantage: 1 RevPi DIO replaces 3 WAGO modules — simpler wiring.
+> - Position comes from the 1FL2 absolute encoder through the S200.
+>   VC-HB-3410 and WAGO 750-637 are obsolete.
+>   Do not use the RevPi DIO encoder mode for a chain encoder.
+> - I/O advantage: 1 RevPi DIO replaces the DI and DO modules.
 >
 > See `docs/design/CONTROL_SYSTEM.md#controller-comparison` for full analysis.
 
@@ -299,7 +300,7 @@ Hub carriage plate
    └────┬─────────────────────────┘
         │  RS-485 (existing Modbus RTU bus)
         ▼
-   WAGO 750-826 / RevPi RS-485 (Slave 3, after Slave 2 Nanotec C5-E)
+   WAGO 750-652 candidate / RevPi RS-485 (Slave 3). Article 750-826 does not exist.
 ```
 
 | # | Component | Spec | Qty | Est. € | Supplier |

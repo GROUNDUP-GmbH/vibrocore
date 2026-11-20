@@ -21,7 +21,7 @@ core imaging. See `docs/engineering/BOM.md §8` for BOM and cost details.
 │                                                                      │
 │  ┌──────────────────────────────────────────────────────────────┐   │
 │  │                  4. POWER SYSTEM                              │   │
-│  │  Instagrid ONE max (230V AC, 3.6 kW) → VFD + 24V/48V PSU   │   │
+│  │  Instagrid ONE max (230V AC) → S200 + inverter + two 24 V supplies │   │
 │  └──────────────────────────────────────────────────────────────┘   │
 │                                                                      │
 │  ┌──────────────────────────────────────────────────────────────┐   │
@@ -174,7 +174,8 @@ WAGO / RevPi (CODESYS / Python)
         │
         ├── 4× DI (Slot 1) ─── Limit switches: hub up/down, E-Stop, alarm
         ├── 4× DO (Slot 2) ─── Brake, hub enable, VFD reset, alarm beacon
-        ├── Encoder (Slot 3) ── 1000ppr chain shaft quadrature
+        ├── Position ── 1FL2 absolute encoder through the S200
+        │                 VC-HB-3410 and 750-637 are obsolete
         │
         ├── 4× DI (Slot 5) ─── Lift deployed/retracted, Tilt vertical/folded  [V1.1]
         ├── 4× DO (Slot 6) ─── Lift extend/retract, Tilt vertical/fold         [V1.1]

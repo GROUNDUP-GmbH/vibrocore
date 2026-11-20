@@ -249,26 +249,26 @@ Phase 5 — Return to top (0.5 m at 60 mm/s):    8 s × 0.2 kW    =   2 kJ
 
 Sonic subtotal:  ~86 kJ
 
-Hub power (all phases):
-  Penetration: 48V × 4A = 192 W × 67s = 12.9 kJ
-  Extraction:  48V × 6A = 288 W × 20s =  5.8 kJ
-  Return:      48V × 2A =  96 W ×  8s =  0.8 kJ
-  Hub subtotal: ~19.5 kJ
+Hub power:
+  The 48 V hub budget is withdrawn.
+  There is no 48 V rail.
+  The S200 and the 1FL2 run on 230 V AC from the Instagrid.
+  Do not use 19.5 kJ or the 48 V × 4 A / 6 A / 2 A lines.
 
-Grand total per cycle: 86 + 20 = 106 kJ ≈ 0.029 kWh
+Grand total per cycle: the old 106 kJ figure included that withdrawn hub term.
+The sonic subtotal above stays 86 kJ.
+A new hub energy figure is not calculated here.
 ```
 
 ### 6.4 Daily Energy Budget (100 cores)
 
 ```
-100 cycles × 0.029 kWh = 2.9 kWh
+The old 2.9 kWh/day figure included the withdrawn 48 V hub term.
+Instagrid ONE max stores 2.1 kWh.
+A 48 V 50 Ah LiFePO4 battery is not part of this machine.
+Do not use the old "~83 cores per charge" line.
 
-Instagrid ONE max: 2.1 kWh → sufficient for ~72 cores per charge
-→ With 2 charges: 144 cores/day — covers 100 cores easily ✓
-
-48V 50Ah LiFePO4 battery: 2.4 kWh → ~83 cores per charge
-
-V2 (OLI) uses ~48% less energy per cycle vs. V1 (custom 3 kW motor).
+V2 (OLI) uses ~48% less sonic energy per cycle vs. V1 (custom 3 kW motor).
 ```
 
 ## 7. Hub System Forces
