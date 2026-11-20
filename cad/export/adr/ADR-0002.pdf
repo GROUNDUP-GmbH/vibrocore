@@ -1,0 +1,211 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 1 /Kids [3 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 4866 >>
+stream
+BT
+/F1 10 Tf
+40 800 Td
+12 TL
+(ADR-0002) Tj
+T*
+(ADR-0002 Control software architecture) Tj
+T*
+(Status: Accepted) Tj
+T*
+(Parts: VC-CT-6800, VC-CT-6810, VC-CT-6220, VC-HB-2100, VC-HB-2300, VC-ASM-5000) Tj
+T*
+() Tj
+T*
+(# ADR-0002 - Control software architecture) Tj
+T*
+() Tj
+T*
+(## Status) Tj
+T*
+() Tj
+T*
+(Stefan \(CTO\) accepted this decision on 2026-11-20.) Tj
+T*
+(The accepted rule is: "the right parts in the right language, clean and structured".) Tj
+T*
+() Tj
+T*
+(## Decision) Tj
+T*
+() Tj
+T*
+(Use Rust for time-critical code and for code next to the safety circuit.) Tj
+T*
+(Use Python only for tools.) Tj
+T*
+(Do not use CODESYS on this path.) Tj
+T*
+(Rust owns the cyclic loop and the machine state machine.) Tj
+T*
+(Rust owns the Modbus RTU master and the DIO process image.) Tj
+T*
+(Python owns test benches, data analysis, plm-sync and hardware-in-the-loop scripts.) Tj
+T*
+(The target cycle is 10 ms on a PREEMPT_RT kernel.) Tj
+T*
+(Run the control thread on one isolated core with policy SCHED_FIFO.) Tj
+T*
+(Call mlockall before the loop.) Tj
+T*
+(Use a software watchdog and the RevPi hardware watchdog.) Tj
+T*
+(Do not publish MQTT and do not build JSON on the loop thread.) Tj
+T*
+(Measure the cycle on a Connect 4 before you state a jitter value.) Tj
+T*
+(The state machine covers hub, sonic, sampling, tilt and faults.) Tj
+T*
+(Sampling is the hub drill sequence plus the lift deploy.) Tj
+T*
+(Keep the state codes from the Structured Text blocks.) Tj
+T*
+(The fault codes stay the table in ADR-0001.) Tj
+T*
+(Do not add a fault code.) Tj
+T*
+(The controller is RevPi Connect 4, part VC-CT-6800, plus one RevPi DIO, part VC-CT-6810.) Tj
+T*
+(The RevPi is the Modbus RTU master on the RS-485 port.) Tj
+T*
+(Use device node /dev/piControl0 with ioctl, read and write.) Tj
+T*
+(Byte offsets come from PiCtory and are not frozen.) Tj
+T*
+(The lift drive is SINAMICS S200 PTI order 6SL5510-1BB11-0AA0 \(VC-HB-2300\).) Tj
+T*
+(That drive is Modbus slave 2 and needs firmware V6.3 HF4 or later.) Tj
+T*
+(The S200 executes position control, the speed profile and the brake on X108.) Tj
+T*
+(The RevPi sends target values and reads status values.) Tj
+T*
+(The RevPi does not close the position loop.) Tj
+T*
+(The RevPi does not release the motor brake with a DIO output.) Tj
+T*
+(Position comes from the 1FL2 absolute encoder in part VC-HB-2100.) Tj
+T*
+(VC-HB-3410, the chain-shaft encoder, is obsolete.) Tj
+T*
+(There is no chain encoder, so do not buy VC-HB-3410.) Tj
+T*
+(The sonic-head inverter is slave 1 and its order code is not selected.) Tj
+T*
+(The sonic register map is TODO.) Tj
+T*
+(Register 40100 is the example control word, and 40101 is the speed setpoint.) Tj
+T*
+(Those two numbers are not verified on this drive.) Tj
+T*
+(Mark every unverified register as TODO.) Tj
+T*
+(Keep the safety function in the hard-wired circuit.) Tj
+T*
+(Wire Pilz PNOZ s4 article 750104 \(VC-CT-6220\) to S200 STO input X131.) Tj
+T*
+(The RevPi software only reads the feedback contacts.) Tj
+T*
+(The software can send a normal stop.) Tj
+T*
+(Do not credit the RevPi software in any ISO 13849 performance level.) Tj
+T*
+(A software crash must not be the only path that removes torque.) Tj
+T*
+(ADR-0001 is not changed.) Tj
+T*
+(Node-RED, MQTT and Modbus TCP remain the HMI path only.) Tj
+T*
+(Do not put a state machine in Node-RED.) Tj
+T*
+(The 60 tests in test_safety, test_hub, test_sonic and test_integration stay the reference.) Tj
+T*
+(Port the tests to Rust and keep a golden-vector harness.) Tj
+T*
+(The Python model and the Rust model must agree on each vector.) Tj
+T*
+(This change ports three safety tests as the pattern.) Tj
+T*
+(The workspace path is `firmware/revpi/`.) Tj
+T*
+(The crates are `vc-core`, `vc-io`, `vc-modbus` and `vc-runtime`.) Tj
+T*
+(`vc-core` has no device I/O and stays compatible with no_std where practical.) Tj
+T*
+(The full loop is not implemented.) Tj
+T*
+() Tj
+T*
+(## Alternatives) Tj
+T*
+() Tj
+T*
+(CODESYS Control Basic M, article 2302000048, was considered.) Tj
+T*
+(The list price starts at 69 EUR excluding tax and is not a quote.) Tj
+T*
+(This decision rejects CODESYS.) Tj
+T*
+(The control loop is native Rust, not a soft PLC.) Tj
+T*
+(A demo licence stops after two hours.) Tj
+T*
+(Do not ship a demo licence on a field machine.) Tj
+T*
+(A Python cyclic service was considered.) Tj
+T*
+(This decision rejects Python for the cyclic loop.) Tj
+T*
+(Garbage collection can pause the process and can miss the 10 ms cycle.) Tj
+T*
+(Python remains the tool language.) Tj
+T*
+() Tj
+T*
+(## Consequences) Tj
+T*
+() Tj
+T*
+(Buy the RevPi Connect 4 and one RevPi DIO for this path.) Tj
+T*
+(Do not buy a CODESYS Basic M licence for this path.) Tj
+T*
+(Do not buy VC-HB-3410.) Tj
+T*
+(Confirm the S200 map on firmware V6.3 HF4 or later.) Tj
+T*
+(Select the sonic inverter before you fill its register map.) Tj
+T*
+(`CONTROL_SYSTEM.md` still describes the WAGO rack and is not changed here.) Tj
+T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000005159 00000 n 
+trailer << /Size 6 /Root 1 0 R >>
+startxref
+5229
+%%EOF

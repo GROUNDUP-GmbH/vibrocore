@@ -1,0 +1,9 @@
+[package]
+name = "vc-modbus"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Typed Modbus maps for the S200 and the sonic-head inverter."
+
+[dependencies]

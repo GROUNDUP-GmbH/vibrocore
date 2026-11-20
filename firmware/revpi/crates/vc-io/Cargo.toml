@@ -1,0 +1,9 @@
+[package]
+name = "vc-io"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "RevPi process image via /dev/piControl0."
+
+[dependencies]

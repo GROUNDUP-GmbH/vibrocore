@@ -1,0 +1,104 @@
+{
+  "source": "tests/sim.py FB_Safety",
+  "cycle_ms": 10,
+  "cases": [
+    {
+      "name": "estop_has_highest_priority",
+      "python_test": "tests/test_safety.py::TestEStop::test_estop_has_highest_priority",
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {
+            "xEStop_NC": false,
+            "xLimitUp_NC": true,
+            "xLimitDown_NC": true,
+            "xHubAlarm": true,
+            "xVFD_Fault": true,
+            "rVFD_Current_pct": 0.0,
+            "xHubMovingDown": false,
+            "xHubMovingUp": false
+          },
+          "expect": {
+            "safe_state": true,
+            "stone_detected": false,
+            "limit_up_triggered": false,
+            "limit_down_triggered": false,
+            "reason": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "limit_up_causes_safe_state_only_when_moving_up",
+      "python_test": "tests/test_safety.py::TestLimitSwitches::test_limit_up_causes_safe_state_only_when_moving_up",
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {
+            "xEStop_NC": true,
+            "xLimitUp_NC": false,
+            "xLimitDown_NC": true,
+            "xHubAlarm": false,
+            "xVFD_Fault": false,
+            "rVFD_Current_pct": 0.0,
+            "xHubMovingDown": false,
+            "xHubMovingUp": false
+          },
+          "expect": {
+            "safe_state": false,
+            "stone_detected": false,
+            "limit_up_triggered": true,
+            "limit_down_triggered": false,
+            "reason": 0
+          }
+        },
+        {
+          "cycles": 1,
+          "input": {
+            "xEStop_NC": true,
+            "xLimitUp_NC": false,
+            "xLimitDown_NC": true,
+            "xHubAlarm": false,
+            "xVFD_Fault": false,
+            "rVFD_Current_pct": 0.0,
+            "xHubMovingDown": false,
+            "xHubMovingUp": true
+          },
+          "expect": {
+            "safe_state": true,
+            "stone_detected": false,
+            "limit_up_triggered": true,
+            "limit_down_triggered": false,
+            "reason": 2
+          }
+        }
+      ]
+    },
+    {
+      "name": "above_threshold_after_debounce",
+      "python_test": "tests/test_safety.py::TestStoneDetection::test_above_threshold_after_debounce",
+      "steps": [
+        {
+          "cycles": 25,
+          "input": {
+            "xEStop_NC": true,
+            "xLimitUp_NC": true,
+            "xLimitDown_NC": true,
+            "xHubAlarm": false,
+            "xVFD_Fault": false,
+            "rVFD_Current_pct": 140.0,
+            "xHubMovingDown": false,
+            "xHubMovingUp": false
+          },
+          "expect": {
+            "safe_state": true,
+            "stone_detected": true,
+            "limit_up_triggered": false,
+            "limit_down_triggered": false,
+            "reason": 5
+          }
+        }
+      ]
+    }
+  ]
+}

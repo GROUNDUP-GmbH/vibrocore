@@ -117,7 +117,7 @@
     "id": "fn_parse_status",
     "type": "function",
     "name": "Register → Variablen",
-    "func": "// Modbus register map (holding registers, 0-based)\n// See firmware/codesys/GVL_MODBUS.st\n//\n// RW registers (HMI → PLC):\n//   0  eOperatingMode  (0=MANUAL, 1=DT325_AUTO)\n//   1  xHMI_CycleStart\n//   2  xHMI_JogDown\n//   3  xHMI_JogUp\n//   4  xHMI_SonicToggle\n//   5  xHMI_FaultReset\n//   6-7 rTargetDepth_mm (IEEE 754 REAL, low word first)\n//   8-9 rTargetFreq_Hz  (IEEE 754 REAL, low word first)\n//\n// RO registers (PLC → HMI):\n//  10  eSystemState\n//  11  eHubState\n//  12  eSonicState\n//  13-14 rPosition_mm  (REAL)\n//  15-16 rActualFreq_Hz (REAL)\n//  17-18 rActualCurrent_pct (REAL)\n//  19  eSafetyReason\n//  20  xSystemOK\n//  21  iCycleCount\n\nvar regs = msg.payload;\nif (!Array.isArray(regs) || regs.length < 22) { return null; }\n\nfunction regsToReal(lo, hi) {\n    var buf = Buffer.allocUnsafe(4);\n    buf.writeUInt16BE(hi, 0);\n    buf.writeUInt16BE(lo, 2);\n    return buf.readFloatBE(0);\n}\n\nvar SYS_STATE = ['IDLE','MANUAL','DT325_AUTO','FAULT','E-STOP'];\nvar HUB_STATE = ['IDLE','HOMING','DRILL_WAIT','DRILLING','STOP_SONIC','RETRACT','ESTOP_HOLD','FAULT'];\nvar SONIC_STATE = ['IDLE','STARTING','RUNNING','STOPPING','FAST_STOP','FAULT'];\nvar SAFETY_REASON = ['OK','ESTOP','LIMIT_UP','LIMIT_DOWN','HUB_ALARM','STONE_DETECTED','VFD_COMM'];\n\nvar d = {\n    mode:         regs[0],\n    systemState:  SYS_STATE[regs[10]]  || ('SYS_'+regs[10]),\n    hubState:     HUB_STATE[regs[11]]  || ('HUB_'+regs[11]),\n    sonicState:   SONIC_STATE[regs[12]] || ('SONIC_'+regs[12]),\n    position_mm:  regsToReal(regs[13], regs[14]),\n    freq_hz:      regsToReal(regs[15], regs[16]),\n    current_pct:  regsToReal(regs[17], regs[18]),\n    safetyReason: SAFETY_REASON[regs[19]] || ('SAFETY_'+regs[19]),\n    systemOK:     regs[20] !== 0,\n    cycleCount:   regs[21],\n    ts:           new Date().toLocaleTimeString('de-AT')\n};\n\n// Store for downstream nodes\nflow.set('plc', d);\n\nreturn { payload: d };",
+    "func": "// Modbus register map (holding registers, 0-based)\n// See firmware/codesys/GVL_MODBUS.st\n//\n// RW registers (HMI → PLC):\n//   0  eOperatingMode  (0=MANUAL, 1=DT325_AUTO)\n//   1  xHMI_CycleStart\n//   2  xHMI_JogDown\n//   3  xHMI_JogUp\n//   4  xHMI_SonicToggle\n//   5  xHMI_FaultReset\n//   6-7 rTargetDepth_mm (IEEE 754 REAL, low word first)\n//   8-9 rTargetFreq_Hz  (IEEE 754 REAL, low word first)\n//\n// RO registers (PLC → HMI):\n//  10  eSystemState\n//  11  eHubState\n//  12  eSonicState\n//  13-14 rPosition_mm  (REAL)\n//  15-16 rActualFreq_Hz (REAL)\n//  17-18 rActualCurrent_pct (REAL)\n//  19  eSafetyReason\n//  20  xSystemOK\n//  21  iCycleCount\n\nvar regs = msg.payload;\nif (!Array.isArray(regs) || regs.length < 22) { return null; }\n\nfunction regsToReal(lo, hi) {\n    var buf = Buffer.allocUnsafe(4);\n    buf.writeUInt16BE(hi, 0);\n    buf.writeUInt16BE(lo, 2);\n    return buf.readFloatBE(0);\n}\n\nvar SYS_STATE = ['IDLE','MANUAL','DT325_AUTO','FAULT','E-STOP'];\nvar HUB_STATE = ['IDLE','HOMING','DRILL_WAIT','DRILLING','STOP_SONIC','RETRACT','ESTOP_HOLD','FAULT','JOG','PARK_MOVE','BRAKE_TEST','PARKED','SAMPLE'];\nvar SONIC_STATE = ['IDLE','STARTING','RUNNING','STOPPING','FAST_STOP','FAULT'];\nvar TILT_STATE = ['UNKNOWN','TILTING_VERT','VERTICAL','TILTING_FOLD','FOLDED'];\nvar ROTATION_STATE = ['OFF','RUN','STALL','FAULT','INHIBIT'];\n// MQTT live status, ADR-0001 prefix vibrocore/status/:\n// vibrocore/status/hub vibrocore/status/sonic vibrocore/status/tilt\n// vibrocore/status/rotation vibrocore/status/jog vibrocore/status/sample\n// vibrocore/status/stage vibrocore/status/container\nvar SAFETY_REASON = ['OK','ESTOP','LIMIT_UP','LIMIT_DOWN','HUB_ALARM','STONE_DETECTED','VFD_COMM'];\n\nvar d = {\n    mode:         regs[0],\n    systemState:  SYS_STATE[regs[10]]  || ('SYS_'+regs[10]),\n    hubState:     HUB_STATE[regs[11]]  || ('HUB_'+regs[11]),\n    sonicState:   SONIC_STATE[regs[12]] || ('SONIC_'+regs[12]),\n    position_mm:  regsToReal(regs[13], regs[14]),\n    freq_hz:      regsToReal(regs[15], regs[16]),\n    current_pct:  regsToReal(regs[17], regs[18]),\n    safetyReason: SAFETY_REASON[regs[19]] || ('SAFETY_'+regs[19]),\n    systemOK:     regs[20] !== 0,\n    cycleCount:   regs[21],\n    ts:           new Date().toLocaleTimeString('de-AT')\n};\n\n// Store for downstream nodes\nflow.set('plc', d);\n\nreturn { payload: d };",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,
@@ -626,5 +626,134 @@
     "func": "// Send default target depth (1200 mm) and freq (100 Hz) to PLC on startup\nvar depthBuf = Buffer.allocUnsafe(4);\ndepthBuf.writeFloatBE(1200.0, 0);\nvar freqBuf = Buffer.allocUnsafe(4);\nfreqBuf.writeFloatBE(100.0, 0);\n\nnode.send([\n    { payload: [depthBuf.readUInt16BE(2), depthBuf.readUInt16BE(0)], fc: 16, unitid: 1, address: 6 },\n    null\n]);\nnode.send([\n    null,\n    { payload: [freqBuf.readUInt16BE(2), freqBuf.readUInt16BE(0)], fc: 16, unitid: 1, address: 8 }\n]);\nreturn null;",
     "outputs": 2,
     "wires": [["modbus_write"], ["modbus_write"]]
+  },
+
+  {
+    "id": "mqtt_status_hub",
+    "type": "mqtt in",
+    "name": "Hub-Status",
+    "topic": "vibrocore/status/hub",
+    "qos": "1",
+    "datatype": "json",
+    "broker": "mqtt_broker_local",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "wires": [["fn_store_live_status"]]
+  },
+
+  {
+    "id": "mqtt_status_sonic",
+    "type": "mqtt in",
+    "name": "Sonic-Status",
+    "topic": "vibrocore/status/sonic",
+    "qos": "1",
+    "datatype": "json",
+    "broker": "mqtt_broker_local",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "wires": [["fn_store_live_status"]]
+  },
+
+  {
+    "id": "mqtt_status_tilt",
+    "type": "mqtt in",
+    "name": "Tilt-Status",
+    "topic": "vibrocore/status/tilt",
+    "qos": "1",
+    "datatype": "json",
+    "broker": "mqtt_broker_local",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "wires": [["fn_store_live_status"]]
+  },
+
+  {
+    "id": "mqtt_status_rotation",
+    "type": "mqtt in",
+    "name": "Rotation-Status",
+    "topic": "vibrocore/status/rotation",
+    "qos": "1",
+    "datatype": "json",
+    "broker": "mqtt_broker_local",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "wires": [["fn_store_live_status"]]
+  },
+
+  {
+    "id": "mqtt_status_jog",
+    "type": "mqtt in",
+    "name": "Jog-Status",
+    "topic": "vibrocore/status/jog",
+    "qos": "1",
+    "datatype": "json",
+    "broker": "mqtt_broker_local",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "wires": [["fn_store_live_status"]]
+  },
+
+  {
+    "id": "mqtt_status_sample",
+    "type": "mqtt in",
+    "name": "Sample-Status",
+    "topic": "vibrocore/status/sample",
+    "qos": "1",
+    "datatype": "json",
+    "broker": "mqtt_broker_local",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "wires": [["fn_store_live_status"]]
+  },
+
+  {
+    "id": "mqtt_status_stage",
+    "type": "mqtt in",
+    "name": "Sample-Stage",
+    "topic": "vibrocore/status/stage",
+    "qos": "1",
+    "datatype": "json",
+    "broker": "mqtt_broker_local",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "wires": [["fn_store_live_status"]]
+  },
+
+  {
+    "id": "mqtt_status_container",
+    "type": "mqtt in",
+    "name": "Sample-Container",
+    "topic": "vibrocore/status/container",
+    "qos": "1",
+    "datatype": "json",
+    "broker": "mqtt_broker_local",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "wires": [["fn_store_live_status"]]
+  },
+
+  {
+    "id": "fn_store_live_status",
+    "type": "function",
+    "name": "Live-Status speichern",
+    "func": "flow.set(msg.topic, msg.payload);\nreturn msg;",
+    "outputs": 1,
+    "wires": [[]]
   }
 ]

@@ -1,0 +1,387 @@
+{
+  "source": "vc-core Plant",
+  "cycle_ms": 10,
+  "sf3_second_hold_fitted": false,
+  "sf3_note": "Stefan 2026-11-20. The S200 holding brake is the only hold. The brake test is optional.",
+  "cases": [
+    {
+      "name": "jog_without_enabling_does_not_move",
+      "setup": {"position_um": 100000},
+      "steps": [
+        {
+          "cycles": 5,
+          "input": {"cmd_jog_down": true},
+          "expect": {"hub_state": 0, "position_um": 100000, "speed_um_s": 0, "pulse_enable": false}
+        }
+      ]
+    },
+    {
+      "name": "jog_with_enabling_uses_reduced_speed",
+      "setup": {"position_um": 100000},
+      "steps": [
+        {
+          "cycles": 5,
+          "input": {"cmd_jog_down": true, "enabling_held": true},
+          "expect": {"hub_state": 8, "position_um": 100500, "speed_um_s": 10000, "pulse_enable": true}
+        }
+      ]
+    },
+    {
+      "name": "jog_release_stops",
+      "setup": {"position_um": 100000},
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"cmd_jog_down": true, "enabling_held": true},
+          "expect": {"hub_state": 8, "position_um": 100100, "speed_um_s": 10000}
+        },
+        {
+          "cycles": 1,
+          "input": {},
+          "expect": {"hub_state": 0, "position_um": 100100, "speed_um_s": 0, "pulse_enable": false}
+        }
+      ]
+    },
+    {
+      "name": "park_uses_only_the_s200_brake",
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"cmd_park": true},
+          "expect": {"hub_state": 11, "position_um": 0, "speed_um_s": 0, "pulse_enable": false, "hub_fault": false}
+        }
+      ]
+    },
+    {
+      "name": "brake_test_passes_then_park",
+      "steps": [
+        {
+          "cycles": 10,
+          "input": {"cmd_park": true, "brake_test_enable": true},
+          "expect": {"hub_state": 11, "position_um": 0, "speed_um_s": 0, "hub_fault": false}
+        }
+      ]
+    },
+    {
+      "name": "brake_test_faults_on_slip",
+      "steps": [
+        {
+          "cycles": 5,
+          "input": {"cmd_park": true, "brake_test_enable": true, "brake_slip_um": 500},
+          "expect": {"hub_state": 7, "position_um": 2500, "speed_um_s": 0, "hub_fault": true}
+        }
+      ]
+    },
+    {
+      "name": "parked_blocks_motion_until_unpark",
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"cmd_park": true},
+          "expect": {"hub_state": 11, "motion_blocked": false}
+        },
+        {
+          "cycles": 1,
+          "input": {"cmd_jog_down": true, "enabling_held": true},
+          "expect": {"hub_state": 11, "speed_um_s": 0, "motion_blocked": true, "position_um": 0}
+        },
+        {
+          "cycles": 1,
+          "input": {"cmd_unpark": true},
+          "expect": {"hub_state": 0, "motion_blocked": false, "speed_um_s": 0}
+        }
+      ]
+    },
+    {
+      "name": "homing_reaches_drill_wait_without_enabling",
+      "setup": {"position_um": 2400},
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"cmd_cycle_start": true},
+          "expect": {"hub_state": 1, "position_um": 2000, "speed_um_s": -40000}
+        },
+        {
+          "cycles": 1,
+          "input": {},
+          "expect": {"hub_state": 2, "position_um": 0, "speed_um_s": 0}
+        },
+        {
+          "cycles": 1,
+          "input": {},
+          "expect": {"hub_state": 2, "position_um": 150, "speed_um_s": 15000}
+        }
+      ]
+    },
+    {
+      "name": "sonic_blocked_until_lowered_and_tool_engaged",
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"tool_engaged": true},
+          "expect": {"sonic_state": 0, "sonic_run": false, "sonic_freq_mhz": 0}
+        }
+      ]
+    },
+    {
+      "name": "sonic_ramps_to_the_short_target",
+      "setup": {"position_um": 80000},
+      "steps": [
+        {
+          "cycles": 21,
+          "input": {"tool_engaged": true, "sonic_target_mhz": 3000},
+          "expect": {"sonic_state": 2, "sonic_freq_mhz": 3000, "sonic_run": true}
+        }
+      ]
+    },
+    {
+      "name": "sonic_sto_loss_stops_the_head",
+      "setup": {"position_um": 80000},
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"tool_engaged": true, "sonic_target_mhz": 3000},
+          "expect": {"sonic_state": 1, "sonic_run": true}
+        },
+        {
+          "cycles": 1,
+          "input": {"tool_engaged": true, "sonic_sto_healthy": false},
+          "expect": {"sonic_state": 5, "sonic_freq_mhz": 0, "sonic_run": false, "sonic_sto_fault": true, "sonic_fault": true}
+        }
+      ]
+    },
+    {
+      "name": "tilt_fold_on_a_hill_does_not_block_jog",
+      "setup": {"position_um": 100000},
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"cmd_fold": true, "cmd_jog_down": true, "enabling_held": true},
+          "expect": {
+            "tilt_state": 3,
+            "tilt_fold": true,
+            "tilt_vertical": false,
+            "hub_state": 8,
+            "speed_um_s": 10000,
+            "position_um": 100100,
+            "motion_blocked": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "tilt_fold_stops_on_the_end_switch",
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"cmd_fold": true, "limit_folded_reached": true},
+          "expect": {"tilt_state": 4, "tilt_fold": false, "tilt_vertical": false}
+        }
+      ]
+    },
+    {
+      "name": "rotation_inhibited_while_sonic_starts",
+      "setup": {"position_um": 80000},
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"tool_engaged": true, "cmd_rotate": true},
+          "expect": {"sonic_state": 1, "sonic_run": true, "rotation_state": 4, "rotation_speed_rpm": 0}
+        }
+      ]
+    },
+    {
+      "name": "rotation_stalls_at_the_torque_limit",
+      "steps": [
+        {
+          "cycles": 20,
+          "input": {"cmd_rotate": true, "rotation_torque_pct": 40},
+          "expect": {"rotation_state": 2, "rotation_stalled": true, "rotation_speed_rpm": 0, "sonic_run": false}
+        }
+      ]
+    },
+    {
+      "name": "sample_one_stage_cuts_dumps_and_parks",
+      "setup": {
+        "position_um": 100000,
+        "indexed": true,
+        "sample": {"stages": 1, "in_depth_um": 100000, "depth_um": [90000], "container_mdeg": [90000]}
+      },
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 4, "hub_state": 12, "rotation_state": 1, "rotation_angle_mdeg": 3600, "sonic_run": false, "position_um": 100000}
+        },
+        {
+          "cycles": 100,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 5, "sample_stage": 1, "rotation_state": 4, "rotation_angle_mdeg": 0, "position_um": 99500, "rotation_speed_rpm": 0}
+        },
+        {
+          "cycles": 20,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 6, "sample_stage": 1, "container_mdeg": 90000, "rotation_state": 1, "rotation_angle_mdeg": 3600, "position_um": 90000}
+        },
+        {
+          "cycles": 25,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 7, "sample_stage": 0, "rotation_angle_mdeg": 90000, "position_um": 89500, "rotation_speed_rpm": 0}
+        },
+        {
+          "cycles": 176,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 9, "hub_state": 11, "position_um": 0, "rotation_angle_mdeg": 90000, "sample_fault": false}
+        }
+      ]
+    },
+    {
+      "name": "sample_two_stages_then_park",
+      "setup": {
+        "position_um": 20000,
+        "indexed": true,
+        "sample": {"stages": 2, "in_depth_um": 20000, "depth_um": [18000, 16000], "container_mdeg": [0, 90000]}
+      },
+      "steps": [
+        {
+          "cycles": 110,
+          "input": {"cmd_sample": true},
+          "expect": {"sample_phase": 6, "sample_stage": 2, "container_mdeg": 90000, "rotation_angle_mdeg": 3600, "position_um": 16000}
+        },
+        {
+          "cycles": 53,
+          "input": {"cmd_sample": true},
+          "expect": {"sample_phase": 9, "hub_state": 11, "position_um": 0, "rotation_angle_mdeg": 90000, "sample_fault": false}
+        }
+      ]
+    },
+    {
+      "name": "sample_three_stages_then_park",
+      "setup": {
+        "position_um": 20000,
+        "indexed": true,
+        "sample": {"stages": 3, "in_depth_um": 20000, "depth_um": [18000, 16000, 14000], "container_mdeg": [0, 90000, 180000]}
+      },
+      "steps": [
+        {
+          "cycles": 139,
+          "input": {"cmd_sample": true},
+          "expect": {"sample_phase": 6, "sample_stage": 3, "container_mdeg": 180000, "rotation_angle_mdeg": 93600, "position_um": 14000}
+        },
+        {
+          "cycles": 49,
+          "input": {"cmd_sample": true},
+          "expect": {"sample_phase": 9, "hub_state": 11, "position_um": 0, "rotation_angle_mdeg": 180000, "sample_fault": false}
+        }
+      ]
+    },
+    {
+      "name": "sample_four_stages_then_park",
+      "setup": {
+        "position_um": 20000,
+        "indexed": true,
+        "sample": {"stages": 4, "in_depth_um": 20000, "depth_um": [18000, 16000, 14000, 12000], "container_mdeg": [0, 90000, 180000, 270000]}
+      },
+      "steps": [
+        {
+          "cycles": 168,
+          "input": {"cmd_sample": true},
+          "expect": {"sample_phase": 6, "sample_stage": 4, "container_mdeg": 270000, "rotation_angle_mdeg": 183600, "position_um": 12000}
+        },
+        {
+          "cycles": 45,
+          "input": {"cmd_sample": true},
+          "expect": {"sample_phase": 9, "hub_state": 11, "position_um": 0, "rotation_angle_mdeg": 270000, "sample_fault": false}
+        }
+      ]
+    },
+    {
+      "name": "sample_drives_in_with_sonic_then_cuts",
+      "setup": {
+        "position_um": 40000,
+        "indexed": true,
+        "sample": {"stages": 1, "in_depth_um": 50000, "depth_um": [40000], "container_mdeg": [0]}
+      },
+      "steps": [
+        {
+          "cycles": 67,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 2, "sonic_state": 1, "sonic_run": true, "rotation_state": 4, "position_um": 50050, "hub_state": 12}
+        },
+        {
+          "cycles": 1,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 3, "sonic_run": false, "position_um": 50050, "rotation_speed_rpm": 0}
+        },
+        {
+          "cycles": 20,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 4, "rotation_state": 1, "rotation_angle_mdeg": 3600, "sonic_run": false, "position_um": 50050}
+        },
+        {
+          "cycles": 198,
+          "input": {"cmd_sample": true, "tool_engaged": true},
+          "expect": {"sample_phase": 9, "hub_state": 11, "position_um": 0, "rotation_angle_mdeg": 0, "sample_fault": false}
+        }
+      ]
+    },
+    {
+      "name": "sample_stall_aborts_to_fault",
+      "setup": {
+        "position_um": 100000,
+        "indexed": true,
+        "sample": {"stages": 1, "in_depth_um": 100000, "depth_um": [90000], "container_mdeg": [90000]}
+      },
+      "steps": [
+        {
+          "cycles": 20,
+          "input": {"cmd_sample": true, "tool_engaged": true, "rotation_torque_pct": 40},
+          "expect": {
+            "sample_phase": 8,
+            "sample_fault": true,
+            "rotation_state": 2,
+            "rotation_stalled": true,
+            "rotation_angle_mdeg": 68400,
+            "rotation_speed_rpm": 0,
+            "hub_state": 12,
+            "position_um": 100000,
+            "speed_um_s": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "sample_rejects_a_stage_count_outside_1_to_4",
+      "setup": {
+        "indexed": true,
+        "sample": {"stages": 0, "in_depth_um": 20000, "depth_um": [18000], "container_mdeg": [0]}
+      },
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"cmd_sample": true},
+          "expect": {"sample_phase": 8, "sample_fault": true, "hub_state": 12, "speed_um_s": 0, "rotation_speed_rpm": 0}
+        }
+      ]
+    },
+    {
+      "name": "sample_seeks_the_rotation_index_before_the_cut",
+      "setup": {
+        "position_um": 100000,
+        "sample": {"stages": 1, "in_depth_um": 100000, "depth_um": [98000], "container_mdeg": [0]}
+      },
+      "steps": [
+        {
+          "cycles": 1,
+          "input": {"cmd_sample": true, "rotation_index": true},
+          "expect": {"sample_phase": 1, "rotation_indexed": true, "rotation_move_done": true, "rotation_angle_mdeg": 0, "hub_state": 12}
+        },
+        {
+          "cycles": 1,
+          "input": {"cmd_sample": true, "rotation_index": true},
+          "expect": {"sample_phase": 4, "rotation_indexed": true, "rotation_angle_mdeg": 3600, "sonic_run": false}
+        }
+      ]
+    }
+  ]
+}
