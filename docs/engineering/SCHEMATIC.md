@@ -4,8 +4,10 @@ Drawing VC-SCH-5000 is the cabinet schematic.
 The KiCad 8 project is `cad/kicad/vibrocore-control/`.
 The PDF is `cad/export/kicad/vibrocore-control.pdf`.
 The terminal list and the cable list are in that same directory.
-Wire numbers are the global labels.
-The same label on two sheets is one net.
+A wire is a drawn segment.
+A label names that wire.
+A global label is used only when the net leaves the sheet.
+The same global label on two sheets is one net.
 Sheet 1 lists every wire number that leaves its sheet.
 Regenerate the sheets with `python3 cad/kicad/vibrocore-control/generate_schematic.py`.
 Run ERC with `kicad-cli sch erc --severity-all --exit-code-violations`.
@@ -23,6 +25,7 @@ Run ERC with `kicad-cli sch erc --severity-all --exit-code-violations`.
 | 7 | `06-tilt.kicad_sch` | Tilt contactors and the lift H-bridge |
 | 8 | `07-rotation.kicad_sch` | Proposed rod-rotation drive |
 | 9 | `08-network.kicad_sch` | RUT241, Ethernet and RS-485 |
+| 10 | `09-terminals.kicad_sch` | Terminal strips X1 to X10, with the wire number and the section |
 
 ## Controller
 
@@ -39,7 +42,7 @@ There is no CODESYS target on this drawing.
 
 The E-stop has three NC contacts.
 Two contacts go to the PNOZ s4, article 750104, part VC-CT-6220.
-The third contact is DIO input 2.
+The third contact is DIO input index 2.
 Set the PNOZ for two channels, short detection and a monitored manual reset.
 Confirm the rotary-switch mark in the PNOZ s4 manual before you commission the relay.
 PNOZ contact 13-14 is STO channel 1 for the S200 and for the ATV320.
@@ -74,9 +77,15 @@ The rotation drive has its own 2 A fuse on the general rail.
 ## Hub drive
 
 Order the S200 as 6SL5510-1BB11-0AA0.
-X131 and X108 are the terminals of the PTI standard drive.
-The STO pin order on this drawing is taken from the S200 PN sheet.
-Confirm that order on the PTI sheet.
+This is the PTI standard drive.
+X131 pins are 1 STO1+, 2 STO1-, 3 STO-VS, 4 STO-M, 5 STO2+ and 6 STO2-.
+STO1+ and STO2+ come from the PNOZ.
+STO1- and STO2- go to 0 V.
+STO-VS and STO-M are TBC.
+Do not land 24 V on STO-VS until the figure is confirmed.
+X130 is not on this PTI drive.
+STO status is status word bit STO_EP.
+Do not land 440_S200FB until a digital output is assigned.
 U1 is the pulse and direction source.
 U1 is not a DIO pin.
 The pulse scale is TODO.
@@ -87,11 +96,16 @@ One ATV320 output feeds both OLI MVE 400/6-HF motors.
 Motor A keeps the drive phase order.
 Motor B swaps V and W at terminal X3.
 F21 and F22 must tolerate a PWM output.
+R1C is the fault-relay common and sits on the general 24 V rail.
+R1B is the NC contact and feeds DIO input index 11.
+R1A stays open.
 Do not link the ATV320 P24 terminal to the cabinet 24 V.
+F2 stays C16.
+The ATV320 input is 17.8 A at 200 V.
+Confirm F2 before you order it.
 Assign the second STO channel in SoMove.
 The parameter name is TODO.
-Relay R1B opens on a fault and feeds DIO input 11.
-Relay R2 is the STO monitor for DIO input 5.
+Relay R2 is the STO monitor for DIO input index 5.
 The R2 parameter is TODO.
 
 ## Tilt and lift
@@ -126,7 +140,18 @@ The rotation drive is not on this bus.
 
 Strips X1 to X10 are the names on this drawing.
 The purchased terminal block is not chosen.
-The cross-section is an assumption: 6 mm2 on the mains, 4 mm2 on the motor power, 2.5 mm2 on the 24 V rails.
+The mains cable is 3G6.
+PE on that cable is 6 mm2.
+The sonic feeder is 4 mm2.
+The S200 feeder is 2.5 mm2.
+Servo power and each vibrator output are 4G1.5 shielded.
+The servo brake pair is 2x0.75 mm2.
+The general 24 V rail is 2.5 mm2.
+The S200 24 V feed is 1.0 mm2.
+STO, field signals and the rotation cable are 0.75 mm2.
+The field 24 V feed is 1.0 mm2.
+Tilt power is 1.5 mm2 and the current is TBC.
+The lift section is TBC.
 
 | Strip | Function |
 | --- | --- |
@@ -147,8 +172,10 @@ The E-stop contact block is not chosen.
 The reset-button order code and colour are not chosen.
 The PNOZ rotary-switch detent text is not confirmed on the unit.
 The state of auxiliary contact 41-42 is not confirmed.
-The S200 X131 pin order is not confirmed on the PTI sheet.
-The X130 STO-status pin name is TODO.
+X131 is confirmed.
+X130 is absent on this drive.
+STO-VS and STO-M are still TBC.
+The STO status wire 440_S200FB is not landed.
 The PTI connector name and the pulse scale are TODO.
 The RS-485 port on the PTI unit is TODO.
 The Siemens order codes for the motor cable and the encoder cable are TODO.

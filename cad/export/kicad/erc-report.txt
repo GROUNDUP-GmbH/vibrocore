@@ -1,4 +1,4 @@
-ERC report (2026-11-20T14:51:01+0000, Encoding UTF8)
+ERC report (2026-11-20T18:51:44+0000, Encoding UTF8)
 
 ***** Sheet /
 
@@ -17,5 +17,7 @@ ERC report (2026-11-20T14:51:01+0000, Encoding UTF8)
 ***** Sheet /07 Rod rotation proposal/
 
 ***** Sheet /08 RUT241 and Modbus/
+
+***** Sheet /09 Terminal strips/
 
  ** ERC messages: 0  Errors 0  Warnings 0
