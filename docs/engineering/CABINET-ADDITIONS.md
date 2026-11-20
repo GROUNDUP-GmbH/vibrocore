@@ -1,9 +1,9 @@
 # Cabinet additions
 
-These parts are proposed purchases.
-Do not edit the BOM in this change.
-Order codes below are the proposed buy list.
-Prices are not quotes.
+Stefan approved these rows for the BOM on 2026-11-20.
+The cabinet schematic is VC-SCH-5000.
+See docs/engineering/SCHEMATIC.md.
+Prices below are not quotes.
 
 ## Do not buy a second hold
 

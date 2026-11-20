@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 1505 >>
+<< /Length 1636 >>
 stream
 BT
 /F1 11 Tf
@@ -51,9 +51,13 @@ T*
 T*
 (17  VC-HB-3300  rev A  qty 1  Fastener kit, hub) Tj
 T*
-(18  VC-HB-3400  rev A  qty 1  Drag chain) Tj
+(18  VC-HB-3430  rev A  qty 1  igus energy chain 2400.05.075.0) Tj
 T*
-(19  VC-HB-3420  rev A  qty 1  Chain drive guard) Tj
+(19  VC-HB-3440  rev A  qty 1  Hub motor cable) Tj
+T*
+(20  VC-HB-3450  rev A  qty 1  Hub encoder cable) Tj
+T*
+(21  VC-HB-3420  rev A  qty 1  Chain drive guard) Tj
 T*
 (Owner: Ground UP GmbH) Tj
 T*
@@ -84,8 +88,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000001805 00000 n 
+0000001936 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-1875
+2006
 %%EOF

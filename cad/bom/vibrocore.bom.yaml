@@ -98,6 +98,26 @@ suppliers:
   name: Raspberry Pi Ltd
   country_xml: base.gb
   website: https://www.raspberrypi.com
+- id: schneider
+  name: Schneider Electric
+  country_xml: base.fr
+  website: https://www.se.com
+- id: idec
+  name: IDEC
+  country_xml: base.jp
+  website: https://www.idec.com
+- id: finder
+  name: Finder
+  country_xml: base.it
+  website: https://www.findernet.com
+- id: nanotec
+  name: Nanotec
+  country_xml: base.de
+  website: https://www.nanotec.com
+- id: igus
+  name: igus
+  country_xml: base.de
+  website: https://www.igus.com
 - id: pilz
   name: Pilz GmbH & Co. KG
   country_xml: base.de
@@ -177,6 +197,10 @@ data_issues:
     and the 1FL2 run on 230 V AC from the Instagrid. VC-PW-5310 is the dedicated SDR-120-24 for S200
     control and the brake. VC-PW-5320 reserves an SDR-480-24 size slot for the rest of the machine.
     The rating of that slot stays open until the actuator currents are known.
+- id: sonic-inverter-selected-2026-11-20
+  summary: Stefan kept Schneider ATV320U15M2C. VC-SH-1210 is the live sonic inverter. VC-SH-1200 is
+    superseded. The old EUR 180-300 band is not a Schneider quote and is not in the rollup. The ATV320
+    price is not sourced.
 parts:
 - part_number: VC-ASM-0000
   name: Vibrocore V1.1
@@ -623,14 +647,14 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: Mushroom E-stop with two NC contacts, in an IP65 enclosure. One NC contact is the hard-wired
-    channel into the safety relay. The PLC reads a monitor contact. The button is outside the cabinet.
+  spec: Mushroom operator in an IP65 enclosure, outside the cabinet. The contact block must provide
+    three NC contacts. Two contacts are the PNOZ channels. The third contact is the RevPi monitor.
   legacy_ref: '5.54'
   estimate_eur_low: 40
   estimate_eur_high: 70
   unknowns:
-  - Order code is not frozen. Eaton or Schneider. The device must have two NC contacts.
-  notes: Do not use a single NC contact as the only stop path. The 40-70 EUR band is not a quote.
+  - The catalogue contact block is not selected. Do not buy a single-contact operator.
+  notes: Eaton or Schneider. The EUR 40-70 band is not a quote for a three-contact block.
 - part_number: VC-CT-6220
   name: Safety relay
   revision_index: 0
@@ -638,18 +662,20 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: DIN space reserved for Pilz PNOZ s4, article 750104, 24 V DC, 22.5 x 98 x 120 mm, 3 N/O and 1 N/C.
-    The safety assessment is open. Do not state a performance level.
+  spec: Pilz PNOZ s4, article 750104, 24 V DC, 22.5 x 98 x 120 mm, 3 NO and 1 NC. Two NO contacts are
+    the STO channels. The NC contact is the monitor. The safety assessment is open. Do not state a
+    performance level.
   legacy_ref: '5.55'
   manufacturer_pn: '750104'
   supplier_id: pilz
+  datasheet: https://www.pilz.com/download/open/OM_PNOZ_s4_21396-EN-24.pdf
   estimate_eur_low: 80
   estimate_eur_high: 130
   unknowns:
   - The safety assessment is open. Do not state a performance level.
   - The 80-130 EUR band is not a quote for article 750104.
   notes: 'Operating manual https://www.pilz.com/download/open/OM_PNOZ_s4_21396-EN-24.pdf. DC supply is
-    2.5 W. PNOZ m B0 article 772100 is not the reserved slot.'
+    2.5 W. PNOZ m B0 article 772100 is not this relay. The schematic uses contacts 13-14 and 23-24 for STO.'
 - part_number: VC-CT-6230
   name: Warning beacon
   revision_index: 0
@@ -899,15 +925,17 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: CM4 Quad-Core A72 1.5 GHz, 4 GB RAM, 32 GB eMMC, 2x GbE, RS-485, Docker-native, -25 to +55 C,
-    DIN rail. Housing 96 x 45 x 110.5 mm. Kunbus item 100378. Option B controller.
+  spec: CM4 Quad-Core A72 1.5 GHz, 4 GB RAM, 32 GB eMMC, 2x GbE, RS-485, no WLAN, Docker-native,
+    -25 to +55 C, DIN rail. Housing 96 x 45 x 110.5 mm. Kunbus item 100378. Option B controller.
   legacy_ref: 5.47b
   manufacturer_pn: '100378'
   supplier_id: revolutionpi
+  datasheet: https://revolutionpi.com/shop/en/revpi-connect4
   estimate_eur_low: 493
   estimate_eur_high: 493
   lifecycle: alternative
-  notes: 'Alternative to VC-CT-6100. Not on the Option A control BOM. Official shop list 493 EUR excl. tax
+  notes: 'Kunbus 100378, 4 GB, no WLAN. This is the controller on the cabinet schematic. The line stays
+    alternative because VC-CT-6100 is still the live control BOM line. Official shop list 493 EUR excl. tax
     on 2026-11-20. That figure is not a quote. Source https://revolutionpi.com/en/ordering/overview-products-and-prices.'
 - part_number: VC-CT-6810
   name: RevPi DIO module
@@ -916,16 +944,18 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: Kunbus item 100197. 14x DI 24 V and 14x DO 24 V. Width 22.5 mm. Replaces the DI and DO modules
-    on the Option B path. It does not replace an encoder module. The chain encoder is obsolete.
+  spec: Kunbus item 100197. 14x DI 24 V and 14x DO 24 V. Width 22.5 mm. One module covers the I/O list.
+    It does not replace an encoder module. The chain encoder is obsolete.
   legacy_ref: 5.48b
   manufacturer_pn: '100197'
   supplier_id: revolutionpi
+  datasheet: https://revolutionpi.com/shop/en/revpi-dio
   estimate_eur_low: 196
   estimate_eur_high: 196
   lifecycle: alternative
-  notes: 'Option B only. Official shop list 196 EUR excl. tax on 2026-11-20. That figure is not a quote.
-    RS-485 is on the Connect 4. Do not use the DIO encoder mode for a chain encoder.'
+  notes: 'The cabinet schematic uses this module with VC-CT-6800. Official shop list 196 EUR excl. tax
+    on 2026-11-20. That figure is not a quote. RS-485 is on the Connect 4. Do not use the DIO encoder
+    mode for a chain encoder.'
 - part_number: VC-CT-6820
   name: PiBridge plug connector
   revision_index: 0
@@ -1666,17 +1696,14 @@ parts:
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: Cable carrier for the moving sonic-head carriage. Travel is 1300 mm, the same value as
-    rMAX_STROKE_MM. Cables in the carrier are two shielded motor cables 3 x 1.5 mm2 (VC-SH-1700) and
-    one GNSS antenna cable from VC-CT-6500. Cable outside diameters are unknown, so the carrier section
-    is unknown.
+  spec: Superseded cable carrier. Travel 1300 mm. The order code was not selected.
   legacy_ref: '2.96'
   unknowns:
-  - Cable outside diameters are unknown.
-  - Inner width, inner height and bend radius are unknown.
-  - Order code is unknown.
-  - Price is unknown.
-  notes: Do not order a chain until the cable diameters are known.
+  - Superseded. Do not buy this row.
+  notes: 'Superseded 2026-11-20 by VC-HB-3430, igus 2400.05.075.0. The old unknowns stay as history.
+    This row is not on the live hub BOM.'
+  lifecycle: superseded
+  superseded_by: VC-HB-3430
 - part_number: VC-HB-3410
   name: Chain-shaft encoder 1000 ppr
   revision_index: 0
@@ -1958,12 +1985,13 @@ parts:
   supply: purchase
   subsystem: power
   category: Power
-  spec: 230 V AC to 24 V DC, 5 A, 120 W, DIN rail. Dedicated supply for the S200 control input and the
-    motor brake. S200 control is 2.2 A maximum at 22.8 to 28.8 V. Brake current is below 1 A. 24 V is
-    inside that window. 3.2 A is below 5 A.
+  spec: 230 V AC to 24 V DC, 5 A, 120 W, DIN rail. Dedicated supply for the S200 X124 input and the
+    brake driver inside the drive. No other load is on this rail. S200 control is 2.2 A maximum at
+    22.8 to 28.8 V. Brake current is below 1 A. 3.2 A is below 5 A.
   legacy_ref: 8.psu
   manufacturer_pn: SDR-120-24
   supplier_id: meanwell
+  datasheet: https://www.meanwell.com/Upload/PDF/SDR-120/SDR-120-SPEC.PDF
   estimate_eur_low: 40
   estimate_eur_high: 70
   replaces: VC-PW-5300
@@ -2104,17 +2132,16 @@ parts:
   supply: purchase
   subsystem: sonic_head
   category: Sonic Head
-  spec: 1.5 kW, 230 V single-phase in, three-phase out. The selected inverter must have STO. The order
-    is not selected. The enclosure holds a placeholder of 140 x 160 x 164.5 mm.
+  spec: 1.5 kW candidate inverter. No order code. Superseded by the ATV320.
   legacy_ref: '1.2'
   estimate_eur_low: 180
   estimate_eur_high: 300
-  notes: 'Candidates named in the docs include Siemens SINAMICS V20 and ABB ACS150. Neither is selected.
-    Mounted in the control enclosure. Kept on the sonic-head BOM because BOM.md lists it there. STO stays
-    hard-wired from the safety relay. Do not claim a performance level.'
+  notes: 'Superseded 2026-11-20 by VC-SH-1210 (Schneider ATV320U15M2C). The candidates were Siemens
+    SINAMICS V20 and ABB ACS150. The EUR 180-300 band is history and is not in the rollup.'
   unknowns:
-  - The order code is unknown. STO is required and is not selected.
-  - The placeholder envelope is 140 x 160 x 164.5 mm until that order is known.
+  - Superseded. Do not buy this row.
+  lifecycle: superseded
+  superseded_by: VC-SH-1210
 - part_number: VC-SH-1300
   name: Vibrating plate weldment
   revision_index: 0
@@ -2389,6 +2416,440 @@ parts:
   - Order code is unknown.
   - Price is unknown.
   notes: Draft. Do not buy a fastener kit until the tube length is known.
+- part_number: VC-SH-1210
+  name: Sonic inverter ATV320U15M2C
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: sonic_head
+  category: Sonic Head
+  spec: Schneider Altivar Machine ATV320, 1.5 kW heavy duty, 200-240 V one phase in, 8.0 A out, 599 Hz
+    maximum. STO input. Two OLI MVE 400/6-HF motors share the output. Motor B swaps two phases.
+  legacy_ref: '1.2'
+  manufacturer_pn: ATV320U15M2C
+  supplier_id: schneider
+  datasheet: https://www.se.com/us/en/product/ATV320U15M2C/variable-speed-drive-altivar-machine-atv320-1-5kw-200-to-240v-1-phase-compact/
+  unknowns:
+  - The EUR price is not sourced. Do not copy the old EUR 180-300 band.
+  - Line current and the branch breaker must be confirmed in the installation manual before you order the MCB.
+  - The Modbus register map is TODO.
+  notes: 'Selected 2026-11-20. Replaces VC-SH-1200. Data sheet mirror:
+    https://iportal.se.com/Contents/docs/SQD-ATV320U15M2C_DATASHEET.PDF. Mounted in the cabinet.'
+  lifecycle: active
+- part_number: VC-HB-3430
+  name: igus energy chain 2400.05.075.0
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: hub
+  category: Hub
+  spec: igus e-chain series 2400, order 2400.05.075.0, bend radius 75 mm. The head cables travel with
+    the carriage. Do not use a slip ring for this path.
+  legacy_ref: '2.96'
+  manufacturer_pn: 2400.05.075.0
+  supplier_id: igus
+  datasheet: https://www.igus.com/product/series-2400
+  unknowns:
+  - The chain length for the 1300 mm stroke is not calculated.
+  - The price is not sourced.
+  - Cable outside diameters are still unknown. Confirm the 2400.05 section against those diameters.
+  notes: 'Selected 2026-11-20. Replaces VC-HB-3400. Motor power for the rod does not cross the rotating
+    joint. Buy a slip ring only if a later design routes power through that joint.'
+  lifecycle: active
+- part_number: VC-HB-3440
+  name: Hub motor cable
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: hub
+  category: Hub
+  spec: Shielded power cable from S200 X2 to the 1FL2104 motor, with the brake pair for X108. Length is
+    not set. Use a Siemens catalogue cable for this motor and this drive.
+  legacy_ref: '9.120'
+  supplier_id: lapp
+  unknowns:
+  - The Siemens cable order code is not selected.
+  - The length is not set.
+  - The price is not sourced.
+  notes: The brake conductors end on S200 X108. The RevPi does not drive the brake coil.
+  lifecycle: active
+- part_number: VC-HB-3450
+  name: Hub encoder cable
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: hub
+  category: Hub
+  spec: Encoder cable from the 1FL2104 absolute encoder to S200 X120. Use a Siemens catalogue cable.
+  legacy_ref: '9.121'
+  unknowns:
+  - The Siemens cable order code is not selected.
+  - The length is not set.
+  - The price is not sourced.
+  notes: Do not substitute a loose multi-core until the connector is confirmed.
+  lifecycle: active
+- part_number: VC-PW-5730
+  name: Branch MCB sonic inverter
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: power
+  category: Safety
+  spec: Two-pole MCB, characteristic C, 16 A, on the ATV320 feeder. Confirm the rating in the ATV320
+    installation manual. The Instagrid feeder is only about 16 A continuous.
+  legacy_ref: '9.123'
+  unknowns:
+  - The order code is not selected.
+  - The price is not sourced.
+  - The manual may require a different rating. Do not order until that page is checked.
+  notes: Schneider or Eaton. Schematic reference F2.
+  lifecycle: active
+- part_number: VC-PW-5740
+  name: Branch MCB hub drive
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: power
+  category: Safety
+  spec: Two-pole MCB, characteristic C, 16 A, on the S200 feeder. The Siemens table for 6SL5510-1BB11-0A
+    on 200-240 V one phase lists a 16 A fuse. Confirm the PTI row.
+  legacy_ref: '9.124'
+  unknowns:
+  - The order code is not selected.
+  - The price is not sourced.
+  notes: Schematic reference F3.
+  lifecycle: active
+- part_number: VC-PW-5750
+  name: Branch MCB S200 24 V supply
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: power
+  category: Safety
+  spec: Two-pole MCB, characteristic C, 4 A, on the SDR-120-24 primary. The supply is 120 W.
+  legacy_ref: '9.125'
+  unknowns:
+  - The order code is not selected.
+  - The price is not sourced.
+  - Inrush may need a different curve. Confirm against the Mean Well manual.
+  notes: Schematic reference F4.
+  lifecycle: active
+- part_number: VC-PW-5760
+  name: Branch MCB general 24 V supply
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: power
+  category: Safety
+  spec: Two-pole MCB, characteristic C, 10 A, on the SDR-480-24-size primary. The slot is 480 W.
+  legacy_ref: '9.126'
+  unknowns:
+  - The order code is not selected.
+  - The price is not sourced.
+  notes: Schematic reference F5.
+  lifecycle: active
+- part_number: VC-PW-5770
+  name: Sonic motor protection
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: sonic_head
+  category: Sonic Head
+  spec: One protection device per OLI motor, set near 1.6 A. The device must be suitable for a VFD PWM
+    output. Two devices. The ATV320 sees the sum and does not protect one stalled motor.
+  legacy_ref: '9.127'
+  unknowns:
+  - The order code is not selected. Do not fit a standard GV2 until a PWM rating is confirmed.
+  - The price is not sourced.
+  notes: Schematic references F21 and F22. Quantity is two.
+  lifecycle: active
+- part_number: VC-PW-5800
+  name: DC fuse S200 24 V rail
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: power
+  category: Safety
+  spec: 6 A fuse on the SDR-120-24 output. The supply is 5 A. The brake driver is inside the S200.
+  legacy_ref: '9.128'
+  unknowns:
+  - The order code and the fuse holder are not selected.
+  - The price is not sourced.
+  notes: Schematic reference F14.
+  lifecycle: active
+- part_number: VC-PW-5810
+  name: DC fuse general 24 V rail
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: power
+  category: Safety
+  spec: 20 A fuse on the SDR-480-24-size output. The slot rating is 20 A.
+  legacy_ref: '9.129'
+  unknowns:
+  - The order code and the fuse holder are not selected.
+  - The price is not sourced.
+  notes: Schematic reference F24. Confirm the current when the actuator nameplates are known.
+  lifecycle: active
+- part_number: VC-PW-5820
+  name: PNOZ output fuse
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: power
+  category: Safety
+  spec: 2 A fuse ahead of each PNOZ safety contact that drives a STO channel. The PNOZ manual requires a
+    fuse before the safety contacts. Two fuses.
+  legacy_ref: '9.130'
+  unknowns:
+  - The order code is not selected.
+  - The price is not sourced.
+  notes: Schematic references F30 and F31. Pilz lists a 6 A maximum breaker for these contacts.
+  lifecycle: active
+- part_number: VC-PW-5790
+  name: Rotation drive fuse
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: power
+  category: Safety
+  spec: 2 A fuse on the 24 V feed of the proposed rotation drive. The drive is not released.
+  legacy_ref: '9.131'
+  unknowns:
+  - The order code is not selected.
+  - The current of the released drive may differ.
+  - The price is not sourced.
+  notes: Schematic reference F6. Keep the holder if the drive order code changes.
+  lifecycle: active
+- part_number: VC-CT-6250
+  name: Rotation index sensor
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: 24 V sensor for DIO input 12. It sets the rod angle to zero. An encoder index on the rotation
+    drive may replace this sensor.
+  legacy_ref: '9.132'
+  unknowns:
+  - The order code is not chosen.
+  - PNP, NPN or a dry contact is not chosen. The schematic draws a PNP output.
+  - The price is not sourced.
+  notes: Do not treat this row as a released sensor. See docs/engineering/IO-LIST.md input 12.
+  lifecycle: active
+- part_number: VC-CT-6260
+  name: Enabling switch HE1B-M1
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: IDEC HE1B-M1, three positions, off-on-off. The SPST-NO contact closes only in the centre
+    position. The body is IP40. Mount it inside a housing. The contact is DIO input 6 only. It is not in
+    the PNOZ circuit.
+  legacy_ref: '9.133'
+  manufacturer_pn: HE1B-M1
+  supplier_id: idec
+  datasheet: https://www.idec.com/en-us/safety-explosion-protection/safety-components/enabling-switches/he1b-series/he1b-m1
+  unknowns:
+  - The EUR price is not sourced.
+  - The housing order code is not selected.
+  notes: 'Data sheet mirror: https://www.mouser.com/catalog/specsheets/IDEC_HE1BSeries.pdf. Jog gating is
+    software. It is not a performance level.'
+  lifecycle: active
+- part_number: VC-CT-6270
+  name: Safety reset pushbutton
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: NO pushbutton for the PNOZ s4 monitored reset, between S12 and S34. It is not a RevPi output.
+  legacy_ref: '9.134'
+  unknowns:
+  - The order code is not selected.
+  - The price is not sourced.
+  notes: Schematic reference S10. A blue or white operator is typical. The colour is not frozen.
+  lifecycle: active
+- part_number: VC-CT-6280
+  name: Rotation drive PD2-C4118L1804-E-01
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: Nanotec PD2-C4118L1804-E-01. NEMA 17 motor with an integrated controller. Supply 12-48 V DC.
+    The schematic uses 24 V. Clock and direction. This order code speaks USB, not Modbus RTU.
+  legacy_ref: '9.135'
+  manufacturer_pn: PD2-C4118L1804-E-01
+  supplier_id: nanotec
+  datasheet: https://www.nanotec.com/eu/en/products/1892-pd2-c4118l1804-e-01
+  unknowns:
+  - This row is a proposal. It is not a released selection.
+  - A Modbus RTU order code in the same family is TODO.
+  - The price is not sourced.
+  notes: 'Not on a live BOM. Manual:
+    https://www.nanotec.com/fileadmin/files/Handbuecher/Handbuecher_Archiv/Plug_Drive/PD2-C/fir-v2139/PD2C_USB_Technical-Manual_V3.2.0.pdf.'
+  lifecycle: alternative
+- part_number: VC-CT-6710
+  name: Signal terminal set
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: Feed-through terminals for the field signals on X7, X8 and X9. Grey 2.5 mm2 terminals and end
+    plates. One kit.
+  legacy_ref: '9.136'
+  unknowns:
+  - The Phoenix or Weidmueller order code is not selected.
+  - The terminal count on the strip is the schematic terminal list. Confirm it before you buy a kit.
+  - The price is not sourced.
+  notes: Names X7, X8 and X9 are the schematic strips. They are not printed on a purchased block.
+  lifecycle: active
+- part_number: VC-CT-6720
+  name: Power terminal set
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: Power terminals for X1, X2, X3, X4, X5 and X6. The mains and motor strips need a larger
+    cross-section than the signal kit.
+  legacy_ref: '9.137'
+  unknowns:
+  - The order code is not selected.
+  - The cross-section is 4 mm2 for the motors and 6 mm2 for the mains. Confirm both.
+  - The price is not sourced.
+  notes: PE terminals are green-yellow. The 0V terminal on X1 is grey or blue. The colour is a convention.
+  lifecycle: active
+- part_number: VC-CT-6730
+  name: STO and safety cable
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: Shielded twisted pairs for the two E-stop channels, the reset, and the two STO channels to the
+    S200 and the ATV320. Length is the cabinet run.
+  legacy_ref: '9.138'
+  supplier_id: lapp
+  unknowns:
+  - The Lapp order code is not selected.
+  - The length is not set.
+  - The price is not sourced.
+  notes: Keep each STO channel in its own pair. Do not share a pair between channel 1 and channel 2.
+  lifecycle: active
+- part_number: VC-CT-6740
+  name: Field signal cable set
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: Cables for the limit switches, the enabling switch, the index sensor, the beacon and the tilt
+    monitor contacts. 0.5 mm2 or 0.75 mm2. Shield where the run leaves the cabinet.
+  legacy_ref: '9.139'
+  supplier_id: lapp
+  unknowns:
+  - Lengths are not set.
+  - The price is not sourced.
+  notes: Carriage cables of this set run in VC-HB-3430.
+  lifecycle: active
+- part_number: VC-CT-6750
+  name: Ethernet patch RevPi to RUT241
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: Cat5e patch cable, cabinet length, from RevPi ETH0 to RUT241 LAN.
+  legacy_ref: '9.140'
+  unknowns:
+  - The length is not set. A 0.5 m patch is the working assumption.
+  - The price is not sourced.
+  notes: ETH1 on the RevPi stays free for service.
+  lifecycle: active
+- part_number: VC-CT-6760
+  name: RS-485 Modbus cable
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: Shielded twisted pair for Modbus RTU. The RevPi is the master. The ATV320 is slave 1. The S200
+    is slave 2. One 120 ohm resistor at the last slave.
+  legacy_ref: '9.141'
+  supplier_id: lapp
+  unknowns:
+  - The Lapp order code is not selected.
+  - The S200 PTI connector for RS-485 is not confirmed.
+  - The baud and the parity are TODO.
+  - The price is not sourced.
+  notes: The Nanotec proposal is USB. It is not on this cable.
+  lifecycle: active
+- part_number: VC-CT-6770
+  name: Rotation drive cable
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: 24 V pair plus clock, direction and enable for the proposed Nanotec drive. Not released.
+  legacy_ref: '9.142'
+  supplier_id: lapp
+  unknowns:
+  - The cable follows VC-CT-6280. That drive is not released.
+  - The price is not sourced.
+  notes: Not on a live BOM. Do not buy it until the drive order code is frozen.
+  lifecycle: alternative
+- part_number: VC-CT-6780
+  name: Coil diode 1N4007
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: 1N4007 diode across each tilt-contactor coil. Cathode on the switched coil side. Two diodes.
+  legacy_ref: '9.143'
+  manufacturer_pn: 1N4007
+  unknowns:
+  - The price is a few cents and is not entered. Do not invent a band.
+  notes: Schematic references D2 and D3. The Finder 62.32.9.024.4000 coil has no internal diode in this
+    order code. Confirm the suffix before you omit the diodes.
+  lifecycle: active
+- part_number: VC-CT-6790
+  name: Modbus termination 120 ohm
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: control
+  category: Control
+  spec: 120 ohm resistor across RS-485 A and B at the last slave. One resistor.
+  legacy_ref: '9.144'
+  unknowns:
+  - The body style is not selected.
+  - The price is not entered.
+  notes: Schematic reference R1. Move it if the physical bus order changes. The drawing puts it at the S200.
+  lifecycle: active
+- part_number: VC-LT-9230
+  name: Tilt contactor 62.32.9.024.4000
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: tilt
+  category: Tilt
+  spec: Finder 62.32.9.024.4000. Two changeover contacts, 16 A, 24 V DC coil. Two relays, one per tilt
+    direction. The coil of each relay is in series with a NC contact of the other relay.
+  legacy_ref: '9.145'
+  manufacturer_pn: 62.32.9.024.4000
+  supplier_id: finder
+  datasheet: https://www.relayspec.com/specs/175/S62EN.pdf
+  unknowns:
+  - The actuator current is not on a nameplate. The present note assumes 10 A. Confirm it before you order.
+  - The EUR price is not sourced.
+  notes: Never command both directions. The off state puts both motor leads on 0 V. Quantity is two.
+  lifecycle: active
 boms:
 - part_number: VC-ASM-0000
   mrp_type: normal
@@ -2403,7 +2864,7 @@ boms:
   mrp_type: normal
   lines:
   - {part_number: VC-SH-1100, qty: 2}
-  - {part_number: VC-SH-1200, qty: 1}
+  - {part_number: VC-SH-1210, qty: 1}
   - {part_number: VC-SH-1300, qty: 1}
   - {part_number: VC-SH-1350, qty: 1}
   - {part_number: VC-SH-1400, qty: 1}
@@ -2412,6 +2873,7 @@ boms:
   - {part_number: VC-SH-1700, qty: 2}
   - {part_number: VC-SH-1800, qty: 1}
   - {part_number: VC-SH-1900, qty: 1}
+  - {part_number: VC-PW-5770, qty: 2}
 - part_number: VC-ASM-2000
   mrp_type: normal
   lines:
@@ -2432,7 +2894,9 @@ boms:
   - {part_number: VC-HB-3110, qty: 4}
   - {part_number: VC-HB-3200, qty: 1}
   - {part_number: VC-HB-3300, qty: 1}
-  - {part_number: VC-HB-3400, qty: 1}
+  - {part_number: VC-HB-3430, qty: 1}
+  - {part_number: VC-HB-3440, qty: 1}
+  - {part_number: VC-HB-3450, qty: 1}
   - {part_number: VC-HB-3420, qty: 1}
 - part_number: VC-ASM-3000
   mrp_type: normal
@@ -2465,6 +2929,14 @@ boms:
   - {part_number: VC-PW-5700, qty: 1}
   - {part_number: VC-PW-5710, qty: 1}
   - {part_number: VC-PW-5720, qty: 1}
+  - {part_number: VC-PW-5730, qty: 1}
+  - {part_number: VC-PW-5740, qty: 1}
+  - {part_number: VC-PW-5750, qty: 1}
+  - {part_number: VC-PW-5760, qty: 1}
+  - {part_number: VC-PW-5790, qty: 1}
+  - {part_number: VC-PW-5800, qty: 1}
+  - {part_number: VC-PW-5810, qty: 1}
+  - {part_number: VC-PW-5820, qty: 2}
 - part_number: VC-ASM-5000
   mrp_type: normal
   lines:
@@ -2489,6 +2961,16 @@ boms:
   - {part_number: VC-CT-6600, qty: 1}
   - {part_number: VC-CT-6610, qty: 1}
   - {part_number: VC-CT-6700, qty: 1}
+  - {part_number: VC-CT-6250, qty: 1}
+  - {part_number: VC-CT-6260, qty: 1}
+  - {part_number: VC-CT-6270, qty: 1}
+  - {part_number: VC-CT-6710, qty: 1}
+  - {part_number: VC-CT-6720, qty: 1}
+  - {part_number: VC-CT-6730, qty: 1}
+  - {part_number: VC-CT-6740, qty: 1}
+  - {part_number: VC-CT-6750, qty: 1}
+  - {part_number: VC-CT-6760, qty: 1}
+  - {part_number: VC-CT-6790, qty: 1}
 - part_number: VC-ASM-8000
   mrp_type: normal
   lines:
@@ -2508,6 +2990,8 @@ boms:
   - {part_number: VC-LT-9200, qty: 1}
   - {part_number: VC-LT-9210, qty: 1}
   - {part_number: VC-LT-9220, qty: 1}
+  - {part_number: VC-LT-9230, qty: 2}
+  - {part_number: VC-CT-6780, qty: 2}
 - part_number: VC-ASM-8300
   mrp_type: normal
   lines:

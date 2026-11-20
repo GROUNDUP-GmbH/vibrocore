@@ -16,6 +16,14 @@
 <text x="20" y="68.00000000000001" font-size="2.8" font-family="sans-serif">6      VC-PW-5700     A    1    Main isolator</text>
 <text x="20" y="72.20000000000002" font-size="2.8" font-family="sans-serif">7      VC-PW-5710     A    1    Line circuit breaker</text>
 <text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-PW-5720     A    1    Residual current device</text>
+<text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-PW-5730     A    1    Branch MCB sonic inverter</text>
+<text x="20" y="84.80000000000003" font-size="2.8" font-family="sans-serif">10     VC-PW-5740     A    1    Branch MCB hub drive</text>
+<text x="20" y="89.00000000000003" font-size="2.8" font-family="sans-serif">11     VC-PW-5750     A    1    Branch MCB S200 24 V supply</text>
+<text x="20" y="93.20000000000003" font-size="2.8" font-family="sans-serif">12     VC-PW-5760     A    1    Branch MCB general 24 V supply</text>
+<text x="20" y="97.40000000000003" font-size="2.8" font-family="sans-serif">13     VC-PW-5790     A    1    Rotation drive fuse</text>
+<text x="20" y="101.60000000000004" font-size="2.8" font-family="sans-serif">14     VC-PW-5800     A    1    DC fuse S200 24 V rail</text>
+<text x="20" y="105.80000000000004" font-size="2.8" font-family="sans-serif">15     VC-PW-5810     A    1    DC fuse general 24 V rail</text>
+<text x="20" y="110.00000000000004" font-size="2.8" font-family="sans-serif">16     VC-PW-5820     A    2    PNOZ output fuse</text>
 <text x="20" y="244" font-size="3" font-family="sans-serif">Schematic only. Component positions that are not dimensioned in the design documents are not drawn.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>

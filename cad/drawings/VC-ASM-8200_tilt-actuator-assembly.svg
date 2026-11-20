@@ -11,6 +11,8 @@
 <text x="20" y="47" font-size="2.8" font-family="sans-serif">1      VC-LT-9200     A    1    Electric linear actuator, tilt</text>
 <text x="20" y="51.2" font-size="2.8" font-family="sans-serif">2      VC-LT-9210     A    1    Tilt pivot bracket</text>
 <text x="20" y="55.400000000000006" font-size="2.8" font-family="sans-serif">3      VC-LT-9220     A    1    Tilt detent pin and spring</text>
+<text x="20" y="59.60000000000001" font-size="2.8" font-family="sans-serif">4      VC-LT-9230     A    2    Tilt contactor 62.32.9.024.4000</text>
+<text x="20" y="63.80000000000001" font-size="2.8" font-family="sans-serif">5      VC-CT-6780     A    2    Coil diode 1N4007</text>
 <text x="20" y="244" font-size="3" font-family="sans-serif">Schematic only. Component positions that are not dimensioned in the design documents are not drawn.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>

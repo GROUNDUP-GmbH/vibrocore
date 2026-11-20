@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 1950 >>
+<< /Length 2561 >>
 stream
 BT
 /F1 11 Tf
@@ -71,6 +71,26 @@ T*
 T*
 (21  VC-CT-6700  rev A  qty 1  Wiring harness) Tj
 T*
+(22  VC-CT-6250  rev A  qty 1  Rotation index sensor) Tj
+T*
+(23  VC-CT-6260  rev A  qty 1  Enabling switch HE1B-M1) Tj
+T*
+(24  VC-CT-6270  rev A  qty 1  Safety reset pushbutton) Tj
+T*
+(25  VC-CT-6710  rev A  qty 1  Signal terminal set) Tj
+T*
+(26  VC-CT-6720  rev A  qty 1  Power terminal set) Tj
+T*
+(27  VC-CT-6730  rev A  qty 1  STO and safety cable) Tj
+T*
+(28  VC-CT-6740  rev A  qty 1  Field signal cable set) Tj
+T*
+(29  VC-CT-6750  rev A  qty 1  Ethernet patch RevPi to RUT241) Tj
+T*
+(30  VC-CT-6760  rev A  qty 1  RS-485 Modbus cable) Tj
+T*
+(31  VC-CT-6790  rev A  qty 1  Modbus termination 120 ohm) Tj
+T*
 (Owner: Ground UP GmbH) Tj
 T*
 (Document status: preliminary) Tj
@@ -100,8 +120,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000002250 00000 n 
+0000002861 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-2320
+2931
 %%EOF

@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 991 >>
+<< /Length 1054 >>
 stream
 BT
 /F1 11 Tf
@@ -19,7 +19,7 @@ BT
 T*
 (1  VC-SH-1100  rev A  qty 2  OLI MVE 400/6-HF) Tj
 T*
-(2  VC-SH-1200  rev A  qty 1  Frequency inverter 1.5 kW) Tj
+(2  VC-SH-1210  rev A  qty 1  Sonic inverter ATV320U15M2C) Tj
 T*
 (3  VC-SH-1300  rev A  qty 1  Vibrating plate weldment) Tj
 T*
@@ -36,6 +36,8 @@ T*
 (9  VC-SH-1800  rev A  qty 1  Fastener kit, sonic head) Tj
 T*
 (10  VC-SH-1900  rev A  qty 1  Vibro head guard) Tj
+T*
+(11  VC-PW-5770  rev A  qty 2  Sonic motor protection) Tj
 T*
 (Owner: Ground UP GmbH) Tj
 T*
@@ -66,8 +68,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000001290 00000 n 
+0000001354 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-1360
+1424
 %%EOF

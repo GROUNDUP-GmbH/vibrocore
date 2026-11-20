@@ -9,6 +9,9 @@ A second I/O module is not required.
 There is no analogue input module.
 Byte offsets come from PiCtory.
 The numbers below are channel indexes, not byte offsets.
+The cabinet schematic is VC-SCH-5000.
+See docs/engineering/SCHEMATIC.md.
+This channel table is the source for that drawing.
 
 ## Safety note for every function
 

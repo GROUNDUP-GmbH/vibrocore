@@ -49,16 +49,18 @@ The S200 executes position control, the speed profile and the brake on X108.
 The RevPi sends target values and reads status values.
 The RevPi does not close the position loop.
 The RevPi does not release the motor brake with a DIO output.
+VC-PW-5310, the SDR-120-24, feeds only the S200 24 V input and the brake supply inside the drive.
 Position comes from the 1FL2 absolute encoder in part VC-HB-2100.
 VC-HB-3410, the chain-shaft encoder, is obsolete.
 There is no chain encoder, so do not buy VC-HB-3410.
-The sonic-head inverter is slave 1 and its order code is not selected.
+The sonic-head inverter is slave 1.
+The order code is ATV320U15M2C, part VC-SH-1210.
 The sonic register map is TODO.
 Register 40100 is the example control word, and 40101 is the speed setpoint.
 Those two numbers are not verified on this drive.
 Mark every unverified register as TODO.
 Keep the safety function in the hard-wired circuit.
-Wire Pilz PNOZ s4 article 750104 (VC-CT-6220) to S200 STO input X131.
+Wire Pilz PNOZ s4 article 750104 (VC-CT-6220) to S200 STO input X131 and to the ATV320 STO input.
 The RevPi software only reads the feedback contacts.
 The software can send a normal stop.
 Do not credit the RevPi software in any ISO 13849 performance level.

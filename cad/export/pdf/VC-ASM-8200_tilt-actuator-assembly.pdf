@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 607 >>
+<< /Length 731 >>
 stream
 BT
 /F1 11 Tf
@@ -22,6 +22,10 @@ T*
 (2  VC-LT-9210  rev A  qty 1  Tilt pivot bracket) Tj
 T*
 (3  VC-LT-9220  rev A  qty 1  Tilt detent pin and spring) Tj
+T*
+(4  VC-LT-9230  rev A  qty 2  Tilt contactor 62.32.9.024.4000) Tj
+T*
+(5  VC-CT-6780  rev A  qty 2  Coil diode 1N4007) Tj
 T*
 (Owner: Ground UP GmbH) Tj
 T*
@@ -52,8 +56,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000000906 00000 n 
+0000001030 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-976
+1100
 %%EOF

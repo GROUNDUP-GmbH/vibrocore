@@ -29,8 +29,10 @@ def test_no_48v_parts_on_a_live_bom():
     assert bom.part("VC-PW-5310").manufacturer_pn == "SDR-120-24"
     assert "2.2 A" in bom.part("VC-PW-5310").spec
     assert bom.part("VC-CT-6220").manufacturer_pn == "750104"
-    assert "two NC" in bom.part("VC-CT-6210").spec
-    assert "STO" in bom.part("VC-SH-1200").spec
+    assert "three NC" in bom.part("VC-CT-6210").spec
+    assert bom.part("VC-SH-1200").lifecycle == "superseded"
+    assert bom.part("VC-SH-1210").manufacturer_pn == "ATV320U15M2C"
+    assert "STO" in bom.part("VC-SH-1210").spec
 
 
 def test_heat_check_drops_the_48v_supply():

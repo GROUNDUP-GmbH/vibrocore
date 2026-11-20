@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 4866 >>
+<< /Length 5020 >>
 stream
 BT
 /F1 10 Tf
@@ -97,13 +97,19 @@ T*
 T*
 (The RevPi does not release the motor brake with a DIO output.) Tj
 T*
+(VC-PW-5310, the SDR-120-24, feeds only the S200 24 V input and the brake supply inside the driv) Tj
+T*
+(e.) Tj
+T*
 (Position comes from the 1FL2 absolute encoder in part VC-HB-2100.) Tj
 T*
 (VC-HB-3410, the chain-shaft encoder, is obsolete.) Tj
 T*
 (There is no chain encoder, so do not buy VC-HB-3410.) Tj
 T*
-(The sonic-head inverter is slave 1 and its order code is not selected.) Tj
+(The sonic-head inverter is slave 1.) Tj
+T*
+(The order code is ATV320U15M2C, part VC-SH-1210.) Tj
 T*
 (The sonic register map is TODO.) Tj
 T*
@@ -115,7 +121,9 @@ T*
 T*
 (Keep the safety function in the hard-wired circuit.) Tj
 T*
-(Wire Pilz PNOZ s4 article 750104 \(VC-CT-6220\) to S200 STO input X131.) Tj
+(Wire Pilz PNOZ s4 article 750104 \(VC-CT-6220\) to S200 STO input X131 and to the ATV320 STO inpu) Tj
+T*
+(t.) Tj
 T*
 (The RevPi software only reads the feedback contacts.) Tj
 T*
@@ -189,7 +197,7 @@ T*
 T*
 (Select the sonic inverter before you fill its register map.) Tj
 T*
-(`CONTROL_SYSTEM.md` still describes the WAGO rack and is not changed here.) Tj
+(? truncated for PLM text PDF; full Markdown is in git.) Tj
 T*
 ET
 endstream
@@ -204,8 +212,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000241 00000 n 
-0000005159 00000 n 
+0000005313 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-5229
+5383
 %%EOF

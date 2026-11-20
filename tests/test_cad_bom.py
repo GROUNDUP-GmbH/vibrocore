@@ -19,7 +19,8 @@ def _rows(path):
 def test_bom_rollups_match_published_lines():
     bom = load_bom()
     expected = {
-        "VC-ASM-1000": (1185, 1900),
+        # ATV320 has no sourced price. The old VFD band 180-300 left the rollup.
+        "VC-ASM-1000": (1005, 1600),
         "VC-ASM-2000": (1435, 2310),
         # V1.1 frame excludes obsolete gas-spring tilt VC-FR-4700.
         "VC-ASM-3000": (440, 730),
@@ -37,8 +38,8 @@ def test_bom_rollups_match_published_lines():
     # Two rods, four shoes and one O-ring pack from offer 26100096.
     assert bom.rollup("VC-KIT-6000", "low") == bom.rollup("VC-KIT-6000", "high")
     assert abs(bom.rollup("VC-KIT-6000", "low") - (2 * 389.99 + 4 * 300.78 + 24.75)) < 1e-6
-    assert bom.rollup("VC-ASM-0000", "low") == 1185 + 1435 + 440 + 2640 + 1465 + 1259
-    assert bom.rollup("VC-ASM-0000", "high") == 1900 + 2310 + 730 + 2750 + 2310 + 2300
+    assert bom.rollup("VC-ASM-0000", "low") == 1005 + 1435 + 440 + 2640 + 1465 + 1259
+    assert bom.rollup("VC-ASM-0000", "high") == 1600 + 2310 + 730 + 2750 + 2310 + 2300
 
 
 def test_revision_letters_follow_odooplm_index():
