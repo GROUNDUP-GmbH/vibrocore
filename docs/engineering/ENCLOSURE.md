@@ -92,6 +92,22 @@ The sonic inverter must have STO.
 The order is not selected.
 The enclosure holds a placeholder of 140 x 160 x 164.5 mm.
 
+## Models
+
+The SDR-480 solid is the manufacturer STEP.
+The file is under 10 MB.
+The SDR-120 solid is the exterior of the manufacturer STEP.
+The full SDR-120 file is 14.7 MB.
+That full file is not stored.
+The stored exterior keeps the measured outline and the terminal solids.
+RevPi Connect 4, the DIO, the RUT241, the WAGO rack, the PNOZ s4 and the S200 are built solids.
+A manufacturer file for those parts is above 10 MB, or the download needs a login.
+Each built solid keeps the published envelope, a DIN groove, the terminals and its own colour.
+Option B is drawn on the control rail so the fit is visible.
+Option B is not a second controller in the order.
+Cable ducts are open channels.
+The DIN rails sit on the mounting plate.
+
 ## Other layout
 
 There is no chain-encoder gland.

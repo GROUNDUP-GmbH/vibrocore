@@ -161,8 +161,9 @@ def layout_items() -> list[Item]:
     items.append(_on_plate("VC-SH-1200-STO", 210.5, 397.5, 140.0, 160.0, 164.5, "placeholder"))
     # Dedicated 24 V supply for S200 control and the brake. SDR-120-24, 5 A.
     items.append(_on_plate("VC-PW-5310", -240.0, 383.02, 40.0, 128.96, 126.26))
-    # Machine 24 V slot. SDR-480-24 envelope. The rating is not frozen.
-    items.append(_on_plate("VC-PW-5320-PLACEHOLDER", -317.75, 384.9, 85.5, 125.2, 129.2, "placeholder"))
+    # Machine 24 V slot. The solid is the SDR-480 STEP. The rating is not frozen.
+    # Measured outline: width 85.5, depth 129.2, height 125.2. Bottom stays at 320.3.
+    items.append(_on_plate("VC-PW-5320-PLACEHOLDER", -317.75, 382.9, 85.5, 125.2, 129.2, "device"))
     # Switchgear placeholders. Order codes are still open.
     items.append(_on_plate("VC-PW-5700", -333.5, 253.5, 54.0, 90.0, 70.0, "placeholder"))
     items.append(_on_plate("VC-PW-5710", -282.5, 253.5, 36.0, 90.0, 70.0, "placeholder"))
@@ -187,9 +188,14 @@ def layout_items() -> list[Item]:
     )
     # Reserved DIN space for Pilz PNOZ s4 750104. 22.5 x 98 x 120 mm.
     items.append(_on_plate("VC-CT-6220-RESERVE", 36.0, z_rail + 49.0, 22.5, 98.0, 120.0, "placeholder"))
-    items.append(_on_plate("VC-CT-6600", 140.0, z_rail + 12.5, 83.0, 25.0, 80.25))
-    items.append(_on_plate("VC-CT-6400", 210.0, z_rail + 20.0, 30.0, 40.0, 20.0, "placeholder"))
-    items.append(_on_plate("VC-LT-9110", 310.0, z_rail + 35.0, 45.0, 70.0, 60.0, "placeholder"))
+    # RUT241 stands on the rail. 83 wide, 32 deep, 86 tall with the antennas.
+    items.append(_on_plate("VC-CT-6600", 120.0, z_rail + 43.0, 83.0, 86.0, 32.0))
+    # Option B is drawn on the same rail so the fit is visible. It is not a second order.
+    items.append(_on_plate("VC-CT-6800", 230.0, z_rail + 48.0, 45.0, 96.0, 110.37))
+    items.append(_on_plate("VC-CT-6810", 268.0, z_rail + 48.0, 22.5, 96.0, 110.37))
+    items.append(_on_plate("VC-CT-6400", -280.0, -250.0, 30.0, 40.0, 20.0, "placeholder"))
+    items.append(_on_plate("VC-LT-9110", -210.0, -240.0, 45.0, 70.0, 60.0, "placeholder"))
+    items.extend(_rails())
     items.append(_on_plate("DUCT-CONTROL", 0.0, 64.5, 700.0, 40.0, 40.0, "duct"))
     items.append(_on_plate("DUCT-TERMINAL", 0.0, -378.0, 680.0, 40.0, 40.0, "duct"))
     items.append(_on_plate("VC-CT-6340", -20.0, -436.5, 360.0, 52.0, 48.0))
@@ -271,6 +277,18 @@ def _mounts() -> list[Item]:
     return items
 
 
+def _rails() -> list[Item]:
+    """DIN rails on the plate. The clip of each device wraps the rail."""
+    y = _plate_front_y() + 3.8
+    rails = (
+        ("RAIL-POWER", -290.0, 383.0, 200.0),
+        ("RAIL-DRIVE", 250.0, 380.0, 280.0),
+        ("RAIL-CONTROL", 70.0, 146.5, 520.0),
+        ("RAIL-FEED", -270.0, 253.5, 200.0),
+    )
+    return [_item(name, x, y, z, length, 7.5, 35.0, "rail") for name, x, z, length in rails]
+
+
 def _fan_reserves() -> list[Item]:
     """Empty door zones. The fan is not fitted. IP66 stays closed."""
     return [
@@ -296,6 +314,8 @@ def layout_conflicts() -> list[tuple[str, str]]:
             if left.kind == "gland" and right.kind == "gland":
                 continue
             if left.kind == "reserve" and right.kind == "reserve":
+                continue
+            if left.kind == "rail" or right.kind == "rail":
                 continue
             if _hits(left, right):
                 hits.append((left.name, right.name))
@@ -327,15 +347,20 @@ def validate_layout() -> None:
                 raise ValueError(f"{item.name} meets the door")
 
 
-def _solid_for(item: Item):
-    from build123d import Box, Pos
+def _coloured_parts(item: Item):
+    """World-space solids for one item. Each entry is shape, colour, label."""
+    from build123d import Pos
 
-    shape = Pos(item.x, item.y, item.z) * Box(item.sx, item.sy, item.sz)
-    if item.name == "VC-PW-5320-PLACEHOLDER":
-        core = Pos(item.x, item.y, item.z) * Box(item.sx - 8, item.sy - 8, item.sz - 8)
-        shape = shape - core
-    shape.label = item.name
-    return shape
+    from cad.models.simplified_electronics import parts_for
+
+    local = parts_for(item.name, item.sx, item.sy, item.sz)
+    placed = []
+    for index, (shape, colour) in enumerate(local):
+        world = Pos(item.x, item.y, item.z) * shape
+        world.label = item.name
+        label = item.name if index == 0 else ""
+        placed.append((world, colour, label))
+    return placed
 
 
 def _shell():
@@ -372,15 +397,28 @@ def _plate():
     return plate
 
 
-def assembly_shape(open_door: bool = False):
-    from build123d import Compound
-
+def assembly_parts(open_door: bool = False):
+    """Shell, door, plate and devices. Reserves stay empty."""
     validate_layout()
-    parts = [_shell(), _door(130.0 if open_door else 0.0), _plate()]
+    shell = _shell()
+    door = _door(130.0 if open_door else 0.0)
+    plate = _plate()
+    parts = [
+        (shell, (198, 200, 196), ""),
+        (door, (186, 188, 184), ""),
+        (plate, (168, 170, 166), ""),
+    ]
     for item in layout_items():
         if item.kind == "reserve":
             continue
-        parts.append(_solid_for(item))
+        parts.extend(_coloured_parts(item))
+    return parts
+
+
+def assembly_shape(open_door: bool = False):
+    from build123d import Compound
+
+    parts = [shape for shape, _colour, _label in assembly_parts(open_door)]
     shape = Compound(children=parts)
     shape.label = ASSEMBLY_ID
     return shape
@@ -400,13 +438,13 @@ def export_electronics_enclosure(bom, step_dir, render_dir) -> list:
     _drop_negative_zero(step_path)
     written = [step_path]
     views = {
-        "iso": assembly_shape(False),
-        "front-open": assembly_shape(True),
-        "bottom": assembly_shape(False),
+        "iso": True,
+        "front-open": True,
+        "bottom": False,
     }
-    for view, solid in views.items():
+    for view, door_open in views.items():
         path = render_dir / f"{ASSEMBLY_ID}-{view}.png"
-        _render(solid, view, path)
+        _render(assembly_parts(door_open), view, path)
         written.append(path)
     return written
 
@@ -421,28 +459,56 @@ def _drop_negative_zero(path) -> None:
     path.write_text(cleaned, encoding="utf-8")
 
 
-def _render(shape, view: str, path) -> None:
+LABELS = {
+    "VC-HB-2300": "S200",
+    "VC-SH-1200-STO": "STO open",
+    "VC-PW-5310": "SDR-120",
+    "VC-PW-5320-PLACEHOLDER": "SDR-480",
+    "VC-CT-6100": "PFC200",
+    "VC-CT-6110-1": "DI",
+    "VC-CT-6110-2": "DI",
+    "VC-CT-6120-1": "DO",
+    "VC-CT-6120-2": "DO",
+    "VC-CT-6140": "485",
+    "VC-CT-6150": "END",
+    "VC-CT-6220-RESERVE": "PNOZ s4",
+    "VC-CT-6600": "RUT241",
+    "VC-CT-6800": "RevPi",
+    "VC-CT-6810": "DIO",
+    "VC-PW-5700": "isolator",
+    "VC-PW-5710": "MCB",
+    "VC-PW-5720": "RCD",
+}
+
+
+def _render(parts, view: str, path) -> None:
     import numpy as np
-    from PIL import Image
+    from PIL import Image, ImageDraw, ImageFont
 
     eyes = {
-        "iso": (np.array([0.9, 0.7, 0.55]), np.array([0.0, 0.0, 1.0])),
-        "front-open": (np.array([0.15, 1.0, 0.08]), np.array([0.0, 0.0, 1.0])),
-        "bottom": (np.array([0.2, 0.15, -1.0]), np.array([0.0, 1.0, 0.0])),
+        "iso": (np.array([0.48, 0.92, 0.72]), np.array([0.0, 0.0, 1.0])),
+        "front-open": (np.array([0.22, 1.05, 0.58]), np.array([0.0, 0.0, 1.0])),
+        "bottom": (np.array([0.18, 0.22, -1.0]), np.array([0.0, 1.0, 0.0])),
     }
     eye, up = eyes[view]
-    forward = -eye / np.linalg.norm(eye)
+    eye = eye / np.linalg.norm(eye)
+    forward = -eye
     right = np.cross(forward, up)
     right = right / np.linalg.norm(right)
     true_up = np.cross(right, forward)
-    light = np.array([0.35, 0.25, 0.9])
-    light = light / np.linalg.norm(light)
+    key = eye * 0.55 + np.array([0.05, 0.1, 0.75])
+    key = key / np.linalg.norm(key)
+    fill = np.array([-0.45, 0.25, 0.15])
+    fill = fill / np.linalg.norm(fill)
     triangles = []
     shades = []
-    leaves = [solid for solid in shape.solids() if abs(float(solid.volume)) > 1.0]
-    for solid in leaves:
-        color = _color(solid.label or "")
-        vertices, faces = solid.tessellate(2.5, 0.8)
+    anchors = []
+    for shape, colour, label in parts:
+        fine = (shape.label or "").startswith("VC-PW-53")
+        try:
+            vertices, faces = shape.tessellate(0.55 if fine else 1.6, 0.35 if fine else 0.6)
+        except Exception:
+            continue
         if not faces:
             continue
         points = np.array([(vertex.X, vertex.Y, vertex.Z) for vertex in vertices], dtype=np.float64)
@@ -452,26 +518,64 @@ def _render(shape, view: str, path) -> None:
             norm = np.linalg.norm(normal)
             if norm < 1e-9:
                 continue
-            shade = 0.42 + 0.58 * abs(float(np.dot(normal / norm, light)))
+            unit = normal / norm
+            shade = 0.30 + 0.62 * max(0.0, float(np.dot(unit, key))) + 0.22 * max(0.0, float(np.dot(unit, fill)))
+            shade = min(shade, 1.35)
             cam = np.column_stack((tri @ right, tri @ true_up, tri @ -forward))
             triangles.append(cam)
-            shades.append(tuple(channel * shade for channel in color))
-    width, height = 960, 720
+            shades.append(tuple(min(255.0, channel * shade) for channel in colour))
+        text = LABELS.get(label or "")
+        if text:
+            center = shape.bounding_box().center()
+            size = shape.bounding_box().size
+            point = np.array(
+                [
+                    float(center.X),
+                    float(center.Y) + float(size.Y) * 0.2,
+                    float(center.Z) + float(size.Z) * 0.22,
+                ]
+            )
+            anchors.append((point, text))
+    width, height = 1100, 820
     image = np.zeros((height, width, 3), dtype=np.uint8)
-    image[:, :] = (236, 236, 232)
+    image[:, :] = (244, 243, 238)
     depth = np.full((height, width), -1e30, dtype=np.float64)
     cloud = np.concatenate(triangles, axis=0)
     span_x = max(float(cloud[:, 0].max() - cloud[:, 0].min()), 1.0)
     span_y = max(float(cloud[:, 1].max() - cloud[:, 1].min()), 1.0)
-    scale = min((width * 0.86) / span_x, (height * 0.86) / span_y)
+    scale = min((width * 0.88) / span_x, (height * 0.86) / span_y)
     center_x = float(cloud[:, 0].min() + cloud[:, 0].max()) / 2.0
     center_y = float(cloud[:, 1].min() + cloud[:, 1].max()) / 2.0
     for tri, color in zip(triangles, shades):
         px = width / 2.0 + (tri[:, 0] - center_x) * scale
         py = height / 2.0 - (tri[:, 1] - center_y) * scale
         _paint(image, depth, px, py, tri[:, 2], color)
+    picture = Image.fromarray(image, mode="RGB")
+    if view != "bottom":
+        _draw_labels(picture, anchors, right, true_up, forward, scale, center_x, center_y, width, height)
     path.parent.mkdir(parents=True, exist_ok=True)
-    Image.fromarray(image, mode="RGB").save(path, format="PNG", compress_level=9, optimize=False)
+    picture.save(path, format="PNG", compress_level=9, optimize=False)
+
+
+def _draw_labels(picture, anchors, right, true_up, forward, scale, center_x, center_y, width, height) -> None:
+    from PIL import ImageDraw, ImageFont
+
+    draw = ImageDraw.Draw(picture)
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 15)
+    used = []
+    for point, text in anchors:
+        cam_x = float(point @ right)
+        cam_y = float(point @ true_up)
+        px = width / 2.0 + (cam_x - center_x) * scale
+        py = height / 2.0 - (cam_y - center_y) * scale
+        if px < 8 or py < 8 or px > width - 8 or py > height - 8:
+            continue
+        while any(abs(px - other_x) < 62 and abs(py - other_y) < 18 for other_x, other_y in used):
+            py -= 16
+        used.append((px, py))
+        box = draw.textbbox((px, py), text, font=font, anchor="mm")
+        draw.rectangle((box[0] - 2, box[1] - 1, box[2] + 2, box[3] + 1), fill=(244, 243, 238))
+        draw.text((px, py), text, font=font, fill=(24, 26, 28), anchor="mm")
 
 
 def _paint(image, depth, px, py, z, color) -> None:
@@ -504,21 +608,3 @@ def _paint(image, depth, px, py, z, color) -> None:
     window[update] = zee[update]
     patch = image[min_y : max_y + 1, min_x : max_x + 1]
     patch[update] = np.clip(np.array(color), 0, 255).astype(np.uint8)
-
-
-def _color(name: str) -> tuple[int, int, int]:
-    if name.startswith("VC-CT-6300"):
-        return (196, 198, 194)
-    if "PLACEHOLDER" in name or "RESERVE" in name or name.endswith("-STO") or name.startswith("VC-PW-57"):
-        return (214, 176, 92)
-    if name.startswith("DUCT"):
-        return (92, 124, 148)
-    if name.startswith("M") or name.startswith("SMA") or name.startswith("RPSMA") or name in {"VENT", "PE-STUD"}:
-        return (176, 154, 92)
-    if name.startswith("BRACKET") or name.startswith("TNUT"):
-        return (90, 98, 108)
-    if name.startswith("BUFFER"):
-        return (70, 78, 86)
-    if name.startswith("VC-HB-2300"):
-        return (48, 72, 112)
-    return (70, 104, 132)

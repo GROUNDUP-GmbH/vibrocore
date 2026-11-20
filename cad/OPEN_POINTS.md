@@ -175,7 +175,6 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-PW-5100` Instagrid ONE max: no solid. Dimensions were not complete enough to model.
 - `VC-PW-5200` Mean Well SDR-480-48: no solid. Dimensions were not complete enough to model.
 - `VC-PW-5300` Mean Well DDR-60D-24: no solid. Dimensions were not complete enough to model.
-- `VC-PW-5310` Mean Well SDR-120-24: no solid. Dimensions were not complete enough to model.
 - `VC-PW-5320` Machine 24 V supply: The current rating stays open until the actuator currents are known.
 - `VC-PW-5320` Machine 24 V supply: SDR-480-24 is the slot size. It is not a purchase order.
 - `VC-PW-5320` Machine 24 V supply: Price is unknown.

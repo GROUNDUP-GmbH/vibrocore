@@ -63,4 +63,36 @@ def test_layout_reserves_the_open_slots():
     assert relay.sz == 98.0
     slot = next(item for item in layout_items() if item.name == "VC-PW-5320-PLACEHOLDER")
     assert slot.sx == 85.5
+    assert slot.sy == 129.2
+    assert slot.sz == 125.2
     assert rack_width_mm() == 150.6
+    assert "VC-CT-6800" in names
+    assert "VC-CT-6810" in names
+
+
+def test_sdr_files_keep_the_outline_and_stay_under_10_mb():
+    from build123d import Compound
+
+    from cad.models.simplified_electronics import sdr120_parts, sdr480_parts
+    from cad.tools.geometry import vendor_step_path
+
+    dedicated = vendor_step_path("VC-PW-5310")
+    machine = vendor_step_path("VC-PW-5320")
+    assert dedicated is not None and dedicated.name == "SDR-120-exterior.step"
+    assert machine is not None and machine.name == "SDR-480.stp"
+    assert dedicated.stat().st_size < 10_000_000
+    assert machine.stat().st_size < 10_000_000
+
+    def span(parts):
+        shape = Compound(children=[solid for solid, _colour in parts])
+        size = shape.bounding_box().size
+        return (float(size.X), float(size.Y), float(size.Z))
+
+    width, depth, height = span(sdr120_parts())
+    assert abs(width - 40.0) < 0.05
+    assert abs(depth - 126.26) < 0.05
+    assert abs(height - 128.96) < 0.05
+    width, depth, height = span(sdr480_parts())
+    assert abs(width - 85.5) < 0.05
+    assert abs(depth - 129.2) < 0.05
+    assert abs(height - 125.2) < 0.05
