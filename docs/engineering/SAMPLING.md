@@ -7,7 +7,11 @@ Open lab tubes sit inside the casing.
 The split carrier holds those tubes.
 The machine does not use an inner string.
 
-Do not add centre rods, a centring drive cap, a sample sheath, PVC liners, core catchers, end caps, a lift cap, a leaf puller, a rod clamp or a retainer wrench.
+Do not add centre rods, a centring drive cap, PVC liners, core catchers, end caps, a lift cap, a leaf puller, a rod clamp or a retainer wrench to the kit.
+
+Approximation solids of the sample sheath, the sheath drive head and the drive head are a study on the casing.
+They are not kit lines.
+The drawing set is `cad/vendor/DT325/SOURCE.md`.
 
 ## What stays on the kit
 
@@ -73,7 +77,7 @@ Prices are EUR net and exclude freight.
 |---|---|---|
 | O-ring 201325, VC-GP-7150 | Keep on VC-KIT-6000. Quantity 1 pack. | Geoprobe names it "O-Ring (3.25 in. Probe Rod)", quantity 25. It seals the joints between outer casing sections. https://geoprobe.com/tooling/dt325-soil-sampling-system/mn201325 |
 | Drive head 201385, VC-GP-7310 | Obsolete. Not on any BOM. History price EUR 171.34. | Geoprobe names it "DT325 Drive Head" with a 1.25 in pin. That pin fits the centre rod. It does not join 3.25 in casing sections. VC-SH-1500 connects the casing to the sonic head. https://geoprobe.com/tooling/dt37-soil-sampling-system/mn201385 |
-| Retainer HD 208472, VC-GP-7410 | Obsolete. Not on any BOM. History price EUR 161.93. | Geoprobe names it "DT325 Retainer HD" and notes "No O-ring". It holds a liner. This machine does not use a liner. https://geoprobe.com/tooling/dt325-soil-sampling-system/mn208472 |
+| Retainer HD 208472, VC-GP-7410 | Obsolete. Not on any BOM. History price EUR 161.93. | Geoprobe names it "DT325 Retainer HD" and notes "No O-ring". It holds a liner. This machine does not use a liner. The retainer is not in the assembly, so it has no solid. https://geoprobe.com/tooling/dt325-soil-sampling-system/mn208472 |
 
 ## Split carrier
 

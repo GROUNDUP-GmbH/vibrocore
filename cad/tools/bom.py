@@ -233,8 +233,8 @@ def load_bom(path: Path | None = None) -> BillOfMaterials:
         if geometry:
             kind = geometry.get("kind")
             fidelity = geometry.get("fidelity")
-            if kind not in {"box", "cylinder", "split_carrier"}:
-                fail(f"{number}: geometry.kind {kind} is not box, cylinder or split_carrier")
+            if kind not in {"box", "cylinder", "split_carrier", "dt325"}:
+                fail(f"{number}: geometry.kind {kind} is not box, cylinder, split_carrier or dt325")
             if fidelity not in FIDELITY:
                 fail(f"{number}: geometry.fidelity {fidelity} is invalid")
             if not geometry.get("source"):
@@ -252,6 +252,13 @@ def load_bom(path: Path | None = None) -> BillOfMaterials:
 
                 try:
                     validate_split_carrier(geometry)
+                except ValueError as exc:
+                    fail(f"{number}: {exc}")
+            if kind == "dt325":
+                from cad.models.dt325 import validate_dt325
+
+                try:
+                    validate_dt325(geometry)
                 except ValueError as exc:
                     fail(f"{number}: {exc}")
         plm_material = raw.get("plm_material")

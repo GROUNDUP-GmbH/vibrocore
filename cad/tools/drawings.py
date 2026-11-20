@@ -138,6 +138,15 @@ def _cylinder_views(part: Part) -> str:
 """.strip()
 
 
+def _dt325_note(part: Part) -> str:
+    geometry = part.geometry or {}
+    return f"""
+<text x="20" y="40" font-size="4" font-family="sans-serif" font-weight="700">APPROXIMATION. Not a Geoprobe CAD model. Do not manufacture.</text>
+<text x="20" y="48" font-size="3.2" font-family="sans-serif">Role { _esc(str(geometry.get("role"))) }. Outer envelope plus a simplified thread zone.</text>
+<text x="20" y="56" font-size="3.2" font-family="sans-serif">Thread form, pitch and engagement are not stated. See cad/vendor/DT325/SOURCE.md.</text>
+""".strip()
+
+
 def _split_carrier_note(part: Part) -> str:
     geometry = part.geometry or {}
     length = float(geometry["tube_count"]) * float(geometry["tube_length_mm"])
@@ -190,6 +199,9 @@ def svg_for(part: Part, bom: BillOfMaterials) -> str:
     elif part.geometry and part.geometry["kind"] == "split_carrier":
         body = _split_carrier_note(part) + "\n" + _notes(part)
         document_type = "part drawing"
+    elif part.geometry and part.geometry["kind"] == "dt325":
+        body = _dt325_note(part) + "\n" + _notes(part)
+        document_type = "part drawing"
     else:
         raise ValueError(f"{part.part_number} has neither a BOM nor geometry")
     return f"""<?xml version="1.0" encoding="UTF-8"?>
@@ -234,6 +246,9 @@ def pdf_for(part: Part, bom: BillOfMaterials) -> bytes:
                 f"Side {geometry['side']}. Stack {geometry['tube_count']:g} x {geometry['tube_length_mm']:g} mm."
             )
             rows.append("Tube OD and tube length are TBD. No cap clearance.")
+        elif geometry.get("kind") == "dt325":
+            rows.append("APPROXIMATION. Not a Geoprobe CAD model. Do not manufacture.")
+            rows.append(f"Role {geometry.get('role')}. Thread form is unknown.")
         rows.extend(f"TODO: {item}" for item in part.unknowns)
     rows.extend(
         [

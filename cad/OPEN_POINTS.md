@@ -16,7 +16,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `gas-spring-vs-electric-tilt`: BOM.md §3 #38 gas-spring tilt (VC-FR-4700) conflicts with §8b electric tilt (#73-75). V1.1 firmware drives the electric tilt. VC-FR-4700 is obsolete/alternative and is not on the live frame BOM.
 - `option-b-savings-v1-vs-v11`: Realistic budget is a rounded scenario, not the YAML rollup. Option B is EUR 530 less than Option A for V1 (8968-8438) and EUR 680 less for V1.1 (10718-10038).
 - `core-scanner-subtotal-mismatch`: Closed 2026-11-19. The scanner subtotal is the VC-ASM-8400 rollup, EUR 429-780.
-- `sampling-concept-2026-11-19`: The sampling string is the 3.25 in outer casing and cutting shoe 205449. Open tubes sit in the split carrier. O-ring 201325 stays, because it seals casing joints. Drive head 201385 and retainer 208472 are obsolete and are not on a BOM.
+- `sampling-concept-2026-11-19`: The sampling string is the 3.25 in outer casing and cutting shoe 205449. Open tubes sit in the split carrier. O-ring 201325 stays, because it seals casing joints. Drive head 201385 and retainer 208472 are obsolete and are not on a BOM. Approximation solids of the DT325 sheath and the drive heads are a study on that casing. They are not kit lines.
 - `mast-height-deficit`: The 1500 mm profile is unchanged. The study layout in docs/engineering/MAST-LAYOUT.md and cad/export/layout/mast-stack.svg computes the deficit for one 1219.2 mm casing plus the head, the shoe and the adapter. Shoe length, adapter length, carriage height and ground clearance are TBD.
 - `se050-double-count`: Closed 2026-11-19. VC-CT-6410 is obsolete. The SE050 breakout is inside VC-CT-6400 and is not a second purchase.
 - `rut241-9v-converter`: Closed 2026-11-19. VC-CT-6620 is obsolete. The RUT241 input is 9-30 V DC. The router runs from the 24 V rail.
@@ -108,9 +108,15 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-FR-4900` Fastener kit, frame: no solid. Dimensions were not complete enough to model.
 - `VC-GP-7100` Probe rod 3.25 in x 48 in: no solid. Dimensions were not complete enough to model.
 - `VC-GP-7150` Probe rod O-ring pack: no solid. Dimensions were not complete enough to model.
-- `VC-GP-7200` Cutting shoe 3.25 in: no solid. Dimensions were not complete enough to model.
+- `VC-GP-7200` Cutting shoe 3.25 in, approximation: Thread form, pitch and engagement are not stated by Geoprobe.
+- `VC-GP-7200` Cutting shoe 3.25 in, approximation: Length is the existing 80 mm placeholder. The SOP does not state a length.
 - `VC-GP-7300` Drive cap GH60: no solid. Dimensions were not complete enough to model.
-- `VC-GP-7310` DT325 drive head: no solid. Dimensions were not complete enough to model.
+- `VC-GP-7310` DT325 drive head, approximation: Thread form, pitch and engagement are not stated by Geoprobe.
+- `VC-GP-7310` DT325 drive head, approximation: Body diameter, body length and pin length are assumptions. See cad/vendor/DT325/SOURCE.md.
+- `VC-GP-7320` DT325 sheath drive head, approximation: Thread form, pitch and engagement are not stated by Geoprobe.
+- `VC-GP-7320` DT325 sheath drive head, approximation: Body diameter, body length and pin length are assumptions. See cad/vendor/DT325/SOURCE.md.
+- `VC-GP-7330` DT325 sample sheath 60 in, approximation: Thread form, pitch and engagement are not stated by Geoprobe.
+- `VC-GP-7330` DT325 sample sheath 60 in, approximation: Outside diameter, inside diameter and wall thickness are assumptions. See cad/vendor/DT325/SOURCE.md.
 - `VC-GP-7400` Core liner 3.25 inch: no solid. Dimensions were not complete enough to model.
 - `VC-GP-7410` DT325 liner retainer HD: no solid. Dimensions were not complete enough to model.
 - `VC-HB-2110` Lift motor bracket: Not placed. VC-FR-4182 carries the gearbox. The motor bolts to the input.
@@ -215,6 +221,10 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-FR-4198` Upper profile mount: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4300` Bottom steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).
 - `VC-FR-4400` Top steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).
+- `VC-GP-7200` Cutting shoe 3.25 in, approximation: dt325, fidelity `partial` (cad/vendor/DT325/SOURCE.md).
+- `VC-GP-7310` DT325 drive head, approximation: dt325, fidelity `partial` (cad/vendor/DT325/SOURCE.md).
+- `VC-GP-7320` DT325 sheath drive head, approximation: dt325, fidelity `partial` (cad/vendor/DT325/SOURCE.md).
+- `VC-GP-7330` DT325 sample sheath 60 in, approximation: dt325, fidelity `partial` (cad/vendor/DT325/SOURCE.md).
 - `VC-HB-2120` Motor flange screw M6x16: cylinder, fidelity `envelope` (docs/engineering/LIFT-DRIVE-SIZING.md).
 - `VC-HB-2122` Gearbox clamp screw: cylinder, fidelity `envelope` (cad/vendor/VC-HB-2200/SOURCE.md).
 - `VC-HB-2124` Adapter access plug: cylinder, fidelity `envelope` (cad/vendor/VC-HB-2200/SOURCE.md).

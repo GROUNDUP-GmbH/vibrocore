@@ -148,6 +148,74 @@
   },
   {
     "bbox_mm": {
+      "x": 87.63,
+      "y": 87.63,
+      "z": 80.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "partial",
+    "kind": "dt325",
+    "part_number": "VC-GP-7200",
+    "source": "cad/vendor/DT325/SOURCE.md",
+    "step": "cad/export/step/VC-GP-7200.step",
+    "unknowns": [
+      "Thread form, pitch and engagement are not stated by Geoprobe.",
+      "Length is the existing 80 mm placeholder. The SOP does not state a length."
+    ]
+  },
+  {
+    "bbox_mm": {
+      "x": 58.0,
+      "y": 58.0,
+      "z": 102.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "partial",
+    "kind": "dt325",
+    "part_number": "VC-GP-7310",
+    "source": "cad/vendor/DT325/SOURCE.md",
+    "step": "cad/export/step/VC-GP-7310.step",
+    "unknowns": [
+      "Thread form, pitch and engagement are not stated by Geoprobe.",
+      "Body diameter, body length and pin length are assumptions. See cad/vendor/DT325/SOURCE.md."
+    ]
+  },
+  {
+    "bbox_mm": {
+      "x": 58.0,
+      "y": 58.0,
+      "z": 102.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "partial",
+    "kind": "dt325",
+    "part_number": "VC-GP-7320",
+    "source": "cad/vendor/DT325/SOURCE.md",
+    "step": "cad/export/step/VC-GP-7320.step",
+    "unknowns": [
+      "Thread form, pitch and engagement are not stated by Geoprobe.",
+      "Body diameter, body length and pin length are assumptions. See cad/vendor/DT325/SOURCE.md."
+    ]
+  },
+  {
+    "bbox_mm": {
+      "x": 60.0,
+      "y": 60.0,
+      "z": 1524.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "partial",
+    "kind": "dt325",
+    "part_number": "VC-GP-7330",
+    "source": "cad/vendor/DT325/SOURCE.md",
+    "step": "cad/export/step/VC-GP-7330.step",
+    "unknowns": [
+      "Thread form, pitch and engagement are not stated by Geoprobe.",
+      "Outside diameter, inside diameter and wall thickness are assumptions. See cad/vendor/DT325/SOURCE.md."
+    ]
+  },
+  {
+    "bbox_mm": {
       "x": 6.0,
       "y": 6.0,
       "z": 16.0

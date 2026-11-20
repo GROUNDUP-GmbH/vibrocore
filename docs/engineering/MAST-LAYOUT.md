@@ -447,7 +447,7 @@ Tighten the four screws.
 
 | Pair | Clearance | Note |
 |---|---|---|
-| Shoe to nearest profile | 419.1 mm | 3D distance. The tip is below the mast. |
+| Shoe to nearest profile | 419.6 mm | 3D distance. The tip is below the mast. The top rim is the thread band, 1.2 mm under the cutting diameter. |
 | Casing to nearest profile | 175.8 mm | The casing passes the mast height. |
 | Casing to the 83 mm bore wall | 0.225 mm | Radial clearance on the 82.55 mm casing. The bore is unchanged. |
 | Rod axis past the rail face | 160.0 mm | Overhang from the rail to the rod. |

@@ -192,6 +192,7 @@ The kit rollup is EUR 2,007.85.
 That sum is two rods, four shoes and one O-ring pack.
 The half-shells have no price yet.
 Drive head 201385 and retainer HD 208472 are obsolete history. They are not kit lines.
+The DT325 sheath and the two drive heads also have approximation solids. Those solids are not kit lines. See `cad/vendor/DT325/SOURCE.md`.
 
 ## 7. Positioning System
 

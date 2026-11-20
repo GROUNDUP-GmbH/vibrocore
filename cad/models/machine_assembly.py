@@ -745,7 +745,7 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     )
     add(
         "VC-GP-7200",
-        bought("VC-GP-7200", Cylinder(SHOE_OD_MM / 2.0, SHOE_LENGTH_MM)),
+        shape_for(bom.part("VC-GP-7200")),
         rod_x,
         rod_y,
         station["shoe_bottom"] + SHOE_LENGTH_MM / 2.0,
@@ -763,6 +763,44 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         else:
             shift = -float(box.max.X)
         add(number, half, rod_x + shift, rod_y, carrier_z)
+
+    # DT325 study solids. The 60 in sheath does not fit this 48 in rod beside the
+    # split carrier, so the placed tube is only the free bore under the carrier.
+    # The two drive heads share one envelope. They are not mated. Thread engagement
+    # is unknown. VC-GP-7410 stays out. This machine does not use a liner.
+    from cad.models.dt325 import BORE_GAP_MM, DRIVE_HEAD_LENGTH_MM, HEAD_GAP_MM, drive_head, sheath
+
+    carrier_geom = bom.part("VC-SP-7620").geometry
+    carrier_stack = float(carrier_geom["tube_count"]) * float(carrier_geom["tube_length_mm"])
+    free_end = (CASING_LENGTH_MM - carrier_stack) / 2.0
+    sheath_bottom = station["casing_bottom"] + BORE_GAP_MM
+    sheath_top = (
+        station["casing_bottom"] + free_end - BORE_GAP_MM - DRIVE_HEAD_LENGTH_MM - HEAD_GAP_MM
+    )
+    sheath_length = sheath_top - sheath_bottom
+    if sheath_length <= 2.0 * 16.0 + 1.0:
+        raise ValueError("no room for the DT325 sheath below the split carrier")
+    add(
+        "VC-GP-7330",
+        sheath(sheath_length),
+        rod_x,
+        rod_y,
+        sheath_bottom + sheath_length / 2.0,
+    )
+    add(
+        "VC-GP-7320",
+        drive_head(),
+        rod_x,
+        rod_y,
+        sheath_top + HEAD_GAP_MM + DRIVE_HEAD_LENGTH_MM / 2.0,
+    )
+    add(
+        "VC-GP-7310",
+        drive_head(),
+        rod_x,
+        rod_y,
+        station["casing_bottom"] + CASING_LENGTH_MM - BORE_GAP_MM - DRIVE_HEAD_LENGTH_MM / 2.0,
+    )
 
     def bored_sprocket():
         disk = along_y(sprocket_r, SPROCKET_WIDTH_MM)
@@ -1485,7 +1523,7 @@ def assembly_bbox_mm(shape=None, bom=None) -> tuple[float, float, float]:
 
 
 def export_machine_assembly(bom, step_dir: Path, render_dir: Path) -> list[Path]:
-    """Write the assembly STEP, the three PNG views, two drive views and two joint close-ups."""
+    """Write the assembly STEP, the PNG views, and two tooling close-ups with the casing left out."""
     from build123d import Compound, export_step
 
     from cad.tools.geometry import _freeze_step_header
@@ -1527,6 +1565,39 @@ def export_machine_assembly(bom, step_dir: Path, render_dir: Path) -> list[Path]
         path = render_dir / f"{ASSEMBLY_ID}-{view}.png"
         _render_png(parts, view, path, clip=joint_clip)
         written.append(path)
+    shoe = next(item.shape for item in parts if item.name == "VC-GP-7200")
+    casing = next(item.shape for item in parts if item.name == "VC-GP-7100")
+    shoe_box = shoe.bounding_box()
+    casing_box = casing.bounding_box()
+    # The casing hides the bore. These two views leave the casing and the carrier out.
+    axis_x = (float(casing_box.min.X) + float(casing_box.max.X)) / 2.0
+    axis_y = (float(casing_box.min.Y) + float(casing_box.max.Y)) / 2.0
+    lower = next(item.shape for item in parts if item.name == "VC-GP-7320").bounding_box()
+    upper = next(item.shape for item in parts if item.name == "VC-GP-7310").bounding_box()
+    hidden = {"VC-GP-7100", "VC-SP-7620", "VC-SP-7621"}
+    visible = [item for item in parts if item.name not in hidden]
+    clips = {
+        "string": (
+            axis_x - 60.0,
+            axis_x + 60.0,
+            axis_y - 60.0,
+            axis_y + 60.0,
+            float(shoe_box.min.Z) - 6.0,
+            float(lower.max.Z) + 8.0,
+        ),
+        "string-top": (
+            axis_x - 60.0,
+            axis_x + 60.0,
+            axis_y - 60.0,
+            axis_y + 60.0,
+            float(upper.min.Z) - 8.0,
+            float(upper.max.Z) + 8.0,
+        ),
+    }
+    for view, clip in clips.items():
+        path = render_dir / f"{ASSEMBLY_ID}-{view}.png"
+        _render_png(visible, "string", path, clip=clip)
+        written.append(path)
     return written
 
 
@@ -1567,6 +1638,8 @@ def _render_png(parts: list[Placed], view: str, path: Path, clip: tuple[float, .
         "joint": (np.array([0.35, -0.85, -0.40]), np.array([0.0, 0.0, 1.0])),
         # Underside of the adapter. The plug and the clamp screw sit on this face.
         "joint-access": (np.array([0.25, -0.55, -0.80]), np.array([0.0, 1.0, 0.0])),
+        # Three-quarter view of the tooling, with the casing left out of the picture.
+        "string": (np.array([0.75, 0.55, 0.28]), np.array([0.0, 0.0, 1.0])),
     }
     eye, up = eyes[view]
     forward = -eye / np.linalg.norm(eye)
@@ -1777,7 +1850,10 @@ def _color_for(name: str) -> tuple[int, int, int]:
         ("VC-SH-1600", (126, 34, 206)),
         ("VC-SH-1500", (120, 80, 40)),
         ("VC-GP-7100", (37, 99, 235)),
-        ("VC-GP-7200", (30, 64, 175)),
+        ("VC-GP-7200", (200, 90, 30)),
+        ("VC-GP-7310", (214, 158, 46)),
+        ("VC-GP-7320", (180, 90, 40)),
+        ("VC-GP-7330", (70, 140, 150)),
         ("VC-SP-7620", (13, 148, 136)),
         ("VC-SP-7621", (15, 118, 110)),
     )

@@ -135,7 +135,8 @@ data_issues:
 - id: sampling-concept-2026-11-19
   summary: The sampling string is the 3.25 in outer casing and cutting shoe 205449. Open tubes sit in
     the split carrier. O-ring 201325 stays, because it seals casing joints. Drive head 201385 and
-    retainer 208472 are obsolete and are not on a BOM.
+    retainer 208472 are obsolete and are not on a BOM. Approximation solids of the DT325 sheath and
+    the drive heads are a study on that casing. They are not kit lines.
 - id: mast-height-deficit
   summary: The 1500 mm profile is unchanged. The study layout in docs/engineering/MAST-LAYOUT.md and
     cad/export/layout/mast-stack.svg computes the deficit for one 1219.2 mm casing plus the head, the
@@ -1319,22 +1320,38 @@ parts:
     between 3.25 in casing sections. They stay on VC-KIT-6000. The liner-retainer O-ring is a
     different part (600428) and is not used.'
 - part_number: VC-GP-7200
-  name: Cutting shoe 3.25 in
+  name: Cutting shoe 3.25 in, approximation
   revision_index: 0
   revision_letter: A
   supply: purchase
   subsystem: sampling
   category: Sampling
-  spec: Cutting shoe for the 3.25 in casing. Outside diameter 3.45 in (87.63 mm). The shoe stays on
-    the casing. It is not part of the inner string.
+  spec: Approximation. Not a Geoprobe CAD model. Cutting shoe for the 3.25 in casing. Current catalog
+    part 205449, outside diameter 3.45 in (87.63 mm), inside diameter 1.85 in (46.99 mm). The 2011 SOP
+    lists this duty as part 28508 and states the 1.85 in inside diameter. A 3.5 in outside diameter
+    is not used. The solid is a tube plus a reduced band for the thread. The thread form is unknown.
+    The shoe stays on the casing. It is not part of the inner string.
   legacy_ref: '6.57'
   manufacturer_pn: '205449'
   supplier_id: geoprobe_eu
   estimate_eur_low: 300.78
   estimate_eur_high: 300.78
   mass_kg: 1.5
-  mass_note: SONIC_HEAD.md mass budget, one shoe. The offer does not state a mass.
-  notes: Offer 26100096, 2026-03-03, EUR 300.78 net each, freight excluded.
+  mass_note: SONIC_HEAD.md mass budget, one shoe. The offer does not state a mass. The approximation
+    volume is not the mass, because the 80 mm length is still a placeholder.
+  geometry:
+    kind: dt325
+    role: shoe
+    fidelity: partial
+    source: cad/vendor/DT325/SOURCE.md
+    diameter_mm: 87.63
+    id_mm: 46.99
+    length_mm: 80
+  unknowns:
+  - Thread form, pitch and engagement are not stated by Geoprobe.
+  - Length is the existing 80 mm placeholder. The SOP does not state a length.
+  notes: 'Offer 26100096, 2026-03-03, EUR 300.78 net each, freight excluded. The solid is an
+    approximation of 205449 / SOP 28508. See cad/vendor/DT325/SOURCE.md.'
 - part_number: VC-GP-7300
   name: Drive cap GH60
   revision_index: 0
@@ -1365,23 +1382,96 @@ parts:
     lines. The split carrier VC-SP-7620 and VC-SP-7621 holds the open tubes. The old EUR 3-6 estimate
     is withdrawn.
 - part_number: VC-GP-7310
-  name: DT325 drive head
+  name: DT325 drive head, approximation
   revision_index: 0
   revision_letter: A
   supply: purchase
   subsystem: sampling
   category: Sampling
-  spec: Geoprobe DT325 drive head, part 201385, with a 1.25 in pin. The pin fits the centre rod, not
-    the 3.25 in casing. The sonic head connects to the casing through VC-SH-1500.
+  spec: Approximation. Not a Geoprobe CAD model. Geoprobe DT325 drive head, part 201385, with a
+    1.25 in pin. The pin fits the centre rod, not the 3.25 in casing. The sonic head connects to the
+    casing through VC-SH-1500. The solid is the same envelope as sheath drive head 10212. The thread
+    form is unknown.
   legacy_ref: '6.110'
   manufacturer_pn: '201385'
   supplier_id: geoprobe_eu
   estimate_eur_low: 171.34
   estimate_eur_high: 171.34
+  mass_kg: 1.459
+  mass_note: Approximation volume times 7850 kg/m3. Not a weighed Geoprobe part. The price stays history only.
+  geometry:
+    kind: dt325
+    role: drive_head
+    fidelity: partial
+    source: cad/vendor/DT325/SOURCE.md
+    diameter_mm: 58
+    length_mm: 102
+  unknowns:
+  - Thread form, pitch and engagement are not stated by Geoprobe.
+  - Body diameter, body length and pin length are assumptions. See cad/vendor/DT325/SOURCE.md.
   lifecycle: obsolete
   notes: 'Obsolete. Offer 26100096, 2026-03-03, EUR 171.34 net, freight excluded. The price is history
     only and is not in any rollup. Geoprobe lists "DT325 Drive Head, 1.25 in. Pin"
-    (https://geoprobe.com/tooling/dt37-soil-sampling-system/mn201385). Do not buy it.'
+    (https://geoprobe.com/tooling/dt37-soil-sampling-system/mn201385). Do not buy it. The study solid
+    is shown in the free bore above the split carrier. It is not a kit line.'
+- part_number: VC-GP-7320
+  name: DT325 sheath drive head, approximation
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: sampling
+  category: Sampling
+  spec: Approximation. Not a Geoprobe CAD model. SOP part 10212, DT325 sheath drive head. No published
+    drawing separates it from drive head 201385, so this solid uses that same envelope. A 1.25 in pin
+    is the tip. The thread form is unknown. Not a kit line.
+  legacy_ref: '6.112'
+  manufacturer_pn: '10212'
+  supplier_id: geoprobe_eu
+  mass_kg: 1.459
+  mass_note: Approximation volume times 7850 kg/m3. Not a weighed Geoprobe part. Same envelope as VC-GP-7310.
+  geometry:
+    kind: dt325
+    role: drive_head
+    fidelity: partial
+    source: cad/vendor/DT325/SOURCE.md
+    diameter_mm: 58
+    length_mm: 102
+  unknowns:
+  - Thread form, pitch and engagement are not stated by Geoprobe.
+  - Body diameter, body length and pin length are assumptions. See cad/vendor/DT325/SOURCE.md.
+  notes: 'Study solid only. The 2011 SOP lists 10212 as the sheath drive head. The current catalog
+    lists 201385 as the DT325 drive head. Do not buy from this model. See cad/vendor/DT325/SOURCE.md.'
+- part_number: VC-GP-7330
+  name: DT325 sample sheath 60 in, approximation
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: sampling
+  category: Sampling
+  spec: Approximation. Not a Geoprobe CAD model. SOP part 26719, DT325 sample sheath, 60 in
+    (1524 mm). The current catalog lists the 60 in sheath as MN 205099. Outside diameter 60 mm and
+    inside diameter 53 mm are assumptions. Both ends have the same internal thread zone. The thread
+    form is unknown. The part solid is the catalog length. The assembly seats only the length that
+    fits below the split carrier. Not a kit line.
+  legacy_ref: '6.113'
+  manufacturer_pn: '26719'
+  supplier_id: geoprobe_eu
+  mass_kg: 7.368
+  mass_note: Approximation volume of the 1524 mm tube times 7850 kg/m3. Not a weighed Geoprobe part.
+    The placed length in the machine is shorter.
+  geometry:
+    kind: dt325
+    role: sheath
+    fidelity: partial
+    source: cad/vendor/DT325/SOURCE.md
+    diameter_mm: 60
+    id_mm: 53
+    length_mm: 1524
+  unknowns:
+  - Thread form, pitch and engagement are not stated by Geoprobe.
+  - Outside diameter, inside diameter and wall thickness are assumptions. See cad/vendor/DT325/SOURCE.md.
+  notes: 'Study solid only. SOP says to match the sheath length to the probe rod. This rod is 48 in,
+    so a 60 in sheath does not fit. Do not buy from this model. See cad/vendor/DT325/SOURCE.md.'
 - part_number: VC-GP-7410
   name: DT325 liner retainer HD
   revision_index: 0
@@ -1827,7 +1917,8 @@ parts:
   legacy_ref: '6'
   notes: 'Kit lines are VC-GP-7100, VC-GP-7150, VC-GP-7200, VC-SP-7620, VC-SP-7621 and VC-SP-7630.
     Sample tubes and push-on caps are lab consumables. VC-GP-7300, VC-GP-7310, VC-GP-7400 and
-    VC-GP-7410 are obsolete history and are not kit lines. See docs/engineering/SAMPLING.md.'
+    VC-GP-7410 are obsolete history and are not kit lines. VC-GP-7320 and VC-GP-7330 are approximation
+    study solids and are not kit lines. See docs/engineering/SAMPLING.md.'
   sale_ok: true
 - part_number: VC-KIT-7000
   name: Positioning kit
@@ -2317,7 +2408,8 @@ parts:
   subsystem: sonic_head
   category: Sonic Head
   spec: Steel adapter between the centre column and the 3.25 in casing. The adapter must push and pull.
-    Do not use the GH60 cap. The thread is not confirmed.
+    Do not use the GH60 cap. Drive cap 9742 (GH60 threadless, current catalog 201275) and drive cap
+    37708 (1.25 in centering cap) are not this interface. The thread is not confirmed.
   legacy_ref: '1.5'
   estimate_eur_low: 60
   estimate_eur_high: 100

@@ -81,6 +81,9 @@ PART_NUMBERS = (
     "VC-SH-1600",
     "VC-GP-7100",
     "VC-GP-7200",
+    "VC-GP-7310",
+    "VC-GP-7320",
+    "VC-GP-7330",
     "VC-SP-7620",
     "VC-SP-7621",
 )
@@ -119,7 +122,7 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
     assert split_overlaps(assembly_parts(bom, stroke_mm=0.0))[0] == []
     assert split_overlaps(assembly_parts(bom, stroke_mm=round(GUIDED_TRAVEL_MM / 2.0, 1)))[0] == []
     report = clearance_report(parts)
-    assert report["shoe_to_profile_mm"] == 419.1
+    assert report["shoe_to_profile_mm"] == 419.6
     assert report["casing_to_profile_mm"] == 175.8
     assert report["casing_to_bottom_plate_mm"] == 0.225
     assert report["guide_radial_clearance_mm"] == 0.225
@@ -132,6 +135,12 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
     assert report["plate_bottom_vs_lower_block_mm"] == 0.0
     assert report["carriage_to_chain_mm"] == 0.0
     assert report["shoe_tip_z_mm"] == -446.6
+    names = {item.name for item in parts}
+    assert {"VC-GP-7310", "VC-GP-7320", "VC-GP-7330"} <= names
+    assert "VC-GP-7410" not in names
+    sheath = next(item for item in parts if item.name == "VC-GP-7330")
+    sheath_length = float(sheath.shape.bounding_box().size.Z)
+    assert 150.0 < sheath_length < 1524.0
     assert report["profile_overhang_past_bottom_plate_mm"] == 25.0
     assert report["chain_min_x_mm"] == -11.3
     assert report["rear_face_x_mm"] == -50.0

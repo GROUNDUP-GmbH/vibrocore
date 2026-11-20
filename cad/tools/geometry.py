@@ -28,6 +28,10 @@ def shape_for(part: Part):
         from cad.models.split_carrier import shape_for_geometry
 
         solid = shape_for_geometry(geometry)
+    elif kind == "dt325":
+        from cad.models.dt325 import shape_for_geometry
+
+        solid = shape_for_geometry(geometry)
     else:
         from build123d import Box, Cylinder
 
@@ -55,6 +59,10 @@ def expected_bbox_mm(part: Part) -> tuple[float, float, float]:
         return (diameter, diameter, float(geometry["length_mm"]))
     if geometry.get("kind") == "split_carrier":
         from cad.models.split_carrier import bbox_mm
+
+        return bbox_mm(geometry)
+    if geometry.get("kind") == "dt325":
+        from cad.models.dt325 import bbox_mm
 
         return bbox_mm(geometry)
     raise ValueError(part.part_number)
