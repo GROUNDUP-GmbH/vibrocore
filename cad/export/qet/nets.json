@@ -276,12 +276,12 @@
                 {
                     "element": "connection",
                     "folio": 3,
-                    "terminal": "4"
+                    "terminal": "2"
                 },
                 {
-                    "element": "F2",
+                    "element": "connection",
                     "folio": 3,
-                    "terminal": "IN.1"
+                    "terminal": "1"
                 }
             ],
             "wire_no": "130_L"
@@ -290,49 +290,49 @@
             "net": 17,
             "terminals": [
                 {
-                    "element": "connection",
+                    "element": "Coming arrow",
                     "folio": 3,
-                    "terminal": "4"
+                    "terminal": "1"
                 },
                 {
-                    "element": "F2",
+                    "element": "connection",
                     "folio": 3,
-                    "terminal": "IN.1"
+                    "terminal": "3"
                 }
             ],
-            "wire_no": "131_N"
+            "wire_no": "130_L"
         },
         {
             "net": 18,
             "terminals": [
                 {
-                    "element": "F2",
+                    "element": "connection",
                     "folio": 3,
-                    "terminal": "OUT.2"
+                    "terminal": "2"
                 },
                 {
-                    "element": "Going arrow",
+                    "element": "connection",
                     "folio": 3,
                     "terminal": "1"
                 }
             ],
-            "wire_no": "140_L"
+            "wire_no": "131_N"
         },
         {
             "net": 19,
             "terminals": [
                 {
-                    "element": "F2",
-                    "folio": 3,
-                    "terminal": "OUT.2"
-                },
-                {
-                    "element": "Going arrow",
+                    "element": "Coming arrow",
                     "folio": 3,
                     "terminal": "1"
+                },
+                {
+                    "element": "connection",
+                    "folio": 3,
+                    "terminal": "3"
                 }
             ],
-            "wire_no": "141_N"
+            "wire_no": "131_N"
         },
         {
             "net": 20,
@@ -343,9 +343,9 @@
                     "terminal": "4"
                 },
                 {
-                    "element": "F3",
+                    "element": "F2",
                     "folio": 3,
-                    "terminal": "IN.1"
+                    "terminal": "1"
                 }
             ],
             "wire_no": "130_L"
@@ -359,9 +359,9 @@
                     "terminal": "4"
                 },
                 {
-                    "element": "F3",
+                    "element": "F2",
                     "folio": 3,
-                    "terminal": "IN.1"
+                    "terminal": "1"
                 }
             ],
             "wire_no": "131_N"
@@ -370,9 +370,9 @@
             "net": 22,
             "terminals": [
                 {
-                    "element": "F3",
+                    "element": "F2",
                     "folio": 3,
-                    "terminal": "OUT.2"
+                    "terminal": "1"
                 },
                 {
                     "element": "Going arrow",
@@ -380,15 +380,15 @@
                     "terminal": "1"
                 }
             ],
-            "wire_no": "150_L"
+            "wire_no": "140_L"
         },
         {
             "net": 23,
             "terminals": [
                 {
-                    "element": "F3",
+                    "element": "F2",
                     "folio": 3,
-                    "terminal": "OUT.2"
+                    "terminal": "1"
                 },
                 {
                     "element": "Going arrow",
@@ -396,7 +396,7 @@
                     "terminal": "1"
                 }
             ],
-            "wire_no": "151_N"
+            "wire_no": "141_N"
         },
         {
             "net": 24,
@@ -407,7 +407,7 @@
                     "terminal": "4"
                 },
                 {
-                    "element": "F4",
+                    "element": "F3",
                     "folio": 3,
                     "terminal": "IN.1"
                 }
@@ -423,7 +423,7 @@
                     "terminal": "4"
                 },
                 {
-                    "element": "F4",
+                    "element": "F3",
                     "folio": 3,
                     "terminal": "IN.1"
                 }
@@ -432,6 +432,134 @@
         },
         {
             "net": 26,
+            "terminals": [
+                {
+                    "element": "F3",
+                    "folio": 3,
+                    "terminal": "OUT.2"
+                },
+                {
+                    "element": "Going arrow",
+                    "folio": 3,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "150_L"
+        },
+        {
+            "net": 27,
+            "terminals": [
+                {
+                    "element": "F3",
+                    "folio": 3,
+                    "terminal": "OUT.2"
+                },
+                {
+                    "element": "Going arrow",
+                    "folio": 3,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "151_N"
+        },
+        {
+            "net": 28,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 3,
+                    "terminal": "2"
+                },
+                {
+                    "element": "connection",
+                    "folio": 3,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "130_L"
+        },
+        {
+            "net": 29,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 3,
+                    "terminal": "1"
+                },
+                {
+                    "element": "connection",
+                    "folio": 3,
+                    "terminal": "3"
+                }
+            ],
+            "wire_no": "130_L"
+        },
+        {
+            "net": 30,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 3,
+                    "terminal": "2"
+                },
+                {
+                    "element": "connection",
+                    "folio": 3,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "131_N"
+        },
+        {
+            "net": 31,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 3,
+                    "terminal": "1"
+                },
+                {
+                    "element": "connection",
+                    "folio": 3,
+                    "terminal": "3"
+                }
+            ],
+            "wire_no": "131_N"
+        },
+        {
+            "net": 32,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 3,
+                    "terminal": "4"
+                },
+                {
+                    "element": "F4",
+                    "folio": 3,
+                    "terminal": "IN.1"
+                }
+            ],
+            "wire_no": "130_L"
+        },
+        {
+            "net": 33,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 3,
+                    "terminal": "4"
+                },
+                {
+                    "element": "F4",
+                    "folio": 3,
+                    "terminal": "IN.1"
+                }
+            ],
+            "wire_no": "131_N"
+        },
+        {
+            "net": 34,
             "terminals": [
                 {
                     "element": "F4",
@@ -447,7 +575,7 @@
             "wire_no": "160_L"
         },
         {
-            "net": 27,
+            "net": 35,
             "terminals": [
                 {
                     "element": "F4",
@@ -463,7 +591,7 @@
             "wire_no": "161_N"
         },
         {
-            "net": 28,
+            "net": 36,
             "terminals": [
                 {
                     "element": "connection",
@@ -479,7 +607,7 @@
             "wire_no": "130_L"
         },
         {
-            "net": 29,
+            "net": 37,
             "terminals": [
                 {
                     "element": "connection",
@@ -495,7 +623,7 @@
             "wire_no": "131_N"
         },
         {
-            "net": 30,
+            "net": 38,
             "terminals": [
                 {
                     "element": "F5",
@@ -511,7 +639,7 @@
             "wire_no": "170_L"
         },
         {
-            "net": 31,
+            "net": 39,
             "terminals": [
                 {
                     "element": "F5",
@@ -527,140 +655,76 @@
             "wire_no": "171_N"
         },
         {
-            "net": 32,
-            "terminals": [
-                {
-                    "element": "connection",
-                    "folio": 3,
-                    "terminal": "2"
-                },
-                {
-                    "element": "connection",
-                    "folio": 3,
-                    "terminal": "1"
-                }
-            ],
-            "wire_no": "130_L"
-        },
-        {
-            "net": 33,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 3,
-                    "terminal": "1"
-                },
-                {
-                    "element": "connection",
-                    "folio": 3,
-                    "terminal": "3"
-                }
-            ],
-            "wire_no": "130_L"
-        },
-        {
-            "net": 34,
-            "terminals": [
-                {
-                    "element": "connection",
-                    "folio": 3,
-                    "terminal": "2"
-                },
-                {
-                    "element": "connection",
-                    "folio": 3,
-                    "terminal": "1"
-                }
-            ],
-            "wire_no": "131_N"
-        },
-        {
-            "net": 35,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 3,
-                    "terminal": "1"
-                },
-                {
-                    "element": "connection",
-                    "folio": 3,
-                    "terminal": "3"
-                }
-            ],
-            "wire_no": "131_N"
-        },
-        {
-            "net": 36,
-            "terminals": [
-                {
-                    "element": "connection",
-                    "folio": 3,
-                    "terminal": "2"
-                },
-                {
-                    "element": "connection",
-                    "folio": 3,
-                    "terminal": "1"
-                }
-            ],
-            "wire_no": "130_L"
-        },
-        {
-            "net": 37,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 3,
-                    "terminal": "1"
-                },
-                {
-                    "element": "connection",
-                    "folio": 3,
-                    "terminal": "3"
-                }
-            ],
-            "wire_no": "130_L"
-        },
-        {
-            "net": 38,
-            "terminals": [
-                {
-                    "element": "connection",
-                    "folio": 3,
-                    "terminal": "2"
-                },
-                {
-                    "element": "connection",
-                    "folio": 3,
-                    "terminal": "1"
-                }
-            ],
-            "wire_no": "131_N"
-        },
-        {
-            "net": 39,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 3,
-                    "terminal": "1"
-                },
-                {
-                    "element": "connection",
-                    "folio": 3,
-                    "terminal": "3"
-                }
-            ],
-            "wire_no": "131_N"
-        },
-        {
             "net": 40,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 4,
+                    "terminal": "1"
+                },
+                {
+                    "element": "G1",
+                    "folio": 4,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "160_L"
+        },
+        {
+            "net": 41,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 4,
+                    "terminal": "1"
+                },
+                {
+                    "element": "G1",
+                    "folio": 4,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "161_N"
+        },
+        {
+            "net": 42,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 4,
+                    "terminal": "1"
+                },
+                {
+                    "element": "G2",
+                    "folio": 4,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "170_L"
+        },
+        {
+            "net": 43,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 4,
+                    "terminal": "1"
+                },
+                {
+                    "element": "G2",
+                    "folio": 4,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "171_N"
+        },
+        {
+            "net": 44,
             "terminals": [
                 {
                     "element": "G1",
                     "folio": 4,
-                    "terminal": ""
+                    "terminal": "1"
                 },
                 {
                     "element": "F14",
@@ -671,7 +735,7 @@
             "wire_no": "200_24S"
         },
         {
-            "net": 41,
+            "net": 45,
             "terminals": [
                 {
                     "element": "F14",
@@ -687,12 +751,12 @@
             "wire_no": "201_24S"
         },
         {
-            "net": 42,
+            "net": 46,
             "terminals": [
                 {
                     "element": "G2",
                     "folio": 4,
-                    "terminal": ""
+                    "terminal": "1"
                 },
                 {
                     "element": "F24",
@@ -703,7 +767,7 @@
             "wire_no": "210_24C"
         },
         {
-            "net": 43,
+            "net": 47,
             "terminals": [
                 {
                     "element": "F24",
@@ -719,74 +783,10 @@
             "wire_no": "211_24C"
         },
         {
-            "net": 44,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 4,
-                    "terminal": "1"
-                },
-                {
-                    "element": "G1",
-                    "folio": 4,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "160_L"
-        },
-        {
-            "net": 45,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 4,
-                    "terminal": "1"
-                },
-                {
-                    "element": "connection",
-                    "folio": 4,
-                    "terminal": "3"
-                }
-            ],
-            "wire_no": "161_N"
-        },
-        {
-            "net": 46,
-            "terminals": [
-                {
-                    "element": "connection",
-                    "folio": 4,
-                    "terminal": "2"
-                },
-                {
-                    "element": "G1",
-                    "folio": 4,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "161_N"
-        },
-        {
-            "net": 47,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 4,
-                    "terminal": "1"
-                },
-                {
-                    "element": "G2",
-                    "folio": 4,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "170_L"
-        },
-        {
             "net": 48,
             "terminals": [
                 {
-                    "element": "Coming arrow",
+                    "element": "G1",
                     "folio": 4,
                     "terminal": "1"
                 },
@@ -796,7 +796,7 @@
                     "terminal": "3"
                 }
             ],
-            "wire_no": "171_N"
+            "wire_no": "001_0V"
         },
         {
             "net": 49,
@@ -807,20 +807,20 @@
                     "terminal": "2"
                 },
                 {
-                    "element": "G2",
+                    "element": "connection",
                     "folio": 4,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "171_N"
+            "wire_no": "001_0V"
         },
         {
             "net": 50,
             "terminals": [
                 {
-                    "element": "G1",
+                    "element": "connection",
                     "folio": 4,
-                    "terminal": ""
+                    "terminal": "4"
                 },
                 {
                     "element": "connection",
@@ -852,7 +852,7 @@
                 {
                     "element": "G2",
                     "folio": 4,
-                    "terminal": ""
+                    "terminal": "1"
                 },
                 {
                     "element": "connection",
@@ -887,6 +887,16 @@
                     "terminal": "4"
                 },
                 {
+                    "element": "X1:4",
+                    "folio": 4,
+                    "terminal": ""
+                },
+                {
+                    "element": "X1:4",
+                    "folio": 4,
+                    "terminal": ""
+                },
+                {
                     "element": "connection",
                     "folio": 4,
                     "terminal": "3"
@@ -898,40 +908,30 @@
             "net": 55,
             "terminals": [
                 {
+                    "element": "G1",
+                    "folio": 4,
+                    "terminal": "1"
+                },
+                {
                     "element": "connection",
                     "folio": 4,
                     "terminal": "4"
-                },
-                {
-                    "element": "X1:4",
-                    "folio": 4,
-                    "terminal": ""
-                },
-                {
-                    "element": "X1:4",
-                    "folio": 4,
-                    "terminal": ""
-                },
-                {
-                    "element": "connection",
-                    "folio": 4,
-                    "terminal": "2"
                 }
             ],
-            "wire_no": "001_0V"
+            "wire_no": "102_PE"
         },
         {
             "net": 56,
             "terminals": [
                 {
-                    "element": "G1",
+                    "element": "connection",
                     "folio": 4,
-                    "terminal": ""
+                    "terminal": "2"
                 },
                 {
                     "element": "connection",
                     "folio": 4,
-                    "terminal": "2"
+                    "terminal": "1"
                 }
             ],
             "wire_no": "102_PE"
@@ -942,12 +942,12 @@
                 {
                     "element": "G2",
                     "folio": 4,
-                    "terminal": ""
+                    "terminal": "1"
                 },
                 {
                     "element": "connection",
                     "folio": 4,
-                    "terminal": "2"
+                    "terminal": "4"
                 }
             ],
             "wire_no": "102_PE"
@@ -958,12 +958,12 @@
                 {
                     "element": "connection",
                     "folio": 4,
-                    "terminal": "4"
+                    "terminal": "2"
                 },
                 {
                     "element": "connection",
                     "folio": 4,
-                    "terminal": "3"
+                    "terminal": "1"
                 }
             ],
             "wire_no": "102_PE"
@@ -980,11 +980,6 @@
                     "element": "connection",
                     "folio": 4,
                     "terminal": "3"
-                },
-                {
-                    "element": "PE2",
-                    "folio": 4,
-                    "terminal": "PE"
                 }
             ],
             "wire_no": "102_PE"
@@ -993,14 +988,73 @@
             "net": 60,
             "terminals": [
                 {
-                    "element": "K1",
-                    "folio": 5,
-                    "terminal": ""
+                    "element": "connection",
+                    "folio": 4,
+                    "terminal": "4"
                 },
+                {
+                    "element": "connection",
+                    "folio": 4,
+                    "terminal": "3"
+                }
+            ],
+            "wire_no": "102_PE"
+        },
+        {
+            "net": 61,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 4,
+                    "terminal": "2"
+                },
+                {
+                    "element": "connection",
+                    "folio": 4,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "W1"
+        },
+        {
+            "net": 62,
+            "terminals": [
+                {
+                    "element": "PE2",
+                    "folio": 4,
+                    "terminal": "PE"
+                },
+                {
+                    "element": "connection",
+                    "folio": 4,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "102_PE"
+        },
+        {
+            "net": 63,
+            "terminals": [
                 {
                     "element": "K1",
                     "folio": 5,
-                    "terminal": ""
+                    "terminal": "1"
+                },
+                {
+                    "element": "connection",
+                    "folio": 5,
+                    "terminal": "4"
+                }
+            ],
+            "wire_no": "410_S11"
+        },
+        {
+            "net": 64,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 5,
+                    "terminal": "2"
                 },
                 {
                     "element": "S1",
@@ -1011,7 +1065,7 @@
             "wire_no": "410_S11"
         },
         {
-            "net": 61,
+            "net": 65,
             "terminals": [
                 {
                     "element": "S1",
@@ -1019,17 +1073,39 @@
                     "terminal": ""
                 },
                 {
+                    "element": "connection",
+                    "folio": 5,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "411_S12"
+        },
+        {
+            "net": 66,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 5,
+                    "terminal": "4"
+                },
+                {
+                    "element": "K1",
+                    "folio": 5,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "411_S12"
+        },
+        {
+            "net": 67,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 5,
+                    "terminal": "2"
+                },
+                {
                     "element": "S10",
-                    "folio": 5,
-                    "terminal": ""
-                },
-                {
-                    "element": "K1",
-                    "folio": 5,
-                    "terminal": ""
-                },
-                {
-                    "element": "K1",
                     "folio": 5,
                     "terminal": ""
                 }
@@ -1037,7 +1113,7 @@
             "wire_no": "411_S12"
         },
         {
-            "net": 62,
+            "net": 68,
             "terminals": [
                 {
                     "element": "S10",
@@ -1045,30 +1121,52 @@
                     "terminal": ""
                 },
                 {
-                    "element": "K1",
+                    "element": "connection",
                     "folio": 5,
-                    "terminal": ""
-                },
-                {
-                    "element": "K1",
-                    "folio": 5,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
             "wire_no": "414_S34"
         },
         {
-            "net": 63,
+            "net": 69,
             "terminals": [
                 {
-                    "element": "K1",
+                    "element": "connection",
                     "folio": 5,
-                    "terminal": ""
+                    "terminal": "4"
                 },
                 {
                     "element": "K1",
                     "folio": 5,
-                    "terminal": ""
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "414_S34"
+        },
+        {
+            "net": 70,
+            "terminals": [
+                {
+                    "element": "K1",
+                    "folio": 5,
+                    "terminal": "1"
+                },
+                {
+                    "element": "connection",
+                    "folio": 5,
+                    "terminal": "4"
+                }
+            ],
+            "wire_no": "412_S21"
+        },
+        {
+            "net": 71,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 5,
+                    "terminal": "2"
                 },
                 {
                     "element": "S1",
@@ -1079,7 +1177,7 @@
             "wire_no": "412_S21"
         },
         {
-            "net": 64,
+            "net": 72,
             "terminals": [
                 {
                     "element": "S1",
@@ -1087,84 +1185,31 @@
                     "terminal": ""
                 },
                 {
-                    "element": "K1",
+                    "element": "connection",
                     "folio": 5,
-                    "terminal": ""
-                },
-                {
-                    "element": "K1",
-                    "folio": 5,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
             "wire_no": "413_S22"
         },
         {
-            "net": 65,
+            "net": 73,
             "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 5,
-                    "terminal": "1"
-                },
-                {
-                    "element": "S1",
-                    "folio": 5,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "211_24C"
-        },
-        {
-            "net": 66,
-            "terminals": [
-                {
-                    "element": "S1",
-                    "folio": 5,
-                    "terminal": ""
-                },
-                {
-                    "element": "Going arrow",
-                    "folio": 5,
-                    "terminal": "1"
-                }
-            ],
-            "wire_no": "420_ESTOP"
-        },
-        {
-            "net": 67,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 5,
-                    "terminal": "1"
-                },
-                {
-                    "element": "K1",
-                    "folio": 5,
-                    "terminal": "A1"
-                }
-            ],
-            "wire_no": "211_24C"
-        },
-        {
-            "net": 68,
-            "terminals": [
-                {
-                    "element": "K1",
-                    "folio": 5,
-                    "terminal": "A2"
-                },
                 {
                     "element": "connection",
                     "folio": 5,
                     "terminal": "4"
+                },
+                {
+                    "element": "K1",
+                    "folio": 5,
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "001_0V"
+            "wire_no": "413_S22"
         },
         {
-            "net": 69,
+            "net": 74,
             "terminals": [
                 {
                     "element": "Coming arrow",
@@ -1177,158 +1222,68 @@
                     "terminal": "3"
                 }
             ],
-            "wire_no": "001_0V"
-        },
-        {
-            "net": 70,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 6,
-                    "terminal": "1"
-                },
-                {
-                    "element": "F30",
-                    "folio": 6,
-                    "terminal": "1"
-                }
-            ],
-            "wire_no": "211_24C"
-        },
-        {
-            "net": 71,
-            "terminals": [
-                {
-                    "element": "F30",
-                    "folio": 6,
-                    "terminal": "2"
-                },
-                {
-                    "element": "K1",
-                    "folio": 6,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "430_F30"
-        },
-        {
-            "net": 72,
-            "terminals": [
-                {
-                    "element": "K1",
-                    "folio": 6,
-                    "terminal": ""
-                },
-                {
-                    "element": "Going arrow",
-                    "folio": 6,
-                    "terminal": "1"
-                },
-                {
-                    "element": "connection",
-                    "folio": 6,
-                    "terminal": "1"
-                }
-            ],
-            "wire_no": "431_STO1"
-        },
-        {
-            "net": 73,
-            "terminals": [
-                {
-                    "element": "connection",
-                    "folio": 6,
-                    "terminal": "2"
-                },
-                {
-                    "element": "Going arrow",
-                    "folio": 6,
-                    "terminal": "1"
-                }
-            ],
-            "wire_no": "431_STO1"
-        },
-        {
-            "net": 74,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 6,
-                    "terminal": "1"
-                },
-                {
-                    "element": "F31",
-                    "folio": 6,
-                    "terminal": "1"
-                }
-            ],
             "wire_no": "211_24C"
         },
         {
             "net": 75,
             "terminals": [
                 {
-                    "element": "F31",
-                    "folio": 6,
+                    "element": "connection",
+                    "folio": 5,
                     "terminal": "2"
                 },
                 {
-                    "element": "K1",
-                    "folio": 6,
+                    "element": "S1",
+                    "folio": 5,
                     "terminal": ""
                 }
             ],
-            "wire_no": "432_F31"
+            "wire_no": "211_24C"
         },
         {
             "net": 76,
             "terminals": [
                 {
-                    "element": "K1",
-                    "folio": 6,
+                    "element": "S1",
+                    "folio": 5,
                     "terminal": ""
                 },
                 {
-                    "element": "Going arrow",
-                    "folio": 6,
-                    "terminal": "1"
-                },
-                {
                     "element": "connection",
-                    "folio": 6,
+                    "folio": 5,
                     "terminal": "1"
                 }
             ],
-            "wire_no": "433_STO2"
+            "wire_no": "420_ESTOP"
         },
         {
             "net": 77,
             "terminals": [
                 {
                     "element": "connection",
-                    "folio": 6,
-                    "terminal": "2"
+                    "folio": 5,
+                    "terminal": "4"
                 },
                 {
                     "element": "Going arrow",
-                    "folio": 6,
+                    "folio": 5,
                     "terminal": "1"
                 }
             ],
-            "wire_no": "433_STO2"
+            "wire_no": "420_ESTOP"
         },
         {
             "net": 78,
             "terminals": [
                 {
                     "element": "Coming arrow",
-                    "folio": 6,
+                    "folio": 5,
                     "terminal": "1"
                 },
                 {
                     "element": "K1",
-                    "folio": 6,
-                    "terminal": ""
+                    "folio": 5,
+                    "terminal": "1"
                 }
             ],
             "wire_no": "211_24C"
@@ -1337,9 +1292,249 @@
             "net": 79,
             "terminals": [
                 {
+                    "element": "Coming arrow",
+                    "folio": 5,
+                    "terminal": "1"
+                },
+                {
+                    "element": "K1",
+                    "folio": 5,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "001_0V"
+        },
+        {
+            "net": 80,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 6,
+                    "terminal": "1"
+                },
+                {
+                    "element": "F30",
+                    "folio": 6,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "211_24C"
+        },
+        {
+            "net": 81,
+            "terminals": [
+                {
+                    "element": "F30",
+                    "folio": 6,
+                    "terminal": "2"
+                },
+                {
                     "element": "K1",
                     "folio": 6,
-                    "terminal": ""
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "430_F30"
+        },
+        {
+            "net": 82,
+            "terminals": [
+                {
+                    "element": "K1",
+                    "folio": 6,
+                    "terminal": "1"
+                },
+                {
+                    "element": "connection",
+                    "folio": 6,
+                    "terminal": "3"
+                }
+            ],
+            "wire_no": "431_STO1"
+        },
+        {
+            "net": 83,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 6,
+                    "terminal": "4"
+                },
+                {
+                    "element": "Going arrow",
+                    "folio": 6,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "431_STO1"
+        },
+        {
+            "net": 84,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 6,
+                    "terminal": "2"
+                },
+                {
+                    "element": "connection",
+                    "folio": 6,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "431_STO1"
+        },
+        {
+            "net": 85,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 6,
+                    "terminal": "4"
+                },
+                {
+                    "element": "Going arrow",
+                    "folio": 6,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "431_STO1"
+        },
+        {
+            "net": 86,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 6,
+                    "terminal": "1"
+                },
+                {
+                    "element": "F31",
+                    "folio": 6,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "211_24C"
+        },
+        {
+            "net": 87,
+            "terminals": [
+                {
+                    "element": "F31",
+                    "folio": 6,
+                    "terminal": "2"
+                },
+                {
+                    "element": "K1",
+                    "folio": 6,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "432_F31"
+        },
+        {
+            "net": 88,
+            "terminals": [
+                {
+                    "element": "K1",
+                    "folio": 6,
+                    "terminal": "1"
+                },
+                {
+                    "element": "connection",
+                    "folio": 6,
+                    "terminal": "3"
+                }
+            ],
+            "wire_no": "433_STO2"
+        },
+        {
+            "net": 89,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 6,
+                    "terminal": "4"
+                },
+                {
+                    "element": "Going arrow",
+                    "folio": 6,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "433_STO2"
+        },
+        {
+            "net": 90,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 6,
+                    "terminal": "2"
+                },
+                {
+                    "element": "connection",
+                    "folio": 6,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "433_STO2"
+        },
+        {
+            "net": 91,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 6,
+                    "terminal": "4"
+                },
+                {
+                    "element": "Going arrow",
+                    "folio": 6,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "433_STO2"
+        },
+        {
+            "net": 92,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 6,
+                    "terminal": "1"
+                },
+                {
+                    "element": "K1",
+                    "folio": 6,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "211_24C"
+        },
+        {
+            "net": 93,
+            "terminals": [
+                {
+                    "element": "K1",
+                    "folio": 6,
+                    "terminal": "1"
+                },
+                {
+                    "element": "connection",
+                    "folio": 6,
+                    "terminal": "3"
+                }
+            ],
+            "wire_no": "421_PNOZ"
+        },
+        {
+            "net": 94,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 6,
+                    "terminal": "4"
                 },
                 {
                     "element": "Going arrow",
@@ -1350,508 +1545,344 @@
             "wire_no": "421_PNOZ"
         },
         {
-            "net": 80,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 7,
-                    "terminal": "1"
-                },
-                {
-                    "element": "A2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 7,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "150_L"
-        },
-        {
-            "net": 81,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 7,
-                    "terminal": "1"
-                },
-                {
-                    "element": "A2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 7,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "151_N"
-        },
-        {
-            "net": 82,
-            "terminals": [
-                {
-                    "element": "A2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "X4:3",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "X4:3",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "connection",
-                    "folio": 7,
-                    "terminal": "4"
-                }
-            ],
-            "wire_no": "542_W"
-        },
-        {
-            "net": 83,
-            "terminals": [
-                {
-                    "element": "connection",
-                    "folio": 7,
-                    "terminal": "2"
-                },
-                {
-                    "element": "M1",
-                    "folio": 7,
-                    "terminal": "W1"
-                }
-            ],
-            "wire_no": "542_W"
-        },
-        {
-            "net": 84,
-            "terminals": [
-                {
-                    "element": "A2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "X4:2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "X4:2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "connection",
-                    "folio": 7,
-                    "terminal": "4"
-                }
-            ],
-            "wire_no": "541_V"
-        },
-        {
-            "net": 85,
-            "terminals": [
-                {
-                    "element": "connection",
-                    "folio": 7,
-                    "terminal": "2"
-                },
-                {
-                    "element": "M1",
-                    "folio": 7,
-                    "terminal": "V1"
-                }
-            ],
-            "wire_no": "541_V"
-        },
-        {
-            "net": 86,
-            "terminals": [
-                {
-                    "element": "A2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "X4:1",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "X4:1",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "connection",
-                    "folio": 7,
-                    "terminal": "4"
-                }
-            ],
-            "wire_no": "540_U"
-        },
-        {
-            "net": 87,
-            "terminals": [
-                {
-                    "element": "connection",
-                    "folio": 7,
-                    "terminal": "2"
-                },
-                {
-                    "element": "M1",
-                    "folio": 7,
-                    "terminal": "U1"
-                }
-            ],
-            "wire_no": "540_U"
-        },
-        {
-            "net": 88,
-            "terminals": [
-                {
-                    "element": "A2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "X4:4",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "X4:4",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "connection",
-                    "folio": 7,
-                    "terminal": "4"
-                }
-            ],
-            "wire_no": "102_PE"
-        },
-        {
-            "net": 89,
-            "terminals": [
-                {
-                    "element": "connection",
-                    "folio": 7,
-                    "terminal": "2"
-                },
-                {
-                    "element": "M1",
-                    "folio": 7,
-                    "terminal": "PE"
-                }
-            ],
-            "wire_no": "102_PE"
-        },
-        {
-            "net": 90,
-            "terminals": [
-                {
-                    "element": "A2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "X6:1",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "X6:1",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "M1",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "M1",
-                    "folio": 7,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "543_BRP"
-        },
-        {
-            "net": 91,
-            "terminals": [
-                {
-                    "element": "A2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "X6:2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "X6:2",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "M1",
-                    "folio": 7,
-                    "terminal": ""
-                },
-                {
-                    "element": "M1",
-                    "folio": 7,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "544_BRN"
-        },
-        {
-            "net": 92,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 8,
-                    "terminal": "1"
-                },
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "431_STO1"
-        },
-        {
-            "net": 93,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 8,
-                    "terminal": "1"
-                },
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "001_0V"
-        },
-        {
-            "net": 94,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 8,
-                    "terminal": "1"
-                },
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "433_STO2"
-        },
-        {
             "net": 95,
             "terminals": [
                 {
                     "element": "Coming arrow",
-                    "folio": 8,
+                    "folio": 7,
                     "terminal": "1"
                 },
                 {
                     "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
+                    "folio": 7,
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "001_0V"
+            "wire_no": "150_L"
         },
         {
             "net": 96,
             "terminals": [
                 {
                     "element": "Coming arrow",
-                    "folio": 8,
+                    "folio": 7,
                     "terminal": "1"
                 },
                 {
                     "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
+                    "folio": 7,
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "440_S200FB"
+            "wire_no": "151_N"
         },
         {
             "net": 97,
             "terminals": [
                 {
-                    "element": "Coming arrow",
-                    "folio": 8,
+                    "element": "A2",
+                    "folio": 7,
                     "terminal": "1"
                 },
                 {
-                    "element": "A2",
-                    "folio": 8,
+                    "element": "X4:1",
+                    "folio": 7,
                     "terminal": ""
                 },
                 {
-                    "element": "A2",
-                    "folio": 8,
+                    "element": "X4:1",
+                    "folio": 7,
                     "terminal": ""
+                },
+                {
+                    "element": "M1",
+                    "folio": 7,
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "201_24S"
+            "wire_no": "540_U"
         },
         {
             "net": 98,
             "terminals": [
                 {
-                    "element": "Coming arrow",
-                    "folio": 8,
+                    "element": "A2",
+                    "folio": 7,
                     "terminal": "1"
                 },
                 {
-                    "element": "A2",
-                    "folio": 8,
+                    "element": "X4:2",
+                    "folio": 7,
                     "terminal": ""
                 },
                 {
-                    "element": "A2",
-                    "folio": 8,
+                    "element": "X4:2",
+                    "folio": 7,
                     "terminal": ""
+                },
+                {
+                    "element": "M1",
+                    "folio": 7,
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "201_24S"
+            "wire_no": "541_V"
         },
         {
             "net": 99,
             "terminals": [
                 {
-                    "element": "Coming arrow",
-                    "folio": 8,
+                    "element": "A2",
+                    "folio": 7,
                     "terminal": "1"
                 },
                 {
-                    "element": "A2",
-                    "folio": 8,
+                    "element": "X4:3",
+                    "folio": 7,
                     "terminal": ""
                 },
                 {
-                    "element": "A2",
-                    "folio": 8,
+                    "element": "X4:3",
+                    "folio": 7,
                     "terminal": ""
+                },
+                {
+                    "element": "M1",
+                    "folio": 7,
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "001_0V"
+            "wire_no": "542_W"
         },
         {
             "net": 100,
             "terminals": [
                 {
-                    "element": "Coming arrow",
-                    "folio": 8,
+                    "element": "A2",
+                    "folio": 7,
                     "terminal": "1"
                 },
                 {
-                    "element": "A2",
-                    "folio": 8,
+                    "element": "X4:4",
+                    "folio": 7,
                     "terminal": ""
                 },
                 {
-                    "element": "A2",
-                    "folio": 8,
+                    "element": "X4:4",
+                    "folio": 7,
                     "terminal": ""
+                },
+                {
+                    "element": "M1",
+                    "folio": 7,
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "001_0V"
+            "wire_no": "102_PE"
         },
         {
             "net": 101,
             "terminals": [
                 {
                     "element": "A2",
-                    "folio": 8,
+                    "folio": 7,
+                    "terminal": "1"
+                },
+                {
+                    "element": "X6:1",
+                    "folio": 7,
                     "terminal": ""
+                },
+                {
+                    "element": "X6:1",
+                    "folio": 7,
+                    "terminal": ""
+                },
+                {
+                    "element": "M1",
+                    "folio": 7,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "543_BRP"
+        },
+        {
+            "net": 102,
+            "terminals": [
+                {
+                    "element": "A2",
+                    "folio": 7,
+                    "terminal": "1"
+                },
+                {
+                    "element": "X6:2",
+                    "folio": 7,
+                    "terminal": ""
+                },
+                {
+                    "element": "X6:2",
+                    "folio": 7,
+                    "terminal": ""
+                },
+                {
+                    "element": "M1",
+                    "folio": 7,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "544_BRN"
+        },
+        {
+            "net": 103,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 8,
+                    "terminal": "1"
                 },
                 {
                     "element": "A2",
                     "folio": 8,
-                    "terminal": ""
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "431_STO1"
+        },
+        {
+            "net": 104,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 8,
+                    "terminal": "1"
+                },
+                {
+                    "element": "A2",
+                    "folio": 8,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "001_0V"
+        },
+        {
+            "net": 105,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 8,
+                    "terminal": "1"
+                },
+                {
+                    "element": "A2",
+                    "folio": 8,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "433_STO2"
+        },
+        {
+            "net": 106,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 8,
+                    "terminal": "1"
+                },
+                {
+                    "element": "A2",
+                    "folio": 8,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "001_0V"
+        },
+        {
+            "net": 107,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 8,
+                    "terminal": "1"
+                },
+                {
+                    "element": "A2",
+                    "folio": 8,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "440_S200FB"
+        },
+        {
+            "net": 108,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 8,
+                    "terminal": "1"
+                },
+                {
+                    "element": "A2",
+                    "folio": 8,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "201_24S"
+        },
+        {
+            "net": 109,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 8,
+                    "terminal": "1"
+                },
+                {
+                    "element": "A2",
+                    "folio": 8,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "201_24S"
+        },
+        {
+            "net": 110,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 8,
+                    "terminal": "1"
+                },
+                {
+                    "element": "A2",
+                    "folio": 8,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "001_0V"
+        },
+        {
+            "net": 111,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 8,
+                    "terminal": "1"
+                },
+                {
+                    "element": "A2",
+                    "folio": 8,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "001_0V"
+        },
+        {
+            "net": 112,
+            "terminals": [
+                {
+                    "element": "A2",
+                    "folio": 8,
+                    "terminal": "1"
                 },
                 {
                     "element": "X5:1",
@@ -1867,121 +1898,12 @@
             "wire_no": "510_ENC"
         },
         {
-            "net": 102,
+            "net": 113,
             "terminals": [
                 {
                     "element": "A2",
                     "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "U1",
-                    "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "U1",
-                    "folio": 8,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "520_PULSP"
-        },
-        {
-            "net": 103,
-            "terminals": [
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "U1",
-                    "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "U1",
-                    "folio": 8,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "521_PULSN"
-        },
-        {
-            "net": 104,
-            "terminals": [
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "U1",
-                    "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "U1",
-                    "folio": 8,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "522_SIGNP"
-        },
-        {
-            "net": 105,
-            "terminals": [
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "U1",
-                    "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "U1",
-                    "folio": 8,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "523_SIGNN"
-        },
-        {
-            "net": 106,
-            "terminals": [
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
+                    "terminal": "1"
                 },
                 {
                     "element": "R1",
@@ -1997,7 +1919,7 @@
             "wire_no": "910_A"
         },
         {
-            "net": 107,
+            "net": 114,
             "terminals": [
                 {
                     "element": "R1",
@@ -2012,425 +1934,278 @@
                 {
                     "element": "A2",
                     "folio": 8,
-                    "terminal": ""
-                },
-                {
-                    "element": "A2",
-                    "folio": 8,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
             "wire_no": "911_B"
         },
         {
-            "net": 108,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 9,
-                    "terminal": "1"
-                },
-                {
-                    "element": "A3",
-                    "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "A3",
-                    "folio": 9,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "140_L"
-        },
-        {
-            "net": 109,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 9,
-                    "terminal": "1"
-                },
-                {
-                    "element": "A3",
-                    "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "A3",
-                    "folio": 9,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "141_N"
-        },
-        {
-            "net": 110,
-            "terminals": [
-                {
-                    "element": "A3",
-                    "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "A3",
-                    "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "F21",
-                    "folio": 9,
-                    "terminal": "IN.1"
-                }
-            ],
-            "wire_no": "600_U"
-        },
-        {
-            "net": 111,
-            "terminals": [
-                {
-                    "element": "F21",
-                    "folio": 9,
-                    "terminal": "OUT.2"
-                },
-                {
-                    "element": "X2:1",
-                    "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "X2:1",
-                    "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "connection",
-                    "folio": 9,
-                    "terminal": "1"
-                }
-            ],
-            "wire_no": "610_UA"
-        },
-        {
-            "net": 112,
-            "terminals": [
-                {
-                    "element": "A3",
-                    "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "A3",
-                    "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "F21",
-                    "folio": 9,
-                    "terminal": "IN.1"
-                }
-            ],
-            "wire_no": "600_V"
-        },
-        {
-            "net": 113,
-            "terminals": [
-                {
-                    "element": "F21",
-                    "folio": 9,
-                    "terminal": "OUT.2"
-                },
-                {
-                    "element": "X2:2",
-                    "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "X2:2",
-                    "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "connection",
-                    "folio": 9,
-                    "terminal": "1"
-                }
-            ],
-            "wire_no": "611_VA"
-        },
-        {
-            "net": 114,
-            "terminals": [
-                {
-                    "element": "A3",
-                    "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "A3",
-                    "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "F21",
-                    "folio": 9,
-                    "terminal": "IN.1"
-                }
-            ],
-            "wire_no": "600_W"
-        },
-        {
             "net": 115,
             "terminals": [
                 {
-                    "element": "F21",
-                    "folio": 9,
-                    "terminal": "OUT.2"
-                },
-                {
-                    "element": "X2:3",
-                    "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "X2:3",
-                    "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "connection",
-                    "folio": 9,
+                    "element": "A2",
+                    "folio": 8,
                     "terminal": "1"
+                },
+                {
+                    "element": "U1",
+                    "folio": 8,
+                    "terminal": ""
+                },
+                {
+                    "element": "U1",
+                    "folio": 8,
+                    "terminal": ""
                 }
             ],
-            "wire_no": "612_WA"
+            "wire_no": "520_PULSP"
         },
         {
             "net": 116,
             "terminals": [
                 {
-                    "element": "connection",
-                    "folio": 9,
-                    "terminal": "2"
+                    "element": "A2",
+                    "folio": 8,
+                    "terminal": "1"
                 },
                 {
-                    "element": "connection",
-                    "folio": 9,
-                    "terminal": "4"
+                    "element": "U1",
+                    "folio": 8,
+                    "terminal": ""
+                },
+                {
+                    "element": "U1",
+                    "folio": 8,
+                    "terminal": ""
                 }
             ],
-            "wire_no": "610_UA"
+            "wire_no": "521_PULSN"
         },
         {
             "net": 117,
             "terminals": [
                 {
-                    "element": "connection",
-                    "folio": 9,
-                    "terminal": "2"
+                    "element": "A2",
+                    "folio": 8,
+                    "terminal": "1"
                 },
                 {
-                    "element": "M2",
-                    "folio": 9,
-                    "terminal": "U1"
+                    "element": "U1",
+                    "folio": 8,
+                    "terminal": ""
+                },
+                {
+                    "element": "U1",
+                    "folio": 8,
+                    "terminal": ""
                 }
             ],
-            "wire_no": "610_UA"
+            "wire_no": "522_SIGNP"
         },
         {
             "net": 118,
             "terminals": [
                 {
-                    "element": "connection",
-                    "folio": 9,
-                    "terminal": "2"
+                    "element": "A2",
+                    "folio": 8,
+                    "terminal": "1"
                 },
                 {
-                    "element": "connection",
-                    "folio": 9,
-                    "terminal": "4"
+                    "element": "U1",
+                    "folio": 8,
+                    "terminal": ""
+                },
+                {
+                    "element": "U1",
+                    "folio": 8,
+                    "terminal": ""
                 }
             ],
-            "wire_no": "611_VA"
+            "wire_no": "523_SIGNN"
         },
         {
             "net": 119,
             "terminals": [
                 {
-                    "element": "connection",
+                    "element": "Coming arrow",
                     "folio": 9,
-                    "terminal": "2"
+                    "terminal": "1"
                 },
                 {
-                    "element": "M2",
+                    "element": "A3",
                     "folio": 9,
-                    "terminal": "V1"
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "611_VA"
+            "wire_no": "140_L"
         },
         {
             "net": 120,
             "terminals": [
                 {
-                    "element": "connection",
+                    "element": "Coming arrow",
                     "folio": 9,
-                    "terminal": "2"
+                    "terminal": "1"
                 },
                 {
-                    "element": "connection",
+                    "element": "A3",
                     "folio": 9,
-                    "terminal": "4"
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "612_WA"
+            "wire_no": "141_N"
         },
         {
             "net": 121,
             "terminals": [
                 {
-                    "element": "connection",
-                    "folio": 9,
-                    "terminal": "2"
-                },
-                {
-                    "element": "M2",
-                    "folio": 9,
-                    "terminal": "W1"
-                }
-            ],
-            "wire_no": "612_WA"
-        },
-        {
-            "net": 122,
-            "terminals": [
-                {
                     "element": "A3",
                     "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "A3",
-                    "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "X2:4",
-                    "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "X2:4",
-                    "folio": 9,
-                    "terminal": ""
-                },
-                {
-                    "element": "connection",
-                    "folio": 9,
-                    "terminal": "4"
-                }
-            ],
-            "wire_no": "102_PE"
-        },
-        {
-            "net": 123,
-            "terminals": [
-                {
-                    "element": "connection",
-                    "folio": 9,
-                    "terminal": "2"
-                },
-                {
-                    "element": "M2",
-                    "folio": 9,
-                    "terminal": "PE"
-                }
-            ],
-            "wire_no": "102_PE"
-        },
-        {
-            "net": 124,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 10,
                     "terminal": "1"
                 },
                 {
-                    "element": "F22",
-                    "folio": 10,
-                    "terminal": "IN.1"
+                    "element": "F21",
+                    "folio": 9,
+                    "terminal": "1"
                 }
             ],
             "wire_no": "600_U"
         },
         {
-            "net": 125,
+            "net": 122,
             "terminals": [
                 {
-                    "element": "F22",
-                    "folio": 10,
-                    "terminal": "OUT.2"
+                    "element": "F21",
+                    "folio": 9,
+                    "terminal": "1"
                 },
                 {
-                    "element": "X3:1",
-                    "folio": 10,
+                    "element": "X2:1",
+                    "folio": 9,
                     "terminal": ""
                 },
                 {
-                    "element": "X3:1",
-                    "folio": 10,
+                    "element": "X2:1",
+                    "folio": 9,
                     "terminal": ""
                 },
                 {
-                    "element": "connection",
-                    "folio": 10,
+                    "element": "M2",
+                    "folio": 9,
                     "terminal": "1"
                 }
             ],
-            "wire_no": "620_UB"
+            "wire_no": "610_UA"
         },
         {
-            "net": 126,
+            "net": 123,
             "terminals": [
                 {
-                    "element": "Coming arrow",
-                    "folio": 10,
+                    "element": "A3",
+                    "folio": 9,
                     "terminal": "1"
                 },
                 {
-                    "element": "F22",
-                    "folio": 10,
-                    "terminal": "IN.1"
+                    "element": "F21",
+                    "folio": 9,
+                    "terminal": "1"
                 }
             ],
             "wire_no": "600_V"
         },
         {
-            "net": 127,
+            "net": 124,
             "terminals": [
                 {
-                    "element": "F22",
-                    "folio": 10,
-                    "terminal": "OUT.2"
+                    "element": "F21",
+                    "folio": 9,
+                    "terminal": "1"
                 },
                 {
-                    "element": "X3:3",
-                    "folio": 10,
+                    "element": "X2:2",
+                    "folio": 9,
                     "terminal": ""
                 },
                 {
-                    "element": "X3:3",
-                    "folio": 10,
+                    "element": "X2:2",
+                    "folio": 9,
                     "terminal": ""
                 },
                 {
-                    "element": "connection",
-                    "folio": 10,
+                    "element": "M2",
+                    "folio": 9,
                     "terminal": "1"
                 }
             ],
-            "wire_no": "621_VB"
+            "wire_no": "611_VA"
+        },
+        {
+            "net": 125,
+            "terminals": [
+                {
+                    "element": "A3",
+                    "folio": 9,
+                    "terminal": "1"
+                },
+                {
+                    "element": "F21",
+                    "folio": 9,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "600_W"
+        },
+        {
+            "net": 126,
+            "terminals": [
+                {
+                    "element": "F21",
+                    "folio": 9,
+                    "terminal": "1"
+                },
+                {
+                    "element": "X2:3",
+                    "folio": 9,
+                    "terminal": ""
+                },
+                {
+                    "element": "X2:3",
+                    "folio": 9,
+                    "terminal": ""
+                },
+                {
+                    "element": "M2",
+                    "folio": 9,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "612_WA"
+        },
+        {
+            "net": 127,
+            "terminals": [
+                {
+                    "element": "A3",
+                    "folio": 9,
+                    "terminal": "1"
+                },
+                {
+                    "element": "X2:4",
+                    "folio": 9,
+                    "terminal": ""
+                },
+                {
+                    "element": "X2:4",
+                    "folio": 9,
+                    "terminal": ""
+                },
+                {
+                    "element": "M2",
+                    "folio": 9,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "102_PE"
         },
         {
             "net": 128,
@@ -2441,67 +2216,82 @@
                     "terminal": "1"
                 },
                 {
+                    "element": "A3",
+                    "folio": 10,
+                    "terminal": "1"
+                },
+                {
                     "element": "F22",
                     "folio": 10,
-                    "terminal": "IN.1"
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "600_W"
+            "wire_no": "600_U"
         },
         {
             "net": 129,
             "terminals": [
                 {
+                    "element": "Coming arrow",
+                    "folio": 10,
+                    "terminal": "1"
+                },
+                {
+                    "element": "A3",
+                    "folio": 10,
+                    "terminal": "1"
+                },
+                {
                     "element": "F22",
-                    "folio": 10,
-                    "terminal": "OUT.2"
-                },
-                {
-                    "element": "X3:2",
-                    "folio": 10,
-                    "terminal": ""
-                },
-                {
-                    "element": "X3:2",
-                    "folio": 10,
-                    "terminal": ""
-                },
-                {
-                    "element": "connection",
                     "folio": 10,
                     "terminal": "1"
                 }
             ],
-            "wire_no": "622_WB"
+            "wire_no": "600_V"
         },
         {
             "net": 130,
             "terminals": [
                 {
-                    "element": "connection",
+                    "element": "Coming arrow",
                     "folio": 10,
-                    "terminal": "2"
+                    "terminal": "1"
                 },
                 {
-                    "element": "connection",
+                    "element": "A3",
                     "folio": 10,
-                    "terminal": "4"
+                    "terminal": "1"
+                },
+                {
+                    "element": "F22",
+                    "folio": 10,
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "620_UB"
+            "wire_no": "600_W"
         },
         {
             "net": 131,
             "terminals": [
                 {
-                    "element": "connection",
+                    "element": "F22",
                     "folio": 10,
-                    "terminal": "2"
+                    "terminal": "1"
+                },
+                {
+                    "element": "X3:1",
+                    "folio": 10,
+                    "terminal": ""
+                },
+                {
+                    "element": "X3:1",
+                    "folio": 10,
+                    "terminal": ""
                 },
                 {
                     "element": "M3",
                     "folio": 10,
-                    "terminal": "U1"
+                    "terminal": "1"
                 }
             ],
             "wire_no": "620_UB"
@@ -2510,14 +2300,24 @@
             "net": 132,
             "terminals": [
                 {
-                    "element": "connection",
+                    "element": "F22",
                     "folio": 10,
-                    "terminal": "2"
+                    "terminal": "1"
                 },
                 {
-                    "element": "connection",
+                    "element": "X3:3",
                     "folio": 10,
-                    "terminal": "4"
+                    "terminal": ""
+                },
+                {
+                    "element": "X3:3",
+                    "folio": 10,
+                    "terminal": ""
+                },
+                {
+                    "element": "M3",
+                    "folio": 10,
+                    "terminal": "1"
                 }
             ],
             "wire_no": "621_VB"
@@ -2526,86 +2326,96 @@
             "net": 133,
             "terminals": [
                 {
-                    "element": "connection",
+                    "element": "F22",
                     "folio": 10,
-                    "terminal": "2"
+                    "terminal": "1"
+                },
+                {
+                    "element": "X3:2",
+                    "folio": 10,
+                    "terminal": ""
+                },
+                {
+                    "element": "X3:2",
+                    "folio": 10,
+                    "terminal": ""
                 },
                 {
                     "element": "M3",
                     "folio": 10,
-                    "terminal": "W1"
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "621_VB"
+            "wire_no": "622_WB"
         },
         {
             "net": 134,
             "terminals": [
                 {
-                    "element": "connection",
+                    "element": "X3:4",
                     "folio": 10,
-                    "terminal": "2"
+                    "terminal": ""
                 },
                 {
-                    "element": "connection",
+                    "element": "X3:4",
                     "folio": 10,
-                    "terminal": "4"
+                    "terminal": ""
+                },
+                {
+                    "element": "M3",
+                    "folio": 10,
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "622_WB"
+            "wire_no": "102_PE"
         },
         {
             "net": 135,
             "terminals": [
                 {
-                    "element": "connection",
-                    "folio": 10,
-                    "terminal": "2"
+                    "element": "Coming arrow",
+                    "folio": 11,
+                    "terminal": "1"
                 },
                 {
-                    "element": "M3",
-                    "folio": 10,
-                    "terminal": "V1"
+                    "element": "A3",
+                    "folio": 11,
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "622_WB"
+            "wire_no": "431_STO1"
         },
         {
             "net": 136,
             "terminals": [
                 {
-                    "element": "X3:4",
-                    "folio": 10,
-                    "terminal": ""
+                    "element": "Coming arrow",
+                    "folio": 11,
+                    "terminal": "1"
                 },
                 {
-                    "element": "X3:4",
-                    "folio": 10,
-                    "terminal": ""
-                },
-                {
-                    "element": "connection",
-                    "folio": 10,
-                    "terminal": "4"
+                    "element": "A3",
+                    "folio": 11,
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "102_PE"
+            "wire_no": "433_STO2"
         },
         {
             "net": 137,
             "terminals": [
                 {
-                    "element": "connection",
-                    "folio": 10,
-                    "terminal": "2"
+                    "element": "Coming arrow",
+                    "folio": 11,
+                    "terminal": "1"
                 },
                 {
-                    "element": "M3",
-                    "folio": 10,
-                    "terminal": "PE"
+                    "element": "A3",
+                    "folio": 11,
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "102_PE"
+            "wire_no": "450_RESET"
         },
         {
             "net": 138,
@@ -2618,15 +2428,10 @@
                 {
                     "element": "A3",
                     "folio": 11,
-                    "terminal": ""
-                },
-                {
-                    "element": "A3",
-                    "folio": 11,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "431_STO1"
+            "wire_no": "001_0V"
         },
         {
             "net": 139,
@@ -2639,15 +2444,10 @@
                 {
                     "element": "A3",
                     "folio": 11,
-                    "terminal": ""
-                },
-                {
-                    "element": "A3",
-                    "folio": 11,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "433_STO2"
+            "wire_no": "451_FAULT"
         },
         {
             "net": 140,
@@ -2660,15 +2460,10 @@
                 {
                     "element": "A3",
                     "folio": 11,
-                    "terminal": ""
-                },
-                {
-                    "element": "A3",
-                    "folio": 11,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "450_RESET"
+            "wire_no": "211_24C"
         },
         {
             "net": 141,
@@ -2681,15 +2476,10 @@
                 {
                     "element": "A3",
                     "folio": 11,
-                    "terminal": ""
-                },
-                {
-                    "element": "A3",
-                    "folio": 11,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "001_0V"
+            "wire_no": "211_24C"
         },
         {
             "net": 142,
@@ -2702,15 +2492,10 @@
                 {
                     "element": "A3",
                     "folio": 11,
-                    "terminal": ""
-                },
-                {
-                    "element": "A3",
-                    "folio": 11,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "451_FAULT"
+            "wire_no": "452_SONSTO"
         },
         {
             "net": 143,
@@ -2723,15 +2508,10 @@
                 {
                     "element": "A3",
                     "folio": 11,
-                    "terminal": ""
-                },
-                {
-                    "element": "A3",
-                    "folio": 11,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "211_24C"
+            "wire_no": "910_A"
         },
         {
             "net": 144,
@@ -2744,78 +2524,58 @@
                 {
                     "element": "A3",
                     "folio": 11,
-                    "terminal": ""
-                },
-                {
-                    "element": "A3",
-                    "folio": 11,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "211_24C"
+            "wire_no": "911_B"
         },
         {
             "net": 145,
             "terminals": [
                 {
                     "element": "Coming arrow",
-                    "folio": 11,
+                    "folio": 12,
                     "terminal": "1"
                 },
                 {
-                    "element": "A3",
-                    "folio": 11,
-                    "terminal": ""
-                },
-                {
-                    "element": "A3",
-                    "folio": 11,
-                    "terminal": ""
+                    "element": "A4",
+                    "folio": 12,
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "452_SONSTO"
+            "wire_no": "211_24C"
         },
         {
             "net": 146,
             "terminals": [
                 {
                     "element": "Coming arrow",
-                    "folio": 11,
+                    "folio": 12,
                     "terminal": "1"
                 },
                 {
-                    "element": "A3",
-                    "folio": 11,
-                    "terminal": ""
-                },
-                {
-                    "element": "A3",
-                    "folio": 11,
-                    "terminal": ""
+                    "element": "A4",
+                    "folio": 12,
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "910_A"
+            "wire_no": "001_0V"
         },
         {
             "net": 147,
             "terminals": [
                 {
                     "element": "Coming arrow",
-                    "folio": 11,
+                    "folio": 12,
                     "terminal": "1"
                 },
                 {
-                    "element": "A3",
-                    "folio": 11,
-                    "terminal": ""
-                },
-                {
-                    "element": "A3",
-                    "folio": 11,
-                    "terminal": ""
+                    "element": "A4",
+                    "folio": 12,
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "911_B"
+            "wire_no": "001_0V"
         },
         {
             "net": 148,
@@ -2828,15 +2588,10 @@
                 {
                     "element": "A4",
                     "folio": 12,
-                    "terminal": ""
-                },
-                {
-                    "element": "A4",
-                    "folio": 12,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "211_24C"
+            "wire_no": "102_PE"
         },
         {
             "net": 149,
@@ -2849,15 +2604,10 @@
                 {
                     "element": "A4",
                     "folio": 12,
-                    "terminal": ""
-                },
-                {
-                    "element": "A4",
-                    "folio": 12,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "001_0V"
+            "wire_no": "910_A"
         },
         {
             "net": 150,
@@ -2870,91 +2620,18 @@
                 {
                     "element": "A4",
                     "folio": 12,
-                    "terminal": ""
-                },
-                {
-                    "element": "A4",
-                    "folio": 12,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "001_0V"
-        },
-        {
-            "net": 151,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 12,
                     "terminal": "1"
-                },
-                {
-                    "element": "A4",
-                    "folio": 12,
-                    "terminal": ""
-                },
-                {
-                    "element": "A4",
-                    "folio": 12,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "102_PE"
-        },
-        {
-            "net": 152,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 12,
-                    "terminal": "1"
-                },
-                {
-                    "element": "A4",
-                    "folio": 12,
-                    "terminal": ""
-                },
-                {
-                    "element": "A4",
-                    "folio": 12,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "910_A"
-        },
-        {
-            "net": 153,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 12,
-                    "terminal": "1"
-                },
-                {
-                    "element": "A4",
-                    "folio": 12,
-                    "terminal": ""
-                },
-                {
-                    "element": "A4",
-                    "folio": 12,
-                    "terminal": ""
                 }
             ],
             "wire_no": "911_B"
         },
         {
-            "net": 154,
+            "net": 151,
             "terminals": [
                 {
                     "element": "A4",
                     "folio": 12,
-                    "terminal": ""
-                },
-                {
-                    "element": "A4",
-                    "folio": 12,
-                    "terminal": ""
+                    "terminal": "1"
                 },
                 {
                     "element": "Going arrow",
@@ -2965,30 +2642,68 @@
             "wire_no": "930_ETH"
         },
         {
-            "net": 155,
+            "net": 152,
             "terminals": [
                 {
                     "element": "A4",
                     "folio": 12,
-                    "terminal": ""
-                },
-                {
-                    "element": "A4",
-                    "folio": 12,
-                    "terminal": ""
+                    "terminal": "1"
                 },
                 {
                     "element": "A5",
                     "folio": 12,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 12,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
             "wire_no": "940_BRIDGE"
+        },
+        {
+            "net": 153,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 13,
+                    "terminal": "1"
+                },
+                {
+                    "element": "A5",
+                    "folio": 13,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "460_LIM_UP"
+        },
+        {
+            "net": 154,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 13,
+                    "terminal": "1"
+                },
+                {
+                    "element": "A5",
+                    "folio": 13,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "461_LIM_DN"
+        },
+        {
+            "net": 155,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 13,
+                    "terminal": "1"
+                },
+                {
+                    "element": "A5",
+                    "folio": 13,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "420_ESTOP"
         },
         {
             "net": 156,
@@ -3001,15 +2716,10 @@
                 {
                     "element": "A5",
                     "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "460_LIM_UP"
+            "wire_no": "421_PNOZ"
         },
         {
             "net": 157,
@@ -3022,15 +2732,10 @@
                 {
                     "element": "A5",
                     "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "461_LIM_DN"
+            "wire_no": "440_S200FB"
         },
         {
             "net": 158,
@@ -3043,15 +2748,10 @@
                 {
                     "element": "A5",
                     "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "420_ESTOP"
+            "wire_no": "452_SONSTO"
         },
         {
             "net": 159,
@@ -3064,15 +2764,10 @@
                 {
                     "element": "A5",
                     "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "421_PNOZ"
+            "wire_no": "462_ENABLE"
         },
         {
             "net": 160,
@@ -3085,15 +2780,10 @@
                 {
                     "element": "A5",
                     "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "440_S200FB"
+            "wire_no": "470_TILT_V"
         },
         {
             "net": 161,
@@ -3106,15 +2796,10 @@
                 {
                     "element": "A5",
                     "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "452_SONSTO"
+            "wire_no": "471_TILT_F"
         },
         {
             "net": 162,
@@ -3127,15 +2812,10 @@
                 {
                     "element": "A5",
                     "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "462_ENABLE"
+            "wire_no": "472_LIFT_D"
         },
         {
             "net": 163,
@@ -3148,15 +2828,10 @@
                 {
                     "element": "A5",
                     "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "470_TILT_V"
+            "wire_no": "473_LIFT_R"
         },
         {
             "net": 164,
@@ -3169,15 +2844,10 @@
                 {
                     "element": "A5",
                     "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "471_TILT_F"
+            "wire_no": "451_FAULT"
         },
         {
             "net": 165,
@@ -3190,91 +2860,18 @@
                 {
                     "element": "A5",
                     "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "472_LIFT_D"
-        },
-        {
-            "net": 166,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 13,
                     "terminal": "1"
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "473_LIFT_R"
-        },
-        {
-            "net": 167,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 13,
-                    "terminal": "1"
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "451_FAULT"
-        },
-        {
-            "net": 168,
-            "terminals": [
-                {
-                    "element": "Coming arrow",
-                    "folio": 13,
-                    "terminal": "1"
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
                 }
             ],
             "wire_no": "480_INDEX"
         },
         {
-            "net": 169,
+            "net": 166,
             "terminals": [
                 {
                     "element": "A5",
                     "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
+                    "terminal": "1"
                 },
                 {
                     "element": "Going arrow",
@@ -3285,17 +2882,12 @@
             "wire_no": "490_EXT"
         },
         {
-            "net": 170,
+            "net": 167,
             "terminals": [
                 {
                     "element": "A5",
                     "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
+                    "terminal": "1"
                 },
                 {
                     "element": "Going arrow",
@@ -3306,17 +2898,12 @@
             "wire_no": "491_RET"
         },
         {
-            "net": 171,
+            "net": 168,
             "terminals": [
                 {
                     "element": "A5",
                     "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
+                    "terminal": "1"
                 },
                 {
                     "element": "Going arrow",
@@ -3327,17 +2914,12 @@
             "wire_no": "492_TILTV"
         },
         {
-            "net": 172,
+            "net": 169,
             "terminals": [
                 {
                     "element": "A5",
                     "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
+                    "terminal": "1"
                 },
                 {
                     "element": "Going arrow",
@@ -3348,17 +2930,12 @@
             "wire_no": "493_TILTF"
         },
         {
-            "net": 173,
+            "net": 170,
             "terminals": [
                 {
                     "element": "A5",
                     "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
+                    "terminal": "1"
                 },
                 {
                     "element": "Going arrow",
@@ -3369,17 +2946,12 @@
             "wire_no": "494_BEACON"
         },
         {
-            "net": 174,
+            "net": 171,
             "terminals": [
                 {
                     "element": "A5",
                     "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
+                    "terminal": "1"
                 },
                 {
                     "element": "Going arrow",
@@ -3390,17 +2962,12 @@
             "wire_no": "450_RESET"
         },
         {
-            "net": 175,
+            "net": 172,
             "terminals": [
                 {
                     "element": "A5",
                     "folio": 13,
-                    "terminal": ""
-                },
-                {
-                    "element": "A5",
-                    "folio": 13,
-                    "terminal": ""
+                    "terminal": "1"
                 },
                 {
                     "element": "Going arrow",
@@ -3411,7 +2978,7 @@
             "wire_no": "495_ROT_EN"
         },
         {
-            "net": 176,
+            "net": 173,
             "terminals": [
                 {
                     "element": "S4",
@@ -3437,7 +3004,7 @@
             "wire_no": "460_LIM_UP"
         },
         {
-            "net": 177,
+            "net": 174,
             "terminals": [
                 {
                     "element": "connection",
@@ -3453,7 +3020,7 @@
             "wire_no": "211_24C"
         },
         {
-            "net": 178,
+            "net": 175,
             "terminals": [
                 {
                     "element": "S5",
@@ -3479,7 +3046,7 @@
             "wire_no": "461_LIM_DN"
         },
         {
-            "net": 179,
+            "net": 176,
             "terminals": [
                 {
                     "element": "connection",
@@ -3495,7 +3062,7 @@
             "wire_no": "211_24C"
         },
         {
-            "net": 180,
+            "net": 177,
             "terminals": [
                 {
                     "element": "S6",
@@ -3521,7 +3088,7 @@
             "wire_no": "462_ENABLE"
         },
         {
-            "net": 181,
+            "net": 178,
             "terminals": [
                 {
                     "element": "connection",
@@ -3537,7 +3104,7 @@
             "wire_no": "211_24C"
         },
         {
-            "net": 182,
+            "net": 179,
             "terminals": [
                 {
                     "element": "connection",
@@ -3553,7 +3120,7 @@
             "wire_no": "211_24C"
         },
         {
-            "net": 183,
+            "net": 180,
             "terminals": [
                 {
                     "element": "connection",
@@ -3569,7 +3136,7 @@
             "wire_no": "211_24C"
         },
         {
-            "net": 184,
+            "net": 181,
             "terminals": [
                 {
                     "element": "B1",
@@ -3600,7 +3167,7 @@
             "wire_no": "480_INDEX"
         },
         {
-            "net": 185,
+            "net": 182,
             "terminals": [
                 {
                     "element": "connection",
@@ -3621,7 +3188,7 @@
             "wire_no": "211_24C"
         },
         {
-            "net": 186,
+            "net": 183,
             "terminals": [
                 {
                     "element": "B1",
@@ -3642,7 +3209,7 @@
             "wire_no": "001_0V"
         },
         {
-            "net": 187,
+            "net": 184,
             "terminals": [
                 {
                     "element": "Coming arrow",
@@ -3668,7 +3235,7 @@
             "wire_no": "470_TILT_V"
         },
         {
-            "net": 188,
+            "net": 185,
             "terminals": [
                 {
                     "element": "Coming arrow",
@@ -3694,7 +3261,7 @@
             "wire_no": "471_TILT_F"
         },
         {
-            "net": 189,
+            "net": 186,
             "terminals": [
                 {
                     "element": "connection",
@@ -3710,7 +3277,7 @@
             "wire_no": "211_24C"
         },
         {
-            "net": 190,
+            "net": 187,
             "terminals": [
                 {
                     "element": "S14",
@@ -3726,7 +3293,7 @@
             "wire_no": "474_DMID"
         },
         {
-            "net": 191,
+            "net": 188,
             "terminals": [
                 {
                     "element": "S15",
@@ -3752,7 +3319,7 @@
             "wire_no": "472_LIFT_D"
         },
         {
-            "net": 192,
+            "net": 189,
             "terminals": [
                 {
                     "element": "connection",
@@ -3768,7 +3335,7 @@
             "wire_no": "211_24C"
         },
         {
-            "net": 193,
+            "net": 190,
             "terminals": [
                 {
                     "element": "S16",
@@ -3784,7 +3351,7 @@
             "wire_no": "475_RMID"
         },
         {
-            "net": 194,
+            "net": 191,
             "terminals": [
                 {
                     "element": "S17",
@@ -3810,7 +3377,7 @@
             "wire_no": "473_LIFT_R"
         },
         {
-            "net": 195,
+            "net": 192,
             "terminals": [
                 {
                     "element": "Coming arrow",
@@ -3836,7 +3403,7 @@
             "wire_no": "494_BEACON"
         },
         {
-            "net": 196,
+            "net": 193,
             "terminals": [
                 {
                     "element": "Coming arrow",
@@ -3852,7 +3419,7 @@
             "wire_no": "492_TILTV"
         },
         {
-            "net": 197,
+            "net": 194,
             "terminals": [
                 {
                     "element": "K3",
@@ -3873,7 +3440,7 @@
             "wire_no": "496_K2"
         },
         {
-            "net": 198,
+            "net": 195,
             "terminals": [
                 {
                     "element": "D2",
@@ -3889,7 +3456,7 @@
             "wire_no": "001_0V"
         },
         {
-            "net": 199,
+            "net": 196,
             "terminals": [
                 {
                     "element": "connection",
@@ -3905,7 +3472,7 @@
             "wire_no": "001_0V"
         },
         {
-            "net": 200,
+            "net": 197,
             "terminals": [
                 {
                     "element": "Coming arrow",
@@ -3921,7 +3488,7 @@
             "wire_no": "493_TILTF"
         },
         {
-            "net": 201,
+            "net": 198,
             "terminals": [
                 {
                     "element": "K2",
@@ -3942,7 +3509,7 @@
             "wire_no": "497_K3"
         },
         {
-            "net": 202,
+            "net": 199,
             "terminals": [
                 {
                     "element": "D3",
@@ -3958,7 +3525,7 @@
             "wire_no": "001_0V"
         },
         {
-            "net": 203,
+            "net": 200,
             "terminals": [
                 {
                     "element": "connection",
@@ -3974,7 +3541,7 @@
             "wire_no": "001_0V"
         },
         {
-            "net": 204,
+            "net": 201,
             "terminals": [
                 {
                     "element": "K2",
@@ -3990,7 +3557,7 @@
             "wire_no": "001_0V"
         },
         {
-            "net": 205,
+            "net": 202,
             "terminals": [
                 {
                     "element": "K3",
@@ -4006,12 +3573,60 @@
             "wire_no": "001_0V"
         },
         {
-            "net": 206,
+            "net": 203,
             "terminals": [
                 {
                     "element": "connection",
                     "folio": 15,
                     "terminal": "4"
+                },
+                {
+                    "element": "connection",
+                    "folio": 15,
+                    "terminal": "3"
+                }
+            ],
+            "wire_no": "001_0V"
+        },
+        {
+            "net": 204,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 15,
+                    "terminal": "4"
+                },
+                {
+                    "element": "connection",
+                    "folio": 15,
+                    "terminal": "3"
+                }
+            ],
+            "wire_no": "001_0V"
+        },
+        {
+            "net": 205,
+            "terminals": [
+                {
+                    "element": "connection",
+                    "folio": 15,
+                    "terminal": "4"
+                },
+                {
+                    "element": "connection",
+                    "folio": 15,
+                    "terminal": "3"
+                }
+            ],
+            "wire_no": "001_0V"
+        },
+        {
+            "net": 206,
+            "terminals": [
+                {
+                    "element": "Coming arrow",
+                    "folio": 15,
+                    "terminal": "1"
                 },
                 {
                     "element": "connection",
@@ -4025,138 +3640,90 @@
             "net": 207,
             "terminals": [
                 {
-                    "element": "connection",
+                    "element": "Coming arrow",
                     "folio": 15,
-                    "terminal": "4"
+                    "terminal": "1"
                 },
                 {
-                    "element": "connection",
+                    "element": "K2",
                     "folio": 15,
-                    "terminal": "3"
+                    "terminal": ""
                 }
             ],
-            "wire_no": "001_0V"
+            "wire_no": "211_24C"
         },
         {
             "net": 208,
             "terminals": [
                 {
-                    "element": "connection",
+                    "element": "K2",
                     "folio": 15,
-                    "terminal": "4"
+                    "terminal": ""
+                },
+                {
+                    "element": "X8:1",
+                    "folio": 15,
+                    "terminal": ""
+                },
+                {
+                    "element": "X8:1",
+                    "folio": 15,
+                    "terminal": ""
                 },
                 {
                     "element": "connection",
                     "folio": 15,
-                    "terminal": "3"
+                    "terminal": "1"
+                },
+                {
+                    "element": "M4",
+                    "folio": 15,
+                    "terminal": ""
+                },
+                {
+                    "element": "M4",
+                    "folio": 15,
+                    "terminal": ""
                 }
             ],
-            "wire_no": "001_0V"
+            "wire_no": "498_ACT_A"
         },
         {
             "net": 209,
             "terminals": [
                 {
-                    "element": "Coming arrow",
+                    "element": "K2",
                     "folio": 15,
-                    "terminal": "1"
+                    "terminal": ""
                 },
                 {
                     "element": "connection",
                     "folio": 15,
-                    "terminal": "3"
+                    "terminal": "4"
                 }
             ],
-            "wire_no": "001_0V"
+            "wire_no": "498_ACT_A"
         },
         {
             "net": 210,
             "terminals": [
                 {
-                    "element": "Coming arrow",
-                    "folio": 15,
-                    "terminal": "1"
-                },
-                {
                     "element": "K2",
                     "folio": 15,
                     "terminal": ""
+                },
+                {
+                    "element": "connection",
+                    "folio": 15,
+                    "terminal": "1"
                 }
             ],
-            "wire_no": "211_24C"
+            "wire_no": "001_0V"
         },
         {
             "net": 211,
             "terminals": [
                 {
-                    "element": "K2",
-                    "folio": 15,
-                    "terminal": ""
-                },
-                {
-                    "element": "X8:1",
-                    "folio": 15,
-                    "terminal": ""
-                },
-                {
-                    "element": "X8:1",
-                    "folio": 15,
-                    "terminal": ""
-                },
-                {
-                    "element": "connection",
-                    "folio": 15,
-                    "terminal": "1"
-                },
-                {
-                    "element": "M4",
-                    "folio": 15,
-                    "terminal": ""
-                },
-                {
-                    "element": "M4",
-                    "folio": 15,
-                    "terminal": ""
-                }
-            ],
-            "wire_no": "498_ACT_A"
-        },
-        {
-            "net": 212,
-            "terminals": [
-                {
-                    "element": "K2",
-                    "folio": 15,
-                    "terminal": ""
-                },
-                {
-                    "element": "connection",
-                    "folio": 15,
-                    "terminal": "4"
-                }
-            ],
-            "wire_no": "498_ACT_A"
-        },
-        {
-            "net": 213,
-            "terminals": [
-                {
-                    "element": "K2",
-                    "folio": 15,
-                    "terminal": ""
-                },
-                {
-                    "element": "connection",
-                    "folio": 15,
-                    "terminal": "1"
-                }
-            ],
-            "wire_no": "001_0V"
-        },
-        {
-            "net": 214,
-            "terminals": [
-                {
                     "element": "Coming arrow",
                     "folio": 15,
                     "terminal": "1"
@@ -4170,7 +3737,7 @@
             "wire_no": "211_24C"
         },
         {
-            "net": 215,
+            "net": 212,
             "terminals": [
                 {
                     "element": "K3",
@@ -4206,7 +3773,7 @@
             "wire_no": "499_ACT_B"
         },
         {
-            "net": 216,
+            "net": 213,
             "terminals": [
                 {
                     "element": "K3",
@@ -4222,7 +3789,7 @@
             "wire_no": "499_ACT_B"
         },
         {
-            "net": 217,
+            "net": 214,
             "terminals": [
                 {
                     "element": "K3",
@@ -4238,7 +3805,7 @@
             "wire_no": "001_0V"
         },
         {
-            "net": 218,
+            "net": 215,
             "terminals": [
                 {
                     "element": "Coming arrow",
@@ -4259,7 +3826,7 @@
             "wire_no": "490_EXT"
         },
         {
-            "net": 219,
+            "net": 216,
             "terminals": [
                 {
                     "element": "Coming arrow",
@@ -4280,7 +3847,7 @@
             "wire_no": "491_RET"
         },
         {
-            "net": 220,
+            "net": 217,
             "terminals": [
                 {
                     "element": "Coming arrow",
@@ -4301,7 +3868,7 @@
             "wire_no": "211_24C"
         },
         {
-            "net": 221,
+            "net": 218,
             "terminals": [
                 {
                     "element": "Coming arrow",
@@ -4322,7 +3889,7 @@
             "wire_no": "001_0V"
         },
         {
-            "net": 222,
+            "net": 219,
             "terminals": [
                 {
                     "element": "A10",
@@ -4368,7 +3935,7 @@
             "wire_no": "550_LIFTP"
         },
         {
-            "net": 223,
+            "net": 220,
             "terminals": [
                 {
                     "element": "A10",
@@ -4414,7 +3981,7 @@
             "wire_no": "551_LIFTN"
         },
         {
-            "net": 224,
+            "net": 221,
             "terminals": [
                 {
                     "element": "Coming arrow",
@@ -4430,7 +3997,7 @@
             "wire_no": "211_24C"
         },
         {
-            "net": 225,
+            "net": 222,
             "terminals": [
                 {
                     "element": "F6",
@@ -4461,7 +4028,7 @@
             "wire_no": "500_24R"
         },
         {
-            "net": 226,
+            "net": 223,
             "terminals": [
                 {
                     "element": "Coming arrow",
@@ -4492,7 +4059,7 @@
             "wire_no": "495_ROT_EN"
         },
         {
-            "net": 227,
+            "net": 224,
             "terminals": [
                 {
                     "element": "U2",
@@ -4528,7 +4095,7 @@
             "wire_no": "530_CLKP"
         },
         {
-            "net": 228,
+            "net": 225,
             "terminals": [
                 {
                     "element": "U2",
@@ -4564,70 +4131,70 @@
             "wire_no": "532_DIRP"
         },
         {
+            "net": 226,
+            "terminals": [
+                {
+                    "element": "X9:2",
+                    "folio": 17,
+                    "terminal": ""
+                },
+                {
+                    "element": "X9:2",
+                    "folio": 17,
+                    "terminal": ""
+                },
+                {
+                    "element": "connection",
+                    "folio": 17,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "001_0V"
+        },
+        {
+            "net": 227,
+            "terminals": [
+                {
+                    "element": "X9:5",
+                    "folio": 17,
+                    "terminal": ""
+                },
+                {
+                    "element": "X9:5",
+                    "folio": 17,
+                    "terminal": ""
+                },
+                {
+                    "element": "connection",
+                    "folio": 17,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "001_0V"
+        },
+        {
+            "net": 228,
+            "terminals": [
+                {
+                    "element": "X9:7",
+                    "folio": 17,
+                    "terminal": ""
+                },
+                {
+                    "element": "X9:7",
+                    "folio": 17,
+                    "terminal": ""
+                },
+                {
+                    "element": "connection",
+                    "folio": 17,
+                    "terminal": "1"
+                }
+            ],
+            "wire_no": "001_0V"
+        },
+        {
             "net": 229,
-            "terminals": [
-                {
-                    "element": "X9:2",
-                    "folio": 17,
-                    "terminal": ""
-                },
-                {
-                    "element": "X9:2",
-                    "folio": 17,
-                    "terminal": ""
-                },
-                {
-                    "element": "connection",
-                    "folio": 17,
-                    "terminal": "1"
-                }
-            ],
-            "wire_no": "001_0V"
-        },
-        {
-            "net": 230,
-            "terminals": [
-                {
-                    "element": "X9:5",
-                    "folio": 17,
-                    "terminal": ""
-                },
-                {
-                    "element": "X9:5",
-                    "folio": 17,
-                    "terminal": ""
-                },
-                {
-                    "element": "connection",
-                    "folio": 17,
-                    "terminal": "1"
-                }
-            ],
-            "wire_no": "001_0V"
-        },
-        {
-            "net": 231,
-            "terminals": [
-                {
-                    "element": "X9:7",
-                    "folio": 17,
-                    "terminal": ""
-                },
-                {
-                    "element": "X9:7",
-                    "folio": 17,
-                    "terminal": ""
-                },
-                {
-                    "element": "connection",
-                    "folio": 17,
-                    "terminal": "1"
-                }
-            ],
-            "wire_no": "001_0V"
-        },
-        {
-            "net": 232,
             "terminals": [
                 {
                     "element": "X9:8",
@@ -4648,7 +4215,7 @@
             "wire_no": "102_PE"
         },
         {
-            "net": 233,
+            "net": 230,
             "terminals": [
                 {
                     "element": "Coming arrow",
@@ -4658,18 +4225,13 @@
                 {
                     "element": "A7",
                     "folio": 18,
-                    "terminal": ""
-                },
-                {
-                    "element": "A7",
-                    "folio": 18,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
             "wire_no": "211_24C"
         },
         {
-            "net": 234,
+            "net": 231,
             "terminals": [
                 {
                     "element": "Coming arrow",
@@ -4679,18 +4241,13 @@
                 {
                     "element": "A7",
                     "folio": 18,
-                    "terminal": ""
-                },
-                {
-                    "element": "A7",
-                    "folio": 18,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
             "wire_no": "001_0V"
         },
         {
-            "net": 235,
+            "net": 232,
             "terminals": [
                 {
                     "element": "Coming arrow",
@@ -4700,17 +4257,12 @@
                 {
                     "element": "A7",
                     "folio": 18,
-                    "terminal": ""
-                },
-                {
-                    "element": "A7",
-                    "folio": 18,
-                    "terminal": ""
+                    "terminal": "1"
                 }
             ],
             "wire_no": "930_ETH"
         }
     ],
-    "nets": 235,
+    "nets": 232,
     "project": "VC-SCH-5000"
 }

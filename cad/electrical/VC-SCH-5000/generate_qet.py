@@ -49,6 +49,11 @@ NOTE_SECTION = {
     "150_L": "2.5 mm2",
     "151_N": "2.5 mm2",
     "201_24S": "1.0 mm2",
+    # Drive-to-protector run of the 4G1.5 motor feed. The harness cores stay
+    # 610_UA / 611_VA / 612_WA and 620_UB / 621_VB / 622_WB at 1.5 mm2.
+    "600_U": "1.5 mm2",
+    "600_V": "1.5 mm2",
+    "600_W": "1.5 mm2",
 }
 
 CATALOG = {
@@ -76,6 +81,9 @@ CATALOG = {
     "go": "10_electric/10_allpole/100_folio_referencing/02going_arrow.elmt",
     "come": "10_electric/10_allpole/100_folio_referencing/01coming_arrow.elmt",
     "bod": "10_electric/10_allpole/114_connections/bod.elmt",
+    # Local terminals for a device box. The files live in symbols/.
+    "pinw": "pinw.elmt",
+    "pine": "pine.elmt",
 }
 
 
@@ -139,6 +147,7 @@ class Node:
     marks: list[int] = field(default_factory=list)
     side: str = "right"
     article: str = ""
+    hide_ref: bool = False
 
 
 @dataclass
@@ -162,20 +171,26 @@ class Folio:
     inputs: list[tuple[int, int, str, int]] = field(default_factory=list)
     shapes: list[tuple] = field(default_factory=list)
     seq: int = 0
+    band_top: int = 0
+    spill: list[tuple[int, int, str]] = field(default_factory=list)
+    tail: int = 48
 
-    def _add(self, sym: str, x: int, y: int, ref: str, lines: list[str], side: str, article: str) -> Node:
+    def _add(self, sym: str, x: int, y: int, ref: str, lines: list[str], side: str, article: str, hide_ref: bool) -> Node:
         self.seq += 1
         found = article or next((line for line in lines if line.startswith("VC-")), "")
-        node = Node(sym, int(x), int(y), ref, list(lines), uid(f"{self.number}:{self.seq}:{ref}:{sym}"), side=side, article=found)
+        node = Node(
+            sym, int(x), int(y), ref, list(lines), uid(f"{self.number}:{self.seq}:{ref}:{sym}"),
+            side=side, article=found, hide_ref=hide_ref,
+        )
         self.nodes.append(node)
         return node
 
-    def place(self, sym: str, x: int, y: int, ref: str = "", lines: list[str] | None = None, side: str = "right", article: str = "") -> Node:
-        return self._add(sym, x, y, ref, lines or [], side, article)
+    def place(self, sym: str, x: int, y: int, ref: str = "", lines: list[str] | None = None, side: str = "right", article: str = "", hide_ref: bool = False) -> Node:
+        return self._add(sym, x, y, ref, lines or [], side, article, hide_ref)
 
-    def at(self, sym: str, key, x: int, y: int, ref: str = "", lines: list[str] | None = None, side: str = "right", article: str = "") -> Node:
+    def at(self, sym: str, key, x: int, y: int, ref: str = "", lines: list[str] | None = None, side: str = "right", article: str = "", hide_ref: bool = False) -> Node:
         pin = SYMS[sym].pin(key)
-        return self._add(sym, x - pin.x, y - pin.y, ref, lines or [], side, article)
+        return self._add(sym, x - pin.x, y - pin.y, ref, lines or [], side, article, hide_ref)
 
     def dot(self, x: int, y: int) -> Node:
         return self.place("bod", x, y)
@@ -236,6 +251,9 @@ class Folio:
 
     def dash(self, x1, y1, x2, y2) -> None:
         self.shapes.append(("Line", int(x1), int(y1), int(x2), int(y2), True))
+
+    def ellipse(self, x1, y1, x2, y2) -> None:
+        self.shapes.append(("Ellipse", int(x1), int(y1), int(x2), int(y2), False))
 
     def out(self, x: int, y: int, net: str, target: int) -> Node:
         return self.at("go", "w", x, y, ref=net, lines=[f"to {target:02d}"])
@@ -347,35 +365,50 @@ def _overlap(s1, s2) -> bool:
     return False
 
 
+def _px(value: str, size: int = 10) -> int:
+    """Width of one text line. 8 px per character is wider than the drawn glyph, so a miss is a real gap."""
+    return int(len(value) * (9 if size >= 12 else 8)) + 4
+
+
 def _shown(node: Node) -> list[str]:
     shown = []
     if node.marks:
         shown.append("".join(f"({mark})" for mark in node.marks))
-    if node.ref and node.sym not in ("bod", "go", "come"):
+    if node.ref and not node.hide_ref and node.sym not in ("bod", "go", "come"):
         shown.append(node.ref)
     shown.extend(node.lines)
     return shown
 
 
 def _text_box(node: Node, ink_box: tuple[int, int, int, int], shown: list[str]) -> tuple[int, int, int, int]:
-    x1, y1, x2, _y2 = ink_box
-    width = int(7 * max(len(line) for line in shown)) + 4
-    height = 15 * len(shown)
+    x1, y1, x2, y2 = ink_box
+    width = _px(max(shown, key=len))
+    height = 16 * len(shown)
+    if node.sym == "go":
+        # The folio number sits on the arrow, clear of the wire.
+        return (x2 + 4, y1 - height - 10, x2 + 4 + width, y1 - 10)
     if node.sym == "come":
-        left = max(8, x2 - width)
-        return (left, y1 - height - 16, left + width, y1 - 16)
-    if node.sym == "go" or node.side == "above":
-        return (x1, y1 - height - 16, x1 + width, y1 - 16)
+        return (x1, y1 - height - 10, x1 + width, y1 - 10)
+    if node.side == "above":
+        return (x1, y1 - height - 8, x1 + width, y1 - 8)
     if node.side == "left":
-        return (x1 - width - 6, y1, x1 - 6, y1 + height)
-    return (x2 + 6, y1, x2 + 6 + width, y1 + height)
+        return (x1 - width - 8, y1, x1 - 8, y1 + height)
+    return (x2 + 8, y1, x2 + 8 + width, y1 + height)
 
 
 def _hits(box, items) -> bool:
     return any(box[0] < item[2] - 1 and box[2] > item[0] + 1 and box[1] < item[3] - 1 and box[3] > item[1] + 1 for item in items)
 
 
-def _find_label(wires, width, occupied, wire_boxes, height) -> tuple[int, int, int, int] | None:
+NOTE_X = 470
+RULER = 36
+
+
+def _clear(box, limit_top: int, limit_bottom: int) -> bool:
+    return box[1] >= limit_top and box[3] <= limit_bottom and box[0] >= RULER and box[2] <= PAGE_W - 8
+
+
+def _find_label(wires, width, occupied, wire_boxes, limit_bottom) -> tuple[int, int, int, int] | None:
     ranked = sorted(wires, key=lambda wire: abs(_seg(wire)[0][0] - _seg(wire)[1][0]) + abs(_seg(wire)[0][1] - _seg(wire)[1][1]), reverse=True)
     for wire in ranked:
         (a, b) = _seg(wire)
@@ -384,9 +417,9 @@ def _find_label(wires, width, occupied, wire_boxes, height) -> tuple[int, int, i
             start = min(a[0], b[0])
             for frac in (0.5, 0.3, 0.7, 0.15, 0.85):
                 left = int(start + span * frac - width / 2)
-                for dy in (-24, -42, 18):
-                    box = (left, a[1] + dy, left + width, a[1] + dy + 14)
-                    if box[1] < 16 or box[3] > height - 160 or box[0] < 8 or box[2] > PAGE_W - 8:
+                for dy in (-28, -46, 16):
+                    box = (left, a[1] + dy, left + width, a[1] + dy + 16)
+                    if not _clear(box, RULER, limit_bottom):
                         continue
                     if _hits(box, occupied) or _hits(box, wire_boxes):
                         continue
@@ -395,15 +428,60 @@ def _find_label(wires, width, occupied, wire_boxes, height) -> tuple[int, int, i
             span = abs(b[1] - a[1])
             start = min(a[1], b[1])
             for frac in (0.5, 0.3, 0.7):
-                top = int(start + span * frac - 7)
-                for dx in (-width - 12, 14):
-                    box = (a[0] + dx, top, a[0] + dx + width, top + 14)
-                    if box[1] < 16 or box[3] > height - 160 or box[0] < 8 or box[2] > PAGE_W - 8:
+                top = int(start + span * frac - 8)
+                for dx in (-width - 14, 16):
+                    box = (a[0] + dx, top, a[0] + dx + width, top + 16)
+                    if not _clear(box, RULER, limit_bottom):
                         continue
                     if _hits(box, occupied) or _hits(box, wire_boxes):
                         continue
                     return box
     return None
+
+
+def _inside(box, rect, margin: int = 6) -> bool:
+    return box[0] >= rect[0] + margin and box[2] <= rect[2] - margin and box[1] >= rect[1] + margin and box[3] <= rect[3] - margin
+
+
+def _place_notes(folio: Folio) -> list[tuple[int, int, str]]:
+    """Grow the notes field to the free band. A note that still does not fit is returned whole."""
+    wrapped = []
+    for number, note in enumerate(folio.notes, 1):
+        parts = textwrap.wrap(f"({number}) {note}", width=42) or [f"({number})"]
+        wrapped.append((number, note, parts))
+    line_h = 16
+    need = 28 + line_h * sum(len(parts) for _number, _note, parts in wrapped)
+    content_bottom = 48
+    for node in folio.nodes:
+        if node.sym == "bod":
+            content_bottom = max(content_bottom, node.y)
+            continue
+        _x1, _y1, _x2, y2 = SYMS[node.sym].ink
+        content_bottom = max(content_bottom, node.y + y2)
+    for kind, _sx1, _sy1, _sx2, sy2, _dash in folio.shapes:
+        if kind == "Rectangle":
+            content_bottom = max(content_bottom, sy2)
+    for _x, y, _value, size in folio.inputs:
+        content_bottom = max(content_bottom, y + (20 if size >= 12 else 16))
+    room_top = content_bottom + 12
+    band = max(150, need + 8)
+    band_top = folio.height - 12 - band
+    if band_top < room_top:
+        band_top = room_top
+    folio.band_top = band_top
+    folio.rect(NOTE_X, band_top, PAGE_W - 16, folio.height - 12)
+    folio.text(NOTE_X + 10, band_top + 6, "Notes")
+    y = band_top + 26
+    spill = []
+    for number, note, parts in wrapped:
+        if y + line_h * len(parts) > folio.height - 18:
+            spill.append((folio.number, number, note))
+            continue
+        for line in parts:
+            folio.text(NOTE_X + 10, y, line)
+            y += line_h
+    folio.spill = spill
+    return spill
 
 
 def _boxes(folio: Folio) -> list[str]:
@@ -419,37 +497,75 @@ def _boxes(folio: Folio) -> list[str]:
             continue
         box = _text_box(node, ink[node.uuid], shown)
         texts.append((node.uuid, *box, "label " + (node.ref or node.sym)))
-    for x, y, value, _size in folio.inputs:
-        width = int(7 * len(value)) + 4
-        texts.append(("", x, y, x + width, y + 14, "text"))
+    for x, y, value, size in folio.inputs:
+        width = _px(value, size)
+        texts.append(("", x, y, x + width, y + (20 if size >= 12 else 16), "text"))
     # One wire label per net, on a clear part of any of its segments.
     groups: dict[str, list[Wire]] = {}
     for wire in folio.wires:
         groups.setdefault(wire.net, []).append(wire)
-    occupied = [item[1:5] for item in texts]
-    occupied += [ink[node.uuid] for node in folio.nodes if node.sym != "bod"]
+    occupied = [(a - 4, b - 4, c + 4, d + 4) for _u, a, b, c, d, _n in texts]
+    occupied += [(a - 4, b - 4, c + 4, d + 4) for node in folio.nodes if node.sym != "bod" for a, b, c, d in [ink[node.uuid]]]
+    for kind, sx1, sy1, sx2, sy2, _dash in folio.shapes:
+        if kind == "Rectangle":
+            occupied.append((sx1 - 4, sy1 - 4, sx2 + 4, sy2 + 4))
+        elif kind == "Line":
+            occupied.append((min(sx1, sx2) - 4, min(sy1, sy2) - 4, max(sx1, sx2) + 4, max(sy1, sy2) + 4))
     wire_boxes = []
     for wire in folio.wires:
         (a, b) = _seg(wire)
         x1, x2 = sorted((a[0], b[0]))
         y1, y2 = sorted((a[1], b[1]))
-        wire_boxes.append((x1 - 4, y1 - 4, x2 + 4, y2 + 4))
+        wire_boxes.append((x1 - 6, y1 - 6, x2 + 6, y2 + 6))
+    limit_bottom = folio.band_top - 4
     for net, wires in groups.items():
         label = f"{net}  {section_of(net)}"
-        width = int(7 * len(label)) + 4
-        placed = _find_label(wires, width, occupied, wire_boxes, folio.height)
+        width = _px(label)
+        placed = _find_label(wires, width, occupied, wire_boxes, limit_bottom)
         if placed is None:
-            (a, b) = _seg(wires[0])
-            placed = (a[0] + 8, a[1] - 18, a[0] + 8 + width, a[1] - 4)
+            (a, b) = _seg(max(wires, key=lambda wire: abs(_seg(wire)[0][0] - _seg(wire)[1][0]) + abs(_seg(wire)[0][1] - _seg(wire)[1][1])))
+            candidates = []
+            for anchor in (a, b):
+                candidates.append((anchor[0] + 8, anchor[1] - 40, anchor[0] + 8 + width, anchor[1] - 24))
+                candidates.append((anchor[0] - width - 8, anchor[1] - 40, anchor[0] - 8, anchor[1] - 24))
+            placed = candidates[0]
+            for cand in candidates:
+                if _clear(cand, RULER, limit_bottom) and not _hits(cand, occupied) and not _hits(cand, wire_boxes):
+                    placed = cand
+                    break
         texts.append(("", *placed, "wire " + net))
         occupied.append(placed)
         folio.text(placed[0], placed[1], label)
-    band_top = folio.height - 150
+    band_top = folio.band_top
+    note_rects = [shape for shape in folio.shapes if shape[0] == "Rectangle"]
     for uuid_, x1, y1, x2, y2, name in texts:
-        if y2 > band_top and x2 > 590:
+        box = (x1, y1, x2, y2)
+        in_notes = any(_inside(box, (shape[1], shape[2], shape[3], shape[4])) for shape in note_rects)
+        if y2 > band_top and x2 > NOTE_X and not in_notes:
             errors.append(f"{name} enters the notes field")
+        if y1 < RULER or x1 < RULER:
+            errors.append(f"{name} enters the ruler")
+        if y2 > folio.height - 12:
+            errors.append(f"{name} enters the title block")
         if x2 > PAGE_W - 8 or y2 > folio.height - 8 or x1 < 4 or y1 < 4:
             errors.append(f"{name} leaves the sheet ({x1},{y1})-({x2},{y2})")
+        for kind, sx1, sy1, sx2, sy2, _dash in folio.shapes:
+            if kind == "Rectangle":
+                rect = (sx1, sy1, sx2, sy2)
+                fully_in = x1 >= rect[0] and x2 <= rect[2] and y1 >= rect[1] and y2 <= rect[3]
+                if _hits(box, [rect]) and not fully_in:
+                    errors.append(f"{name} crosses a device border")
+                    break
+            elif kind == "Ellipse":
+                if _hits(box, [(sx1, sy1, sx2, sy2)]):
+                    errors.append(f"{name} covers a symbol graphic")
+                    break
+            elif kind == "Line" and not in_notes:
+                lx1, lx2 = sorted((sx1, sx2))
+                ly1, ly2 = sorted((sy1, sy2))
+                if _hits(box, [(lx1 - 2, ly1 - 2, lx2 + 2, ly2 + 2)]):
+                    errors.append(f"{name} crosses a link line")
+                    break
         for other, box in ink.items():
             if other == uuid_:
                 continue
@@ -467,7 +583,7 @@ def _boxes(folio: Folio) -> list[str]:
     # Symbol ink against the notes field and against other symbols.
     for node in folio.nodes:
         box = ink[node.uuid]
-        if box[3] > band_top and box[2] > 590:
+        if node.sym != "bod" and box[3] > band_top and box[0] >= NOTE_X:
             errors.append(f"{node.ref or node.sym} enters the notes field")
         for other in folio.nodes:
             if other.uuid <= node.uuid:
@@ -484,6 +600,15 @@ def _boxes(folio: Folio) -> list[str]:
 def _wire_errors(folio: Folio) -> list[str]:
     errors = []
     segs = [(_seg(wire), wire.net) for wire in folio.wires]
+    note_rects = [(shape[1], shape[2], shape[3], shape[4]) for shape in folio.shapes if shape[0] == "Rectangle" and shape[1] >= NOTE_X]
+    for seg, net in segs:
+        length = abs(seg[0][0] - seg[1][0]) + abs(seg[0][1] - seg[1][1])
+        if length < ROWSIZE:
+            errors.append(f"{net} jog is {length}px")
+        for rect in note_rects:
+            if _hits((min(seg[0][0], seg[1][0]), min(seg[0][1], seg[1][1]), max(seg[0][0], seg[1][0]), max(seg[0][1], seg[1][1])), [rect]):
+                errors.append(f"{net} enters the notes field")
+                break
     for index, (seg, net) in enumerate(segs):
         for other, onet in segs[index + 1 :]:
             shared = seg[0] in other or seg[1] in other
@@ -500,11 +625,25 @@ def check(folios: list[Folio]) -> None:
     bad = []
     for folio in folios:
         bad.extend(f"folio {folio.number:02d} {folio.title}: {message}" for message in folio.errors)
+    spills: list[tuple[int, int, str]] = []
+    for folio in folios:
+        if folio.number == 21:
+            continue
+        spills.extend(_place_notes(folio))
+    notes = next(folio for folio in folios if folio.number == 21)
+    y = notes.tail
+    for source, number, text in spills:
+        for line in textwrap.wrap(f"Folio {source:02d} note ({number}) continues: {text}", width=70) or [""]:
+            notes.text(48, y, line)
+            y += 18
+        y += 6
+    notes.tail = y
+    _place_notes(notes)
     for folio in folios:
         for message in _wire_errors(folio) + _boxes(folio):
             bad.append(f"folio {folio.number:02d} {folio.title}: {message}")
     if bad:
-        raise SystemExit("Layout check failed:\n- " + "\n- ".join(bad[:40]))
+        raise SystemExit("Layout check failed:\n- " + "\n- ".join(bad[:60]) + (f"\n({len(bad)} in total)" if len(bad) > 60 else ""))
 
 
 def _titleblock() -> ET.Element:
@@ -659,12 +798,7 @@ def write_project(folios: list[Folio], path: Path) -> None:
                 for kind, target in node.links:
                     ET.SubElement(links, "link", {"type": kind, "uuid": target})
             texts = ET.SubElement(element, "dynamic_texts")
-            shown = []
-            if node.marks:
-                shown.append("".join(f"({mark})" for mark in node.marks))
-            if node.ref and node.sym not in ("go", "come"):
-                shown.append(node.ref)
-            shown.extend(node.lines)
+            shown = _shown(node)
             if shown and node.sym != "bod":
                 x1, y1, x2, y2 = SYMS[node.sym].ink
                 box = _text_box(node, (node.x + x1, node.y + y1, node.x + x2, node.y + y2), shown)
@@ -677,7 +811,7 @@ def write_project(folios: list[Folio], path: Path) -> None:
                         "x": str(text_x),
                         "y": str(text_y),
                         "z": "1",
-                        "text_width": "240",
+                        "text_width": str(max(40, box[2] - box[0])),
                         "rotation": "0",
                         "Halignment": "AlignLeft",
                         "Valignment": "AlignTop",
@@ -725,10 +859,8 @@ def write_project(folios: list[Folio], path: Path) -> None:
                     "y": str((y1 + y2) // 2),
                 },
             ).append(ET.Element("sequentialNumbers"))
-        # Notes field. The drawing area stays above it.
-        band_top = folio.height - 150
         shapes = ET.SubElement(diagram, "shapes")
-        for kind, x1, y1, x2, y2, dash in folio.shapes + [("Rectangle", 590, band_top, PAGE_W - 16, folio.height - 16, False)]:
+        for kind, x1, y1, x2, y2, dash in folio.shapes:
             shape = ET.SubElement(
                 shapes,
                 "shape",
@@ -749,19 +881,6 @@ def write_project(folios: list[Folio], path: Path) -> None:
             ET.SubElement(shape, "pen", {"color": "#000080" if not dash else "#000000", "widthF": "1", "style": "DashLine" if dash else "SolidLine"})
             ET.SubElement(shape, "brush", {"color": "#ffffff", "style": "NoBrush"})
         inputs = ET.SubElement(diagram, "inputs")
-        folio.text(600, band_top + 6, "Notes")
-        y = band_top + 22
-        room = folio.height - 18
-        overflow = []
-        for number, note in enumerate(folio.notes, 1):
-            wrapped = textwrap.wrap(f"({number}) {note}", width=68) or [f"({number})"]
-            for line in wrapped:
-                if y + 14 > room:
-                    overflow.append((folio.number, number, note))
-                    break
-                folio.text(600, y, line)
-                y += 14
-        folio.overflow = overflow  # type: ignore[attr-defined]
         for x, yy, value, size in folio.inputs:
             ET.SubElement(inputs, "input", {"x": str(x), "y": str(yy), "rotation": "0", "font": FONT12 if size == 12 else FONT, "text": value})
     tree = ET.ElementTree(project)

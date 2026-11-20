@@ -21,6 +21,8 @@ Power is at the top.
 Control is below.
 The flow is left to right.
 A wire is orthogonal.
+A wire shorter than one grid step is rejected.
+Text that overlaps text, a symbol, a wire, a device border, the ruler or the title block is rejected.
 A junction dot is a connection.
 A crossing without a dot is not a connection.
 Notes sit in the numbered notes field.
@@ -40,22 +42,22 @@ Folio 20 names those cables.
 | --- | --- | --- |
 | 1 | Cover and folio index | Drawing index |
 | 2 | Mains incoming | Instagrid, isolator Q1, RCD QF1, breaker F1, PE |
-| 3 | Branch feeders | F2 GV2L20, F3, F4 and F5 |
-| 4 | 24 V supplies | G1, G2, F14, F24, 0 V and bond W1 |
-| 5 | E-stop and PNOZ inputs | E-stop, reset and the PNOZ s4 coil |
-| 6 | PNOZ outputs | STO channels and the monitor contact |
-| 7 | S200 power and motor | 6SL5510 mains and the 1FL2104 |
-| 8 | S200 control | STO, X124, encoder, pulse and RS-485 |
-| 9 | ATV320 motor A | Drive output and motor A |
-| 10 | ATV320 motor B | Drive output and motor B, V and W swapped at X3 |
-| 11 | ATV320 control | STO, digital inputs, relays and RJ45 |
-| 12 | RevPi supply | RevPi Connect 4, order 100378 |
-| 13 | DIO channels | RevPi DIO, order 100197 |
+| 3 | Branch feeders | F2 is one three-pole GV2L20. Pole 3 is open. F3, F4 and F5 |
+| 4 | 24 V supplies | G1 and G2 device boxes, F14, F24, 0 V and bond W1 |
+| 5 | E-stop and PNOZ inputs | Mushroom E-stop, reset, and the PNOZ s4 device box |
+| 6 | PNOZ outputs | PNOZ s4 output terminals, STO channels and the monitor contact |
+| 7 | S200 power and motor | 6SL5510 and the 1FL2104 as device boxes |
+| 8 | S200 control | S200 control terminals, encoder, pulse and RS-485 |
+| 9 | ATV320 motor A | ATV320, F21 and motor A as device boxes |
+| 10 | ATV320 motor B | ATV320, F22 and motor B. V and W swap at X3 |
+| 11 | ATV320 control | ATV320 control terminals |
+| 12 | RevPi supply | RevPi Connect 4 device, order 100378 |
+| 13 | DIO channels | RevPi DIO device, order 100197 |
 | 14 | Field devices | Limits, enabling switch, index sensor and beacon |
 | 15 | Tilt | Finder 62.32 contactors and the tilt actuator |
 | 16 | Lift | H-bridge and the lift actuators |
 | 17 | Rotation proposal | Nanotec proposal, not released |
-| 18 | Network | RUT241, Ethernet and RS-485 |
+| 18 | Network | RUT241 device, Ethernet and RS-485 |
 | 19 | Terminal plan | Strips X1 to X10 |
 | 20 | Cable list | Harness cables |
 | 21 | Notes | Points that apply to the whole drawing |
@@ -181,6 +183,9 @@ PE on that cable is 6 mm2.
 The sonic feeder is 6 mm2.
 The S200 feeder is 2.5 mm2.
 Servo power and each vibrator output are 4G1.5 shielded.
+The drive-to-protector wires 600_U, 600_V and 600_W are 1.5 mm2.
+They are the same motor feed as that cable.
+The harness cores stay 610_UA, 611_VA, 612_WA, 620_UB, 621_VB and 622_WB.
 The servo brake pair is 2x0.75 mm2.
 The general 24 V rail is 2.5 mm2.
 The S200 24 V feed is 1.0 mm2.

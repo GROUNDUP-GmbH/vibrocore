@@ -8,13 +8,13 @@ A10;MN;;;;;;Lift;16/21
 A2;L1;;VC-HB-2300;;;;S200 power and motor;7/21
 A2;L2 open;;;;;;S200 power and motor;7/21
 A2;L3;;;;;;S200 power and motor;7/21
-A2;PE;;;;;;S200 power and motor;7/21
-A2;W;;;;;;S200 power and motor;7/21
-A2;V;;;;;;S200 power and motor;7/21
 A2;U;;;;;;S200 power and motor;7/21
+A2;V;;;;;;S200 power and motor;7/21
+A2;W;;;;;;S200 power and motor;7/21
+A2;PE;;;;;;S200 power and motor;7/21
 A2;X108 BR+;;;;;;S200 power and motor;7/21
 A2;X108 BR-;;;;;;S200 power and motor;7/21
-A2;STO1+;;;;;;S200 control;8/21
+A2;STO1+;;VC-HB-2300;;;;S200 control;8/21
 A2;STO1-;;;;;;S200 control;8/21
 A2;STO-VS TBC;;;;;;S200 control;8/21
 A2;STO-M TBC;;;;;;S200 control;8/21
@@ -25,20 +25,23 @@ A2;X124 24 V;;;;;;S200 control;8/21
 A2;X124 24 V;;;;;;S200 control;8/21
 A2;X124 0 V;;;;;;S200 control;8/21
 A2;X124 0 V;;;;;;S200 control;8/21
-A2;encoder;;;;;;S200 control;8/21
+A2;X120 encoder;;;;;;S200 control;8/21
+A2;23;;;;;;S200 control;8/21
+A2;25;;;;;;S200 control;8/21
 A2;36;;;;;;S200 control;8/21
 A2;37;;;;;;S200 control;8/21
 A2;38;;;;;;S200 control;8/21
 A2;39;;;;;;S200 control;8/21
-A2;23;;;;;;S200 control;8/21
-A2;25;;;;;;S200 control;8/21
 A3;L1;;VC-SH-1210;;;;ATV320 motor A;9/21
 A3;L2;;;;;;ATV320 motor A;9/21
-A3;PE;;;;;;ATV320 motor A;9/21
 A3;U;;;;;;ATV320 motor A;9/21
 A3;V;;;;;;ATV320 motor A;9/21
 A3;W;;;;;;ATV320 motor A;9/21
-A3;STO;;;;;;ATV320 control;11/21
+A3;PE;;;;;;ATV320 motor A;9/21
+A3;U;;;;;;ATV320 motor B;10/21
+A3;V;;;;;;ATV320 motor B;10/21
+A3;W;;;;;;ATV320 motor B;10/21
+A3;STO;;VC-SH-1210;;;;ATV320 control;11/21
 A3;DI3;;;;;;ATV320 control;11/21
 A3;DI1;;;;;;ATV320 control;11/21
 A3;COM;;;;;;ATV320 control;11/21
@@ -57,9 +60,9 @@ A4;FG;;;;;;RevPi supply;12/21
 A4;P;;;;;;RevPi supply;12/21
 A4;N;;;;;;RevPi supply;12/21
 A4;ETH0;;;;;;RevPi supply;12/21
-A4;ETH1 service, no harness;;;;;;RevPi supply;12/21
+A4;ETH1 service;;;;;;RevPi supply;12/21
 A4;PiBridge;;;;;;RevPi supply;12/21
-A5;PiBridge;;;;;;RevPi supply;12/21
+A5;PiBridge;;VC-CT-6810;;;;RevPi supply;12/21
 A5;I1;;VC-CT-6810;;;;DIO channels;13/21
 A5;I2;;;;;;DIO channels;13/21
 A5;I3;;;;;;DIO channels;13/21
@@ -94,43 +97,77 @@ D2;1N4007;;VC-CT-6780;;;;Tilt;15/21
 D3;1N4007;;VC-CT-6780;;;;Tilt;15/21
 F1;L;;VC-PW-5710;;;;Mains incoming;2/21
 F1;N;;;;;;Mains incoming;2/21
-F14;;;VC-PW-5800;;;;24 V supplies;4/21
-F2;L pole;;VC-PW-5730;;;;Branch feeders;3/21
-F2;N pole;;;;;;Branch feeders;3/21
+F14;6 A;;VC-PW-5800;;;;24 V supplies;4/21
+F2;L;;VC-PW-5730;;;;Branch feeders;3/21
+F2;N;;;;;;Branch feeders;3/21
 F2;pole 3 open;;;;;;Branch feeders;3/21
-F21;pole U;;VC-PW-5770;;;;ATV320 motor A;9/21
-F21;pole V;;;;;;ATV320 motor A;9/21
-F21;pole W;;;;;;ATV320 motor A;9/21
-F22;pole U;;VC-PW-5770;;;;ATV320 motor B;10/21
-F22;pole V;;;;;;ATV320 motor B;10/21
-F22;pole W;;;;;;ATV320 motor B;10/21
-F24;;;VC-PW-5810;;;;24 V supplies;4/21
-F3;L pole;;VC-PW-5740;;;;Branch feeders;3/21
-F3;N pole;;;;;;Branch feeders;3/21
+F2;L;;;;;;Branch feeders;3/21
+F2;N;;;;;;Branch feeders;3/21
+F21;U;;VC-PW-5770;;;;ATV320 motor A;9/21
+F21;V;;;;;;ATV320 motor A;9/21
+F21;W;;;;;;ATV320 motor A;9/21
+F21;U;;;;;;ATV320 motor A;9/21
+F21;V;;;;;;ATV320 motor A;9/21
+F21;W;;;;;;ATV320 motor A;9/21
+F22;U;;VC-PW-5770;;;;ATV320 motor B;10/21
+F22;V;;;;;;ATV320 motor B;10/21
+F22;W;;;;;;ATV320 motor B;10/21
+F22;U;;;;;;ATV320 motor B;10/21
+F22;V;;;;;;ATV320 motor B;10/21
+F22;W;;;;;;ATV320 motor B;10/21
+F24;20 A;;VC-PW-5810;;;;24 V supplies;4/21
+F3;L;;VC-PW-5740;;;;Branch feeders;3/21
+F3;N;;;;;;Branch feeders;3/21
 F30;OPEN fuse 2 A;;VC-PW-5820;;;;PNOZ outputs;6/21
 F31;OPEN fuse 2 A;;VC-PW-5820;;;;PNOZ outputs;6/21
-F4;L pole;;VC-PW-5750;;;;Branch feeders;3/21
-F4;N pole;;;;;;Branch feeders;3/21
-F5;L pole;;VC-PW-5760;;;;Branch feeders;3/21
-F5;N pole;;;;;;Branch feeders;3/21
-F6;OPEN fuse 2 A;;VC-PW-5790;;;;Rotation proposal;17/21
+F4;L;;VC-PW-5750;;;;Branch feeders;3/21
+F4;N;;;;;;Branch feeders;3/21
+F5;L;;VC-PW-5760;;;;Branch feeders;3/21
+F5;N;;;;;;Branch feeders;3/21
+F6;2 A;;VC-PW-5790;;;;Rotation proposal;17/21
 G0;;;VC-PW-5100;;;;Mains incoming;2/21
-G1;Mean Well SDR-120-24;;VC-PW-5310;;;;24 V supplies;4/21
-G2;OPEN 24 V supply;;VC-PW-5320;;;;24 V supplies;4/21
+G1;L;;VC-PW-5310;;;;24 V supplies;4/21
+G1;N;;;;;;24 V supplies;4/21
+G1;PE;;;;;;24 V supplies;4/21
+G1;+;;;;;;24 V supplies;4/21
+G1;-;;;;;;24 V supplies;4/21
+G2;L;;VC-PW-5320;;;;24 V supplies;4/21
+G2;N;;;;;;24 V supplies;4/21
+G2;PE;;;;;;24 V supplies;4/21
+G2;+;;;;;;24 V supplies;4/21
+G2;-;;;;;;24 V supplies;4/21
 H1;OPEN beacon;;VC-CT-6230;;;;Field devices;14/21
-K1;S11;;;;;;E-stop and PNOZ inputs;5/21
-K1;S12;;;;;;E-stop and PNOZ inputs;5/21
-K1;S34;;;;;;E-stop and PNOZ inputs;5/21
+K1;S11;;VC-CT-6220;;;;E-stop and PNOZ inputs;5/21
 K1;S21;;;;;;E-stop and PNOZ inputs;5/21
 K1;S22;;;;;;E-stop and PNOZ inputs;5/21
-K1;A1 A2;;VC-CT-6220;;;;E-stop and PNOZ inputs;5/21
+K1;S12;;;;;;E-stop and PNOZ inputs;5/21
+K1;S34;;;;;;E-stop and PNOZ inputs;5/21
+K1;A1;;;;;;E-stop and PNOZ inputs;5/21
+K1;A2;;;;;;E-stop and PNOZ inputs;5/21
+K1;13;;VC-CT-6220;;;;PNOZ outputs;6/21
+K1;14;;;;;;PNOZ outputs;6/21
+K1;23;;;;;;PNOZ outputs;6/21
+K1;24;;;;;;PNOZ outputs;6/21
+K1;33;;;;;;PNOZ outputs;6/21
+K1;34;;;;;;PNOZ outputs;6/21
+K1;41;;;;;;PNOZ outputs;6/21
+K1;42;;;;;;PNOZ outputs;6/21
 K2;vertical;;VC-LT-9230;;;;Tilt;15/21
 K3;fold;;VC-LT-9230;;;;Tilt;15/21
-M1;Siemens 1FL2104;;VC-HB-2100;;;;S200 power and motor;7/21
+M1;U;;VC-HB-2100;;;;S200 power and motor;7/21
+M1;V;;;;;;S200 power and motor;7/21
+M1;W;;;;;;S200 power and motor;7/21
+M1;PE;;;;;;S200 power and motor;7/21
 M1;BR+;;;;;;S200 power and motor;7/21
 M1;BR-;;;;;;S200 power and motor;7/21
-M2;motor A;;VC-SH-1100;;;;ATV320 motor A;9/21
-M3;motor B;;VC-SH-1100;;;;ATV320 motor B;10/21
+M2;U;;VC-SH-1100;;;;ATV320 motor A;9/21
+M2;V;;;;;;ATV320 motor A;9/21
+M2;W;;;;;;ATV320 motor A;9/21
+M2;PE;;;;;;ATV320 motor A;9/21
+M3;U;;VC-SH-1100;;;;ATV320 motor B;10/21
+M3;W;;;;;;ATV320 motor B;10/21
+M3;V;;;;;;ATV320 motor B;10/21
+M3;PE;;;;;;ATV320 motor B;10/21
 M4;A;;VC-LT-9200;;;;Tilt;15/21
 M4;B;;;;;;Tilt;15/21
 M5;A;;VC-LT-9100;;;;Lift;16/21
@@ -182,8 +219,8 @@ X4:3;W;;;;;;S200 power and motor;7/21
 X4:4;PE;;;;;;S200 power and motor;7/21
 X5:1;ENC;;;;;;S200 control;8/21
 X5:2;shield;;;;;;S200 control;8/21
-X6:1;BR+;;;;;;S200 power and motor;7/21
-X6:2;BR-;;;;;;S200 power and motor;7/21
+X6:1;P;;;;;;S200 power and motor;7/21
+X6:2;N;;;;;;S200 power and motor;7/21
 X7:1;460_LIM_UP;;;;;;Field devices;14/21
 X7:2;461_LIM_DN;;;;;;Field devices;14/21
 X7:3;462_ENABLE;;;;;;Field devices;14/21

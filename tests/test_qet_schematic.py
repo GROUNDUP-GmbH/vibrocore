@@ -91,6 +91,30 @@ def test_text_is_readable_and_the_old_relay_is_absent():
     assert "PNOZ s7" not in text
 
 
+def test_motor_feed_section_matches_the_cable():
+    sections = {
+        conductor.get("num"): conductor.get("conductor_section")
+        for conductor in _project().findall(".//conductor")
+        if conductor.get("num") in {"600_U", "600_V", "600_W"}
+    }
+    assert set(sections) == {"600_U", "600_V", "600_W"}
+    assert set(sections.values()) == {"1.5 mm2"}
+
+
+def test_geometry_gate_reports_no_hit():
+    import sys
+
+    path = str(ROOT / "cad" / "electrical" / "VC-SCH-5000")
+    if path not in sys.path:
+        sys.path.insert(0, path)
+    import generate_qet
+
+    generate_qet.load_symbols()
+    import sheets_qet
+
+    generate_qet.check(sheets_qet.build())
+
+
 def test_articles_strips_and_wires_match_revision_0c():
     root = _project()
     articles = {
