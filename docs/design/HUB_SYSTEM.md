@@ -110,7 +110,8 @@ No pretension is stated. The bearing load is half of the pull when the sprocket 
 
 The bearing feet bolt to two 25 mm flats, VC-FR-4183. The bolts are M12 and pass through the bottom plate.
 The gearbox flange bolts to one bent plate, VC-FR-4182. The foot of that plate bolts through the bottom plate.
-There is no weld in this mount.
+Two gussets and one ear rib are fillet-welded to that plate, weld a5 on both sides.
+The welds stop at the plate. The profile joints and the bottom-plate joints stay bolted.
 
 | Parameter              | Value                              |
 |------------------------|------------------------------------|

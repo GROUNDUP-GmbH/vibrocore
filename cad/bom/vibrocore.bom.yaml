@@ -872,19 +872,23 @@ parts:
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: One laser-cut S355 plate, 10 mm, one bend. Vertical leg on the PLE120 flange.
-    Pilot bore Ø84 mm. Four holes Ø6.6 mm on PCD 90 mm for ISO 4762 M6x20 screws. The outline
-    stops under the carriage. A narrow ear behind the rail reaches the upper screw. There is
-    no inspection window. The foot takes two M8x30 through bolts and ISO 4032 nuts. No weld and no notch.
+  spec: One laser-cut S355 plate, 10 mm, one bend, plus three welded gussets. Vertical leg on the
+    PLE120 flange. Pilot bore Ø84 mm. Four holes Ø6.6 mm on PCD 90 mm for ISO 4762 M6x20 screws.
+    The outline stops under the carriage. A narrow ear behind the rail reaches the upper screw.
+    There is no inspection window. Two triangular gussets, 6 mm, stand on the output side of the
+    bend, one each side of the shaft. One 6 mm rib stands on the ear and stops below the upper screw.
+    Fillet weld a5 on both sides of each gusset, along the full joint with the plate. The gussets
+    do not meet the mk profile or the bottom plate. The foot takes two M8x30 through bolts and
+    ISO 4032 nuts. No notch.
   legacy_ref: draft-fr-4182
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  mass_kg: 0.609
-  mass_note: Solid volume at 7850 kg/m3. The bore and the six holes are already cut.
+  mass_kg: 0.643
+  mass_note: Solid volume at 7850 kg/m3. The bore, the holes and the three gussets are included.
   unknowns:
   - M6 property class. The study uses 8.8. Not in BOM.md v1.
-  notes: Draft. Made part. One bend, no weld. Do not manufacture from this revision.
+  notes: Draft. Made part. One bend plus fillet welds a5. Do not manufacture from this revision.
 - part_number: VC-FR-4183
   name: Bearing seat flat
   revision_index: 0
@@ -912,7 +916,7 @@ parts:
   spec: One sawn length of S355 angle 40 x 40 x 6 mm, 80 mm long. The upright leg bolts to the idle profile inner side slots
     with two Lasche 1 nuts, order 34.01.0050, and two M8x20 slot screws. The measured throat is
     10.10 mm. The foot leg takes two M8x30 through bolts and ISO 4032 nuts in the bottom plate.
-    No weld.
+    The angle stays a stock section. Its joints to the profile and to the bottom plate stay bolted.
   legacy_ref: draft-fr-4184
   supplier_id: custom_eu
   material: S355

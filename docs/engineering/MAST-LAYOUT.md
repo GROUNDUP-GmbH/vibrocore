@@ -303,13 +303,18 @@ The sprocket is at Y = 0, between the uprights.
 The order along the shaft, from the gearbox toward the idle upright, is the PLE120, the ROTEX 28, the drive-side SYJ 30 TF, the sprocket, and the idle-side SYJ 30 TF.
 The bearing centres are 72.7 mm apart. The sprocket is in the middle.
 The gearbox shaft sees torque only. It does not see the chain radial load.
-VC-FR-4182 is one 10 mm laser-cut plate with one bend. No weld, no notch and no inspection window.
+VC-FR-4182 is one 10 mm laser-cut plate with one bend, plus three welded gussets. No notch and no inspection window.
 The vertical leg sits on the output flange. Four M6 screws on PCD 90 mm hold it. The bore is Ø84 mm.
 The plate stops at Z = 100 mm, under the carriage. A narrow ear behind the rail reaches the upper screw.
+Two 6 mm gussets stand on the output side of the bend, one each side of the shaft.
+One 6 mm rib stands on the ear and stops below the upper screw.
+Each gusset has a fillet weld a5 on both sides, along the joint with the plate.
+The gussets do not meet the profiles or the bottom plate.
 The foot sits on the bottom plate and takes two M8 through bolts.
 VC-FR-4183 is two 25 mm flats, one under each bearing. The M12 bolts pass through the bottom plate.
-VC-FR-4184 is one 40 mm by 40 mm by 6 mm angle. No weld.
+VC-FR-4184 is one 40 mm by 40 mm by 6 mm angle.
 It bolts to the idle profile inner side slots and to the bottom plate with two through bolts.
+Those joints stay bolted. A weld is not used there.
 The drive-side upright is cut short.
 It starts at Z = 142.4 mm and reaches the same top as the idle upright.
 The idle upright stays 1500 mm and stands on the bottom plate.
@@ -423,7 +428,7 @@ The sheet and its screws stay inside the 4 mm band.
 Fit the bottom plate.
 Stand the two profiles on the plate.
 Bolt the two bearing flats to the plate.
-Set the bent mount plate on the gearbox flange.
+Set the welded mount plate on the gearbox flange.
 Fit the four M6x20 screws.
 Bolt the plate foot to the bottom plate with two M8x30 screws and two nuts.
 Bolt the angle to the idle slots and to the bottom plate.

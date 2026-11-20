@@ -844,9 +844,10 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         coupling = Compound(children=opened)
     add("VC-HB-2400", coupling, motor_x, bay["coupling_y"], z_lift)
 
-    # One laser-cut 10 mm plate, one bend. No weld, no notch, no inspection window.
+    # One laser-cut 10 mm plate, one bend, plus welded gussets. No notch and no window.
     # The upright stops under the carriage. A narrow ear reaches the upper M6
     # behind the rail. The foot lies under the gearbox, in the 10 mm gap.
+    # The gearbox fills the inside of the bend, so the gussets stand on the output side.
     face_y = bay["face_y"]
     plate_top = bay["plate_top"]
     short_z0 = bay["short_z0"]
@@ -865,6 +866,29 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     foot_plate = span(motor_x - 50.0, motor_x + 50.0, face_y, -136.0, plate_top + 0.2, bend_z)
     for hole_x in (motor_x - 40.0, motor_x + 40.0):
         foot_plate = foot_plate - Pos(hole_x, -143.0, plate_top + 6.0) * Cylinder(4.5, 16.0)
+
+    def right_gusset(x0, x1, y0, y1, z0, z1):
+        # Right angle on the upright. The hypotenuse falls away from the shaft.
+        from build123d import Polyline, extrude, make_face
+
+        face = make_face(Polyline((0, y0, z0), (0, y0, z1), (0, y1, z0), close=True))
+        return Pos(x0, 0, 0) * extrude(face, amount=x1 - x0)
+
+    # 6 mm gussets. They stop 3 mm short of the coupling and clear the Ø25 shaft.
+    for edge in (motor_x - 28.0, motor_x + 22.0):
+        foot_plate = fuse(
+            [foot_plate, span(edge, edge + 6.0, face_y, face_y + 16.0, plate_top + 0.2, bend_z)]
+        )
+        mount = fuse(
+            [
+                mount,
+                right_gusset(edge, edge + 6.0, face_y + 9.8, face_y + 16.0, bend_z - 0.2, 70.0),
+            ]
+        )
+    # Rib on the ear. It stops below the upper M6.
+    mount = fuse(
+        [mount, span(motor_x - 10.0, motor_x + 10.0, face_y + 9.8, face_y + 16.0, 102.0, 124.0)]
+    )
     add("VC-FR-4182", fuse([mount, foot_plate]), 0.0, 0.0, 0.0)
 
     pillow = _pillow_solid()
@@ -889,8 +913,8 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     for index, seat in enumerate(seats, start=1):
         add(f"VC-FR-4183-{index}", seat, 0.0, 0.0, 0.0)
 
-    # One 40 x 40 x 6 angle. Inner side slots of the idle profile, and two
-    # M8 through the bottom plate. No weld. The measured throat is 10.10 mm.
+    # One 40 x 40 x 6 angle. Bolted to the idle slots and to the bottom plate.
+    # Those two joints stay bolted. The measured throat is 10.10 mm.
     idle_inner = profile_inner_y
     # Sawn 40 x 40 x 6 angle, 80 mm long. Both legs share that width.
     upright = span(-40.0, 40.0, idle_inner - 6.0, idle_inner - 0.2, 21.2, 61.2)
