@@ -50,7 +50,7 @@ complexity reduction vs. V1 custom design.*
 |---|-------------------------|-----------------------------------|-----|----------|----------------------------|
 |32 | Al profile 50×100       | mk 2004, 51.04.2004, 1,500 mm, 7.275 kg |   2 |  120–180 | mk Technology (DE)         |
 |33 | Profile connectors      | mk standard corners/T-slot        |   8 |   40–80  | mk Technology (DE)         |
-|34 | Bottom steel plate      | S355, 400×300×15 mm, machined     |   1 |   80–120 | Custom (EU)                |
+|34 | Bottom steel plate      | S355, 400×400×15 mm, machined     |   1 |   80–120 | Custom (EU)                |
 |35 | Top steel plate         | S355, 300×200×12 mm, machined     |   1 |   50–80  | Custom (EU)                |
 |36 | Rod guide bushing       | Split bushing. Closed bore 83 mm. Open it to pass the 87.63 mm shoe. | 1 | 20–40 | Custom (EU) |
 |37 | UTV mounting brackets   | Steel, welded/bolted              |   4 |   60–100 | Custom (EU)                |
@@ -58,7 +58,7 @@ complexity reduction vs. V1 custom design.*
 |39 | Stabiliser feet         | Adjustable screw jacks            |   4 |   40–80  | Standard (EU)              |
 |40 | Fasteners (frame)       | M8–M16, various                   |   1 |   30–50  | Würth / Bossard (EU)       |
 
-**Frame Subtotal (V1.1 live lines, without #38): ~468–766 €.** The rollup includes eight Lasche 1 nuts, twelve M8 screws, four ISO 4032 nuts and four M6x20 screws. The Winkel 40, the three gussets and the drive crossbar are obsolete and are not included.
+**Frame Subtotal (V1.1 live lines, without #38): ~488–792 €.** The rollup includes fourteen Lasche 1 nuts, fourteen M8 screws, eight M8 washers, four M12x35 screws, four M12 washers and four M6x20 screws. The bent plate, the bearing flats and the stiffener angle are obsolete and are not included.
 
 > **#38 vs §8b:** V1.1 firmware drives the electric tilt actuator (`FB_TiltControl`).
 > The gas-spring / hinge line #38 is retained as an obsolete alternative only and is
@@ -429,11 +429,11 @@ Do not add the §8e I/O cost again. Those modules are already inside VC-ASM-5000
 |-----------------------|-------------|---------------|------------------------------------|
 | Sonic head VC-ASM-1000 | 1,185 | 1,900 | YAML rollup |
 | Hub VC-ASM-2000 | 1,441 | 2,316 | YAML rollup. The ROTEX coupling is included. The obsolete brake is not. |
-| Frame VC-ASM-3000 | 468 | 766 | Live lines. Gussets, the crossbar, the Winkel 40 and the gas spring are not included. |
+| Frame VC-ASM-3000 | 488 | 792 | Live lines. The bent plate, the flats, the angle and the gas spring are not included. |
 | Power VC-ASM-4000 | 2,655 | 2,780 | Includes Instagrid at EUR 2,500. Supply price is unknown. |
 | Control VC-ASM-5000 | 1,565 | 2,460 | Option A. SE050 and the 9 V converter are not included. |
 | Field VC-ASM-8000 | 1,259 | 2,300 | Lift, tilt, penetrometer, scanner. |
-| **Machine VC-ASM-0000** | **8,573** | **12,522** | Sum of the six rollups above. |
+| **Machine VC-ASM-0000** | **8,593** | **12,548** | Sum of the six rollups above. |
 | Casing kit VC-KIT-6000 | 2,007.85 | 2,007.85 | Offer prices. Half-shell price is unknown. |
 | Positioning kit VC-KIT-7000 | 2,020 | 2,040 | viDoc plus WLAN bridge. |
 

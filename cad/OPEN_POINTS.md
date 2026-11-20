@@ -85,6 +85,9 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-CT-6800` RevPi Connect 4: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6810` RevPi DIO module: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4125` Cylinder screw M6x20: The Neugart STEP output holes lie on a 100 mm circle and are about 16 mm deep. These screws stay on the specified 90 mm circle and do not enter those bores.
+- `VC-FR-4131` Washer M8: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4132` Hex screw M12x35: The SYJ foot thickness is not in the placed solid. 14 mm is an assumption.
+- `VC-FR-4133` Washer M12: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4150` Bottom frame gusset: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4160` Top frame gusset: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4170` Mid frame gusset: no solid. Dimensions were not complete enough to model.
@@ -93,7 +96,11 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-FR-4183` Bearing seat flat: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4184` Profile stiffener angle: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4185` Lower front stiffener: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4187` Welded lower drive frame: M6 property class on the flange screws. The study uses 8.8.
+- `VC-FR-4188` Drive frame fillet welds: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4190` Front top stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
+- `VC-FR-4191` Sprocket side guards: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4192` Drive cover: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4195` Rear top stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4200` Profile connector: Which mk connector.
 - `VC-FR-4300` Bottom steel plate: Profile feet and UTV holes. The 83 mm bore is a draft assembly cut for casing VC-GP-7100.
@@ -119,7 +126,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-GP-7330` DT325 sample sheath 60 in, approximation: Outside diameter, inside diameter and wall thickness are assumptions. See cad/vendor/DT325/SOURCE.md.
 - `VC-GP-7400` Core liner 3.25 inch: no solid. Dimensions were not complete enough to model.
 - `VC-GP-7410` DT325 liner retainer HD: no solid. Dimensions were not complete enough to model.
-- `VC-HB-2110` Lift motor bracket: Not placed. VC-FR-4182 carries the gearbox. The motor bolts to the input.
+- `VC-HB-2110` Lift motor bracket: Not placed. VC-FR-4187 carries the gearbox. The motor bolts to the input.
 - `VC-HB-2122` Gearbox clamp screw: Clamp-screw size is TBD. The PLE manual PDF is not in cad/vendor/VC-HB-2200.
 - `VC-HB-2122` Gearbox clamp screw: Clamp-screw tightening torque is TBD. The same PDF is not in the repository.
 - `VC-HB-2124` Adapter access plug: Access-plug order code is TBD. The PLE manual PDF is not in cad/vendor/VC-HB-2200.

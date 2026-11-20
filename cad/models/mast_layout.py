@@ -33,7 +33,10 @@ MAST_PROFILE_COUNT = 2
 
 # VC-FR-4300 and VC-FR-4400.
 BOTTOM_PLATE_LENGTH_MM = 400.0
-BOTTOM_PLATE_WIDTH_MM = 300.0
+# The plate projects 25 mm past each profile outer face.
+# Outer face is at ±175 mm. Half width is 175 + 25 = 200 mm.
+BOTTOM_PLATE_SIDE_OVERHANG_MM = 25.0
+BOTTOM_PLATE_WIDTH_MM = 400.0
 BOTTOM_PLATE_THICKNESS_MM = 15.0
 TOP_PLATE_LENGTH_MM = 300.0
 TOP_PLATE_WIDTH_MM = 200.0
@@ -162,7 +165,7 @@ GEARBOX_FLANGE_MM = 115.0
 GEARBOX_LENGTH_MM = 204.0
 # Output shaft, from the output flange face to the tip. It is inside the 204 mm.
 OUTPUT_SHAFT_LENGTH_MM = 55.0
-# VC-FR-4182. The output flange bolts to this plate. The sprocket sits outside it.
+# VC-FR-4187. The output flange bolts to this frame. The sprocket sits outside it.
 MOUNT_PLATE_THICKNESS_MM = 12.0
 # Siemens 1FL2104-4AG11-1MC0. Flange AB is 81 mm.
 # 186.6 mm is the body behind the flange face. The STEP shaft adds 40 mm.

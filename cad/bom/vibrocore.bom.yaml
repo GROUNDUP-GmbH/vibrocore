@@ -889,7 +889,9 @@ parts:
   mass_note: Solid volume at 7850 kg/m3. The bore, the holes and the three gussets are included.
   unknowns:
   - M6 property class. The study uses 8.8. Not in BOM.md v1.
-  notes: Draft. Made part. One bend plus fillet welds a5. Do not manufacture from this revision.
+  notes: Obsolete. VC-FR-4187 replaces this plate. Do not place it.
+  lifecycle: obsolete
+  superseded_by: VC-FR-4187
 - part_number: VC-FR-4183
   name: Bearing seat flat
   revision_index: 0
@@ -906,7 +908,9 @@ parts:
   plm_material: s355
   mass_kg: 0.997
   mass_note: Solid volume of one flat at 7850 kg/m3. The two M12 holes are already cut.
-  notes: Draft. Made part. Two pieces. No weld. Do not manufacture from this revision.
+  notes: Obsolete. The beam of VC-FR-4187 replaces these flats. Do not place them.
+  lifecycle: obsolete
+  superseded_by: VC-FR-4187
 - part_number: VC-FR-4184
   name: Profile stiffener angle
   revision_index: 0
@@ -924,7 +928,81 @@ parts:
   plm_material: s355
   mass_kg: 0.284
   mass_note: Solid volume at 7850 kg/m3. The four clearance holes are already cut.
-  notes: Draft. Stock angle, sawn and drilled. No weld. Do not manufacture from this revision.
+  notes: Obsolete. The idle upright of VC-FR-4187 replaces this angle. Do not place it.
+  lifecycle: obsolete
+  superseded_by: VC-FR-4187
+- part_number: VC-FR-4187
+  name: Welded lower drive frame
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: One welded S355 frame. An inverted U. The cross beam is 150 mm wide and 24 mm
+    thick. It carries both SYJ 30 TF bearings. An 8 mm flange plate on the drive end
+    takes the gearbox output flange. Bore Ø86 mm for the Ø80 spigot. Four holes Ø6.6 mm
+    on PCD 90 mm. The drive upright stands in front of the gearbox, because the 115 mm
+    gearbox is wider than the 100 mm profile. Four M8 screws per upright, into slot-10
+    T-nuts. Fillet welds are the separate part VC-FR-4188.
+  legacy_ref: draft-fr-4187
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  mass_kg: 8.269
+  mass_note: Solid volume at 7850 kg/m3. Holes are already cut.
+  unknowns:
+  - M6 property class on the flange screws. The study uses 8.8.
+  notes: Draft. Welded frame. Do not manufacture from this revision.
+- part_number: VC-FR-4188
+  name: Drive frame fillet welds
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Fillet welds a5 (5 mm leg) on the lower drive frame. The beads are a separate
+    solid. Each bead sits 0.2 mm clear of the parent faces so the study model does not
+    share volume with the frame.
+  legacy_ref: draft-fr-4188
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  mass_kg: 0.020
+  mass_note: Solid volume at 7850 kg/m3.
+  notes: Draft. Weld metal only. Do not manufacture from this revision.
+- part_number: VC-FR-4191
+  name: Sprocket side guards
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: Two 2 mm steel sheets beside the drive sprocket. They stand outside the chain
+    plates. There is no sheet under the sprocket. The beam closes that side.
+  legacy_ref: draft-fr-4191
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  mass_kg: 0.089
+  mass_note: Solid volume at 7850 kg/m3.
+  notes: Draft. Fixed guard. Do not manufacture from this revision.
+- part_number: VC-FR-4192
+  name: Drive cover
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: 2 mm steel cover over the motor, the coupling and the gearbox. This is the
+    panel that comes off to reach the coupling and the motor-flange screws. The
+    coupling sheets stand outside the bearing foot and outside the front leg.
+  legacy_ref: draft-fr-4192
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  mass_kg: 2.016
+  mass_note: Solid volume at 7850 kg/m3.
+  notes: Draft. Removable cover. Do not manufacture from this revision.
 - part_number: VC-FR-4185
   name: Lower front stiffener
   revision_index: 0
@@ -1002,9 +1080,9 @@ parts:
   supply: purchase
   subsystem: frame
   category: Frame
-  spec: mk Lasche 1 mit Feder, M8, order 34.01.0050. Slot 10. Eight nuts. Two hold the stiffener
-    angle in the idle inner slots. Two hold the cap lips. Four hold the rear sheet in the rear-face
-    slots. The solid is an 8 x 6 x 5 mm box in the 10.10 mm throat, not the full T-head.
+  spec: mk Lasche 1 mit Feder, M8, order 34.01.0050. Slot 10. Fourteen nuts. Eight hold the
+    drive frame uprights, four per side. Two hold the cap lips. Four hold the rear sheet.
+    The solid is an 8 x 6 x 5 mm box in the 10.10 mm throat, not the full T-head.
     Price list 01/2024, 0.79 EUR.
   legacy_ref: draft-fr-4120
   supplier_id: mk
@@ -1029,9 +1107,11 @@ parts:
   supply: purchase
   subsystem: frame
   category: Frame
-  spec: mk Zylinderschraube M8. Eight slot screws M8x20, order D0912820. Four of them hold the
-    rear sheet. Four through bolts M8x30, order D0912830, in the bottom plate. Twelve screws.
-    The solid is the shank, diameter 7.8 mm, so it clears the Ø9 hole.
+  spec: mk Zylinderschraube M8x20, order D0912820. Fourteen screws. Eight hold the drive
+    frame uprights. Four hold the rear sheet. Two hold the cap lips. The plate is 8 mm
+    and the washer is 1.6 mm, so about 10 mm of thread enters the T-nut. 1.5 times the
+    diameter is 12 mm. A longer screw can bottom in the short T-nut. The solid is the
+    shank, diameter 7.8 mm, so it clears the Ø9 hole.
   legacy_ref: draft-fr-4121
   supplier_id: mk
   manufacturer_pn: D0912820
@@ -1078,8 +1158,7 @@ parts:
   supply: purchase
   subsystem: frame
   category: Frame
-  spec: ISO 4032 hex nut M8. Four nuts, under the bottom plate. Two on the gearbox-plate foot and
-    two on the stiffener angle. mk order D09348. Price list 01/2024, 0.06 EUR.
+  spec: ISO 4032 hex nut M8. Not used on this frame. The uprights use T-nuts. mk order D09348.
   legacy_ref: draft-fr-4124
   supplier_id: mk
   manufacturer_pn: D09348
@@ -1104,7 +1183,7 @@ parts:
   subsystem: frame
   category: Frame
   spec: ISO 4762 cylinder screw M6x20. Four screws on the PLE120 output flange, PCD 90 mm.
-    The plate is 10 mm. The specified thread depth is 15 mm. Engagement is 10 mm, more than
+    The plate is 8 mm. The specified thread depth is 15 mm. Engagement is 12 mm, more than
     1.5 times the 6 mm diameter. The solid is the shank, diameter 5 mm, inside the plate hole.
   unknowns:
   - The Neugart STEP output holes lie on a 100 mm circle and are about 16 mm deep. These screws
@@ -1121,7 +1200,59 @@ parts:
     length_mm: 20
     fidelity: envelope
     source: docs/engineering/MAST-LAYOUT.md
-  notes: Standard fastener. Property class is an open point on VC-FR-4182.
+  notes: Standard fastener. Property class is an open point.
+- part_number: VC-FR-4131
+  name: Washer M8
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: frame
+  category: Frame
+  spec: ISO 7089 washer, M8. Eight washers, one under each drive-frame slot screw.
+    Outside diameter 16 mm. Thickness 1.6 mm.
+  legacy_ref: draft-fr-4131
+  supplier_id: mk
+  mass_kg: 0.001
+  mass_note: Placeholder per washer.
+  estimate_eur_low: 1
+  estimate_eur_high: 1
+  notes: Standard washer.
+- part_number: VC-FR-4132
+  name: Hex screw M12x35
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: frame
+  category: Frame
+  spec: ISO 4017 hex screw M12x35. Four screws, two per SYJ 30 TF. The foot thickness
+    is taken as 14 mm. The screw runs through the foot into the 24 mm beam. Thread in
+    the beam is about 18 mm, which is 1.5 times the diameter. The beam is tapped.
+  legacy_ref: draft-fr-4132
+  supplier_id: mk
+  mass_kg: 0.04
+  mass_note: Placeholder per screw.
+  estimate_eur_low: 1
+  estimate_eur_high: 1
+  unknowns:
+  - The SYJ foot thickness is not in the placed solid. 14 mm is an assumption.
+  notes: Standard screw. Property class 8.8 in this study.
+- part_number: VC-FR-4133
+  name: Washer M12
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: frame
+  category: Frame
+  spec: ISO 7089 washer, M12. Four washers, one per bearing bolt. Catalogue outside
+    diameter is 24 mm. The foot slot is 17 mm wide, so the study ring is 16 mm across
+    and sits in the slot.
+  legacy_ref: draft-fr-4133
+  supplier_id: mk
+  mass_kg: 0.002
+  mass_note: Placeholder per washer.
+  estimate_eur_low: 1
+  estimate_eur_high: 1
+  notes: Standard washer.
 - part_number: VC-FR-4198
   name: Upper profile mount
   revision_index: 0
@@ -1166,19 +1297,20 @@ parts:
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: S355 blank 400 x 300 x 15 mm. The assembly cuts an 83 mm bore at the rod axis. The blank size is unchanged.
+  spec: S355 blank 400 x 400 x 15 mm. The plate projects 25 mm past each profile outer face.
+    The rear edge stays flush with the profile rear face. The assembly cuts an 83 mm bore at the rod axis.
   legacy_ref: '3.34'
   estimate_eur_low: 80
   estimate_eur_high: 120
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  mass_kg: 14.13
-  mass_note: Calculated from the blank at 7850 kg/m3. Holes will reduce it.
+  mass_kg: 18.84
+  mass_note: Calculated from the 400 x 400 x 15 mm blank at 7850 kg/m3. Holes will reduce it.
   geometry:
     kind: box
     length_mm: 400
-    width_mm: 300
+    width_mm: 400
     height_mm: 15
     fidelity: partial
     source: docs/engineering/BOM.md#3
@@ -1516,13 +1648,13 @@ parts:
   supply: subcontract
   subsystem: hub
   category: Hub
-  spec: Not placed. The gearbox mount plate VC-FR-4182 carries the train. The motor bolts to the gearbox input.
+  spec: Not placed. The welded frame VC-FR-4187 carries the train. The motor bolts to the gearbox input.
   legacy_ref: draft-hb-2110
   supplier_id: custom_eu
   material: S355
   plm_material: s355
   unknowns:
-  - Not placed. VC-FR-4182 carries the gearbox. The motor bolts to the input.
+  - Not placed. VC-FR-4187 carries the gearbox. The motor bolts to the input.
   notes: Not in this pose. Do not manufacture from this revision.
 - part_number: VC-HB-2120
   name: Motor flange screw M6x16
@@ -1667,8 +1799,8 @@ parts:
   estimate_eur_high: 50
   supplier_id: custom_eu
   material: steel
-  mass_kg: 0.898
-  mass_note: Solid volume at 7850 kg/m3. The solid is 0.2 mm under the bore. Length is 167.4 mm.
+  mass_kg: 1.006
+  mass_note: Solid volume at 7850 kg/m3. The solid is 0.2 mm under the bore. Length is 187.4 mm.
   notes: Draft. The modeled diameter is 29.6 mm so the bore and the shaft do not share a volume.
     Do not manufacture from this revision.
 - part_number: VC-HB-2600
@@ -2618,14 +2750,17 @@ boms:
   mrp_type: normal
   lines:
   - {part_number: VC-FR-4100, qty: 2}
-  - {part_number: VC-FR-4120, qty: 8}
-  - {part_number: VC-FR-4121, qty: 12}
-  - {part_number: VC-FR-4124, qty: 4}
+  - {part_number: VC-FR-4120, qty: 14}
+  - {part_number: VC-FR-4121, qty: 14}
   - {part_number: VC-FR-4125, qty: 4}
-  - {part_number: VC-FR-4182, qty: 1}
-  - {part_number: VC-FR-4183, qty: 2}
-  - {part_number: VC-FR-4184, qty: 1}
+  - {part_number: VC-FR-4131, qty: 8}
+  - {part_number: VC-FR-4132, qty: 4}
+  - {part_number: VC-FR-4133, qty: 4}
   - {part_number: VC-FR-4185, qty: 1}
+  - {part_number: VC-FR-4187, qty: 1}
+  - {part_number: VC-FR-4188, qty: 1}
+  - {part_number: VC-FR-4191, qty: 1}
+  - {part_number: VC-FR-4192, qty: 1}
   - {part_number: VC-FR-4186, qty: 1}
   - {part_number: VC-FR-4190, qty: 1}
   - {part_number: VC-FR-4195, qty: 1}

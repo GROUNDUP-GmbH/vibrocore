@@ -15,7 +15,7 @@
 <text x="20" y="40" font-size="3" font-family="sans-serif">Fidelity: envelope. Source: docs/engineering/MAST-LAYOUT.md.</text>
 <text x="20" y="44.5" font-size="3" font-family="sans-serif">Mass: 0.01 kg. Catalogue mass is not stated. 0.01 kg is a placeholder per screw.</text>
 <text x="20" y="49.0" font-size="3" font-family="sans-serif">TODO: The Neugart STEP output holes lie on a 100 mm circle and are about 16 mm deep. These screws stay on the specified 90 mm circle and do </text>
-<text x="20" y="53.5" font-size="3" font-family="sans-serif">Standard fastener. Property class is an open point on VC-FR-4182.</text>
+<text x="20" y="53.5" font-size="3" font-family="sans-serif">Standard fastener. Property class is an open point.</text>
 <text x="20" y="58.0" font-size="3" font-family="sans-serif">General tolerances: TODO. No tolerance class is specified in the design documents.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>

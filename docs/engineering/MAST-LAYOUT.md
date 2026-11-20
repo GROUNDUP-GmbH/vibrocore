@@ -141,7 +141,7 @@ Do not use the 10 mm carriage-plate thickness as the carriage height.
 | Casing inside diameter | 66.675 mm (2.625 in) | Decision 2026-11-19 |
 | Shoe outside diameter | 87.63 mm (3.45 in) | PN 205449, VC-GP-7200 |
 | Profile | 50 x 100 x 1500 mm, two bars | VC-FR-4100 |
-| Bottom plate | 400 x 300 x 15 mm | VC-FR-4300 |
+| Bottom plate | 400 x 400 x 15 mm | VC-FR-4300 |
 | Top plate | 300 x 200 x 12 mm | VC-FR-4400 |
 | Carriage plate thickness | 10 mm | VC-HB-3200. Not the chain term. |
 | Rail length | 1300 mm | VC-HB-3100 |
@@ -277,8 +277,12 @@ The same solids at stroke 0, at mid travel 504.8 mm and at the top do not overla
 
 The volume behind the profile rear faces is reserved for the machine tilt mechanism.
 Those faces are the plane X = −50 mm.
-No chain strand, sprocket, shaft, gearbox, brake or motor enters X < −50 mm.
-The rear sheets VC-FR-4195 and VC-FR-4186 are the exceptions.
+The chain plates, the sprocket, the shaft and the lift motor stay in front of that plane.
+The centred gearbox and the centred bearing feet do not.
+The gearbox body starts at X = −57.5 mm. It crosses the plane by 7.5 mm.
+The bearing foot starts at X = −82.5 mm. It crosses the plane by 32.5 mm.
+The beam starts at X = −75 mm.
+The rear sheets VC-FR-4195 and VC-FR-4186 are the sheet exceptions.
 Each is a 4 mm sheet on the rear face, from X = −54 mm to X = −50 mm.
 VC-FR-4195 covers the band above the rails, from Z = 1430 mm to the profile top.
 VC-FR-4186 covers the lower bay and has a tab on the short upright.
@@ -290,31 +294,38 @@ The separate brake is not in this pose.
 The chain lift is VC-ASM-2000, not the VC-ASM-8100 actuators.
 The drive sprocket sits on the gearbox output shaft.
 The chain and the idler share that axis.
-The axis is at X = 32.5 mm and Z = 82.9 mm.
-The rear strand stays at X = −35.5 mm, 14.5 mm in front of the rear face.
-The chain is an ISO 606 section on the pitch radius.
-The wrap is a shell outside the tooth tip. It is not a meshed link.
+The axis is at X = 0 mm and Z = 82.9 mm.
+This is the profile centre plane. The profile runs from X = −50 mm to X = 50 mm.
+The rear strand stays at X = −37.9 mm. Its outer plate reaches X = −45.2 mm.
+The chain is an ISO 606 10B-2 section. G&G, iwis, Renold and Rexnord do not offer a free STEP without an account.
+The links are built here. Pitch 15.875 mm. Roller diameter 10.16 mm. Inner width 9.65 mm. Transverse pitch 16.59 mm.
+Plate height 14.7 mm. Plate thickness 1.6 mm. Pin diameter 5.08 mm.
+The sprocket solid has no tooth gap, so the wrap sits outside the tooth tip.
 The Siemens servo is the SiePortal STEP. The PLE120 gearbox is the Neugart STEP.
-They sit above the bottom plate.
+They sit above the bottom plate, on the profile centre plane, under the cut end of the drive upright.
 The head plate sweeps Y = ±210 mm down to the rail, so this train stands outside that sweep, on the drive side.
-The chain axis is at X = 32.5 mm.
-That puts the rear of the 165 mm bearing foot on the rear face, X = −50 mm.
+The chain axis is at X = 0 mm.
+The 165 mm bearing foot then overhangs the profile by 32.5 mm on each side.
+The 115 mm gearbox overhangs the profile by 7.5 mm on each side.
+The catalogue foot cannot be turned. The bore must stay along Y.
 The sprocket is at Y = 0, between the uprights.
 The order along the shaft, from the gearbox toward the idle upright, is the PLE120, the ROTEX 28, the drive-side SYJ 30 TF, the sprocket, and the idle-side SYJ 30 TF.
-The bearing centres are 72.7 mm apart. The sprocket is in the middle.
+The bearing centres are 92.7 mm apart. The sprocket is in the middle.
+The shaft solid is 187.4 mm long.
+The sizing note still uses the earlier 72.7 mm span from the 2 mm gap.
 The gearbox shaft sees torque only. It does not see the chain radial load.
-VC-FR-4182 is one 10 mm laser-cut plate with one bend, plus three welded gussets. No notch and no inspection window.
-The vertical leg sits on the output flange. Four M6 screws on PCD 90 mm hold it. The bore is Ø84 mm.
-The plate stops at Z = 100 mm, under the carriage. A narrow ear behind the rail reaches the upper screw.
-Two 6 mm gussets stand on the output side of the bend, one each side of the shaft.
-One 6 mm rib stands on the ear and stops below the upper screw.
-Each gusset has a fillet weld a5 on both sides, along the joint with the plate.
-The gussets do not meet the profiles or the bottom plate.
-The foot sits on the bottom plate and takes two M8 through bolts.
-VC-FR-4183 is two 25 mm flats, one under each bearing. The M12 bolts pass through the bottom plate.
-VC-FR-4184 is one 40 mm by 40 mm by 6 mm angle.
-It bolts to the idle profile inner side slots and to the bottom plate with two through bolts.
-Those joints stay bolted. A weld is not used there.
+VC-FR-4187 is one welded frame. It replaces VC-FR-4182, VC-FR-4183 and VC-FR-4184. Those three parts are obsolete and are not placed.
+The frame is an inverted U. The cross beam carries both bearings. The sprocket sits between them.
+The beam is 150 mm wide. Its top is at Z = 39.2 mm. The bearing sole is at Z = 40 mm.
+The drive upright stands in front of the gearbox. The gearbox fills the profile width, so the leg cannot stand on the profile centre.
+The leg is at X = 70.5 mm to 84 mm. It stops at Z = 100 mm, under the carriage at stroke 0. It stands on the plate.
+The idle upright stands on the plate, on the inner face.
+Four M8 screws hold each upright. The chain design pull is 5.8 kN. Four slot-10 T-nuts cover that load. Six screws are not required.
+The screws are M8x20. The plate is 8 mm. The washer is 1.6 mm. About 10 mm of thread enters the T-nut. 1.5 times the diameter is 12 mm. A longer screw can bottom in the short T-nut.
+The flange plate is 8 mm. The bore is Ø86 mm, clear of the Ø80 spigot. Four M6x20 screws sit on PCD 90 mm.
+VC-FR-4188 is the fillet weld. The size is a5, a 5 mm leg. The beads are a separate solid. Each bead sits 0.2 mm clear of the parent faces.
+The bearing bolts are ISO 4017 M12x35. The foot thickness is taken as 14 mm. The thread in the beam is about 18 mm.
+The profile joints and the bottom-plate joints stay bolted. The rear sheet stays a bolted panel.
 The drive-side upright is cut short.
 It starts at Z = 142.4 mm and reaches the same top as the idle upright.
 The idle upright stays 1500 mm and stands on the bottom plate.
@@ -324,8 +335,13 @@ VC-FR-4186 is the rear sheet. It is one removable panel.
 Two screws hold the idle rear slot. A tab on the drive profile takes two more screws.
 Remove that panel to reach the coupling, the flange screws and the motor.
 The carriage arm stays in front of the rail and meets the chain.
-VC-FR-4150, VC-FR-4160, VC-FR-4170 and VC-FR-4180 are obsolete and are not placed.
-The lower mount VC-FR-4183 and the upper mount VC-FR-4198 take their job.
+VC-FR-4150, VC-FR-4160, VC-FR-4170, VC-FR-4180, VC-FR-4182, VC-FR-4183 and VC-FR-4184 are obsolete and are not placed.
+The welded frame VC-FR-4187 and the upper mount VC-FR-4198 take their job.
+VC-FR-4191 is two 2 mm sheets beside the sprocket.
+VC-FR-4192 is the 2 mm cover over the motor and the coupling. Remove that cover to reach the coupling and the motor-flange screws. This study does not add screws for that cover.
+The bottom plate is 400 mm wide. It projects 25 mm past each profile outer face.
+The old plate was 300 mm wide, so the profiles overhung it by 25 mm. The new margin is the same 25 mm, on the plate side.
+That margin covers the front leg and leaves a free edge. The rear edge of the plate stays on X = −50 mm. It does not enter the tilt volume.
 The idle sprocket is on the same axis as the drive sprocket.
 One bearing block, VC-HB-2830, bolts to the drive-side profile end.
 Each block has a slotted seat and a tension screw.
@@ -385,7 +401,7 @@ It is not a shift of this pose.
 
 The bottom plate meets the profiles on a face.
 The solids do not share a volume.
-At the TBD pitch of 300 mm the profiles overhang the bottom plate by 25 mm.
+At the TBD pitch of 300 mm the plate projects 25 mm past each profile outer face.
 The length study still subtracts the 12 mm top-plate blank.
 The machine pose does not mount that plate.
 
@@ -400,7 +416,7 @@ The mk 2004 section is type 51.04. The slot is slot 10. The measured throat is 1
 The price list is mk Profiltechnik-Komponenten 01/2024.
 https://www.mk-group.com/fileadmin/media/documents/Preisliste_Profltechnik-Komponenten_01_2024.pdf
 
-The chain pull is vertical. The bolted angle and the cap lips carry the shear that the three gussets used to carry.
+The chain pull is vertical. The welded frame and the cap lips carry that load.
 There is no end-thread machining.
 
 The front face is the 50 mm face at world +X. It has one slot on the profile centre line.
@@ -408,15 +424,15 @@ The rail covers this face from Z = 115 mm to Z = 1415 mm, so the stiffener does 
 
 The inner side face is the 100 mm face toward the bay. It has two slots, at world X = +25 mm and X = −25 mm.
 The measured throat is 10.10 mm. The two slots are 50 mm apart in X, so the pair resists twist.
-VC-FR-4184 uses both idle slots at Z = 48 mm.
+VC-FR-4187 uses both idle slots, at Z = 50 mm and Z = 110 mm, and both drive slots, at Z = 180 mm and Z = 230 mm.
 VC-FR-4198 uses the forward slot of each profile, at X = +25 mm, just under the cap.
 The nuts are Lasche 1 mit Feder, M8, order 34.01.0050.
 The slot screws are M8x20, order D0912820.
 Each nut is a plain 8 mm box in the throat. It is not the full T-head.
-The through bolts are M8x30, order D0912830, with ISO 4032 nuts under the bottom plate.
+The frame does not use through bolts in the bottom plate.
 The flange screws are ISO 4762 M6x20.
-The plate is 10 mm thick. The specified thread depth is 15 mm.
-The engagement is 10 mm. That is more than 9 mm.
+The plate is 8 mm thick. The specified thread depth is 15 mm.
+The engagement is 12 mm. That is more than 9 mm.
 
 The rear-face slot is used by VC-FR-4186.
 Four Lasche 1 nuts and four M8x20 screws hold that sheet.
@@ -426,24 +442,24 @@ The sheet and its screws stay inside the 4 mm band.
 ## Assembly and access
 
 Fit the bottom plate.
-Stand the two profiles on the plate.
-Bolt the two bearing flats to the plate.
-Set the welded mount plate on the gearbox flange.
+Stand the two profiles on the plate. Both outer faces sit 25 mm in from the plate edge.
+Set the welded frame on the plate.
+Bolt each upright with four M8x20 screws, four washers and four T-nuts.
+Fit the four M12x35 screws through the bearing feet into the beam.
+Set the gearbox flange against the frame plate.
 Fit the four M6x20 screws.
-Bolt the plate foot to the bottom plate with two M8x30 screws and two nuts.
-Bolt the angle to the idle slots and to the bottom plate.
 Fit the coupling on the gearbox shaft.
 Bolt the motor to the gearbox with four M6x16 screws.
+Fit the sprocket guards.
+Fit the removable cover. This study does not add screws for that cover.
 Fit the rear sheet with four M8x20 screws and four T-slot nuts.
 
 Stop the machine.
 Remove the power.
-Remove the four screws of VC-FR-4186.
-Take the sheet off.
-Reach the coupling, the three reachable flange screws and the motor through that opening.
-The upper flange screw stays behind the rail. The plate has no inspection window.
-Fit the sheet again.
-Tighten the four screws.
+Lift off the cover VC-FR-4192 as one solid.
+Reach the coupling and the motor-flange screws through that opening.
+The rear sheet can also come off. Remove its four screws and take the sheet off.
+Fit the cover again.
 
 | Pair | Clearance | Note |
 |---|---|---|
@@ -456,10 +472,10 @@ Tighten the four screws.
 | Motor to nearest rail | 32.5 mm | No collision. |
 | Vibrating plate to nearest profile | 50.0 mm | The plate rear is flush with the motors. |
 | Vibrating plate to nearest rail | 32.5 mm | The plate shares the guide-block height. |
-| Carriage to chain strand | 0.0 mm | The arm meets the front strand on a face. |
-| Rear chain strand to the rear face | 38.7 mm | The strand is at X = −11.3 mm. |
-| Lift-motor body to the rear face | 42.0 mm | The motor body starts at X = −8 mm. |
-| Gearbox body to the rear face | 25.0 mm | The 115 mm body starts at X = −25 mm. The foot stays on X = −50 mm. |
+| Carriage to chain strand | 2.1 mm | The arm starts outside the chain plates. |
+| Rear chain strand to the rear face | 4.8 mm | The outer plate is at X = −45.2 mm. |
+| Lift-motor body to the rear face | 9.5 mm | The motor body starts at X = −40.5 mm. |
+| Gearbox body to the rear face | −7.5 mm | The 115 mm body starts at X = −57.5 mm. It crosses the rear face. |
 
 No pair of part solids shares more than 1 mm³, except VC-HB-2100 and VC-HB-2200.
 The ground datum is not a part.
@@ -471,6 +487,8 @@ The views are:
 - `cad/export/renders/VC-ASM-0000-layout-top.png`
 - `cad/export/renders/VC-ASM-0000-layout-drive-iso.png`
 - `cad/export/renders/VC-ASM-0000-layout-drive-front.png`
+- `cad/export/renders/VC-ASM-0000-layout-below.png`
+- `cad/export/renders/VC-ASM-0000-layout-drive-open.png`
 
 ## Values Stefan must get
 

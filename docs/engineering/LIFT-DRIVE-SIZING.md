@@ -119,23 +119,24 @@ The current STEP oil seal extends about 8 mm. The gearbox recess is 4.4 mm deep 
 
 ## 6. Mount
 
-VC-FR-4182 is one 10 mm S355 plate, laser cut, with one bend and three welded gussets.
-Fillet weld a5 on both sides of each gusset, along the joint with the plate.
+VC-FR-4187 is one welded S355 frame. VC-FR-4182, VC-FR-4183 and VC-FR-4184 are obsolete.
+Fillet weld a5 is the separate solid VC-FR-4188.
 The profile joints and the bottom-plate joints stay bolted. VC-FR-4186 stays a bolted sheet.
 Four ISO 4762 M6x20 screws on PCD 90 mm hold the flange.
-The plate is 10 mm. The specified thread depth is 15 mm. The engagement is 10 mm.
-The output pilot is Ø80 mm. The plate bore is Ø84 mm.
-The plate has no inspection window. Remove VC-FR-4186 to reach this joint.
+The plate is 8 mm. The specified thread depth is 15 mm. The engagement is 12 mm.
+The output pilot is Ø80 mm. The plate bore is Ø86 mm.
+Remove the cover VC-FR-4192 to reach the coupling and the motor-flange screws.
 The motor uses four ISO 4762 M6x16 screws. The flange is 6.4 mm. The thread engagement is 9.6 mm.
 The clamp-screw size and the tightening torque are TBD.
-The foot uses two M8x30 through bolts. VC-FR-4184 is one 40 x 40 x 6 angle on the idle inner slots.
+Four M8x20 screws hold each upright. The bearing bolts are M12x35 into the beam.
 
 T2max is 365 Nm.
 Each bolt sees 365000 N·mm / (4 × 45 mm) = 2028 N.
 An M6-8.8 proof load is about 11.6 kN. The bolts are inside that load.
 
 The chain shaft is Ø30 mm, C45, between the two bearings.
-The bearing centres are 72.7 mm apart and the sprocket is centred, so the bending moment is 5800 N × 72.7 mm / 4 = 105415 N·mm.
+The earlier 2 mm gap put the bearing centres 72.7 mm apart. The sprocket was centred, so the bending moment was 5800 N × 72.7 mm / 4 = 105415 N·mm.
+The placed centres are 92.7 mm apart. The shaft solid is 187.4 mm long. This note does not recompute that stress.
 The full section modulus is 2651 mm³. With one DIN 6885 keyway, 8 mm by 4 mm, it is about 2290 mm³.
 At T2max 365 Nm the von Mises stress is 126 MPa on the full section and 146 MPa with the keyway.
 EN 10083-2 gives C45E, normalized, 16 mm to 100 mm, a minimum yield of 305 MPa.

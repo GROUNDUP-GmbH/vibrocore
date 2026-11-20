@@ -44,11 +44,14 @@ PART_NUMBERS = (
     "VC-FR-4100",
     "VC-FR-4120",
     "VC-FR-4121",
-    "VC-FR-4124",
     "VC-FR-4125",
-    "VC-FR-4182",
-    "VC-FR-4183",
-    "VC-FR-4184",
+    "VC-FR-4131",
+    "VC-FR-4132",
+    "VC-FR-4133",
+    "VC-FR-4187",
+    "VC-FR-4188",
+    "VC-FR-4191",
+    "VC-FR-4192",
     "VC-FR-4185",
     "VC-FR-4186",
     "VC-FR-4190",
@@ -133,7 +136,7 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
     assert report["motor_to_profile_mm"] == 50.0
     assert report["motor_to_rail_mm"] == 32.5
     assert report["plate_bottom_vs_lower_block_mm"] == 0.0
-    assert report["carriage_to_chain_mm"] == 0.0
+    assert report["carriage_to_chain_mm"] == 2.1
     assert report["shoe_tip_z_mm"] == -446.6
     names = {item.name for item in parts}
     assert {"VC-GP-7310", "VC-GP-7320", "VC-GP-7330"} <= names
@@ -141,11 +144,11 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
     sheath = next(item for item in parts if item.name == "VC-GP-7330")
     sheath_length = float(sheath.shape.bounding_box().size.Z)
     assert 150.0 < sheath_length < 1524.0
-    assert report["profile_overhang_past_bottom_plate_mm"] == 25.0
-    assert report["chain_min_x_mm"] == -11.3
+    assert report["profile_overhang_past_bottom_plate_mm"] == -25.0
+    assert report["chain_min_x_mm"] == -45.2
     assert report["rear_face_x_mm"] == -50.0
     assert report["rear_stiffener_min_x_mm"] == -54.0
-    assert report["lift_motor_min_x_mm"] == -8.0
+    assert report["lift_motor_min_x_mm"] == -40.5
     lift = next(item for item in parts if item.name == "VC-HB-2100")
     assert float(lift.shape.bounding_box().min.Z) > 15.0
     short = next(item for item in parts if item.name == "VC-FR-4100-1")
@@ -153,14 +156,15 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
     assert float(short.shape.bounding_box().size.Z) < MAST_PROFILE_LENGTH_MM - 1.0
     assert abs(float(long.shape.bounding_box().size.Z) - MAST_PROFILE_LENGTH_MM) < 0.05
     assert abs(float(short.shape.bounding_box().max.Z) - float(long.shape.bounding_box().max.Z)) < 0.05
-    flange = next(item for item in parts if item.name == "VC-FR-4182")
+    flange = next(item for item in parts if item.name == "VC-FR-4187")
     gearbox = next(item for item in parts if item.name == "VC-HB-2200")
     sprocket = next(item for item in parts if item.name == "VC-HB-2800")
     face_y = float(gearbox.shape.bounding_box().max.Y) - 55.0
     assert abs(float(flange.shape.bounding_box().min.Y) - face_y) < 0.05
     assert float(flange.shape.bounding_box().min.Z) > 15.0
     assert abs(float(gearbox.shape.bounding_box().size.Y) - 204.0) < 0.05
-    assert float(gearbox.shape.bounding_box().min.X) > -50.0
+    assert abs(float(gearbox.shape.bounding_box().center().X)) < 0.5
+    assert abs(float(gearbox.shape.bounding_box().min.X) - (-57.5)) < 0.5
     flange_y = float(lift.shape.bounding_box().min.Y) + SERVO_BODY_LENGTH_MM
     assert abs(float(gearbox.shape.bounding_box().min.Y) - flange_y) < 0.05
     assert abs(float(lift.shape.bounding_box().max.Y) - flange_y - 40.0) < 0.2
@@ -208,10 +212,10 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
 
 def test_bbox_matches_the_placed_solids():
     size = assembly_bbox_mm()
-    assert abs(size[0] - 454.0) < 0.05
-    assert abs(size[1] - 719.05) < 0.05
-    # Shoe tip at Z=-446.6. Tensioner box top at Z=1621.5. The mast axis is Z.
-    assert abs(size[2] - 2068.1) < 0.05
+    assert abs(size[0] - 490.0) < 0.05
+    assert abs(size[1] - 729.05) < 0.05
+    # Shoe tip at Z=-446.6. The idler wrap sets the top. The mast axis is Z.
+    assert abs(size[2] - 2072.95) < 0.05
     assert size[2] > size[0]
     assert size[2] > size[1]
     bom = load_bom()
