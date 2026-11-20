@@ -8,7 +8,7 @@ All prices are estimates; verify with suppliers before ordering.
 | # | Component               | Spec                              | Qty | Est. €   | Supplier / Source          |
 |---|-------------------------|-----------------------------------|-----|----------|----------------------------|
 | 1 | OLI MVE 400/6-HF       | HF vibration motor, 7.2 kg, 4 kN |   2 |  600–900 | OLI Vibrators (IT) / dealer|
-| 2 | VFD                     | 1.5 kW, 230V 1ph in, 3ph out     |   1 |  180–300 | Siemens V20 / ABB ACS150   |
+| 2 | Sonic inverter ATV320U15M2C | 1.5 kW, 200–240 V 1ph in, 8 A out, STO. Price not sourced. | 1 | unknown | Schneider. Replaces the V20/ACS150 candidate. |
 | 3 | Vibrating plate         | S355J2, 420×300×20 mm + ribs      |   1 |  200–350 | Custom fabrication (EU)    |
 | 4 | Center column           | 42CrMo4, Ø50×200 mm + flange     |   1 |   80–120 | Custom machining (EU)      |
 | 5 | Casing adapter          | Must push and pull. Do not use the GH60 cap. Thread TBD. | 1 | 60–100 | Custom machining (EU) |
@@ -16,7 +16,7 @@ All prices are estimates; verify with suppliers before ordering.
 | 7 | Motor cable (shielded)  | 3×1.5 mm², < 5 m                 |   2 |   15–30  | Lapp (DE)                  |
 | 8 | Fasteners (head)        | M12×40 (motors), M10 (column)    |   1 |   20–40  | Würth / Bossard (EU)       |
 
-**Sonic Head Subtotal: ~1,185–1,900 €**
+**Sonic Head Subtotal: ~1,005–1,600 €.** The old EUR 180–300 inverter band left the rollup. The ATV320 price is not sourced.
 
 *Note: V2 eliminates custom eccentric shafts, discs, timing belts, and external
 bearings — all handled internally by the OLI motors. Significant cost and
@@ -428,13 +428,13 @@ Do not add the §8e I/O cost again. Those modules are already inside VC-ASM-5000
 
 | Subsystem             | Low Est. (€) | High Est. (€) | Notes                              |
 |-----------------------|-------------|---------------|------------------------------------|
-| Sonic head VC-ASM-1000 | 1,185 | 1,900 | YAML rollup |
+| Sonic head VC-ASM-1000 | 1,005 | 1,600 | YAML rollup. ATV320 price is not in the band. |
 | Hub VC-ASM-2000 | 1,435 | 2,310 | YAML rollup. The obsolete brake is not included. |
 | Frame VC-ASM-3000 | 440 | 730 | Live lines. The obsolete gas spring is not included. |
 | Power VC-ASM-4000 | 2,640 | 2,750 | Includes Instagrid at EUR 2,500. No 48 V rail. Machine 24 V price is unknown. |
 | Control VC-ASM-5000 | 1,465 | 2,310 | Option A. The encoder module is not included. |
 | Field VC-ASM-8000 | 1,259 | 2,300 | Lift, tilt, penetrometer, scanner. |
-| **Machine VC-ASM-0000** | **8,424** | **12,300** | Sum of the six rollups above. |
+| **Machine VC-ASM-0000** | **8,244** | **12,000** | Sum of the six rollups above. |
 | Casing kit VC-KIT-6000 | 2,007.85 | 2,007.85 | Offer prices. Half-shell price is unknown. |
 | Positioning kit VC-KIT-7000 | 2,020 | 2,040 | viDoc plus WLAN bridge. |
 
@@ -497,7 +497,7 @@ Do not invent an order code.
 
 | # | Component | Spec | Qty | Est. € | Supplier |
 |---|-----------|------|-----|--------|----------|
-| 96 | Drag chain | Travel 1300 mm. Inner size TBD until cable diameters are known. | 1 | unknown | TBD |
+| 96 | Energy chain | igus 2400.05.075.0, bend radius 75 mm. Length for the 1300 mm stroke is TBD. | 1 | unknown | igus |
 | 97 | Chain-shaft encoder | Obsolete. Position comes from the 1FL2 absolute encoder through the S200. | 0 | — | Do not buy |
 | 98 | Chain drive guard | Fixed guard for the chain and the sprockets. Size TBD. | 1 | unknown | Custom (EU) |
 | 99 | Vibro head guard | Fixed guard for the vibro head. Size TBD. | 1 | unknown | Custom (EU) |
@@ -557,6 +557,47 @@ Do not invent an order code.
 
 ---
 
-*Last updated: 2026-11-19*
+## 10. Cabinet parts added on 2026-11-20
+
+Stefan approved these rows on 2026-11-20.
+Prices below are unknown.
+Do not invent a price.
+The rotation drive is a proposal.
+It is not on the live BOM.
+VC-CT-6100, the PFC200, is unchanged.
+
+| # | Component | Spec | Qty | Est. € | Supplier |
+|---|-----------|------|-----|--------|----------|
+| 120 | Hub motor cable | S200 X2 and brake pair to X108. Siemens cable order code TBD. | 1 | unknown | Lapp / Siemens |
+| 121 | Hub encoder cable | 1FL2104 encoder to S200 X120. Order code TBD. | 1 | unknown | Siemens |
+| 122 | 24 V slot | Already VC-PW-5320. Not a second supply. Rating stays open. | 0 | — | Mean Well |
+| 123 | Branch MCB sonic | 2-pole C16 for the ATV320. Confirm the manual. | 1 | unknown | TBD |
+| 124 | Branch MCB hub | 2-pole C16 for the S200. | 1 | unknown | TBD |
+| 125 | Branch MCB S200 supply | 2-pole C4 for the SDR-120-24 primary. | 1 | unknown | TBD |
+| 126 | Branch MCB general supply | 2-pole C10 for the SDR-480-24 primary. | 1 | unknown | TBD |
+| 127 | Sonic motor protection | About 1.6 A, PWM-rated, one per motor. | 2 | unknown | TBD |
+| 128 | DC fuse S200 rail | 6 A on the SDR-120-24 output. | 1 | unknown | TBD |
+| 129 | DC fuse general rail | 20 A on the general 24 V output. | 1 | unknown | TBD |
+| 130 | PNOZ output fuse | 2 A ahead of each STO contact. | 2 | unknown | TBD |
+| 131 | Rotation fuse | 2 A. The drive is not released. | 1 | unknown | TBD |
+| 132 | Rotation index sensor | 24 V, DIO input 12. Order code not chosen. | 1 | unknown | TBD |
+| 133 | Enabling switch | IDEC HE1B-M1. Centre position only. | 1 | unknown | IDEC |
+| 134 | Safety reset | NO pushbutton for PNOZ S34. | 1 | unknown | TBD |
+| 135 | Rotation drive | Nanotec PD2-C4118L1804-E-01. Proposal. Not on the live BOM. | 0 | unknown | Nanotec |
+| 136 | Signal terminals | Kit for X7, X8, X9. | 1 | unknown | TBD |
+| 137 | Power terminals | Kit for X1 to X6. | 1 | unknown | TBD |
+| 138 | STO cable | Shielded pairs. One pair per channel. | 1 | unknown | Lapp |
+| 139 | Field signal cable | Limits, enable, index, beacon. | 1 | unknown | Lapp |
+| 140 | Ethernet patch | RevPi ETH0 to RUT241 LAN. | 1 | unknown | TBD |
+| 141 | RS-485 cable | Modbus RTU, shielded pair, 120 ohm at the end. | 1 | unknown | Lapp |
+| 142 | Rotation cable | Proposal. Not on the live BOM. | 0 | unknown | Lapp |
+| 143 | Coil diode | 1N4007, two, across the tilt coils. | 2 | unknown | TBD |
+| 144 | Termination | 120 ohm, one, at the last Modbus slave. | 1 | unknown | TBD |
+| 145 | Tilt contactor | Finder 62.32.9.024.4000. One per direction. | 2 | unknown | Finder |
+
+The live sonic inverter is row 2, not a new row.
+The live energy chain is row 96, not a new row.
+
+*Last updated: 2026-11-20*
 *Status: PRELIMINARY — verify all prices and availability before ordering*
 *Single-source YAML: `cad/bom/vibrocore.bom.yaml` (V1.1 baseline)*

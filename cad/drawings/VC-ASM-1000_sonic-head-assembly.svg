@@ -9,7 +9,7 @@
 <text x="20" y="36" font-size="4" font-family="sans-serif" font-weight="700">Parts list (same item numbers as the OdooPLM EBOM itemnum)</text>
 <text x="20" y="42" font-size="2.8" font-family="sans-serif">Item  Part number   Rev  Qty  Name</text>
 <text x="20" y="47" font-size="2.8" font-family="sans-serif">1      VC-SH-1100     A    2    OLI MVE 400/6-HF</text>
-<text x="20" y="51.2" font-size="2.8" font-family="sans-serif">2      VC-SH-1200     A    1    Frequency inverter 1.5 kW</text>
+<text x="20" y="51.2" font-size="2.8" font-family="sans-serif">2      VC-SH-1210     A    1    Sonic inverter ATV320U15M2C</text>
 <text x="20" y="55.400000000000006" font-size="2.8" font-family="sans-serif">3      VC-SH-1300     A    1    Vibrating plate weldment</text>
 <text x="20" y="59.60000000000001" font-size="2.8" font-family="sans-serif">4      VC-SH-1350     A    1    Vibration motor bracket</text>
 <text x="20" y="63.80000000000001" font-size="2.8" font-family="sans-serif">5      VC-SH-1400     A    1    Center column</text>
@@ -18,6 +18,7 @@
 <text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-SH-1700     A    2    Motor cable shielded</text>
 <text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-SH-1800     A    1    Fastener kit, sonic head</text>
 <text x="20" y="84.80000000000003" font-size="2.8" font-family="sans-serif">10     VC-SH-1900     A    1    Vibro head guard</text>
+<text x="20" y="89.00000000000003" font-size="2.8" font-family="sans-serif">11     VC-PW-5770     A    2    Sonic motor protection</text>
 <text x="20" y="244" font-size="3" font-family="sans-serif">Schematic only. Component positions that are not dimensioned in the design documents are not drawn.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>

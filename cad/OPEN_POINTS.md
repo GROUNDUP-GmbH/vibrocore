@@ -22,6 +22,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `rut241-9v-converter`: Closed 2026-11-19. VC-CT-6620 is obsolete. The RUT241 input is 9-30 V DC. The router runs from the 24 V rail.
 - `chain-encoder-obsolete`: Closed 2026-11-20. VC-HB-3410 and VC-CT-6130 are obsolete. Position comes from the 1FL2 absolute encoder through the S200. The enclosure has no chain-encoder gland and no encoder I/O.
 - `no-48v-rail`: Closed 2026-11-20. VC-PW-5200 and VC-PW-5400 are obsolete. No 48 V load remains. The S200 and the 1FL2 run on 230 V AC from the Instagrid. VC-PW-5310 is the dedicated SDR-120-24 for S200 control and the brake. VC-PW-5320 reserves an SDR-480-24 size slot for the rest of the machine. The rating of that slot stays open until the actuator currents are known.
+- `sonic-inverter-selected-2026-11-20`: Stefan kept Schneider ATV320U15M2C. VC-SH-1210 is the live sonic inverter. VC-SH-1200 is superseded. The old EUR 180-300 band is not a Schneider quote and is not in the rollup. The ATV320 price is not sourced.
 
 ## Parts with undocumented geometry or procurement data
 
@@ -64,7 +65,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-CT-6140` WAGO 750-652: 750-652 is a candidate. The order is not frozen.
 - `VC-CT-6150` WAGO 750-600: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6200` Inductive limit switch: The order is not frozen. ifm IFS248 is a candidate. SICK is not ruled out.
-- `VC-CT-6210` Emergency stop: Order code is not frozen. Eaton or Schneider. The device must have two NC contacts.
+- `VC-CT-6210` Emergency stop: The catalogue contact block is not selected. Do not buy a single-contact operator.
 - `VC-CT-6220` Safety relay: The safety assessment is open. Do not state a performance level.
 - `VC-CT-6220` Safety relay: The 80-130 EUR band is not a quote for article 750104.
 - `VC-CT-6230` Warning beacon: Order code is unknown.
@@ -74,6 +75,16 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-CT-6240` Operator tablet: Ingress protection is unknown.
 - `VC-CT-6240` Operator tablet: Order code is unknown.
 - `VC-CT-6240` Operator tablet: Price is unknown.
+- `VC-CT-6250` Rotation index sensor: The order code is not chosen.
+- `VC-CT-6250` Rotation index sensor: PNP, NPN or a dry contact is not chosen. The schematic draws a PNP output.
+- `VC-CT-6250` Rotation index sensor: The price is not sourced.
+- `VC-CT-6260` Enabling switch HE1B-M1: The EUR price is not sourced.
+- `VC-CT-6260` Enabling switch HE1B-M1: The housing order code is not selected.
+- `VC-CT-6270` Safety reset pushbutton: The order code is not selected.
+- `VC-CT-6270` Safety reset pushbutton: The price is not sourced.
+- `VC-CT-6280` Rotation drive PD2-C4118L1804-E-01: This row is a proposal. It is not a released selection.
+- `VC-CT-6280` Rotation drive PD2-C4118L1804-E-01: A Modbus RTU order code in the same family is TODO.
+- `VC-CT-6280` Rotation drive PD2-C4118L1804-E-01: The price is not sourced.
 - `VC-CT-6300` Control enclosure: Price of AX 1181.000 is unknown.
 - `VC-CT-6300` Control enclosure: The sonic inverter order is not frozen. It must have STO. The placeholder envelope is 140 x 160 x 164.5 mm.
 - `VC-CT-6300` Control enclosure: The machine 24 V rating is open. The slot is the SDR-480-24 envelope. There is no 48 V rail.
@@ -97,6 +108,28 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-CT-6610` LTE SIM data plan: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6620` DC converter 24 V to 9 V: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6700` Wiring harness: no solid. Dimensions were not complete enough to model.
+- `VC-CT-6710` Signal terminal set: The Phoenix or Weidmueller order code is not selected.
+- `VC-CT-6710` Signal terminal set: The terminal count on the strip is the schematic terminal list. Confirm it before you buy a kit.
+- `VC-CT-6710` Signal terminal set: The price is not sourced.
+- `VC-CT-6720` Power terminal set: The order code is not selected.
+- `VC-CT-6720` Power terminal set: The cross-section is 4 mm2 for the motors and 6 mm2 for the mains. Confirm both.
+- `VC-CT-6720` Power terminal set: The price is not sourced.
+- `VC-CT-6730` STO and safety cable: The Lapp order code is not selected.
+- `VC-CT-6730` STO and safety cable: The length is not set.
+- `VC-CT-6730` STO and safety cable: The price is not sourced.
+- `VC-CT-6740` Field signal cable set: Lengths are not set.
+- `VC-CT-6740` Field signal cable set: The price is not sourced.
+- `VC-CT-6750` Ethernet patch RevPi to RUT241: The length is not set. A 0.5 m patch is the working assumption.
+- `VC-CT-6750` Ethernet patch RevPi to RUT241: The price is not sourced.
+- `VC-CT-6760` RS-485 Modbus cable: The Lapp order code is not selected.
+- `VC-CT-6760` RS-485 Modbus cable: The S200 PTI connector for RS-485 is not confirmed.
+- `VC-CT-6760` RS-485 Modbus cable: The baud and the parity are TODO.
+- `VC-CT-6760` RS-485 Modbus cable: The price is not sourced.
+- `VC-CT-6770` Rotation drive cable: The cable follows VC-CT-6280. That drive is not released.
+- `VC-CT-6770` Rotation drive cable: The price is not sourced.
+- `VC-CT-6780` Coil diode 1N4007: The price is a few cents and is not entered. Do not invent a band.
+- `VC-CT-6790` Modbus termination 120 ohm: The body style is not selected.
+- `VC-CT-6790` Modbus termination 120 ohm: The price is not entered.
 - `VC-CT-6800` RevPi Connect 4: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6810` RevPi DIO module: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6820` PiBridge plug connector: It is not confirmed whether the DIO packing already includes one joining plug.
@@ -148,14 +181,20 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-HB-3000` Power-off brake 24 V: Obsolete. Do not buy. The motor holding brake replaces this part.
 - `VC-HB-3200` Carriage plate: Length, width, hole pattern and chain-pin position. Thickness alone is not enough to model a blank.
 - `VC-HB-3300` Fastener kit, hub: no solid. Dimensions were not complete enough to model.
-- `VC-HB-3400` Drag chain: Cable outside diameters are unknown.
-- `VC-HB-3400` Drag chain: Inner width, inner height and bend radius are unknown.
-- `VC-HB-3400` Drag chain: Order code is unknown.
-- `VC-HB-3400` Drag chain: Price is unknown.
+- `VC-HB-3400` Drag chain: Superseded. Do not buy this row.
 - `VC-HB-3410` Chain-shaft encoder 1000 ppr: no solid. Dimensions were not complete enough to model.
 - `VC-HB-3420` Chain drive guard: Length, width and mounting holes are unknown. Shaft length and sprocket position are not frozen.
 - `VC-HB-3420` Chain drive guard: Material thickness is unknown.
 - `VC-HB-3420` Chain drive guard: Price is unknown.
+- `VC-HB-3430` igus energy chain 2400.05.075.0: The chain length for the 1300 mm stroke is not calculated.
+- `VC-HB-3430` igus energy chain 2400.05.075.0: The price is not sourced.
+- `VC-HB-3430` igus energy chain 2400.05.075.0: Cable outside diameters are still unknown. Confirm the 2400.05 section against those diameters.
+- `VC-HB-3440` Hub motor cable: The Siemens cable order code is not selected.
+- `VC-HB-3440` Hub motor cable: The length is not set.
+- `VC-HB-3440` Hub motor cable: The price is not sourced.
+- `VC-HB-3450` Hub encoder cable: The Siemens cable order code is not selected.
+- `VC-HB-3450` Hub encoder cable: The length is not set.
+- `VC-HB-3450` Hub encoder cable: The price is not sourced.
 - `VC-KIT-6000` Casing sampling kit: no solid. Dimensions were not complete enough to model.
 - `VC-KIT-7000` Positioning kit: no solid. Dimensions were not complete enough to model.
 - `VC-LT-9100` Electric linear actuator, lift: no solid. Dimensions were not complete enough to model.
@@ -164,6 +203,8 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-LT-9200` Electric linear actuator, tilt: no solid. Dimensions were not complete enough to model.
 - `VC-LT-9210` Tilt pivot bracket: no solid. Dimensions were not complete enough to model.
 - `VC-LT-9220` Tilt detent pin and spring: no solid. Dimensions were not complete enough to model.
+- `VC-LT-9230` Tilt contactor 62.32.9.024.4000: The actuator current is not on a nameplate. The present note assumes 10 A. Confirm it before you order.
+- `VC-LT-9230` Tilt contactor 62.32.9.024.4000: The EUR price is not sourced.
 - `VC-PN-9300` Load cell S-type 0-5 kN: no solid. Dimensions were not complete enough to model.
 - `VC-PN-9310` 4-20 mA transmitter: no solid. Dimensions were not complete enough to model.
 - `VC-PN-9320` Modbus RTU ADC 4-20 mA: no solid. Dimensions were not complete enough to model.
@@ -188,10 +229,33 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-PW-5710` Line circuit breaker: Price is unknown.
 - `VC-PW-5720` Residual current device: Order code is unknown.
 - `VC-PW-5720` Residual current device: Price is unknown.
+- `VC-PW-5730` Branch MCB sonic inverter: The order code is not selected.
+- `VC-PW-5730` Branch MCB sonic inverter: The price is not sourced.
+- `VC-PW-5730` Branch MCB sonic inverter: The manual may require a different rating. Do not order until that page is checked.
+- `VC-PW-5740` Branch MCB hub drive: The order code is not selected.
+- `VC-PW-5740` Branch MCB hub drive: The price is not sourced.
+- `VC-PW-5750` Branch MCB S200 24 V supply: The order code is not selected.
+- `VC-PW-5750` Branch MCB S200 24 V supply: The price is not sourced.
+- `VC-PW-5750` Branch MCB S200 24 V supply: Inrush may need a different curve. Confirm against the Mean Well manual.
+- `VC-PW-5760` Branch MCB general 24 V supply: The order code is not selected.
+- `VC-PW-5760` Branch MCB general 24 V supply: The price is not sourced.
+- `VC-PW-5770` Sonic motor protection: The order code is not selected. Do not fit a standard GV2 until a PWM rating is confirmed.
+- `VC-PW-5770` Sonic motor protection: The price is not sourced.
+- `VC-PW-5790` Rotation drive fuse: The order code is not selected.
+- `VC-PW-5790` Rotation drive fuse: The current of the released drive may differ.
+- `VC-PW-5790` Rotation drive fuse: The price is not sourced.
+- `VC-PW-5800` DC fuse S200 24 V rail: The order code and the fuse holder are not selected.
+- `VC-PW-5800` DC fuse S200 24 V rail: The price is not sourced.
+- `VC-PW-5810` DC fuse general 24 V rail: The order code and the fuse holder are not selected.
+- `VC-PW-5810` DC fuse general 24 V rail: The price is not sourced.
+- `VC-PW-5820` PNOZ output fuse: The order code is not selected.
+- `VC-PW-5820` PNOZ output fuse: The price is not sourced.
 - `VC-SH-1100` OLI MVE 400/6-HF: Which motor axis is the 90 mm bolt pitch, and which is the 125 mm pitch, is not stated.
 - `VC-SH-1100` OLI MVE 400/6-HF: The solid is the published envelope, not a manufacturer model.
-- `VC-SH-1200` Frequency inverter 1.5 kW: The order code is unknown. STO is required and is not selected.
-- `VC-SH-1200` Frequency inverter 1.5 kW: The placeholder envelope is 140 x 160 x 164.5 mm until that order is known.
+- `VC-SH-1200` Frequency inverter 1.5 kW: Superseded. Do not buy this row.
+- `VC-SH-1210` Sonic inverter ATV320U15M2C: The EUR price is not sourced. Do not copy the old EUR 180-300 band.
+- `VC-SH-1210` Sonic inverter ATV320U15M2C: Line current and the branch breaker must be confirmed in the installation manual before you order the MCB.
+- `VC-SH-1210` Sonic inverter ATV320U15M2C: The Modbus register map is TODO.
 - `VC-SH-1300` Vibrating plate weldment: Rib spacing and weld details are not specified, so the ribs are separate blanks and are not positioned on the plate.
 - `VC-SH-1301` Vibrating plate blank: 4x M12 isolator coordinates.
 - `VC-SH-1301` Vibrating plate blank: Two times 4x M12 motor holes. Pitch is 90 x 125 mm, location on the plate is not fixed.

@@ -37,6 +37,16 @@
 <text x="20" y="139.0" font-size="2.6" font-family="sans-serif">19     VC-CT-6600     A    1    Teltonika RUT241</text>
 <text x="20" y="142.5" font-size="2.6" font-family="sans-serif">20     VC-CT-6610     A    1    LTE SIM data plan</text>
 <text x="20" y="146.0" font-size="2.6" font-family="sans-serif">21     VC-CT-6700     A    1    Wiring harness</text>
+<text x="20" y="149.5" font-size="2.6" font-family="sans-serif">22     VC-CT-6250     A    1    Rotation index sensor</text>
+<text x="20" y="153.0" font-size="2.6" font-family="sans-serif">23     VC-CT-6260     A    1    Enabling switch HE1B-M1</text>
+<text x="20" y="156.5" font-size="2.6" font-family="sans-serif">24     VC-CT-6270     A    1    Safety reset pushbutton</text>
+<text x="20" y="160.0" font-size="2.6" font-family="sans-serif">25     VC-CT-6710     A    1    Signal terminal set</text>
+<text x="20" y="163.5" font-size="2.6" font-family="sans-serif">26     VC-CT-6720     A    1    Power terminal set</text>
+<text x="20" y="167.0" font-size="2.6" font-family="sans-serif">27     VC-CT-6730     A    1    STO and safety cable</text>
+<text x="20" y="170.5" font-size="2.6" font-family="sans-serif">28     VC-CT-6740     A    1    Field signal cable set</text>
+<text x="20" y="174.0" font-size="2.6" font-family="sans-serif">29     VC-CT-6750     A    1    Ethernet patch RevPi to RUT241</text>
+<text x="20" y="177.5" font-size="2.6" font-family="sans-serif">30     VC-CT-6760     A    1    RS-485 Modbus cable</text>
+<text x="20" y="181.0" font-size="2.6" font-family="sans-serif">31     VC-CT-6790     A    1    Modbus termination 120 ohm</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>
 <text x="268" y="278.2" font-size="2.4" font-family="sans-serif">Document title</text>

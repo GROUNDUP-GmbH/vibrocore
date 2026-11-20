@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 871 >>
+<< /Length 1366 >>
 stream
 BT
 /F1 11 Tf
@@ -32,6 +32,22 @@ T*
 (7  VC-PW-5710  rev A  qty 1  Line circuit breaker) Tj
 T*
 (8  VC-PW-5720  rev A  qty 1  Residual current device) Tj
+T*
+(9  VC-PW-5730  rev A  qty 1  Branch MCB sonic inverter) Tj
+T*
+(10  VC-PW-5740  rev A  qty 1  Branch MCB hub drive) Tj
+T*
+(11  VC-PW-5750  rev A  qty 1  Branch MCB S200 24 V supply) Tj
+T*
+(12  VC-PW-5760  rev A  qty 1  Branch MCB general 24 V supply) Tj
+T*
+(13  VC-PW-5790  rev A  qty 1  Rotation drive fuse) Tj
+T*
+(14  VC-PW-5800  rev A  qty 1  DC fuse S200 24 V rail) Tj
+T*
+(15  VC-PW-5810  rev A  qty 1  DC fuse general 24 V rail) Tj
+T*
+(16  VC-PW-5820  rev A  qty 2  PNOZ output fuse) Tj
 T*
 (Owner: Ground UP GmbH) Tj
 T*
@@ -62,8 +78,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000001170 00000 n 
+0000001666 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-1240
+1736
 %%EOF
