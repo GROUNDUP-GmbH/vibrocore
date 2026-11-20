@@ -39,5 +39,6 @@ The Neugart shaft is not in this batch.
 The 32H7 bore is the gearbox-side hub only.
 The chain-side hub is unbored in the file. The assembly cuts a Ø30.4 mm bore into that hub.
 Purchase hubs are Ø25H7, article 020285102500, and Ø30, article 020285103000.
-Confirm 020285103000 on the KTR order page. The placed STEP is not those two hubs.
-The 92 Sh-A spider has TKmax 190 Nm. Gearbox T2max is 365 Nm. The file is unchanged.
+The placed STEP is not those two hubs. A sleeve inside the 32H7 bore leaves Ø25.4 mm for the Ø25 journal.
+The specified spider is 64 Sh-D. KTR lists TKmax 400 Nm, which covers gearbox T2max 365 Nm.
+The public file in this folder is still 92 Sh-A, article 020281000045. Size 28 uses one envelope.

@@ -95,9 +95,35 @@
     "part_number": "VC-FR-4125",
     "source": "docs/engineering/MAST-LAYOUT.md",
     "step": "cad/export/step/VC-FR-4125.step",
-    "unknowns": [
-      "The Neugart STEP output holes lie on a 100 mm circle and are about 16 mm deep. These screws stay on the specified 90 mm circle and do not enter those bores."
-    ]
+    "unknowns": []
+  },
+  {
+    "bbox_mm": {
+      "x": 6.0,
+      "y": 6.0,
+      "z": 20.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "envelope",
+    "kind": "cylinder",
+    "part_number": "VC-FR-4134",
+    "source": "docs/engineering/MAST-LAYOUT.md",
+    "step": "cad/export/step/VC-FR-4134.step",
+    "unknowns": []
+  },
+  {
+    "bbox_mm": {
+      "x": 5.0,
+      "y": 5.0,
+      "z": 16.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "envelope",
+    "kind": "cylinder",
+    "part_number": "VC-FR-4135",
+    "source": "docs/engineering/MAST-LAYOUT.md",
+    "step": "cad/export/step/VC-FR-4135.step",
+    "unknowns": []
   },
   {
     "bbox_mm": {

@@ -141,6 +141,8 @@ def oriented_sprocket():
     """G&G 10B-2 sprocket. The file axis is Z. The chain shaft is Y.
 
     VC-HB-2810 reuses this solid. It has no second file.
+    The vendor body has 15 gaps. Each gap is opened so an ISO roller
+    on the pitch circle sits in it with clearance.
     """
     loaded = load_vendor_shape("VC-HB-2800")
     if loaded is None:
@@ -148,8 +150,38 @@ def oriented_sprocket():
     turned = Rot(90, 0, 0) * loaded
     # Tooth fillets are tori. FreeCAD draws them as spikes.
     if "sprocket" not in _FACET:
-        _FACET["sprocket"] = facet_closed(turned, 0.45, 0.35, 0.1)
+        _FACET["sprocket"] = _seat_gaps(facet_closed(turned, 0.45, 0.35, 0.1))
     return _FACET["sprocket"]
+
+
+def _seat_gaps(solid):
+    """Open each vendor gap for a Ø10.16 roller on the ISO pitch circle.
+
+    The file already has a gap at 18 degrees and a tooth at 6 degrees.
+    A roller on the exact pitch circle still kisses the flanks, so each
+    gap is cut 0.5 mm larger than the roller.
+    """
+    import math
+
+    from build123d import Cylinder, Pos, Rot
+
+    from cad.models.mast_layout import CHAIN_TRANSVERSE_PITCH_MM
+    from cad.models.roller_chain import GAP_CENTER_DEG, MESH_RADIUS_MM, TOOTH_COUNT
+
+    radius = MESH_RADIUS_MM
+    row = CHAIN_TRANSVERSE_PITCH_MM / 2.0
+    # Roller radius is 5.08 mm. The cutter leaves about 0.5 mm of clearance.
+    cutter_r = 5.58
+    seated = solid
+    for index in range(TOOTH_COUNT):
+        deg = GAP_CENTER_DEG + index * (360.0 / TOOTH_COUNT)
+        rad = math.radians(deg)
+        center_x = radius * math.cos(rad)
+        center_z = radius * math.sin(rad)
+        for row_y in (row, -row):
+            tool = Pos(center_x, row_y, center_z) * Rot(90, 0, 0) * Cylinder(cutter_r, 14.0)
+            seated = seated - tool
+    return seated
 
 
 def oriented_coupling():

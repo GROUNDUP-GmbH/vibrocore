@@ -15,22 +15,24 @@
 <text x="20" y="63.80000000000001" font-size="2.8" font-family="sans-serif">5      VC-FR-4131     A    8    Washer M8</text>
 <text x="20" y="68.00000000000001" font-size="2.8" font-family="sans-serif">6      VC-FR-4132     A    4    Hex screw M12x35</text>
 <text x="20" y="72.20000000000002" font-size="2.8" font-family="sans-serif">7      VC-FR-4133     A    4    Washer M12</text>
-<text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-FR-4185     A    1    Lower front stiffener</text>
-<text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-FR-4187     A    1    Welded lower drive frame</text>
-<text x="20" y="84.80000000000003" font-size="2.8" font-family="sans-serif">10     VC-FR-4188     A    1    Drive frame fillet welds</text>
-<text x="20" y="89.00000000000003" font-size="2.8" font-family="sans-serif">11     VC-FR-4191     A    1    Sprocket side guards</text>
-<text x="20" y="93.20000000000003" font-size="2.8" font-family="sans-serif">12     VC-FR-4192     A    1    Drive cover</text>
-<text x="20" y="97.40000000000003" font-size="2.8" font-family="sans-serif">13     VC-FR-4186     A    1    Lower rear stiffener</text>
-<text x="20" y="101.60000000000004" font-size="2.8" font-family="sans-serif">14     VC-FR-4190     A    1    Front top stiffener</text>
-<text x="20" y="105.80000000000004" font-size="2.8" font-family="sans-serif">15     VC-FR-4195     A    1    Rear top stiffener</text>
-<text x="20" y="110.00000000000004" font-size="2.8" font-family="sans-serif">16     VC-FR-4198     A    1    Upper profile mount</text>
-<text x="20" y="114.20000000000005" font-size="2.8" font-family="sans-serif">17     VC-FR-4200     A    8    Profile connector</text>
-<text x="20" y="118.40000000000005" font-size="2.8" font-family="sans-serif">18     VC-FR-4300     A    1    Bottom steel plate</text>
-<text x="20" y="122.60000000000005" font-size="2.8" font-family="sans-serif">19     VC-FR-4400     A    1    Top steel plate</text>
-<text x="20" y="126.80000000000005" font-size="2.8" font-family="sans-serif">20     VC-FR-4500     A    1    Rod guide bushing</text>
-<text x="20" y="131.00000000000006" font-size="2.8" font-family="sans-serif">21     VC-FR-4600     A    4    UTV mounting bracket</text>
-<text x="20" y="135.20000000000005" font-size="2.8" font-family="sans-serif">22     VC-FR-4800     A    4    Stabiliser foot</text>
-<text x="20" y="139.40000000000003" font-size="2.8" font-family="sans-serif">23     VC-FR-4900     A    1    Fastener kit, frame</text>
+<text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-FR-4134     A    4    Cylinder screw M6x20 guard</text>
+<text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-FR-4135     A    4    Cylinder screw M5x16 cover</text>
+<text x="20" y="84.80000000000003" font-size="2.8" font-family="sans-serif">10     VC-FR-4185     A    1    Lower front stiffener</text>
+<text x="20" y="89.00000000000003" font-size="2.8" font-family="sans-serif">11     VC-FR-4187     A    1    Welded lower drive frame</text>
+<text x="20" y="93.20000000000003" font-size="2.8" font-family="sans-serif">12     VC-FR-4188     A    1    Drive frame fillet welds</text>
+<text x="20" y="97.40000000000003" font-size="2.8" font-family="sans-serif">13     VC-FR-4191     A    1    Sprocket side guards</text>
+<text x="20" y="101.60000000000004" font-size="2.8" font-family="sans-serif">14     VC-FR-4192     A    1    Drive cover</text>
+<text x="20" y="105.80000000000004" font-size="2.8" font-family="sans-serif">15     VC-FR-4186     A    1    Lower rear stiffener</text>
+<text x="20" y="110.00000000000004" font-size="2.8" font-family="sans-serif">16     VC-FR-4190     A    1    Front top stiffener</text>
+<text x="20" y="114.20000000000005" font-size="2.8" font-family="sans-serif">17     VC-FR-4195     A    1    Rear top stiffener</text>
+<text x="20" y="118.40000000000005" font-size="2.8" font-family="sans-serif">18     VC-FR-4198     A    1    Upper profile mount</text>
+<text x="20" y="122.60000000000005" font-size="2.8" font-family="sans-serif">19     VC-FR-4200     A    8    Profile connector</text>
+<text x="20" y="126.80000000000005" font-size="2.8" font-family="sans-serif">20     VC-FR-4300     A    1    Bottom steel plate</text>
+<text x="20" y="131.00000000000006" font-size="2.8" font-family="sans-serif">21     VC-FR-4400     A    1    Top steel plate</text>
+<text x="20" y="135.20000000000005" font-size="2.8" font-family="sans-serif">22     VC-FR-4500     A    1    Rod guide bushing</text>
+<text x="20" y="139.40000000000003" font-size="2.8" font-family="sans-serif">23     VC-FR-4600     A    4    UTV mounting bracket</text>
+<text x="20" y="143.60000000000002" font-size="2.8" font-family="sans-serif">24     VC-FR-4800     A    4    Stabiliser foot</text>
+<text x="20" y="147.8" font-size="2.8" font-family="sans-serif">25     VC-FR-4900     A    1    Fastener kit, frame</text>
 <text x="20" y="244" font-size="3" font-family="sans-serif">Schematic only. Component positions that are not dimensioned in the design documents are not drawn.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>

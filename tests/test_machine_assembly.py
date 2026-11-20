@@ -38,7 +38,7 @@ from cad.models.mast_layout import (
     required_total_mm,
 )
 from cad.tools.bom import ROOT, load_bom
-from cad.tools.geometry import STEP_DIR, read_step_bbox_mm
+from cad.tools.geometry import STEP_DIR, read_step_bbox_mm, read_step_text
 
 PART_NUMBERS = (
     "VC-FR-4100",
@@ -48,6 +48,8 @@ PART_NUMBERS = (
     "VC-FR-4131",
     "VC-FR-4132",
     "VC-FR-4133",
+    "VC-FR-4134",
+    "VC-FR-4135",
     "VC-FR-4187",
     "VC-FR-4188",
     "VC-FR-4191",
@@ -136,7 +138,7 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
     assert report["motor_to_profile_mm"] == 50.0
     assert report["motor_to_rail_mm"] == 32.5
     assert report["plate_bottom_vs_lower_block_mm"] == 0.0
-    assert report["carriage_to_chain_mm"] == 2.1
+    assert report["carriage_to_chain_mm"] == 2.0
     assert report["shoe_tip_z_mm"] == -446.6
     names = {item.name for item in parts}
     assert {"VC-GP-7310", "VC-GP-7320", "VC-GP-7330"} <= names
@@ -145,7 +147,7 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
     sheath_length = float(sheath.shape.bounding_box().size.Z)
     assert 150.0 < sheath_length < 1524.0
     assert report["profile_overhang_past_bottom_plate_mm"] == -25.0
-    assert report["chain_min_x_mm"] == -45.2
+    assert report["chain_min_x_mm"] == -45.3
     assert report["rear_face_x_mm"] == -50.0
     assert report["rear_stiffener_min_x_mm"] == -54.0
     assert report["lift_motor_min_x_mm"] == -40.5
@@ -215,7 +217,7 @@ def test_bbox_matches_the_placed_solids():
     assert abs(size[0] - 490.0) < 0.05
     assert abs(size[1] - 729.05) < 0.05
     # Shoe tip at Z=-446.6. The idler wrap sets the top. The mast axis is Z.
-    assert abs(size[2] - 2072.95) < 0.05
+    assert abs(size[2] - 2058.46) < 0.05
     assert size[2] > size[0]
     assert size[2] > size[1]
     bom = load_bom()
@@ -227,7 +229,7 @@ def test_bbox_matches_the_placed_solids():
 
 
 def test_step_names_each_part_and_pngs_are_distinct():
-    text = (STEP_DIR / STEP_NAME).read_text(encoding="utf-8")
+    text = read_step_text(STEP_DIR / STEP_NAME)
     assert "FILE_NAME('VC-ASM-0000-layout','2026-11-19T00:00:00'" in text
     assert "DIRECTION('',(0.,0.,1.))" in text
     assert "DIRECTION('',(1.,0.,-0.))" not in text

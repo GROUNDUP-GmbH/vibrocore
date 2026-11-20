@@ -1,6 +1,7 @@
 __pycache__/
 .pytest_cache/
 cad/export/freecad/
+cad/export/step/VC-ASM-0000-layout.step
 *.FCStd
 .env
 .env.local

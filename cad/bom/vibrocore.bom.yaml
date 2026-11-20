@@ -189,7 +189,7 @@ parts:
   legacy_ref: '2'
   unknowns:
   - Carriage plate length and width are not given, only the 10 mm thickness.
-  - The placed ROTEX spider is 92 Sh-A. Its TKmax is 190 Nm. Gearbox T2max is 365 Nm. Confirm spider 64 Sh-D and hub 020285103000.
+  - The public ROTEX file is the 92 Sh-A spider. The specified spider is 64 Sh-D. Size 28 uses one envelope.
 - part_number: VC-ASM-3000
   name: Frame assembly
   revision_index: 0
@@ -941,15 +941,15 @@ parts:
   spec: One welded S355 frame. An inverted U. The cross beam is 150 mm wide and 24 mm
     thick. It carries both SYJ 30 TF bearings. An 8 mm flange plate on the drive end
     takes the gearbox output flange. Bore Ø86 mm for the Ø80 spigot. Four holes Ø6.6 mm
-    on PCD 90 mm. The drive upright stands in front of the gearbox, because the 115 mm
+    on a 100 mm circle, on the diagonals. The drive upright stands in front of the gearbox, because the 115 mm
     gearbox is wider than the 100 mm profile. Four M8 screws per upright, into slot-10
     T-nuts. Fillet welds are the separate part VC-FR-4188.
   legacy_ref: draft-fr-4187
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  mass_kg: 8.269
-  mass_note: Solid volume at 7850 kg/m3. Holes are already cut.
+  mass_kg: 8.183
+  mass_note: Solid volume at 7850 kg/m3. Holes and the chain notch are already cut.
   unknowns:
   - M6 property class on the flange screws. The study uses 8.8.
   notes: Draft. Welded frame. Do not manufacture from this revision.
@@ -978,12 +978,13 @@ parts:
   subsystem: frame
   category: Frame
   spec: Two 2 mm steel sheets beside the drive sprocket. They stand outside the chain
-    plates. There is no sheet under the sprocket. The beam closes that side.
+    plates. Four M6x20 screws, VC-FR-4134, hold the feet to the beam. There is no
+    sheet under the sprocket. The beam closes that side.
   legacy_ref: draft-fr-4191
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  mass_kg: 0.089
+  mass_kg: 0.096
   mass_note: Solid volume at 7850 kg/m3.
   notes: Draft. Fixed guard. Do not manufacture from this revision.
 - part_number: VC-FR-4192
@@ -993,14 +994,16 @@ parts:
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: 2 mm steel cover over the motor, the coupling and the gearbox. This is the
-    panel that comes off to reach the coupling and the motor-flange screws. The
-    coupling sheets stand outside the bearing foot and outside the front leg.
+  spec: 2 mm steel cover over the motor, the coupling and the gearbox. Four M5x16
+    screws, VC-FR-4135, hold it to the flange edge. About 10 mm of thread enters
+    that edge. Remove those screws to reach
+    the coupling and the motor-flange screws. The coupling sheets stand outside
+    the bearing foot and outside the front leg.
   legacy_ref: draft-fr-4192
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  mass_kg: 2.016
+  mass_kg: 2.027
   mass_note: Solid volume at 7850 kg/m3.
   notes: Draft. Removable cover. Do not manufacture from this revision.
 - part_number: VC-FR-4185
@@ -1182,12 +1185,10 @@ parts:
   supply: purchase
   subsystem: frame
   category: Frame
-  spec: ISO 4762 cylinder screw M6x20. Four screws on the PLE120 output flange, PCD 90 mm.
-    The plate is 8 mm. The specified thread depth is 15 mm. Engagement is 12 mm, more than
-    1.5 times the 6 mm diameter. The solid is the shank, diameter 5 mm, inside the plate hole.
-  unknowns:
-  - The Neugart STEP output holes lie on a 100 mm circle and are about 16 mm deep. These screws
-    stay on the specified 90 mm circle and do not enter those bores.
+  spec: ISO 4762 cylinder screw M6x20. Four screws on the PLE120 output flange.
+    The holes lie on a 100 mm circle, on the diagonals, and the screws pass through them.
+    The plate is 8 mm. The STEP holes are about 16 mm deep. Engagement is 12 mm, more than
+    1.5 times the 6 mm diameter. The head stands on the coupling side of the plate.
   legacy_ref: draft-fr-4125
   supplier_id: mk
   mass_kg: 0.01
@@ -1253,6 +1254,51 @@ parts:
   estimate_eur_low: 1
   estimate_eur_high: 1
   notes: Standard washer.
+- part_number: VC-FR-4134
+  name: Cylinder screw M6x20 guard
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: frame
+  category: Frame
+  spec: ISO 4762 cylinder screw M6x20. Four screws hold the sprocket side sheets VC-FR-4191
+    to the beam. The foot is 2 mm. About 16 mm of thread enters the beam.
+  legacy_ref: draft-fr-4134
+  supplier_id: mk
+  mass_kg: 0.01
+  mass_note: Placeholder per screw.
+  estimate_eur_low: 1
+  estimate_eur_high: 1
+  geometry:
+    kind: cylinder
+    diameter_mm: 6
+    length_mm: 20
+    fidelity: envelope
+    source: docs/engineering/MAST-LAYOUT.md
+  notes: Standard fastener. Property class is an open point.
+- part_number: VC-FR-4135
+  name: Cylinder screw M5x16 cover
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: frame
+  category: Frame
+  spec: ISO 4762 cylinder screw M5x16. Four screws hold the removable cover VC-FR-4192
+    to the flange edge. About 10 mm of thread enters that edge. 1.5 times 5 mm is 7.5 mm.
+    Remove these four screws to reach the coupling and the motor-flange screws.
+  legacy_ref: draft-fr-4135
+  supplier_id: mk
+  mass_kg: 0.004
+  mass_note: Placeholder per screw.
+  estimate_eur_low: 1
+  estimate_eur_high: 1
+  geometry:
+    kind: cylinder
+    diameter_mm: 5
+    length_mm: 16
+    fidelity: envelope
+    source: docs/engineering/MAST-LAYOUT.md
+  notes: Standard fastener. Property class is an open point.
 - part_number: VC-FR-4198
   name: Upper profile mount
   revision_index: 0
@@ -1778,8 +1824,8 @@ parts:
   subsystem: hub
   category: Hub
   spec: KTR ROTEX 28 between the PLE120 and the Ø30 chain shaft. Purchase hubs Ø25H7 020285102500
-    and Ø30 020285103000. The placed STEP is the 32H7 hub and an unbored hub with a Ø30.4 bore cut.
-    The placed spider is 92 Sh-A. It does not transmit 365 Nm.
+    and Ø30 020285103000. The study bore on the gearbox hub is Ø25.4. The chain hub is bored Ø30.4.
+    The spider is 64 Sh-D. KTR lists TKmax 400 Nm, which covers T2max 365 Nm.
   legacy_ref: '2.20'
   estimate_eur_low: 60
   estimate_eur_high: 100
@@ -2756,6 +2802,8 @@ boms:
   - {part_number: VC-FR-4131, qty: 8}
   - {part_number: VC-FR-4132, qty: 4}
   - {part_number: VC-FR-4133, qty: 4}
+  - {part_number: VC-FR-4134, qty: 4}
+  - {part_number: VC-FR-4135, qty: 4}
   - {part_number: VC-FR-4185, qty: 1}
   - {part_number: VC-FR-4187, qty: 1}
   - {part_number: VC-FR-4188, qty: 1}

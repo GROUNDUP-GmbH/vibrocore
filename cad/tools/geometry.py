@@ -7,14 +7,19 @@ the part simply has no geometry block and is not exported.
 
 from __future__ import annotations
 
+import gzip
 import json
 import re
+import tempfile
 from pathlib import Path
 
 from cad.tools.bom import ROOT, BillOfMaterials, Part, modelled_parts
 
 STEP_DIR = ROOT / "cad" / "export" / "step"
 GEOMETRY_JSON = ROOT / "cad" / "export" / "geometry.json"
+# FreeCAD opens the unpacked STEP. The git tree stores the gzip file.
+FREECAD_DIR = ROOT / "cad" / "export" / "freecad"
+LAYOUT_STEP_PLAIN = "VC-ASM-0000-layout.step"
 VENDOR_DIR = ROOT / "cad" / "vendor"
 
 
@@ -261,11 +266,72 @@ def facet_closed(shape, linear_mm: float, angular_rad: float, sew_mm: float):
     return Compound(children=made)
 
 
+def compress_step(plain: Path) -> Path:
+    """Store a STEP as gzip and drop the plain file. Returns the .step.gz path."""
+    gz_path = plain.with_name(plain.name + ".gz")
+    # mtime 0 keeps the gzip header stable. check() compares the bytes.
+    with plain.open("rb") as source, gz_path.open("wb") as raw:
+        with gzip.GzipFile(filename="", mode="wb", fileobj=raw, compresslevel=9, mtime=0) as target:
+            while True:
+                block = source.read(1 << 20)
+                if not block:
+                    break
+                target.write(block)
+    plain.unlink()
+    return gz_path
+
+
+def read_step_text(path: Path) -> str:
+    """Read a STEP file, including a .step.gz written by compress_step."""
+    if path.name.endswith(".gz"):
+        with gzip.open(path, "rt", encoding="utf-8") as handle:
+            return handle.read()
+    return path.read_text(encoding="utf-8")
+
+
+def materialize_step(path: Path) -> Path:
+    """Return a plain STEP path. A gzip file is unpacked to a temporary file."""
+    if not path.name.endswith(".gz"):
+        return path
+    handle = tempfile.NamedTemporaryFile(suffix=".step", delete=False)
+    with gzip.open(path, "rb") as source:
+        while True:
+            block = source.read(1 << 20)
+            if not block:
+                break
+            handle.write(block)
+    handle.close()
+    return Path(handle.name)
+
+
+def unpack_layout_step(gz_path: Path | None = None, destination: Path | None = None) -> Path:
+    """Write the layout STEP where FreeCAD can open it.
+
+    The committed file is gzip. FreeCAD does not open that. This writes
+    cad/export/freecad/VC-ASM-0000-layout.step, which git ignores.
+    """
+    gz_path = gz_path or (STEP_DIR / f"{LAYOUT_STEP_PLAIN}.gz")
+    destination = destination or (FREECAD_DIR / LAYOUT_STEP_PLAIN)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with gzip.open(gz_path, "rb") as source, destination.open("wb") as target:
+        while True:
+            block = source.read(1 << 20)
+            if not block:
+                break
+            target.write(block)
+    return destination
+
+
 def read_step_bbox_mm(path: Path) -> tuple[float, float, float]:
     """Re-import a STEP file and return its axis-aligned size in millimetres."""
     from build123d import import_step
 
-    loaded = import_step(path)
+    plain = materialize_step(path)
+    try:
+        loaded = import_step(plain)
+    finally:
+        if plain != path:
+            plain.unlink(missing_ok=True)
     if loaded is None:
         raise ValueError(f"{path} did not contain a solid")
     solid = loaded[0] if isinstance(loaded, (list, tuple)) else loaded

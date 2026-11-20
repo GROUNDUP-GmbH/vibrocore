@@ -118,7 +118,7 @@ from cad.tools.bom import ROOT
 
 ASSEMBLY_ID = "VC-ASM-0000-layout"
 RENDER_DIR = ROOT / "cad" / "export" / "renders"
-STEP_NAME = f"{ASSEMBLY_ID}.step"
+STEP_NAME = f"{ASSEMBLY_ID}.step.gz"
 OVERLAP_TOLERANCE_MM3 = 1.0
 # The Siemens oil seal extends 8 mm. This PLE120 recess is 4.4 mm deep.
 # The key has no keyway in that bore. Flange faces still meet.
@@ -374,6 +374,8 @@ def shoe_tip_z_mm(stroke_mm: float | None = None) -> float:
 
 def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     """One named solid per instance. Labels are the part numbers FreeCAD shows."""
+    import math
+
     from build123d import Box, Compound, Cylinder, Pos, Rot
 
     from cad.tools.geometry import load_vendor_shape, shape_for
@@ -559,16 +561,19 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     chain_y = bay["sprocket_y"]
     sprocket_r = SPROCKET_TIP_DIAMETER_MM / 2.0
     # 8 mm is the upper cap. The idler sits on that cap, not on the raw profile end.
-    # The idler tooth tip must clear the upper cap. 41 mm radius needs this lift.
-    z_idler = station["profile_top"] + 8.0 + 46.0
-    front_strand_x = drive_x + SPROCKET_PITCH_RADIUS_MM
+    # The closed chain then shifts this centre so the loop is an even pitch count.
+    from cad.models.roller_chain import MESH_RADIUS_MM, PLATE_HEIGHT_MM, idler_z_mm
+
+    z_idler = idler_z_mm(z_drive, station["profile_top"] + 8.0 + 46.0)
+    # End rollers sit 6 degrees off the tangent, so the strand is inside the pitch radius.
+    front_strand_x = drive_x + MESH_RADIUS_MM * math.cos(math.radians(6.0))
 
     web_z0 = station["shelf_bottom"]
     web_z1 = station["upper_top"]
     web_y = PROFILE_SPACING_MM + RUNNER_WIDTH_MM
     lug_z = station["lower_bottom"] + RUNNER_LENGTH_MM / 2.0
-    # Plate height is 14.7 mm. The arm starts 2 mm outside the outer plate.
-    strand_face_x = front_strand_x + 7.4 + 2.0
+    # The arm starts 2 mm outside the outer plate.
+    strand_face_x = front_strand_x + PLATE_HEIGHT_MM / 2.0 + 2.0
     # The arm stays in front of the profiles and above the mount plate.
     carriage = Compound(
         children=[
@@ -810,12 +815,16 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         chain_y,
         z_drive,
     )
+    # 12 degrees puts an idler gap on the same X as each drive-end roller.
+    from cad.models.roller_chain import IDLER_TURN_DEG
+
     add(
         "VC-HB-2810",
         bored_sprocket() if sprocket_solid is None else sprocket_solid,
         drive_x,
         chain_y,
         z_idler,
+        Rot(0.0, IDLER_TURN_DEG, 0.0),
     )
 
     strand_z0 = z_drive + sprocket_r + _MODEL_GAP_MM
@@ -826,32 +835,15 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     else:
         from cad.models.roller_chain import duplex_chain
 
-        tip_r = sprocket_r
-        if sprocket_solid is not None:
-            import math
-
-            tip_r = max(
-                math.hypot(float(vertex.X), float(vertex.Z)) for vertex in sprocket_solid.vertices()
-            )
         add(
             "VC-HB-2700",
-            duplex_chain(
-                z_drive,
-                z_idler,
-                SPROCKET_PITCH_RADIUS_MM,
-                tip_r,
-                drive_x,
-                _MODEL_GAP_MM,
-                chain_y,
-            ),
+            duplex_chain(z_drive, z_idler, drive_x, chain_y),
             0.0,
             0.0,
             0.0,
         )
 
     # Gearbox, then the coupling, then the shaft. The motor is last, on the input face.
-    import math
-
     motor_x = bay["motor_x"]
     z_lift = bay["z_lift"]
     if bay["gear"] is not None:
@@ -875,6 +867,14 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         # The chain-side hub in the STEP is unbored. Open it for the Ø30 shaft.
         cutter = Pos(0.0, 28.0, 0.0) * along_y(SHAFT_DIAMETER_MM / 2.0 + 0.4, 50.0)
         opened = [solid - cutter for solid in coupling.solids()]
+        # The public hub is 32H7. The purchase hub is Ø25H7. A sleeve fills the
+        # 32 mm bore down to Ø25.4 so the Ø25 journal has 0.2 mm clearance.
+        # The 32H7 hub runs from local Y = -35 mm to the jaw at +17.5 mm.
+        # The sleeve stays inside that hub. The output key reaches X = 15.5 mm, so the
+        # sleeve has a keyway. The bore left for the Ø25 journal is Ø25.4 mm.
+        sleeve = along_y(15.8, 28.0) - along_y(12.7, 32.0)
+        keyway = Pos(14.2, 0.0, 0.0) * Box(4.4, 32.0, 13.0)
+        opened.append(Pos(0.0, -19.0, 0.0) * (sleeve - keyway))
         coupling = Compound(children=opened)
     add("VC-HB-2400", coupling, motor_x, bay["coupling_y"], z_lift)
 
@@ -899,6 +899,7 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         face_y,
         bay["motor_y0"],
         bay["drive_bearing_min_y"],
+        z_lift,
     )
     add("VC-FR-4191", fixed_guard, 0.0, 0.0, 0.0)
     add("VC-FR-4192", cover_guard, 0.0, 0.0, 0.0)
@@ -1138,19 +1139,44 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
             # so this study ring is 16 mm across and sits in the slot.
             washer = Cylinder(8.0, 2.5) - Cylinder(6.6, 4.0)
             add(f"VC-FR-4133-{int(sign)}-{int(centre_y)}", washer, drive_x + sign * 59.0, centre_y, 47.0)
-    # Plate is 8 mm. Thread depth on the output flange is 15 mm.
-    # M6x20 leaves 12 mm in the thread, more than 1.5 x 6 mm.
-    # The shank stays inside the plate. The STEP output circle is Ø100 mm.
-    for deg in (0.0, 90.0, 180.0, 270.0):
-        angle = math.radians(deg)
-        m6_i += 1
-        add(
-            f"VC-FR-4125-{m6_i}",
-            along_y(2.5, 7.6),
-            drive_x + 45.0 * math.cos(angle),
-            face_y + 4.0,
-            z_lift + 45.0 * math.sin(angle),
-        )
+    # Plate is 8 mm. The STEP holes are 16 mm deep on the Ø100 mm diagonal circle.
+    # M6x20 leaves 12 mm in that hole, more than 1.5 x 6 mm.
+    # The head stands on the coupling side of the plate.
+    from cad.models.drive_frame import COVER_SCREW_Z_MM, FLANGE_PCD_MM, GEARBOX_FLANGE_MM as _FLANGE
+    from cad.models.drive_frame import SIDE_SCREW_OFFSETS_MM
+
+    radius = FLANGE_PCD_MM / 2.0 / math.sqrt(2.0)
+    for sign_x in (-1.0, 1.0):
+        for sign_z in (-1.0, 1.0):
+            m6_i += 1
+            shank = along_y(2.4, 20.0)
+            head = Pos(0.0, 13.2, 0.0) * along_y(5.0, 6.0)
+            add(
+                f"VC-FR-4125-{m6_i}",
+                shank + head,
+                drive_x + sign_x * radius,
+                face_y - 2.0,
+                z_lift + sign_z * radius,
+            )
+    # Four M6x20 hold the sprocket sheets. The foot is 2 mm. About 16 mm enters the beam.
+    for dx, sy in SIDE_SCREW_OFFSETS_MM:
+        shank = Cylinder(2.5, 20.0)
+        head = Pos(0.0, 0.0, 13.2) * Cylinder(5.0, 6.0)
+        add(f"VC-FR-4134-{abs(dx)}-{sy}", shank + head, drive_x + dx, sy, 31.2)
+    # Four M5x16 hold the cover. The head is outboard. 8 mm of thread enters the flange edge.
+    for sign_x in (-1.0, 1.0):
+        for dz in COVER_SCREW_Z_MM:
+            # The shank centre is 2 mm inboard of the flange edge. About 10 mm stays in the edge.
+            centre = drive_x + sign_x * (_FLANGE / 2.0 - 2.0)
+            shank = Rot(0, 90, 0) * Cylinder(2.1, 16.0)
+            head = Pos(sign_x * 9.2, 0.0, 0.0) * (Rot(0, 90, 0) * Cylinder(4.25, 5.0))
+            add(
+                f"VC-FR-4135-{int(sign_x)}-{int(dz)}",
+                shank + head,
+                centre,
+                face_y + 4.0,
+                z_lift + dz,
+            )
 
     # Sheets above the rails. No bracket windows.
     stiffener_z0 = station["rail_top"] + 15.0
@@ -1405,6 +1431,7 @@ def _check_pose(parts: list[Placed], station: dict[str, float]) -> None:
                 "VC-FR-4131",
                 "VC-FR-4132",
                 "VC-FR-4133",
+                "VC-FR-4135",
             )
             if item.name.startswith(allowed):
                 if low_x < -90.0:
@@ -1580,12 +1607,15 @@ def export_machine_assembly(bom, step_dir: Path, render_dir: Path) -> list[Path]
     parts = assembly_parts(bom)
     step_dir.mkdir(parents=True, exist_ok=True)
     render_dir.mkdir(parents=True, exist_ok=True)
+    from cad.tools.geometry import compress_step
+
     shape = Compound(children=[item.shape for item in parts])
     shape.label = ASSEMBLY_ID
-    step_path = step_dir / STEP_NAME
-    export_step(shape, step_path)
-    _freeze_step_header(step_path, ASSEMBLY_ID, bom.meta["cad_baseline_date"])
-    _write_z_up_step(step_path)
+    plain_path = step_dir / f"{ASSEMBLY_ID}.step"
+    export_step(shape, plain_path)
+    _freeze_step_header(plain_path, ASSEMBLY_ID, bom.meta["cad_baseline_date"])
+    _write_z_up_step(plain_path)
+    step_path = compress_step(plain_path)
     written = [step_path]
     for view in RENDER_VIEWS:
         path = render_dir / f"{ASSEMBLY_ID}-{view}.png"
@@ -1871,6 +1901,8 @@ def _color_for(name: str) -> tuple[int, int, int]:
         ("VC-FR-4191", (100, 116, 139)),
         ("VC-FR-4188", (180, 83, 9)),
         ("VC-FR-4187", (51, 65, 85)),
+        ("VC-FR-4135", (30, 41, 59)),
+        ("VC-FR-4134", (30, 41, 59)),
         ("VC-FR-4132", (30, 41, 59)),
         ("VC-FR-4198", (71, 85, 105)),
         ("VC-FR-4125", (30, 41, 59)),

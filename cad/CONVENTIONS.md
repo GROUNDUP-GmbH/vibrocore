@@ -73,7 +73,8 @@ cad/export/geometry.json            dimensions the FreeCAD script reads
 cad/export/layout/mast-stack.svg    mast study sheet, not a part drawing
 cad/export/layout/mast-stack.pdf    same chain as text
 cad/export/layout/mast-stack.step   study solid, not for manufacture
-cad/export/step/VC-ASM-0000-layout.step   machine study assembly, not a BOM solid
+cad/export/step/VC-ASM-0000-layout.step.gz   machine study assembly, gzip, not a BOM solid
+cad/export/freecad/VC-ASM-0000-layout.step   unpacked copy for FreeCAD, gitignored
 cad/export/renders/VC-ASM-0000-layout-*.png   views of that assembly
 cad/kicad/vibrocore-control/        wiring skeleton
 cad/freecad/make_plate.py           optional freecadcmd check

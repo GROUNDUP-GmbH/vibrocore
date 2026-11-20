@@ -122,8 +122,9 @@ The current STEP oil seal extends about 8 mm. The gearbox recess is 4.4 mm deep 
 VC-FR-4187 is one welded S355 frame. VC-FR-4182, VC-FR-4183 and VC-FR-4184 are obsolete.
 Fillet weld a5 is the separate solid VC-FR-4188.
 The profile joints and the bottom-plate joints stay bolted. VC-FR-4186 stays a bolted sheet.
-Four ISO 4762 M6x20 screws on PCD 90 mm hold the flange.
-The plate is 8 mm. The specified thread depth is 15 mm. The engagement is 12 mm.
+Four ISO 4762 M6x20 screws hold the flange.
+They sit on the Ø100 mm circle, on the diagonals, and they pass through the STEP holes.
+The plate is 8 mm. Those holes are about 16 mm deep. The engagement is 12 mm.
 The output pilot is Ø80 mm. The plate bore is Ø86 mm.
 Remove the cover VC-FR-4192 to reach the coupling and the motor-flange screws.
 The motor uses four ISO 4762 M6x16 screws. The flange is 6.4 mm. The thread engagement is 9.6 mm.
@@ -131,28 +132,31 @@ The clamp-screw size and the tightening torque are TBD.
 Four M8x20 screws hold each upright. The bearing bolts are M12x35 into the beam.
 
 T2max is 365 Nm.
-Each bolt sees 365000 N·mm / (4 × 45 mm) = 2028 N.
+Each bolt sees 365000 N·mm / (4 × 50 mm) = 1825 N.
 An M6-8.8 proof load is about 11.6 kN. The bolts are inside that load.
 
 The chain shaft is Ø30 mm, C45, between the two bearings.
-The earlier 2 mm gap put the bearing centres 72.7 mm apart. The sprocket was centred, so the bending moment was 5800 N × 72.7 mm / 4 = 105415 N·mm.
-The placed centres are 92.7 mm apart. The shaft solid is 187.4 mm long. This note does not recompute that stress.
+The placed centres are 92.7 mm apart. The sprocket is centred. The shaft solid is 187.4 mm long.
+The bending moment is 5800 N × 92.7 mm / 4 = 134415 N·mm.
 The full section modulus is 2651 mm³. With one DIN 6885 keyway, 8 mm by 4 mm, it is about 2290 mm³.
-At T2max 365 Nm the von Mises stress is 126 MPa on the full section and 146 MPa with the keyway.
+Bending stress is 50.7 MPa on the full section and 58.7 MPa with the keyway.
+Torsion at T2max 365 Nm is 68.8 MPa on the full section. The keyway raises that torsion to 79.7 MPa.
+Von Mises stress is 130 MPa on the full section and 150 MPa with the keyway.
 EN 10083-2 gives C45E, normalized, 16 mm to 100 mm, a minimum yield of 305 MPa.
-The safety factor is 2.4 on the full section and 2.1 with the keyway.
+The safety factor is 2.35 on the full section and 2.03 with the keyway.
 The chain torque at 5.8 kN and 37.9 mm is 220 Nm. That case is lower.
+The modelled shaft is Ø29.6 mm, 0.2 mm under the bore. This stress uses the design diameter Ø30 mm.
 A quenched shaft is stronger than this normalized figure.
 
 Each SYJ 30 TF sees 2.9 kN. C0 is 11.2 kN, so the static safety factor is 3.86.
 C is 19.5 kN. No pretension is included. Pretension would raise both loads.
 Each foot takes two M12 bolts. The slot is 17 mm wide, so M12 leaves the J adjustment.
 
-The ROTEX 28 spider in the model is 92 Sh-A. KTR lists TKN 95 Nm and TKmax 190 Nm for that spider.
-Both the 220 Nm chain torque and T2max 365 Nm are above 190 Nm.
-The 64 Sh-D spider lists TKmax 400 Nm. That covers 365 Nm. The placed spider file is unchanged.
-Purchase hubs are Ø25H7 020285102500 and Ø30 020285103000. Confirm 020285103000 on the KTR page.
-The placed STEP is the 32H7 hub and an unbored hub with a Ø30.4 bore cut.
+The specified ROTEX 28 spider is 64 Sh-D. KTR lists TKmax 400 Nm for that spider. That covers T2max 365 Nm.
+The public STEP file is still the 92 Sh-A article 020281000045. Size 28 uses one envelope. The compound is the hardness.
+Purchase hubs are Ø25H7 020285102500 and Ø30 020285103000.
+The public gearbox hub is 32H7. A sleeve inside that bore leaves Ø25.4 mm for the Ø25 journal.
+The chain-side hub is opened to Ø30.4 mm.
 
 ## 7. Sources
 

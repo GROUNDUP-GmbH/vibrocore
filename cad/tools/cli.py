@@ -230,6 +230,7 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("validate")
     sub.add_parser("export")
     sub.add_parser("check")
+    sub.add_parser("unpack-layout", help="Write the layout STEP for FreeCAD")
     plm = sub.add_parser(
         "plm-sync",
         help="Create or update draft OdooPLM products, documents and the engineering BOM",
@@ -259,6 +260,12 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.command == "check":
         return check()
+    if args.command == "unpack-layout":
+        from cad.tools.geometry import unpack_layout_step
+
+        path = unpack_layout_step()
+        print(f"FreeCAD opens {path}")
+        return 0
     return _plm_sync_command(args)
 
 

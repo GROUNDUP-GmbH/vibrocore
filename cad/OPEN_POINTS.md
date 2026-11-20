@@ -28,7 +28,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-ASM-1000` Sonic head assembly: Motor centre distance is only a minimum of 170 mm. It is not a frozen pitch, so the motors are not placed in the 3D model.
 - `VC-ASM-1000` Sonic head assembly: Isolator coordinates are not given.
 - `VC-ASM-2000` Hub system assembly: Carriage plate length and width are not given, only the 10 mm thickness.
-- `VC-ASM-2000` Hub system assembly: The placed ROTEX spider is 92 Sh-A. Its TKmax is 190 Nm. Gearbox T2max is 365 Nm. Confirm spider 64 Sh-D and hub 020285103000.
+- `VC-ASM-2000` Hub system assembly: The public ROTEX file is the 92 Sh-A spider. The specified spider is 64 Sh-D. Size 28 uses one envelope.
 - `VC-ASM-3000` Frame assembly: Stabiliser feet have no selected order codes.
 - `VC-ASM-4000` Power system assembly: no solid. Dimensions were not complete enough to model.
 - `VC-ASM-5000` Control system assembly: no solid. Dimensions were not complete enough to model.
@@ -84,7 +84,6 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-CT-6700` Wiring harness: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6800` RevPi Connect 4: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6810` RevPi DIO module: no solid. Dimensions were not complete enough to model.
-- `VC-FR-4125` Cylinder screw M6x20: The Neugart STEP output holes lie on a 100 mm circle and are about 16 mm deep. These screws stay on the specified 90 mm circle and do not enter those bores.
 - `VC-FR-4131` Washer M8: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4132` Hex screw M12x35: The SYJ foot thickness is not in the placed solid. 14 mm is an assumption.
 - `VC-FR-4133` Washer M12: no solid. Dimensions were not complete enough to model.
@@ -225,6 +224,8 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-FR-4122` mk angle bracket 40: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4124` Hex nut M8: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4125` Cylinder screw M6x20: cylinder, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
+- `VC-FR-4134` Cylinder screw M6x20 guard: cylinder, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
+- `VC-FR-4135` Cylinder screw M5x16 cover: cylinder, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4198` Upper profile mount: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4300` Bottom steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).
 - `VC-FR-4400` Top steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).

@@ -244,10 +244,12 @@ The bore diameter stays 83 mm.
 
 ## Assembly pose
 
-The study solid is `cad/export/step/VC-ASM-0000-layout.step`.
+The study solid in git is `cad/export/step/VC-ASM-0000-layout.step.gz`.
 It is not a BOM part.
 Do not manufacture from it.
 Each solid keeps its part number in the STEP name.
+FreeCAD does not open the gzip file. Run `python3 -m cad.tools.cli unpack-layout`.
+That writes `cad/export/freecad/VC-ASM-0000-layout.step`. Git ignores that folder.
 FreeCAD 1.1 reads those names.
 The mast axis in the file is +Z.
 The reference directions do not use a negative zero.
@@ -296,11 +298,13 @@ The drive sprocket sits on the gearbox output shaft.
 The chain and the idler share that axis.
 The axis is at X = 0 mm and Z = 82.9 mm.
 This is the profile centre plane. The profile runs from X = −50 mm to X = 50 mm.
-The rear strand stays at X = −37.9 mm. Its outer plate reaches X = −45.2 mm.
+The rear rollers sit on the ISO pitch circle. The outer plate stays inside the rear sheet.
 The chain is an ISO 606 10B-2 section. G&G, iwis, Renold and Rexnord do not offer a free STEP without an account.
 The links are built here. Pitch 15.875 mm. Roller diameter 10.16 mm. Inner width 9.65 mm. Transverse pitch 16.59 mm.
 Plate height 14.7 mm. Plate thickness 1.6 mm. Pin diameter 5.08 mm.
-The sprocket solid has no tooth gap, so the wrap sits outside the tooth tip.
+The vendor sprocket has 15 tooth gaps. Each gap is opened so a roller seats on the ISO pitch circle.
+That radius is 38.177 mm. The 37.9 mm figure stays the force radius for the 220 Nm chain torque.
+The idler is turned 12 degrees. The loop is closed. No link is omitted.
 The Siemens servo is the SiePortal STEP. The PLE120 gearbox is the Neugart STEP.
 They sit above the bottom plate, on the profile centre plane, under the cut end of the drive upright.
 The head plate sweeps Y = ±210 mm down to the rail, so this train stands outside that sweep, on the drive side.
@@ -312,7 +316,7 @@ The sprocket is at Y = 0, between the uprights.
 The order along the shaft, from the gearbox toward the idle upright, is the PLE120, the ROTEX 28, the drive-side SYJ 30 TF, the sprocket, and the idle-side SYJ 30 TF.
 The bearing centres are 92.7 mm apart. The sprocket is in the middle.
 The shaft solid is 187.4 mm long.
-The sizing note still uses the earlier 72.7 mm span from the 2 mm gap.
+The sizing note uses this 92.7 mm span. The safety factor is 2.35 on the full section and 2.03 with the keyway.
 The gearbox shaft sees torque only. It does not see the chain radial load.
 VC-FR-4187 is one welded frame. It replaces VC-FR-4182, VC-FR-4183 and VC-FR-4184. Those three parts are obsolete and are not placed.
 The frame is an inverted U. The cross beam carries both bearings. The sprocket sits between them.
@@ -322,7 +326,7 @@ The leg is at X = 70.5 mm to 84 mm. It stops at Z = 100 mm, under the carriage a
 The idle upright stands on the plate, on the inner face.
 Four M8 screws hold each upright. The chain design pull is 5.8 kN. Four slot-10 T-nuts cover that load. Six screws are not required.
 The screws are M8x20. The plate is 8 mm. The washer is 1.6 mm. About 10 mm of thread enters the T-nut. 1.5 times the diameter is 12 mm. A longer screw can bottom in the short T-nut.
-The flange plate is 8 mm. The bore is Ø86 mm, clear of the Ø80 spigot. Four M6x20 screws sit on PCD 90 mm.
+The flange plate is 8 mm. The bore is Ø86 mm, clear of the Ø80 spigot. Four M6x20 screws sit on the Ø100 mm diagonal circle and pass through the STEP holes.
 VC-FR-4188 is the fillet weld. The size is a5, a 5 mm leg. The beads are a separate solid. Each bead sits 0.2 mm clear of the parent faces.
 The bearing bolts are ISO 4017 M12x35. The foot thickness is taken as 14 mm. The thread in the beam is about 18 mm.
 The profile joints and the bottom-plate joints stay bolted. The rear sheet stays a bolted panel.
@@ -337,8 +341,9 @@ Remove that panel to reach the coupling, the flange screws and the motor.
 The carriage arm stays in front of the rail and meets the chain.
 VC-FR-4150, VC-FR-4160, VC-FR-4170, VC-FR-4180, VC-FR-4182, VC-FR-4183 and VC-FR-4184 are obsolete and are not placed.
 The welded frame VC-FR-4187 and the upper mount VC-FR-4198 take their job.
-VC-FR-4191 is two 2 mm sheets beside the sprocket.
-VC-FR-4192 is the 2 mm cover over the motor and the coupling. Remove that cover to reach the coupling and the motor-flange screws. This study does not add screws for that cover.
+VC-FR-4191 is two 2 mm sheets beside the sprocket. Four M6x20 screws, VC-FR-4134, hold those sheets to the beam.
+VC-FR-4192 is the 2 mm cover over the motor and the coupling. Four M5x16 screws, VC-FR-4135, hold that cover to the flange edge.
+Remove those four screws to reach the coupling and the motor-flange screws. The side sheets stay on the beam.
 The bottom plate is 400 mm wide. It projects 25 mm past each profile outer face.
 The old plate was 300 mm wide, so the profiles overhung it by 25 mm. The new margin is the same 25 mm, on the plate side.
 That margin covers the front leg and leaves a free edge. The rear edge of the plate stays on X = −50 mm. It does not enter the tilt volume.
@@ -366,7 +371,7 @@ That pair is the open adapter check. Every other pair stays under 1 mm³.
 
 VC-HB-2100 is the Siemens STEP.
 VC-HB-2200 is the Neugart STEP.
-VC-HB-2400 is the ROTEX 28. The placed solids are the 32H7 hub, an unbored hub opened to Ø30.4, and the 92 Sh-A spider.
+VC-HB-2400 is the ROTEX 28. The specified spider is 64 Sh-D. The public file is the 92 Sh-A envelope of the same size. The gearbox hub carries a sleeve to Ø25.4 mm. The chain hub is opened to Ø30.4 mm.
 VC-HB-2800 is the G&G 501-302-0515 sprocket.
 It sits on the Ø30 shaft between the two bearings.
 VC-HB-2810 reuses that solid.
@@ -472,8 +477,8 @@ Fit the cover again.
 | Motor to nearest rail | 32.5 mm | No collision. |
 | Vibrating plate to nearest profile | 50.0 mm | The plate rear is flush with the motors. |
 | Vibrating plate to nearest rail | 32.5 mm | The plate shares the guide-block height. |
-| Carriage to chain strand | 2.1 mm | The arm starts outside the chain plates. |
-| Rear chain strand to the rear face | 4.8 mm | The outer plate is at X = −45.2 mm. |
+| Carriage to chain strand | 2.0 mm | The arm starts outside the chain plates. |
+| Rear chain strand to the rear face | 4.7 mm | The outer plate is at X = −45.3 mm. |
 | Lift-motor body to the rear face | 9.5 mm | The motor body starts at X = −40.5 mm. |
 | Gearbox body to the rear face | −7.5 mm | The 115 mm body starts at X = −57.5 mm. It crosses the rear face. |
 
@@ -545,7 +550,8 @@ The parameters are in `cad/models/mast_layout.py`.
 The sheet is `cad/export/layout/mast-stack.svg`.
 The same numbers are in `cad/export/layout/mast-stack.pdf`.
 The study solid is `cad/export/layout/mast-stack.step`.
-The machine pose is `cad/export/step/VC-ASM-0000-layout.step`.
+The machine pose in git is `cad/export/step/VC-ASM-0000-layout.step.gz`.
+Run `python3 -m cad.tools.cli unpack-layout` before you open it in FreeCAD.
 The bracket check is `docs/engineering/CARRIAGE-BRACKET.md`.
 The views are in `cad/export/renders/`.
 Do not manufacture from the STEP files.
