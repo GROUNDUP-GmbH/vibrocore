@@ -12,8 +12,64 @@
     "source": "docs/engineering/BOM.md#3",
     "step": "cad/export/step/VC-FR-4100.step",
     "unknowns": [
-      "Cut length of the drive-side upright. The purchased length stays 1500 mm. The pose scales that tube along the extrusion only."
+      "mk machining 5104 gives 4x M8, but the hole coordinates are not in the price list. Confirm the drawing."
     ]
+  },
+  {
+    "bbox_mm": {
+      "x": 8.0,
+      "y": 6.0,
+      "z": 5.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "envelope",
+    "kind": "box",
+    "part_number": "VC-FR-4120",
+    "source": "docs/engineering/MAST-LAYOUT.md",
+    "step": "cad/export/step/VC-FR-4120.step",
+    "unknowns": []
+  },
+  {
+    "bbox_mm": {
+      "x": 8.0,
+      "y": 8.0,
+      "z": 20.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "envelope",
+    "kind": "cylinder",
+    "part_number": "VC-FR-4121",
+    "source": "docs/engineering/MAST-LAYOUT.md",
+    "step": "cad/export/step/VC-FR-4121.step",
+    "unknowns": []
+  },
+  {
+    "bbox_mm": {
+      "x": 40.0,
+      "y": 40.0,
+      "z": 6.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "envelope",
+    "kind": "box",
+    "part_number": "VC-FR-4122",
+    "source": "docs/engineering/MAST-LAYOUT.md",
+    "step": "cad/export/step/VC-FR-4122.step",
+    "unknowns": []
+  },
+  {
+    "bbox_mm": {
+      "x": 100.0,
+      "y": 350.0,
+      "z": 8.0
+    },
+    "engineering_revision": 0,
+    "fidelity": "envelope",
+    "kind": "box",
+    "part_number": "VC-FR-4198",
+    "source": "docs/engineering/MAST-LAYOUT.md",
+    "step": "cad/export/step/VC-FR-4198.step",
+    "unknowns": []
   },
   {
     "bbox_mm": {

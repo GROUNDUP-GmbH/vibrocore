@@ -188,7 +188,7 @@ parts:
   legacy_ref: '2'
   unknowns:
   - Carriage plate length and width are not given, only the 10 mm thickness.
-  - The SYJ 30 TF bore is Ø30. The gearbox output is Ø25 h7. The ROTEX hub is 32H7.
+  - The placed ROTEX spider is 92 Sh-A. Its TKmax is 190 Nm. Gearbox T2max is 365 Nm. Confirm spider 64 Sh-D and hub 020285103000.
 - part_number: VC-ASM-3000
   name: Frame assembly
   revision_index: 0
@@ -199,8 +199,8 @@ parts:
   spec: mk 2004 mast, steel end plates, linear-guide side and UTV interface.
   legacy_ref: '3'
   unknowns:
-  - Profile connector types are not identified beyond mk standard corners or T-slot nuts.
   - Stabiliser feet have no selected order codes.
+  - mk 5104 end-thread coordinates are not in the 01/2024 price list. The model uses the inner ribs. Confirm the drawing.
   notes: V1.1 electric tilt is VC-ASM-8200, not the obsolete gas-spring VC-FR-4700.
 - part_number: VC-ASM-4000
   name: Power system assembly
@@ -793,7 +793,9 @@ parts:
   subsystem: frame
   category: Frame
   spec: mk 2004 profile, order type 51.04.2004, configured file 51.04.1500. 50 x 100 mm, length
-    1500 mm. Alloy AlMgSi0.7 F28 / EN AW-6005A T6. Slot opening 10.10 mm. Two profiles.
+    1500 mm. Alloy AlMgSi0.7 F28 / EN AW-6005A T6. Slot 10, opening 10.10 mm. Two profiles.
+    End threads 4x M8, mk machining 5104AC on the idle bar. The drive bar is cut to 1365.5 mm
+    and needs the same four threads on the cut end.
   legacy_ref: '3.32'
   supplier_id: mk
   mass_kg: 7.275
@@ -808,8 +810,7 @@ parts:
     fidelity: envelope
     source: docs/engineering/BOM.md#3
   unknowns:
-  - Cut length of the drive-side upright. The purchased length stays 1500 mm. The pose scales that tube
-    along the extrusion only.
+  - mk machining 5104 gives 4x M8, but the hole coordinates are not in the price list. Confirm the drawing.
   notes: The machine pose loads cad/vendor/VC-FR-4100/51.04.1500.stp. The box above is the fallback envelope.
 - part_number: VC-FR-4150
   name: Bottom frame gusset
@@ -823,9 +824,8 @@ parts:
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  unknowns:
-  - Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
-  notes: Draft. Made part. Do not manufacture from this revision.
+  lifecycle: obsolete
+  notes: Obsolete. The lower mount and the bottom plate tie the profiles. Not placed.
 - part_number: VC-FR-4160
   name: Top frame gusset
   revision_index: 0
@@ -838,9 +838,8 @@ parts:
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  unknowns:
-  - Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
-  notes: Draft. Made part. Do not manufacture from this revision.
+  lifecycle: obsolete
+  notes: Obsolete. The upper mount VC-FR-4198 ties the profile tops. Not placed.
 - part_number: VC-FR-4170
   name: Mid frame gusset
   revision_index: 0
@@ -853,9 +852,8 @@ parts:
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  unknowns:
-  - Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
-  notes: Draft. Made part. Do not manufacture from this revision.
+  lifecycle: obsolete
+  notes: Obsolete. The lower and upper mounts tie the profiles. Not placed.
 - part_number: VC-FR-4180
   name: Drive crossbar mk 2004
   revision_index: 0
@@ -869,9 +867,8 @@ parts:
   legacy_ref: draft-fr-4180
   supplier_id: mk
   mass_note: 4.850 kg/m. The draft 250 mm cut is about 1.21 kg. Pitch is TBD, so the mass is not frozen.
-  unknowns:
-  - Final cut length follows the profile pitch. The 300 mm pitch is TBD. Not in BOM.md v1.
-  notes: Draft. Cut this bar to length. Do not change the purchased 1500 mm uprights to hide the height deficit.
+  lifecycle: obsolete
+  notes: Obsolete. The bar crossed the chain after the sprocket moved to the machine centre. Not placed.
 - part_number: VC-FR-4182
   name: Gearbox mount plate
   revision_index: 0
@@ -879,18 +876,18 @@ parts:
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: S355 plate, 12 mm. The PLE120 output flange bolts to it. Pilot bore Ø84 mm. Four holes Ø6.6 mm
-    on PCD 90 mm, on the measured output pattern. The output shaft and the sprocket pass the bore.
-    Welded and bolted to the side frame VC-FR-4183.
+  spec: S355 plate, 12 mm, on the PLE120 output flange. Pilot bore Ø84 mm. Four holes Ø6.6 mm
+    on PCD 90 mm. A foot on the bottom plate takes two M8 screws. No weld. The plate is notched
+    for the rail and for the carriage at stroke 0. The sprocket is not on this shaft.
   legacy_ref: draft-fr-4182
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  mass_kg: 1.12
-  mass_note: Solid volume at 7850 kg/m3. Holes are already cut.
+  mass_kg: 0.913
+  mass_note: Solid volume at 7850 kg/m3. Holes and the carriage notch are already cut.
   unknowns:
   - M6 property class. The study uses 8.8. Not in BOM.md v1.
-  notes: Draft. Made part. Fit the gearbox bolts before the sprocket. The sprocket covers the bolt heads.
+  notes: Draft. Made part. No weld. The foot is tapped M8. Do not manufacture from this revision.
 - part_number: VC-FR-4183
   name: Gearbox side frame
   revision_index: 0
@@ -898,19 +895,17 @@ parts:
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: S355 side frame on the drive side. A pad with four Ø9 mm holes bolts to the drive-side mk 2004.
-    Two rails are welded to the mount plate VC-FR-4182 and to that pad. The lower rail also sits on
-    the bottom plate. A horizontal seat, top at Z = 15 mm, carries the outboard SKF SYJ 30 TF.
-    Two Ø13 mm holes take M12 bolts through that foot.
+  spec: S355 lower mount. Two bearing seats with Ø13 mm holes for the SYJ M12 bolts. An end plate
+    on the cut drive profile, 12 mm, with four M8 clearance holes. Inner-face tabs on both profiles
+    over the side slots. A rear bridge behind the chain joins the tabs. No weld. Bolted with mk
+    Lasche 1 and M8 screws.
   legacy_ref: draft-fr-4183
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  mass_kg: 1.47
-  mass_note: Solid volume at 7850 kg/m3. The seat under the outboard bearing is included.
-  unknowns:
-  - Bolt grade and the T-slot nuts in the mk 2004. Not in BOM.md v1.
-  notes: Draft. Made part. Welded and bolted to VC-FR-4182. Do not manufacture from this revision.
+  mass_kg: 2.984
+  mass_note: Solid volume at 7850 kg/m3. Seats, the end plate and the tabs are included.
+  notes: Draft. Made part. No weld. The mk nuts and screws are VC-FR-4120 and VC-FR-4121. Do not manufacture from this revision.
 - part_number: VC-FR-4184
   name: Gearbox rear anchor
   revision_index: 0
@@ -918,19 +913,15 @@ parts:
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: S355 anchor at the gearbox input end. A cheek and a beam meet the mount plate on the gearbox
-    side of the output flange. A strap clears the housing top. A link runs around the plate and stops
-    at the bearing seat on VC-FR-4183. The seat lands on the bottom plate. The input face stays clear
-    for the motor.
+  spec: S355 side brace at the gearbox. Bolted, removable, no weld. It leaves the input face clear
+    so the motor can come off. Two M8 holes. It does not enter the tilt volume.
   legacy_ref: draft-fr-4184
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  mass_kg: 3.02
-  mass_note: Solid volume at 7850 kg/m3. The link stops at the bearing seat.
-  unknowns:
-  - Weld size where the anchor meets VC-FR-4182. Not in BOM.md v1.
-  notes: Draft. Made part. Fit this anchor before the motor. Do not manufacture from this revision.
+  mass_kg: 0.687
+  mass_note: Solid volume at 7850 kg/m3.
+  notes: Draft. Made part. Unbolt it for access to the motor. Do not manufacture from this revision.
 - part_number: VC-FR-4185
   name: Lower front stiffener
   revision_index: 0
@@ -938,16 +929,13 @@ parts:
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: Draft S355 sheet, 4 mm. Bolts across the profile front faces in the lower bay. Stops under the
-    carriage so the sheet stays clear at stroke 0. A window on the drive side clears the two SYJ 30 TF
-    housings and the Ø30 shaft.
+  spec: Draft S355 sheet, 4 mm. One pad on the idle profile front face, below the rail. A window
+    clears the low Winkel 40. The drive side has no pad. The gearbox occupies that bay.
   legacy_ref: draft-fr-4185
   supplier_id: custom_eu
   material: S355
   plm_material: s355
-  unknowns:
-  - Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
-  notes: Draft. Made part. Do not manufacture from this revision.
+  notes: Draft. Made part. The Winkel screws are VC-FR-4121. Do not manufacture from this revision.
 - part_number: VC-FR-4186
   name: Lower rear stiffener
   revision_index: 0
@@ -994,6 +982,104 @@ parts:
   unknowns:
   - Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
   notes: Draft. Made part. Do not manufacture from this revision.
+- part_number: VC-FR-4120
+  name: mk T-slot nut M8
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: frame
+  category: Frame
+  spec: mk Lasche 1 mit Feder, M8, order 34.01.0050. Slot 10. Twelve nuts. The solid is a 8 x 6 x 5 mm
+    box in the slot throat, not the full T-head. Price list 01/2024, 0.79 EUR.
+  legacy_ref: draft-fr-4120
+  supplier_id: mk
+  manufacturer_pn: 34.01.0050
+  mass_kg: 0.01
+  mass_note: Catalogue mass is not stated. 0.01 kg is a placeholder per nut.
+  estimate_eur_low: 1
+  estimate_eur_high: 2
+  geometry:
+    kind: box
+    length_mm: 8
+    width_mm: 6
+    height_mm: 5
+    fidelity: envelope
+    source: docs/engineering/MAST-LAYOUT.md
+  notes: 'Source: mk Preisliste Profiltechnik-Komponenten 01/2024, article 34.01.0050.
+    https://www.mk-group.com/fileadmin/media/documents/Preisliste_Profltechnik-Komponenten_01_2024.pdf'
+- part_number: VC-FR-4121
+  name: mk cylinder screw M8
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: frame
+  category: Frame
+  spec: mk Zylinderschraube M8. Slot joints use M8x20, order D0912820. End joints use M8x25, order
+    D0912825. Thirty screws. The solid is the shank, diameter 7.8 mm, so it clears the Ø9 hole.
+  legacy_ref: draft-fr-4121
+  supplier_id: mk
+  manufacturer_pn: D0912820
+  mass_kg: 0.01
+  mass_note: Catalogue mass is not stated. 0.01 kg is a placeholder per screw.
+  estimate_eur_low: 1
+  estimate_eur_high: 1
+  geometry:
+    kind: cylinder
+    diameter_mm: 8
+    length_mm: 20
+    fidelity: envelope
+    source: docs/engineering/MAST-LAYOUT.md
+  notes: 'Source: mk Preisliste Profiltechnik-Komponenten 01/2024. D0912820 is 0.07 EUR. D0912825 is 0.11 EUR.
+    https://www.mk-group.com/fileadmin/media/documents/Preisliste_Profltechnik-Komponenten_01_2024.pdf'
+- part_number: VC-FR-4122
+  name: mk angle bracket 40
+  revision_index: 0
+  revision_letter: A
+  supply: purchase
+  subsystem: frame
+  category: Frame
+  spec: mk Winkel 40, order 25.50.1001. Slot 10. Three brackets. Each clamps the front face and the
+    inner side face. The solid is a 40 mm by 40 mm by 6 mm angle, not the full catalogue section.
+    Price list 01/2024, 4.85 EUR.
+  legacy_ref: draft-fr-4122
+  supplier_id: mk
+  manufacturer_pn: 25.50.1001
+  mass_kg: 0.05
+  mass_note: Catalogue mass is not stated. 0.05 kg is a placeholder per bracket.
+  estimate_eur_low: 5
+  estimate_eur_high: 8
+  geometry:
+    kind: box
+    length_mm: 40
+    width_mm: 40
+    height_mm: 6
+    fidelity: envelope
+    source: docs/engineering/MAST-LAYOUT.md
+  notes: 'Source: mk Preisliste Profiltechnik-Komponenten 01/2024, article 25.50.1001.
+    https://www.mk-group.com/fileadmin/media/documents/Preisliste_Profltechnik-Komponenten_01_2024.pdf'
+- part_number: VC-FR-4198
+  name: Upper profile mount
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: S355 cap on both profile ends, 8 mm, plus a rear bridge behind the chain. Four M8 clearance
+    holes in each cap. No weld. The end threads are the mk 5104 pattern.
+  legacy_ref: draft-fr-4198
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  mass_kg: 1.072
+  mass_note: Solid volume at 7850 kg/m3. The cap holes are already cut.
+  geometry:
+    kind: box
+    length_mm: 100
+    width_mm: 350
+    height_mm: 8
+    fidelity: envelope
+    source: docs/engineering/MAST-LAYOUT.md
+  notes: Draft. Made part. The bridge stays behind the rear chain strand. Do not manufacture from this revision.
 - part_number: VC-FR-4200
   name: Profile connector
   revision_index: 0
@@ -1307,7 +1393,6 @@ parts:
   unknowns:
   - Input adapter of article 100460948 was configured for 1FL2104-4AG10. Re-check it for the current
     oil seal and for successor 1FL2104-4BG. The STEP recess is 4.4 mm deep and has no keyway.
-  - The chain sprocket sits on the output shaft. Check the radial load against the Neugart catalogue.
 - part_number: VC-HB-2300
   name: SINAMICS S200 servo drive
   revision_index: 0
@@ -1332,12 +1417,14 @@ parts:
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: KTR ROTEX 28. Not placed. The drive sprocket sits on the gearbox output shaft.
+  spec: KTR ROTEX 28 between the PLE120 and the Ø30 chain shaft. Purchase hubs Ø25H7 020285102500
+    and Ø30 020285103000. The placed STEP is the 32H7 hub and an unbored hub with a Ø30.4 bore cut.
+    The placed spider is 92 Sh-A. It does not transmit 365 Nm.
   legacy_ref: '2.20'
   estimate_eur_low: 60
   estimate_eur_high: 100
-  notes: 'Not in this pose. The STEP set is a 32H7 hub with keyway, an unbored hub and a 92 Sh-A spider.
-    See cad/vendor/VC-HB-2400/SOURCE.md.'
+  notes: 'Placed. See cad/vendor/VC-HB-2400/SOURCE.md. Confirm 020285103000 on the KTR order page.
+    The 60-100 EUR band is the previous placeholder. It is not a KTR quote.'
 - part_number: VC-HB-2500
   name: Chain bearing shaft
   revision_index: 0
@@ -1345,19 +1432,17 @@ parts:
   supply: subcontract
   subsystem: hub
   category: Hub
-  spec: Ø30 mm shaft for two SKF SYJ 30 TF bearings. It does not carry the sprocket. The sprocket stays
-    on the gearbox output, Ø25 h7 by 55 mm.
+  spec: Ø30 mm C45 shaft. It carries the sprocket between two SKF SYJ 30 TF bearings. Key DIN 6885,
+    8 mm wide and 4 mm deep. The gearbox shaft does not carry the sprocket.
   legacy_ref: '2.21'
   estimate_eur_low: 30
   estimate_eur_high: 50
   supplier_id: custom_eu
   material: steel
-  mass_kg: 0.60
-  mass_note: Ø30 mm by 108.7 mm, at 7850 kg/m3. The solid is 0.2 mm under the bore.
-  unknowns:
-  - This shaft does not drive the chain. The sprocket stays on the Ø25 gearbox shaft.
+  mass_kg: 0.898
+  mass_note: Solid volume at 7850 kg/m3. The solid is 0.2 mm under the bore. Length is 167.4 mm.
   notes: Draft. The modeled diameter is 29.6 mm so the bore and the shaft do not share a volume.
-    The grub screw is M6 x 0.75 at 4 Nm. Do not manufacture from this revision.
+    Do not manufacture from this revision.
 - part_number: VC-HB-2600
   name: Pillow block SYJ 30 TF
   revision_index: 0
@@ -1374,9 +1459,8 @@ parts:
   estimate_eur_high: 25
   mass_kg: 1.1
   mass_note: SKF catalogue mass. The 15-25 EUR band is the previous placeholder. It is not an SKF quote.
-  unknowns:
-  - Bore is Ø30. The gearbox output is Ø25 h7 and the ROTEX hub is 32H7. This bearing fits neither.
-  notes: 'The vendor STEP is in cad/vendor/VC-HB-2600. See SOURCE.md. The idler still uses VC-HB-2830.'
+  notes: 'The vendor STEP is in cad/vendor/VC-HB-2600. See SOURCE.md. The idler still uses VC-HB-2830.
+    Each bearing sees about 2.9 kN from the 5.8 kN chain pull. C0 is 11.2 kN.'
 - part_number: VC-HB-2700
   name: Duplex chain 10B-2
   revision_index: 0
@@ -2281,6 +2365,7 @@ boms:
   - {part_number: VC-HB-2100, qty: 1}
   - {part_number: VC-HB-2200, qty: 1}
   - {part_number: VC-HB-2300, qty: 1}
+  - {part_number: VC-HB-2400, qty: 1}
   - {part_number: VC-HB-2500, qty: 1}
   - {part_number: VC-HB-2600, qty: 2}
   - {part_number: VC-HB-2700, qty: 1}
@@ -2300,10 +2385,9 @@ boms:
   mrp_type: normal
   lines:
   - {part_number: VC-FR-4100, qty: 2}
-  - {part_number: VC-FR-4150, qty: 1}
-  - {part_number: VC-FR-4160, qty: 1}
-  - {part_number: VC-FR-4170, qty: 1}
-  - {part_number: VC-FR-4180, qty: 1}
+  - {part_number: VC-FR-4120, qty: 12}
+  - {part_number: VC-FR-4121, qty: 30}
+  - {part_number: VC-FR-4122, qty: 3}
   - {part_number: VC-FR-4182, qty: 1}
   - {part_number: VC-FR-4183, qty: 1}
   - {part_number: VC-FR-4184, qty: 1}
@@ -2311,6 +2395,7 @@ boms:
   - {part_number: VC-FR-4186, qty: 1}
   - {part_number: VC-FR-4190, qty: 1}
   - {part_number: VC-FR-4195, qty: 1}
+  - {part_number: VC-FR-4198, qty: 1}
   - {part_number: VC-FR-4200, qty: 8}
   - {part_number: VC-FR-4300, qty: 1}
   - {part_number: VC-FR-4400, qty: 1}

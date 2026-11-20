@@ -11,6 +11,10 @@ VC-ASM-8200,0,vibrocore.doc_vc_asm_8200,cad/export/pdf/VC-ASM-8200_tilt-actuator
 VC-ASM-8300,0,vibrocore.doc_vc_asm_8300,cad/export/pdf/VC-ASM-8300_penetrometer-assembly.pdf,cad/export/pdf/VC-ASM-8300_penetrometer-assembly.pdf,cad/drawings/VC-ASM-8300_penetrometer-assembly.svg,schematic
 VC-ASM-8400,0,vibrocore.doc_vc_asm_8400,cad/export/pdf/VC-ASM-8400_core-scanner-assembly.pdf,cad/export/pdf/VC-ASM-8400_core-scanner-assembly.pdf,cad/drawings/VC-ASM-8400_core-scanner-assembly.svg,schematic
 VC-FR-4100,0,vibrocore.doc_vc_fr_4100,cad/export/step/VC-FR-4100.step,cad/export/pdf/VC-FR-4100_aluminium-profile-50x100x1500.pdf,cad/drawings/VC-FR-4100_aluminium-profile-50x100x1500.svg,envelope
+VC-FR-4120,0,vibrocore.doc_vc_fr_4120,cad/export/step/VC-FR-4120.step,cad/export/pdf/VC-FR-4120_mk-t-slot-nut-m8.pdf,cad/drawings/VC-FR-4120_mk-t-slot-nut-m8.svg,envelope
+VC-FR-4121,0,vibrocore.doc_vc_fr_4121,cad/export/step/VC-FR-4121.step,cad/export/pdf/VC-FR-4121_mk-cylinder-screw-m8.pdf,cad/drawings/VC-FR-4121_mk-cylinder-screw-m8.svg,envelope
+VC-FR-4122,0,vibrocore.doc_vc_fr_4122,cad/export/step/VC-FR-4122.step,cad/export/pdf/VC-FR-4122_mk-angle-bracket-40.pdf,cad/drawings/VC-FR-4122_mk-angle-bracket-40.svg,envelope
+VC-FR-4198,0,vibrocore.doc_vc_fr_4198,cad/export/step/VC-FR-4198.step,cad/export/pdf/VC-FR-4198_upper-profile-mount.pdf,cad/drawings/VC-FR-4198_upper-profile-mount.svg,envelope
 VC-FR-4300,0,vibrocore.doc_vc_fr_4300,cad/export/step/VC-FR-4300.step,cad/export/pdf/VC-FR-4300_bottom-steel-plate.pdf,cad/drawings/VC-FR-4300_bottom-steel-plate.svg,partial
 VC-FR-4400,0,vibrocore.doc_vc_fr_4400,cad/export/step/VC-FR-4400.step,cad/export/pdf/VC-FR-4400_top-steel-plate.pdf,cad/drawings/VC-FR-4400_top-steel-plate.svg,partial
 VC-KIT-6000,0,vibrocore.doc_vc_kit_6000,cad/export/pdf/VC-KIT-6000_casing-sampling-kit.pdf,cad/export/pdf/VC-KIT-6000_casing-sampling-kit.pdf,cad/drawings/VC-KIT-6000_casing-sampling-kit.svg,schematic

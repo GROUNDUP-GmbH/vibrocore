@@ -99,29 +99,27 @@ The sizing and the torque limit are in [LIFT-DRIVE-SIZING.md](../engineering/LIF
 | Chain length           | 3.2 m placeholder until lift height |
 | Lubrication            | Pre-greased + periodic oil          |
 
-### 3.4 Drive sprocket on the gearbox output
+### 3.4 Drive sprocket between two bearings
 
-The drive sprocket sits on the PLE120 output shaft.
-The shaft is Ø25 h7 by 55 mm, with key DIN 6885-A-8×7×40.
-The taper bush 1210 is finished to that bore.
-There is no coupling in this pose.
-The chain radial load goes into the gearbox output bearing.
-Check that load against the Neugart catalogue. It is an open point.
+The drive sprocket sits on a Ø30 mm C45 shaft, between two SKF SYJ 30 TF bearings.
+A ROTEX 28 coupling joins that shaft to the PLE120 output.
+The gearbox shaft is Ø25 h7 by 55 mm. It does not carry the sprocket.
+The chain radial load is 5.8 kN. The PLE120 Fr max is 2000 N, so the sprocket must not load that shaft.
+The numbers are in [LIFT-DRIVE-SIZING.md](../engineering/LIFT-DRIVE-SIZING.md).
+No pretension is stated. The bearing load is half of the pull when the sprocket is centred.
 
-Two SKF SYJ 30 TF bearings sit beside the gearbox.
-The bore is Ø30 mm. It does not fit the Ø25 output and it does not fit the 32H7 hub.
-VC-HB-2500 is a Ø30 shaft in those bearings. It does not carry the sprocket.
-The outboard foot bolts through the side-frame seat. The inboard foot bolts through the bottom plate.
-The bolts are M12. The slots are 24 mm by 17 mm.
+The bearing feet bolt to seats on VC-FR-4183. The bolts are M12. The slots are 24 mm by 17 mm.
+The gearbox flange bolts to VC-FR-4182. A foot of that plate bolts to the bottom plate.
+There is no weld in this mount.
 
 | Parameter              | Value                              |
 |------------------------|------------------------------------|
-| Shaft                  | Gearbox output, Ø25 h7 × 55 mm     |
-| Key                    | DIN 6885-A-8×7×40                  |
-| Sprocket mount         | Taper bush 1210, bored to Ø25 mm   |
-| Coupling               | Not placed                         |
+| Gearbox shaft          | Ø25 h7 × 55 mm, torque only        |
+| Chain shaft            | Ø30 mm C45, key 8 × 7              |
+| Sprocket mount         | On the Ø30 shaft, between the bearings |
+| Coupling               | ROTEX 28, hubs 25/30               |
 | Chain bearings         | Two SKF SYJ 30 TF, M12             |
-| Bearing shaft          | Ø30 mm. It does not carry the sprocket. |
+| Bearing load           | 2.9 kN each, C0 11.2 kN            |
 
 ## 4. Force Analysis
 

@@ -29,7 +29,8 @@ The assembly yaw is the same 90 degrees as the old envelope.
 
 A shorter part is scaled on local Z only. The section is not scaled.
 The drive-side upright uses that cut. The purchased length stays 1500 mm.
-VC-FR-4180 uses the same extrusion, scaled to the clear span.
+VC-FR-4180 is obsolete and is not placed.
+The assembly facets the extrusion before it scales the drive-side length, so a mesher does not draw the splines as spikes.
 VC-CS-9460 is a 40 mm profile. It does not use this file.
 
 Measured on this solid:

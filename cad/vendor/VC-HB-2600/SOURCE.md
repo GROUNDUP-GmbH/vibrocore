@@ -48,11 +48,9 @@ Shaft check:
 - The ROTEX 28 hub in VC-HB-2400 is 32H7. It does not fit. That hub is 2 mm larger than the bore.
 - `SHAFT_DIAMETER_MM` is 30 mm. The placed shaft VC-HB-2500 uses that diameter.
 - The shaft is modeled 0.2 mm under the bore so the solids do not share a volume.
-- The sprocket stays on the Ø25 gearbox shaft. This Ø30 shaft does not carry it.
+- The sprocket sits on this Ø30 shaft, between the two housings.
 
-The two housings sit beside the gearbox, not on its axis.
-The 165 mm foot would enter the tilt volume if it were centred on the gearbox axis.
-The axis is at X = 44 mm. The foot then stays at X >= -38.5 mm.
-The outboard foot sits on the VC-FR-4183 seat. Two M12 holes pass that seat.
-The inboard foot sits on the bottom plate. Two M12 holes pass that plate.
-The sole is the plane Z = 15 mm. That is the top of the plate and of the seat.
+The two housings sit on the chain axis, one on each side of the sprocket.
+The axis is at X = 32.5 mm. The rear of the 165 mm foot is on X = −50 mm.
+Both soles sit on seats in VC-FR-4183. The sole is at Z = 36.6 mm.
+The placed solid is a faceted copy. Two small cubes stay analytic if the facet fails the check.

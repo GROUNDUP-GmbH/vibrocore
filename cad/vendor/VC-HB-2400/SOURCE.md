@@ -37,4 +37,7 @@ That is the elastomer fit.
 A boolean fuse of the three solids is rejected, so they stay one compound.
 The Neugart shaft is not in this batch.
 The 32H7 bore is the gearbox-side hub only.
-The chain-side hub is unbored.
+The chain-side hub is unbored in the file. The assembly cuts a Ø30.4 mm bore into that hub.
+Purchase hubs are Ø25H7, article 020285102500, and Ø30, article 020285103000.
+Confirm 020285103000 on the KTR order page. The placed STEP is not those two hubs.
+The 92 Sh-A spider has TKmax 190 Nm. Gearbox T2max is 365 Nm. The file is unchanged.

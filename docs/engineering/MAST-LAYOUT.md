@@ -297,46 +297,33 @@ The wrap is a shell outside the tooth tip. It is not a meshed link.
 The Siemens servo is the SiePortal STEP. The PLE120 gearbox is the Neugart STEP.
 They sit above the bottom plate.
 The head plate sweeps Y = ±210 mm down to the rail, so this train stands outside that sweep, on the drive side.
-The 115 mm gearbox is flush with X = −50 mm.
-The motor flange is 81 mm square, so the motor body starts at X = −33 mm.
-VC-FR-4182 is a 12 mm plate on the output flange.
-The flange bolts to it with four M6 screws on PCD 90 mm.
-The plate bore is Ø84 mm and clears the Ø80 pilot.
-The sprocket sits on the shaft just outside that plate.
-VC-FR-4183 is the side frame.
-It is welded to the plate and bolted to the drive-side profile.
-Its lower rail also sits on the bottom plate.
-VC-FR-4184 anchors the input end of the gearbox.
-It meets the plate, clears the housing, and lands on the bottom plate.
-The input face stays clear. The motor bolts on after that anchor.
-Two SKF SYJ 30 TF housings sit beside the gearbox, on a Ø30 shaft.
-The bore does not fit the Ø25 output and it does not fit the 32H7 coupling hub.
-The shaft does not carry the sprocket.
-The axis is at X = 44 mm and Z = 57.9 mm, so the 165 mm foot stays in front of X = −50 mm.
-The outboard sole sits on a seat in VC-FR-4183. Two M12 holes pass that seat.
-The inboard sole sits on the bottom plate. Two M12 holes pass that plate.
-The sole is the plane Z = 15 mm. The housing top is at Z = 97.5 mm, under the carriage web at Z = 105 mm.
+The chain axis is at X = 32.5 mm.
+That puts the rear of the 165 mm bearing foot on the rear face, X = −50 mm.
+The sprocket is at Y = 0, between the uprights.
+The order along the shaft, from the gearbox toward the idle upright, is the PLE120, the ROTEX 28, the drive-side SYJ 30 TF, the sprocket, and the idle-side SYJ 30 TF.
+The bearing centres are 72.7 mm apart. The sprocket is in the middle.
+The gearbox shaft sees torque only. It does not see the chain radial load.
+VC-FR-4182 is a 12 mm plate on the output flange, with a foot on the bottom plate.
+Four M6 screws on PCD 90 mm hold the flange. The bore is Ø84 mm.
+There is no weld. The plate is notched so the rail and the carriage at stroke 0 stay clear.
+VC-FR-4184 is a removable bolted brace on the input side. The motor bolts to the input face.
 The drive-side upright is cut short.
-It starts above the gearbox, at Z = 139 mm, and still reaches the same top as the other upright.
-The idle-side upright stays 1500 mm.
+It starts at Z = 149.5 mm, above a 12 mm end plate, and reaches the same top as the idle upright.
+The idle upright stays 1500 mm and stands on the bottom plate.
 The purchased length of VC-FR-4100 stays 1500 mm.
-VC-FR-4185 is a 4 mm sheet on the front face of the lower bay.
-It stops under the carriage, because at stroke 0 the carriage web is at Z = 105 mm.
-A window on the drive side clears the two bearing housings and the Ø30 shaft.
-VC-FR-4186 is the matching rear sheet.
-The carriage arm stays in front of the rail and meets the chain outboard of the profile.
-A cut mk 2004 bar, VC-FR-4180, spans the clear gap between the inner faces.
-It sits between the chain strands at mid height.
-At the 300 mm pitch that cut length is 250 mm.
-The idle sprocket shares the gearbox axis.
+VC-FR-4185 is a 4 mm pad on the idle front face only.
+VC-FR-4186 is the rear sheet. It stops at the short upright.
+The carriage arm stays in front of the rail and meets the chain.
+VC-FR-4150, VC-FR-4160, VC-FR-4170 and VC-FR-4180 are obsolete and are not placed.
+The lower mount VC-FR-4183 and the upper mount VC-FR-4198 take their job.
+The idle sprocket is on the same axis as the drive sprocket.
 One bearing block, VC-HB-2830, bolts to the drive-side profile end.
 Each block has a slotted seat and a tension screw.
 The top steel plate VC-FR-4400 is not fitted in this pose.
 The blank stays on the BOM.
 Two 4 mm sheets, VC-FR-4190 on the front face and VC-FR-4195 on the rear face, bolt to both profiles above the rails.
 They replace the stiffness the top plate gave.
-Bent 4 mm gussets still tie the profiles at the bottom, at mid height and at the top.
-The gusset webs stay between the profiles. The chain is outboard of them.
+Windows in the front sheet clear the Winkel 40 brackets.
 The chain path still uses the published 83 mm tip diameter.
 The placed G&G sprocket tip is about 82.7 mm and its width is 25.5 mm.
 The pitch radius is the documented 37.9 mm.
@@ -348,9 +335,9 @@ That pair is the open adapter check. Every other pair stays under 1 mm³.
 
 VC-HB-2100 is the Siemens STEP.
 VC-HB-2200 is the Neugart STEP.
-VC-HB-2400 is not placed. The sprocket uses the output shaft.
+VC-HB-2400 is the ROTEX 28. The placed solids are the 32H7 hub, an unbored hub opened to Ø30.4, and the 92 Sh-A spider.
 VC-HB-2800 is the G&G 501-302-0515 sprocket.
-It sits on the Ø25 h7 output shaft.
+It sits on the Ø30 shaft between the two bearings.
 VC-HB-2810 reuses that solid.
 It has no second file.
 VC-HB-3100 is the HIWIN HGR20R1300H rail.
@@ -362,9 +349,10 @@ VC-HB-3000 is obsolete and is not placed.
 The HIWIN files keep the mounting face, so they are not recentered.
 The gearbox file keeps the motor face, so it is not recentered.
 The motor flange meets the gearbox input on a face.
-The drive sprocket sits on the output shaft.
+The drive sprocket sits on the Ø30 shaft.
 A missing file keeps the catalogue envelope.
-The mk 2004 uprights and the drive crossbar use the 3Dfindit extrusion.
+The mk 2004 uprights use the 3Dfindit extrusion.
+The placed profile, the pillow block and the sprocket are faceted copies, so a mesher does not draw cones and splines as spikes.
 The 10B-2 chain is an ISO 606 section. G&G publishes no chain CAD.
 VC-HB-2600 is the SKF SYJ 30 TF solid. The OLI MVE motors stay envelopes.
 
@@ -389,7 +377,39 @@ The machine pose does not mount that plate.
 Clearances below use that TBD pitch and the draft 10 mm front gap.
 Do not treat them as a measured fit.
 The shoe tip is below the profiles, so the shoe distance includes that vertical gap.
-The head clears the rails, the profiles and the gussets at stroke 0, at mid travel and at the top.
+The head clears the rails, the profiles and the mounts at stroke 0, at mid travel and at the top.
+
+## Slot faces
+
+The mk 2004 section is type 51.04. The slot is slot 10. The measured throat is 10.10 mm.
+The price list is mk Profiltechnik-Komponenten 01/2024.
+https://www.mk-group.com/fileadmin/media/documents/Preisliste_Profltechnik-Komponenten_01_2024.pdf
+
+Each upright is clamped on two faces, so the pair resists racking and twist.
+The chain pull is vertical. The fasteners carry the shear that the three gussets used to carry.
+
+The end face takes the vertical tension and compression, and the peel moment.
+Four M8 threads are the mk machining 5104AC, or 5104AA on one end.
+The idle profile bolts through the bottom plate and through the top cap VC-FR-4198.
+The drive profile is cut short, so its lower end bolts through the end plate on VC-FR-4183, and its top bolts through the same cap.
+The hole coordinates are not in the price list. The model puts all four screws on the inner ribs, so they meet the 300 mm plate. Confirm the 5104 drawing.
+
+The front face is the 50 mm face at world +X. It has one slot on the profile centre line.
+A Winkel 40, order 25.50.1001, clamps that slot and the forward side slot.
+It takes the fore-aft force and it helps the torsion about Z.
+The rail covers this face from Z = 115 mm to Z = 1415 mm.
+The idle profile has a Winkel below the rail and one above the rail.
+The drive profile has a Winkel only above the rail. Below the rail the gearbox occupies the front.
+
+The inner side face is the 100 mm face toward the bay. It has two slots, at world X = +25 mm and X = −25 mm.
+The forward slot takes the Winkel side leg.
+The rear slot takes the lower tab on VC-FR-4183.
+The two slots are 50 mm apart in X, so the pair resists twist.
+The nuts are Lasche 1 mit Feder, M8, order 34.01.0050.
+The screws are mk cylinder screws M8x20, order D0912820, in the slots, and M8x25, order D0912825, in the end plates.
+Each nut is a plain box in the throat. It is not the full T-head.
+
+The rear-face slot is not used. The volume behind X = −50 mm is reserved for the tilt mechanism.
 
 | Pair | Clearance | Note |
 |---|---|---|
@@ -403,9 +423,9 @@ The head clears the rails, the profiles and the gussets at stroke 0, at mid trav
 | Vibrating plate to nearest profile | 50.0 mm | The plate rear is flush with the motors. |
 | Vibrating plate to nearest rail | 32.5 mm | The plate shares the guide-block height. |
 | Carriage to chain strand | 0.0 mm | The arm meets the front strand on a face. |
-| Rear chain strand to the rear face | 14.5 mm | The strand is at X = −35.5 mm, on the gearbox axis. |
-| Lift-motor body to the rear face | 17.0 mm | The 81 mm flange starts at X = −33 mm. |
-| Gearbox body to the rear face | 0.0 mm | The 115 mm body is flush at X = −50 mm. |
+| Rear chain strand to the rear face | 38.7 mm | The strand is at X = −11.3 mm. |
+| Lift-motor body to the rear face | 42.0 mm | The motor body starts at X = −8 mm. |
+| Gearbox body to the rear face | 25.0 mm | The 115 mm body starts at X = −25 mm. The foot stays on X = −50 mm. |
 
 No pair of part solids shares more than 1 mm³, except VC-HB-2100 and VC-HB-2200.
 The ground datum is not a part.

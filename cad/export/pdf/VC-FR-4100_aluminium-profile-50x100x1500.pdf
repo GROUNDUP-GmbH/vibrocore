@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 641 >>
+<< /Length 619 >>
 stream
 BT
 /F1 11 Tf
@@ -23,7 +23,7 @@ T*
 T*
 (Box 50 x 100 x 1500 mm) Tj
 T*
-(TODO: Cut length of the drive-side upright. The purchased length stays 1500 mm. The pose scales that tube along the extrusion only.) Tj
+(TODO: mk machining 5104 gives 4x M8, but the hole coordinates are not in the price list. Confirm the drawing.) Tj
 T*
 (Owner: Ground UP GmbH) Tj
 T*
@@ -54,8 +54,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000000940 00000 n 
+0000000918 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-1010
+988
 %%EOF

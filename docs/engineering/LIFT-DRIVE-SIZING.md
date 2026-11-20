@@ -66,9 +66,12 @@ That is above T2max.
 The previous PLPE120 at i = 40 has a cyclic torque of 172 Nm.
 A hard extraction is about 187 Nm. That gearbox is above its cyclic torque.
 PLE120 at i = 40 stays below T2Z for the same case.
-The drive sprocket sits on the gearbox output shaft.
-The chain radial load goes into that shaft.
-Check it against the Neugart radial rating. Do not assume the old separate shaft.
+The sprocket does not sit on the gearbox shaft.
+Neugart PLE_2026_05_EN.pdf rates the PLE120 output at Fr max 2000 N, Fa max 3800 N and MK max 115 Nm.
+The design chain pull is 5.8 kN. That is above Fr max.
+At 25 mm from the flange, 5.8 kN gives 145 Nm, which is above MK max.
+The chain radial load goes into the two SYJ bearings. The gearbox shaft sees torque only.
+No chain pretension is stated. The radial load used here is the pull itself. Pretension would add twice the slack-side tension.
 
 ## 4. Power loss during pull-out
 
@@ -116,31 +119,32 @@ The current STEP oil seal extends about 8 mm. The gearbox recess is 4.4 mm deep 
 
 ## 6. Mount
 
-VC-FR-4182 is a 12 mm S355 plate.
-The output flange bolts to it with four M6 screws on PCD 90 mm.
-That circle is the pattern measured on the vendor solid.
+VC-FR-4182 is a 12 mm S355 plate on the output flange, plus a foot on the bottom plate.
+There is no weld. Four M6 screws on PCD 90 mm hold the flange.
 The output pilot is Ø80 mm. The plate bore is Ø84 mm.
-The sprocket sits on the shaft outside the plate.
 
 T2max is 365 Nm.
 Each bolt sees 365000 N·mm / (4 × 45 mm) = 2028 N.
 An M6-8.8 proof load is about 11.6 kN. The bolts are inside that load.
-A 12 mm by 130 mm strip has section modulus 3120 mm³.
-365000 N·mm / 3120 mm³ is 117 MPa.
-That is below 160 MPa for this study.
 
-The gearbox and the motor are about 11.8 kg.
-VC-FR-4183 welds to the plate and bolts to the drive-side mk 2004.
-VC-FR-4184 anchors the input end and lands on the bottom plate.
-The motor bolts to the input face after that anchor.
-The input face stays clear.
+The chain shaft is Ø30 mm, C45, between the two bearings.
+The bearing centres are 72.7 mm apart and the sprocket is centred, so the bending moment is 5800 N × 72.7 mm / 4 = 105415 N·mm.
+The full section modulus is 2651 mm³. With one DIN 6885 keyway, 8 mm by 4 mm, it is about 2290 mm³.
+At T2max 365 Nm the von Mises stress is 126 MPa on the full section and 146 MPa with the keyway.
+EN 10083-2 gives C45E, normalized, 16 mm to 100 mm, a minimum yield of 305 MPa.
+The safety factor is 2.4 on the full section and 2.1 with the keyway.
+The chain torque at 5.8 kN and 37.9 mm is 220 Nm. That case is lower.
+A quenched shaft is stronger than this normalized figure.
 
-Two SKF SYJ 30 TF bearings sit beside this train.
-The bore is Ø30 mm. The gearbox shaft is Ø25 h7. The ROTEX hub is 32H7.
-Neither fits the bore. The bearings carry a separate Ø30 shaft.
-That shaft does not carry the sprocket.
+Each SYJ 30 TF sees 2.9 kN. C0 is 11.2 kN, so the static safety factor is 3.86.
+C is 19.5 kN. No pretension is included. Pretension would raise both loads.
 Each foot takes two M12 bolts. The slot is 17 mm wide, so M12 leaves the J adjustment.
-The catalogue bolt is 14 mm. That shank also passes the slot.
+
+The ROTEX 28 spider in the model is 92 Sh-A. KTR lists TKN 95 Nm and TKmax 190 Nm for that spider.
+Both the 220 Nm chain torque and T2max 365 Nm are above 190 Nm.
+The 64 Sh-D spider lists TKmax 400 Nm. That covers 365 Nm. The placed spider file is unchanged.
+Purchase hubs are Ø25H7 020285102500 and Ø30 020285103000. Confirm 020285103000 on the KTR page.
+The placed STEP is the 32H7 hub and an unbored hub with a Ø30.4 bore cut.
 
 ## 7. Sources
 
@@ -157,3 +161,6 @@ The catalogue bolt is 14 mm. That shank also passes the slot.
    See cad/vendor/VC-HB-2100/SOURCE.md.
 6. Siemens document 109997329, 2026-01-29. Successor announcement.
 7. Siemens document 110005040. S200 PN / 1FL2 operating instructions, 06/2026.
+8. Neugart PLE operating instructions PLE_2026_05_EN.pdf. PLE120 Fr max 2000 N, Fa max 3800 N, MK max 115 Nm.
+9. EN 10083-2. C45E normalized, 16 mm to 100 mm, Re min 305 MPa.
+10. KTR ROTEX catalogue, size 28. 92 Sh-A TKmax 190 Nm. 64 Sh-D TKmax 400 Nm.

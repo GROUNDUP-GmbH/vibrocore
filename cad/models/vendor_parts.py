@@ -7,9 +7,14 @@ A missing file returns None. The assembly then keeps the envelope.
 
 from __future__ import annotations
 
+import copy
+
 from build123d import Pos, Rot, scale
 
-from cad.tools.geometry import load_vendor_shape
+from cad.tools.geometry import facet_closed, load_vendor_shape
+
+# Faceted copies are expensive. The assembly builds many times in one process.
+_FACET = {}
 
 
 def _mount_to_machine(loaded):
@@ -41,10 +46,15 @@ def oriented_mk2004(length_mm: float | None = None):
     turned = Rot(0, 0, -90) * Rot(0, -90, 0) * loaded
     center = turned.bounding_box().center()
     centered = Pos(-float(center.X), -float(center.Y), -float(center.Z)) * turned
+    # The CADENAS solid is all splines. FreeCAD draws those as spikes.
+    # Planar facets stay inside the section. Scale that copy along Z only.
+    if "mk" not in _FACET:
+        _FACET["mk"] = facet_closed(centered, 0.25, 0.25, 0.2)
+    centered = _FACET["mk"]
     if length_mm is None or abs(length_mm - stock_x) < 0.05:
         return centered
     # about=(0, 0, 0) is the centred section. The location origin is still one end.
-    return scale(centered, by=(1.0, 1.0, length_mm / stock_x), about=(0.0, 0.0, 0.0))
+    return scale(copy.deepcopy(centered), by=(1.0, 1.0, length_mm / stock_x), about=(0.0, 0.0, 0.0))
 
 
 def oriented_motor():
@@ -120,7 +130,11 @@ def oriented_pillow():
     size = loaded.bounding_box().size
     if abs(float(size.Z) - 165.0) > 1.0 or abs(float(size.Y) - 82.5) > 1.0:
         return None
-    return Rot(0, 0, 90) * Rot(90, 0, 0) * loaded
+    turned = Rot(0, 0, 90) * Rot(90, 0, 0) * loaded
+    # Cones and tori on this housing are the grey spikes under the foot.
+    if "pillow" not in _FACET:
+        _FACET["pillow"] = facet_closed(turned, 0.8, 0.5, 0.25)
+    return _FACET["pillow"]
 
 
 def oriented_sprocket():
@@ -131,7 +145,11 @@ def oriented_sprocket():
     loaded = load_vendor_shape("VC-HB-2800")
     if loaded is None:
         return None
-    return Rot(90, 0, 0) * loaded
+    turned = Rot(90, 0, 0) * loaded
+    # Tooth fillets are tori. FreeCAD draws them as spikes.
+    if "sprocket" not in _FACET:
+        _FACET["sprocket"] = facet_closed(turned, 0.45, 0.35, 0.1)
+    return _FACET["sprocket"]
 
 
 def oriented_coupling():

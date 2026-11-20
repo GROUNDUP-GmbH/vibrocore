@@ -9,7 +9,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 1190.55 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 1500 >>
+<< /Length 1503 >>
 stream
 BT
 /F1 11 Tf
@@ -19,27 +19,27 @@ BT
 T*
 (1  VC-FR-4100  rev A  qty 2  Aluminium profile 50x100x1500) Tj
 T*
-(2  VC-FR-4150  rev A  qty 1  Bottom frame gusset) Tj
+(2  VC-FR-4120  rev A  qty 12  mk T-slot nut M8) Tj
 T*
-(3  VC-FR-4160  rev A  qty 1  Top frame gusset) Tj
+(3  VC-FR-4121  rev A  qty 30  mk cylinder screw M8) Tj
 T*
-(4  VC-FR-4170  rev A  qty 1  Mid frame gusset) Tj
+(4  VC-FR-4122  rev A  qty 3  mk angle bracket 40) Tj
 T*
-(5  VC-FR-4180  rev A  qty 1  Drive crossbar mk 2004) Tj
+(5  VC-FR-4182  rev A  qty 1  Gearbox mount plate) Tj
 T*
-(6  VC-FR-4182  rev A  qty 1  Gearbox mount plate) Tj
+(6  VC-FR-4183  rev A  qty 1  Gearbox side frame) Tj
 T*
-(7  VC-FR-4183  rev A  qty 1  Gearbox side frame) Tj
+(7  VC-FR-4184  rev A  qty 1  Gearbox rear anchor) Tj
 T*
-(8  VC-FR-4184  rev A  qty 1  Gearbox rear anchor) Tj
+(8  VC-FR-4185  rev A  qty 1  Lower front stiffener) Tj
 T*
-(9  VC-FR-4185  rev A  qty 1  Lower front stiffener) Tj
+(9  VC-FR-4186  rev A  qty 1  Lower rear stiffener) Tj
 T*
-(10  VC-FR-4186  rev A  qty 1  Lower rear stiffener) Tj
+(10  VC-FR-4190  rev A  qty 1  Front top stiffener) Tj
 T*
-(11  VC-FR-4190  rev A  qty 1  Front top stiffener) Tj
+(11  VC-FR-4195  rev A  qty 1  Rear top stiffener) Tj
 T*
-(12  VC-FR-4195  rev A  qty 1  Rear top stiffener) Tj
+(12  VC-FR-4198  rev A  qty 1  Upper profile mount) Tj
 T*
 (13  VC-FR-4200  rev A  qty 8  Profile connector) Tj
 T*
@@ -84,8 +84,8 @@ xref
 0000000058 00000 n 
 0000000115 00000 n 
 0000000248 00000 n 
-0000001800 00000 n 
+0000001803 00000 n 
 trailer << /Size 6 /Root 1 0 R >>
 startxref
-1870
+1873
 %%EOF

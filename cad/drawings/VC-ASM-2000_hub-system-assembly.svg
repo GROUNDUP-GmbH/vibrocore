@@ -11,21 +11,22 @@
 <text x="20" y="47" font-size="2.8" font-family="sans-serif">1      VC-HB-2100     A    1    Servo motor 1FL2104</text>
 <text x="20" y="51.2" font-size="2.8" font-family="sans-serif">2      VC-HB-2200     A    1    Planetary gearbox PLE120-040</text>
 <text x="20" y="55.400000000000006" font-size="2.8" font-family="sans-serif">3      VC-HB-2300     A    1    SINAMICS S200 servo drive</text>
-<text x="20" y="59.60000000000001" font-size="2.8" font-family="sans-serif">4      VC-HB-2500     A    1    Chain bearing shaft</text>
-<text x="20" y="63.80000000000001" font-size="2.8" font-family="sans-serif">5      VC-HB-2600     A    2    Pillow block SYJ 30 TF</text>
-<text x="20" y="68.00000000000001" font-size="2.8" font-family="sans-serif">6      VC-HB-2700     A    1    Duplex chain 10B-2</text>
-<text x="20" y="72.20000000000002" font-size="2.8" font-family="sans-serif">7      VC-HB-2800     A    1    Sprocket 10B-2 15T drive</text>
-<text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-HB-2810     A    1    Sprocket 10B-2 15T idle</text>
-<text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-HB-2820     A    1    Idler shaft</text>
-<text x="20" y="84.80000000000003" font-size="2.8" font-family="sans-serif">10     VC-HB-2830     A    1    Idler bearing bracket</text>
-<text x="20" y="89.00000000000003" font-size="2.8" font-family="sans-serif">11     VC-HB-2900     A    1    Chain tensioner</text>
-<text x="20" y="93.20000000000003" font-size="2.8" font-family="sans-serif">12     VC-HB-3100     A    2    Linear guide rail HGR20</text>
-<text x="20" y="97.40000000000003" font-size="2.8" font-family="sans-serif">13     VC-HB-3110     A    4    Linear carriage HGH20</text>
-<text x="20" y="101.60000000000004" font-size="2.8" font-family="sans-serif">14     VC-HB-3200     A    1    Carriage plate</text>
-<text x="20" y="105.80000000000004" font-size="2.8" font-family="sans-serif">15     VC-HB-3300     A    1    Fastener kit, hub</text>
-<text x="20" y="110.00000000000004" font-size="2.8" font-family="sans-serif">16     VC-HB-3400     A    1    Drag chain</text>
-<text x="20" y="114.20000000000005" font-size="2.8" font-family="sans-serif">17     VC-HB-3410     A    1    Chain-shaft encoder 1000 ppr</text>
-<text x="20" y="118.40000000000005" font-size="2.8" font-family="sans-serif">18     VC-HB-3420     A    1    Chain drive guard</text>
+<text x="20" y="59.60000000000001" font-size="2.8" font-family="sans-serif">4      VC-HB-2400     A    1    Elastomer coupling</text>
+<text x="20" y="63.80000000000001" font-size="2.8" font-family="sans-serif">5      VC-HB-2500     A    1    Chain bearing shaft</text>
+<text x="20" y="68.00000000000001" font-size="2.8" font-family="sans-serif">6      VC-HB-2600     A    2    Pillow block SYJ 30 TF</text>
+<text x="20" y="72.20000000000002" font-size="2.8" font-family="sans-serif">7      VC-HB-2700     A    1    Duplex chain 10B-2</text>
+<text x="20" y="76.40000000000002" font-size="2.8" font-family="sans-serif">8      VC-HB-2800     A    1    Sprocket 10B-2 15T drive</text>
+<text x="20" y="80.60000000000002" font-size="2.8" font-family="sans-serif">9      VC-HB-2810     A    1    Sprocket 10B-2 15T idle</text>
+<text x="20" y="84.80000000000003" font-size="2.8" font-family="sans-serif">10     VC-HB-2820     A    1    Idler shaft</text>
+<text x="20" y="89.00000000000003" font-size="2.8" font-family="sans-serif">11     VC-HB-2830     A    1    Idler bearing bracket</text>
+<text x="20" y="93.20000000000003" font-size="2.8" font-family="sans-serif">12     VC-HB-2900     A    1    Chain tensioner</text>
+<text x="20" y="97.40000000000003" font-size="2.8" font-family="sans-serif">13     VC-HB-3100     A    2    Linear guide rail HGR20</text>
+<text x="20" y="101.60000000000004" font-size="2.8" font-family="sans-serif">14     VC-HB-3110     A    4    Linear carriage HGH20</text>
+<text x="20" y="105.80000000000004" font-size="2.8" font-family="sans-serif">15     VC-HB-3200     A    1    Carriage plate</text>
+<text x="20" y="110.00000000000004" font-size="2.8" font-family="sans-serif">16     VC-HB-3300     A    1    Fastener kit, hub</text>
+<text x="20" y="114.20000000000005" font-size="2.8" font-family="sans-serif">17     VC-HB-3400     A    1    Drag chain</text>
+<text x="20" y="118.40000000000005" font-size="2.8" font-family="sans-serif">18     VC-HB-3410     A    1    Chain-shaft encoder 1000 ppr</text>
+<text x="20" y="122.60000000000005" font-size="2.8" font-family="sans-serif">19     VC-HB-3420     A    1    Chain drive guard</text>
 <text x="20" y="244" font-size="3" font-family="sans-serif">Schematic only. Component positions that are not dimensioned in the design documents are not drawn.</text>
 <text x="268" y="274" font-size="2.4" font-family="sans-serif">Legal owner</text>
 <text x="332" y="274" font-size="2.6" font-family="sans-serif" font-weight="700">Ground UP GmbH</text>

@@ -28,9 +28,9 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-ASM-1000` Sonic head assembly: Motor centre distance is only a minimum of 170 mm. It is not a frozen pitch, so the motors are not placed in the 3D model.
 - `VC-ASM-1000` Sonic head assembly: Isolator coordinates are not given.
 - `VC-ASM-2000` Hub system assembly: Carriage plate length and width are not given, only the 10 mm thickness.
-- `VC-ASM-2000` Hub system assembly: The SYJ 30 TF bore is Ø30. The gearbox output is Ø25 h7. The ROTEX hub is 32H7.
-- `VC-ASM-3000` Frame assembly: Profile connector types are not identified beyond mk standard corners or T-slot nuts.
+- `VC-ASM-2000` Hub system assembly: The placed ROTEX spider is 92 Sh-A. Its TKmax is 190 Nm. Gearbox T2max is 365 Nm. Confirm spider 64 Sh-D and hub 020285103000.
 - `VC-ASM-3000` Frame assembly: Stabiliser feet have no selected order codes.
+- `VC-ASM-3000` Frame assembly: mk 5104 end-thread coordinates are not in the 01/2024 price list. The model uses the inner ribs. Confirm the drawing.
 - `VC-ASM-4000` Power system assembly: no solid. Dimensions were not complete enough to model.
 - `VC-ASM-5000` Control system assembly: no solid. Dimensions were not complete enough to model.
 - `VC-ASM-8000` Field subsystems assembly: no solid. Dimensions were not complete enough to model.
@@ -85,15 +85,15 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-CT-6700` Wiring harness: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6800` RevPi Connect 4: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6810` RevPi DIO module: no solid. Dimensions were not complete enough to model.
-- `VC-FR-4100` Aluminium profile 50x100x1500: Cut length of the drive-side upright. The purchased length stays 1500 mm. The pose scales that tube along the extrusion only.
-- `VC-FR-4150` Bottom frame gusset: Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
-- `VC-FR-4160` Top frame gusset: Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
-- `VC-FR-4170` Mid frame gusset: Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
-- `VC-FR-4180` Drive crossbar mk 2004: Final cut length follows the profile pitch. The 300 mm pitch is TBD. Not in BOM.md v1.
+- `VC-FR-4100` Aluminium profile 50x100x1500: mk machining 5104 gives 4x M8, but the hole coordinates are not in the price list. Confirm the drawing.
+- `VC-FR-4150` Bottom frame gusset: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4160` Top frame gusset: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4170` Mid frame gusset: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4180` Drive crossbar mk 2004: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4182` Gearbox mount plate: M6 property class. The study uses 8.8. Not in BOM.md v1.
-- `VC-FR-4183` Gearbox side frame: Bolt grade and the T-slot nuts in the mk 2004. Not in BOM.md v1.
-- `VC-FR-4184` Gearbox rear anchor: Weld size where the anchor meets VC-FR-4182. Not in BOM.md v1.
-- `VC-FR-4185` Lower front stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
+- `VC-FR-4183` Gearbox side frame: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4184` Gearbox rear anchor: no solid. Dimensions were not complete enough to model.
+- `VC-FR-4185` Lower front stiffener: no solid. Dimensions were not complete enough to model.
 - `VC-FR-4186` Lower rear stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4190` Front top stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4195` Rear top stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
@@ -117,10 +117,8 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-GP-7410` DT325 liner retainer HD: no solid. Dimensions were not complete enough to model.
 - `VC-HB-2110` Lift motor bracket: Not placed. VC-FR-4182 carries the gearbox. The motor bolts to the input.
 - `VC-HB-2200` Planetary gearbox PLE120-040: Input adapter of article 100460948 was configured for 1FL2104-4AG10. Re-check it for the current oil seal and for successor 1FL2104-4BG. The STEP recess is 4.4 mm deep and has no keyway.
-- `VC-HB-2200` Planetary gearbox PLE120-040: The chain sprocket sits on the output shaft. Check the radial load against the Neugart catalogue.
 - `VC-HB-2300` SINAMICS S200 servo drive: PROFINET order 6SL5510-1BB11-0AF0 if the PLC does not use pulse and direction. The price is not a quote.
-- `VC-HB-2500` Chain bearing shaft: This shaft does not drive the chain. The sprocket stays on the Ø25 gearbox shaft.
-- `VC-HB-2600` Pillow block SYJ 30 TF: Bore is Ø30. The gearbox output is Ø25 h7 and the ROTEX hub is 32H7. This bearing fits neither.
+- `VC-HB-2500` Chain bearing shaft: no solid. Dimensions were not complete enough to model.
 - `VC-HB-2700` Duplex chain 10B-2: Purchase length 3.2 m stays a placeholder until the lift height is decided.
 - `VC-HB-2700` Duplex chain 10B-2: Breaking load is not stated by G&G. Do not assign a value.
 - `VC-HB-2800` Sprocket 10B-2 15T drive: Finish taper bush 1210 to Ø25 h7 for the output shaft and the 8x7x40 key. Not in BOM.md v1.
@@ -207,6 +205,10 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 ## Modelled in this revision
 
 - `VC-FR-4100` Aluminium profile 50x100x1500: box, fidelity `envelope` (docs/engineering/BOM.md#3).
+- `VC-FR-4120` mk T-slot nut M8: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
+- `VC-FR-4121` mk cylinder screw M8: cylinder, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
+- `VC-FR-4122` mk angle bracket 40: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
+- `VC-FR-4198` Upper profile mount: box, fidelity `envelope` (docs/engineering/MAST-LAYOUT.md).
 - `VC-FR-4300` Bottom steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).
 - `VC-FR-4400` Top steel plate: box, fidelity `partial` (docs/engineering/BOM.md#3).
 - `VC-SH-1100` OLI MVE 400/6-HF: box, fidelity `envelope` (docs/design/SONIC_HEAD.md#2.2).
