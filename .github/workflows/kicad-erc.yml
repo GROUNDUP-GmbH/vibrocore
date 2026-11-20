@@ -1,5 +1,9 @@
 name: KiCad ERC
 
+# The KiCad project is the superseded reference for VC-SCH-5000 revision 0C.
+# The drawing of record is the QElectroTech project, revision 0D.
+# tests/test_qet_schematic.py checks that project. It does not need QElectroTech.
+
 on:
   push:
   pull_request:

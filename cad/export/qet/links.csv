@@ -1,0 +1,305 @@
+element;link_type;linked_to;folio;status
+X1:1;Terminale;;2;linked
+X1:2;Terminale;;2;linked
+X1:3;Terminale;;2;linked
+Q1;Master;;2;UNRESOLVED
+Q1;Master;;2;UNRESOLVED
+QF1;Master;;2;UNRESOLVED
+QF1;Master;;2;UNRESOLVED
+F1;Master;;2;UNRESOLVED
+F1;Master;;2;UNRESOLVED
+Going arrow;NextReport;;2;linked
+Going arrow;NextReport;;2;linked
+PE1;Terminale;;2;linked
+F2;Master;;3;UNRESOLVED
+F2;Master;;3;UNRESOLVED
+Going arrow;NextReport;;3;linked
+Going arrow;NextReport;;3;linked
+F2;Master;;3;UNRESOLVED
+F3;Master;;3;UNRESOLVED
+F3;Master;;3;UNRESOLVED
+Going arrow;NextReport;;3;linked
+Going arrow;NextReport;;3;linked
+F4;Master;;3;UNRESOLVED
+F4;Master;;3;UNRESOLVED
+Going arrow;NextReport;;3;linked
+Going arrow;NextReport;;3;linked
+F5;Master;;3;UNRESOLVED
+F5;Master;;3;UNRESOLVED
+Going arrow;NextReport;;3;linked
+Going arrow;NextReport;;3;linked
+Coming arrow;PreviousReport;;3;linked
+Coming arrow;PreviousReport;;3;linked
+Coming arrow;PreviousReport;;3;linked
+Coming arrow;PreviousReport;;3;linked
+Going arrow;NextReport;;4;linked
+Going arrow;NextReport;;4;linked
+Coming arrow;PreviousReport;;4;linked
+Coming arrow;PreviousReport;;4;linked
+Coming arrow;PreviousReport;;4;linked
+Coming arrow;PreviousReport;;4;linked
+X1:4;Terminale;;4;linked
+PE2;Terminale;;4;linked
+K1;Terminale;;5;linked
+S1;Master;;5;UNRESOLVED
+K1;Terminale;;5;linked
+S10;Master;;5;UNRESOLVED
+K1;Terminale;;5;linked
+K1;Terminale;;5;linked
+S1;Master;;5;UNRESOLVED
+K1;Terminale;;5;linked
+S1;Master;;5;UNRESOLVED
+Coming arrow;PreviousReport;;5;linked
+Going arrow;NextReport;;5;linked
+K1;Master;;5;UNRESOLVED
+Coming arrow;PreviousReport;;5;linked
+Coming arrow;PreviousReport;;5;linked
+Coming arrow;PreviousReport;;6;linked
+K1;Slave;;6;UNRESOLVED
+Going arrow;NextReport;;6;linked
+Going arrow;NextReport;;6;linked
+Coming arrow;PreviousReport;;6;linked
+K1;Slave;;6;UNRESOLVED
+Going arrow;NextReport;;6;linked
+Going arrow;NextReport;;6;linked
+K1;Slave;;6;UNRESOLVED
+K1;Slave;;6;UNRESOLVED
+Coming arrow;PreviousReport;;6;linked
+Going arrow;NextReport;;6;linked
+A2;Terminale;;7;linked
+A2;Terminale;;7;linked
+A2;Terminale;;7;linked
+A2;Terminale;;7;linked
+Coming arrow;PreviousReport;;7;linked
+Coming arrow;PreviousReport;;7;linked
+A2;Terminale;;7;linked
+A2;Terminale;;7;linked
+A2;Terminale;;7;linked
+X4:3;Terminale;;7;linked
+X4:2;Terminale;;7;linked
+X4:1;Terminale;;7;linked
+X4:4;Terminale;;7;linked
+A2;Terminale;;7;linked
+A2;Terminale;;7;linked
+X6:1;Terminale;;7;linked
+X6:2;Terminale;;7;linked
+M1;Terminale;;7;linked
+M1;Terminale;;7;linked
+A2;Terminale;;8;linked
+Coming arrow;PreviousReport;;8;linked
+A2;Terminale;;8;linked
+Coming arrow;PreviousReport;;8;linked
+A2;Terminale;;8;linked
+A2;Terminale;;8;linked
+A2;Terminale;;8;linked
+Coming arrow;PreviousReport;;8;linked
+A2;Terminale;;8;linked
+Coming arrow;PreviousReport;;8;linked
+A2;Terminale;;8;linked
+Coming arrow;PreviousReport;;8;linked
+A2;Terminale;;8;linked
+Coming arrow;PreviousReport;;8;linked
+A2;Terminale;;8;linked
+Coming arrow;PreviousReport;;8;linked
+A2;Terminale;;8;linked
+Coming arrow;PreviousReport;;8;linked
+A2;Terminale;;8;linked
+Coming arrow;PreviousReport;;8;linked
+A2;Terminale;;8;linked
+X5:1;Terminale;;8;linked
+X5:2;Terminale;;8;linked
+A2;Terminale;;8;linked
+U1;Terminale;;8;linked
+A2;Terminale;;8;linked
+U1;Terminale;;8;linked
+A2;Terminale;;8;linked
+U1;Terminale;;8;linked
+A2;Terminale;;8;linked
+U1;Terminale;;8;linked
+A2;Terminale;;8;linked
+A2;Terminale;;8;linked
+Going arrow;NextReport;;8;linked
+Going arrow;NextReport;;8;linked
+A3;Terminale;;9;linked
+A3;Terminale;;9;linked
+A3;Terminale;;9;linked
+Coming arrow;PreviousReport;;9;linked
+Coming arrow;PreviousReport;;9;linked
+A3;Terminale;;9;linked
+F21;Master;;9;UNRESOLVED
+X2:1;Terminale;;9;linked
+A3;Terminale;;9;linked
+F21;Master;;9;UNRESOLVED
+X2:2;Terminale;;9;linked
+A3;Terminale;;9;linked
+F21;Master;;9;UNRESOLVED
+X2:3;Terminale;;9;linked
+X2:4;Terminale;;9;linked
+Coming arrow;PreviousReport;;10;linked
+F22;Master;;10;UNRESOLVED
+X3:1;Terminale;;10;linked
+Coming arrow;PreviousReport;;10;linked
+F22;Master;;10;UNRESOLVED
+X3:3;Terminale;;10;linked
+Coming arrow;PreviousReport;;10;linked
+F22;Master;;10;UNRESOLVED
+X3:2;Terminale;;10;linked
+X3:4;Terminale;;10;linked
+A3;Terminale;;11;linked
+Coming arrow;PreviousReport;;11;linked
+A3;Terminale;;11;linked
+Coming arrow;PreviousReport;;11;linked
+A3;Terminale;;11;linked
+Coming arrow;PreviousReport;;11;linked
+A3;Terminale;;11;linked
+Coming arrow;PreviousReport;;11;linked
+A3;Terminale;;11;linked
+A3;Terminale;;11;linked
+Coming arrow;PreviousReport;;11;linked
+A3;Terminale;;11;linked
+Coming arrow;PreviousReport;;11;linked
+A3;Terminale;;11;linked
+Coming arrow;PreviousReport;;11;linked
+A3;Terminale;;11;linked
+Coming arrow;PreviousReport;;11;linked
+A3;Terminale;;11;linked
+Coming arrow;PreviousReport;;11;linked
+A3;Terminale;;11;linked
+Coming arrow;PreviousReport;;11;linked
+A3;Terminale;;11;linked
+A4;Terminale;;12;linked
+Coming arrow;PreviousReport;;12;linked
+A4;Terminale;;12;linked
+Coming arrow;PreviousReport;;12;linked
+A4;Terminale;;12;linked
+Coming arrow;PreviousReport;;12;linked
+A4;Terminale;;12;linked
+Coming arrow;PreviousReport;;12;linked
+A4;Terminale;;12;linked
+Coming arrow;PreviousReport;;12;linked
+A4;Terminale;;12;linked
+Coming arrow;PreviousReport;;12;linked
+A4;Terminale;;12;linked
+Going arrow;NextReport;;12;linked
+A4;Terminale;;12;linked
+A4;Terminale;;12;linked
+A5;Terminale;;12;linked
+A5;Terminale;;13;linked
+Coming arrow;PreviousReport;;13;linked
+A5;Terminale;;13;linked
+Coming arrow;PreviousReport;;13;linked
+A5;Terminale;;13;linked
+Coming arrow;PreviousReport;;13;linked
+A5;Terminale;;13;linked
+Coming arrow;PreviousReport;;13;linked
+A5;Terminale;;13;linked
+Coming arrow;PreviousReport;;13;linked
+A5;Terminale;;13;linked
+Coming arrow;PreviousReport;;13;linked
+A5;Terminale;;13;linked
+Coming arrow;PreviousReport;;13;linked
+A5;Terminale;;13;linked
+Coming arrow;PreviousReport;;13;linked
+A5;Terminale;;13;linked
+Coming arrow;PreviousReport;;13;linked
+A5;Terminale;;13;linked
+Coming arrow;PreviousReport;;13;linked
+A5;Terminale;;13;linked
+Coming arrow;PreviousReport;;13;linked
+A5;Terminale;;13;linked
+Coming arrow;PreviousReport;;13;linked
+A5;Terminale;;13;linked
+Coming arrow;PreviousReport;;13;linked
+A5;Terminale;;13;linked
+Going arrow;NextReport;;13;linked
+A5;Terminale;;13;linked
+Going arrow;NextReport;;13;linked
+A5;Terminale;;13;linked
+Going arrow;NextReport;;13;linked
+A5;Terminale;;13;linked
+Going arrow;NextReport;;13;linked
+A5;Terminale;;13;linked
+Going arrow;NextReport;;13;linked
+A5;Terminale;;13;linked
+Going arrow;NextReport;;13;linked
+A5;Terminale;;13;linked
+Going arrow;NextReport;;13;linked
+X7:1;Terminale;;14;linked
+Going arrow;NextReport;;14;linked
+X7:2;Terminale;;14;linked
+Going arrow;NextReport;;14;linked
+X7:3;Terminale;;14;linked
+Going arrow;NextReport;;14;linked
+B1;Terminale;;14;linked
+B1;Terminale;;14;linked
+B1;Terminale;;14;linked
+X7:4;Terminale;;14;linked
+Going arrow;NextReport;;14;linked
+X7:5;Terminale;;14;linked
+Coming arrow;PreviousReport;;14;linked
+Going arrow;NextReport;;14;linked
+X7:6;Terminale;;14;linked
+Coming arrow;PreviousReport;;14;linked
+Going arrow;NextReport;;14;linked
+X7:7;Terminale;;14;linked
+Going arrow;NextReport;;14;linked
+X7:8;Terminale;;14;linked
+Going arrow;NextReport;;14;linked
+X7:9;Terminale;;14;linked
+Coming arrow;PreviousReport;;14;linked
+K3;Slave;;15;UNRESOLVED
+K2;Master;;15;UNRESOLVED
+Coming arrow;PreviousReport;;15;linked
+K2;Slave;;15;UNRESOLVED
+K3;Master;;15;UNRESOLVED
+Coming arrow;PreviousReport;;15;linked
+Coming arrow;PreviousReport;;15;linked
+K2;Slave;;15;UNRESOLVED
+X8:1;Terminale;;15;linked
+M4;Terminale;;15;linked
+Coming arrow;PreviousReport;;15;linked
+K2;Slave;;15;UNRESOLVED
+K3;Slave;;15;UNRESOLVED
+X8:2;Terminale;;15;linked
+M4;Terminale;;15;linked
+Coming arrow;PreviousReport;;15;linked
+K3;Slave;;15;UNRESOLVED
+A10;Terminale;;16;linked
+Coming arrow;PreviousReport;;16;linked
+A10;Terminale;;16;linked
+Coming arrow;PreviousReport;;16;linked
+A10;Terminale;;16;linked
+Coming arrow;PreviousReport;;16;linked
+A10;Terminale;;16;linked
+Coming arrow;PreviousReport;;16;linked
+A10;Terminale;;16;linked
+A10;Terminale;;16;linked
+X10:1;Terminale;;16;linked
+X10:2;Terminale;;16;linked
+M5;Terminale;;16;linked
+M5;Terminale;;16;linked
+M6;Terminale;;16;linked
+M6;Terminale;;16;linked
+Coming arrow;PreviousReport;;17;linked
+X9:1;Terminale;;17;linked
+A6;Terminale;;17;linked
+X9:3;Terminale;;17;linked
+Coming arrow;PreviousReport;;17;linked
+A6;Terminale;;17;linked
+U2;Terminale;;17;linked
+X9:4;Terminale;;17;linked
+A6;Terminale;;17;linked
+U2;Terminale;;17;linked
+X9:6;Terminale;;17;linked
+A6;Terminale;;17;linked
+X9:2;Terminale;;17;linked
+X9:5;Terminale;;17;linked
+X9:7;Terminale;;17;linked
+X9:8;Terminale;;17;linked
+PE3;Terminale;;17;linked
+A7;Terminale;;18;linked
+A7;Terminale;;18;linked
+A7;Terminale;;18;linked
+Coming arrow;PreviousReport;;18;linked
+Coming arrow;PreviousReport;;18;linked
+Coming arrow;PreviousReport;;18;linked

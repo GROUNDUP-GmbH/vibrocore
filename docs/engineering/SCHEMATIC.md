@@ -1,39 +1,64 @@
 # Cabinet schematic
 
-Drawing VC-SCH-5000 is the cabinet schematic.
-The KiCad 8 project is `cad/kicad/vibrocore-control/`.
-The PDF is `cad/export/kicad/vibrocore-control.pdf`.
-The terminal list and the cable list are in that same directory.
-A wire is a drawn segment.
-A label names that wire.
-A global label is used only when the net leaves the sheet.
-The same global label on two sheets is one net.
-The notes sheet lists every wire number that leaves its sheet.
-Each circuit sheet keeps its notes in one band above the title block.
-A marker such as (1) is the only note in the drawing area.
-A note that does not fit in the band moves to the notes sheet.
-Each symbol shows the reference, the maker and the short type, and the Ground UP article.
-The title block revision is 0C.
-Regenerate the sheets with `python3 cad/kicad/vibrocore-control/generate_schematic.py`.
-Run ERC with `kicad-cli sch erc --severity-all --exit-code-violations`.
+Drawing VC-SCH-5000 revision 0D is the cabinet schematic.
+The drawing of record is the QElectroTech project `cad/electrical/VC-SCH-5000/VC-SCH-5000.qet`.
+The PDF is `cad/export/qet/VC-SCH-5000.pdf`.
+One PNG per folio is in `cad/export/qet/png/`.
+The title block reads Ground UP GmbH, file VC-SCH-5000, revision 0D, date 2026-11-20.
+Regenerate the project with `python3 cad/electrical/VC-SCH-5000/generate_qet.py`.
+The generator reads the component names, the article numbers, the terminal list and the cable list from the KiCad generator.
+It does not add a part.
 
-## Sheets
+The KiCad 8 project `cad/kicad/vibrocore-control/` is a superseded reference.
+Its revision is 0C.
+Keep the files.
+Do not treat the KiCad PDF as the drawing of record.
+The KiCad ERC job still checks that reference.
 
-| Sheet | File | Content |
+Each folio has a column and row grid.
+That grid is the current-path reference.
+Power is at the top.
+Control is below.
+The flow is left to right.
+A wire is orthogonal.
+A junction dot is a connection.
+A crossing without a dot is not a connection.
+Notes sit in the numbered notes field.
+A marker such as (1) is the only note mark in the drawing area.
+The terminal plan is folio 19.
+The cable list is folio 20.
+QElectroTech writes the component list, the wire list, the net list and the conductor list into `cad/export/qet/`.
+The terminal-strip editor did not write a separate file.
+Folio 19 is the terminal plan.
+The conductor export carries the section and the colour.
+It does not name the harness cables.
+Folio 20 names those cables.
+
+## Folios
+
+| Folio | Title | Content |
 | --- | --- | --- |
-| 1 | `vibrocore-control.kicad_sch` | Index |
-| 2 | `01-power.kicad_sch` | Mains, isolator, RCD and the branch MCBs |
-| 3 | `01b-supplies.kicad_sch` | Both 24 V supplies, 0 V and the PE bond |
-| 4 | `02-safety.kicad_sch` | E-stop, PNOZ s4, STO, reset and feedback |
-| 5 | `03-hub.kicad_sch` | S200, 1FL2104, encoder, brake, pulse and direction |
-| 6 | `04-sonic.kicad_sch` | ATV320 and two OLI motors |
-| 7 | `05-revpi.kicad_sch` | RevPi Connect 4 and one DIO |
-| 8 | `06-field.kicad_sch` | Limits, enabling switch, index sensor and beacon |
-| 9 | `06-tilt.kicad_sch` | Tilt contactors and the lift H-bridge |
-| 10 | `07-rotation.kicad_sch` | Proposed rod-rotation drive |
-| 11 | `08-network.kicad_sch` | RUT241, Ethernet and RS-485 |
-| 12 | `09-terminals.kicad_sch` | Terminal strips X1 to X10, with the wire number and the section |
-| 13 | `10-notes.kicad_sch` | Notes that do not fit on a sheet, and the net list |
+| 1 | Cover and folio index | Drawing index |
+| 2 | Mains incoming | Instagrid, isolator Q1, RCD QF1, breaker F1, PE |
+| 3 | Branch feeders | F2 GV2L20, F3, F4 and F5 |
+| 4 | 24 V supplies | G1, G2, F14, F24, 0 V and bond W1 |
+| 5 | E-stop and PNOZ inputs | E-stop, reset and the PNOZ s4 coil |
+| 6 | PNOZ outputs | STO channels and the monitor contact |
+| 7 | S200 power and motor | 6SL5510 mains and the 1FL2104 |
+| 8 | S200 control | STO, X124, encoder, pulse and RS-485 |
+| 9 | ATV320 motor A | Drive output and motor A |
+| 10 | ATV320 motor B | Drive output and motor B, V and W swapped at X3 |
+| 11 | ATV320 control | STO, digital inputs, relays and RJ45 |
+| 12 | RevPi supply | RevPi Connect 4, order 100378 |
+| 13 | DIO channels | RevPi DIO, order 100197 |
+| 14 | Field devices | Limits, enabling switch, index sensor and beacon |
+| 15 | Tilt | Finder 62.32 contactors and the tilt actuator |
+| 16 | Lift | H-bridge and the lift actuators |
+| 17 | Rotation proposal | Nanotec proposal, not released |
+| 18 | Network | RUT241, Ethernet and RS-485 |
+| 19 | Terminal plan | Strips X1 to X10 |
+| 20 | Cable list | Harness cables |
+| 21 | Notes | Points that apply to the whole drawing |
 
 ## Controller
 
@@ -207,5 +232,9 @@ The energy-chain length for a 1300 mm stroke is TODO.
 There is no slip ring.
 The rotation cable is not released.
 The feeder and the Instagrid may trip on the combined inrush.
+The terminal list gives 211_24C as 1.0 mm2.
+The supplies note calls the general 24 V rail 2.5 mm2.
+Both statements are on revision 0C.
+This drawing keeps both.
 No new EUR price is sourced.
 Do not copy the old EUR 180-300 band onto the ATV320.
