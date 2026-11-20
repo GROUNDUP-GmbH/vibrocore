@@ -36,7 +36,15 @@ def _half_shell(inner_r: float, outer_r: float, width: float, upper: bool):
     return ring - cutter
 
 
-def duplex_chain(z_drive: float, z_idler: float, pitch_radius: float, tip_radius: float, axis_x: float, gap: float):
+def duplex_chain(
+    z_drive: float,
+    z_idler: float,
+    pitch_radius: float,
+    tip_radius: float,
+    axis_x: float,
+    gap: float,
+    axis_y: float = 0.0,
+):
     """One compound for both strands and both wraps. World axes. Z is up."""
     roller_r = CHAIN_ROLLER_DIAMETER_MM / 2.0
     outer_r = pitch_radius + roller_r
@@ -52,13 +60,13 @@ def duplex_chain(z_drive: float, z_idler: float, pitch_radius: float, tip_radius
     pieces = []
     for sign in (1.0, -1.0):
         for offset in (row, -row):
-            blank = Pos(axis_x + sign * pitch_radius, offset, mid_z) * strand
-            trimmed = blank - Pos(axis_x, 0.0, z_drive) * cutter - Pos(axis_x, 0.0, z_idler) * cutter
+            blank = Pos(axis_x + sign * pitch_radius, axis_y + offset, mid_z) * strand
+            trimmed = blank - Pos(axis_x, axis_y, z_drive) * cutter - Pos(axis_x, axis_y, z_idler) * cutter
             pieces.extend(_leaves(trimmed))
     for z_center, upper in ((z_drive, False), (z_idler, True)):
         shell = _half_shell(cut_r, outer_r, width, upper)
         for offset in (row, -row):
-            pieces.extend(_leaves(Pos(axis_x, offset, z_center) * shell))
+            pieces.extend(_leaves(Pos(axis_x, axis_y + offset, z_center) * shell))
     if not pieces:
         raise ValueError("duplex chain produced no solid")
     return Compound(children=pieces)

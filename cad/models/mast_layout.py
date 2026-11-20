@@ -137,9 +137,7 @@ HEAD_FRONT_GAP_MM = 10.0
 BOTTOM_PLATE_REAR_OVERHANG_MM = 0.0
 # VC-FR-4500 closed bore. It guides the 82.55 mm casing VC-GP-7100, not the column.
 CASING_GUIDE_BORE_DIAMETER_MM = 83.0
-# The chain axis is the mast mid-plane (X = 0), in the gap between the uprights.
-# The lift motor sits above the bottom plate, outside the head sweep on the drive side.
-# The brake body is flush with the profile rear face and does not enter the tilt zone.
+# Old chain mid-plane. The drive sprocket now shares the gearbox axis.
 CHAIN_AXIS_X_MM = 0.0
 # Draft sheet for the frame gussets. Not a shop measurement.
 GUSSET_SHEET_THICKNESS_MM = 4.0
@@ -164,6 +162,8 @@ GEARBOX_FLANGE_MM = 115.0
 GEARBOX_LENGTH_MM = 204.0
 # Output shaft, from the output flange face to the tip. It is inside the 204 mm.
 OUTPUT_SHAFT_LENGTH_MM = 55.0
+# VC-FR-4182. The output flange bolts to this plate. The sprocket sits outside it.
+MOUNT_PLATE_THICKNESS_MM = 12.0
 # Siemens 1FL2104-4AG11-1MC0. Flange AB is 81 mm.
 # 186.6 mm is the body behind the flange face. The STEP shaft adds 40 mm.
 # Overall length including that shaft is 226.6 mm.

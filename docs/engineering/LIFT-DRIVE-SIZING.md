@@ -66,7 +66,9 @@ That is above T2max.
 The previous PLPE120 at i = 40 has a cyclic torque of 172 Nm.
 A hard extraction is about 187 Nm. That gearbox is above its cyclic torque.
 PLE120 at i = 40 stays below T2Z for the same case.
-The chain load goes into the separate shaft, not into the gearbox.
+The drive sprocket sits on the gearbox output shaft.
+The chain radial load goes into that shaft.
+Check it against the Neugart radial rating. Do not assume the old separate shaft.
 
 ## 4. Power loss during pull-out
 
@@ -112,7 +114,28 @@ The Neugart input adapter of article 100460948 was configured for 1FL2104-4AG10.
 Re-check that adapter for the successor.
 The current STEP oil seal extends about 8 mm. The gearbox recess is 4.4 mm deep and has no keyway.
 
-## 6. Sources
+## 6. Mount
+
+VC-FR-4182 is a 12 mm S355 plate.
+The output flange bolts to it with four M6 screws on PCD 90 mm.
+That circle is the pattern measured on the vendor solid.
+The output pilot is Ø80 mm. The plate bore is Ø84 mm.
+The sprocket sits on the shaft outside the plate.
+
+T2max is 365 Nm.
+Each bolt sees 365000 N·mm / (4 × 45 mm) = 2028 N.
+An M6-8.8 proof load is about 11.6 kN. The bolts are inside that load.
+A 12 mm by 130 mm strip has section modulus 3120 mm³.
+365000 N·mm / 3120 mm³ is 117 MPa.
+That is below 160 MPa for this study.
+
+The gearbox and the motor are about 11.8 kg.
+VC-FR-4183 welds to the plate and bolts to the drive-side mk 2004.
+VC-FR-4184 anchors the input end and lands on the bottom plate.
+The motor bolts to the input face after that anchor.
+The input face stays clear.
+
+## 7. Sources
 
 1. Siemens datasheet 1FL2104-4AG11-1MC0, generated 2026-11-20.
    https://mall.industry.siemens.com/spice/docuservice/rest/document.spring?articleNumber=1FL21044AG111MC0&documentGroup=TED&documentId=DCS_DATASHEET_CLEANED&language=en&region=ww

@@ -99,21 +99,21 @@ The sizing and the torque limit are in [LIFT-DRIVE-SIZING.md](../engineering/LIF
 | Chain length           | 3.2 m placeholder until lift height |
 | Lubrication            | Pre-greased + periodic oil          |
 
-### 3.4 Drive Shaft (Separate from Gearbox Output)
+### 3.4 Drive sprocket on the gearbox output
 
-The gearbox output connects to a **separately mounted drive shaft** via an
-elastomer coupling. This shaft carries the drive sprocket and is supported by
-two self-aligning ball bearings in pillow blocks bolted to the base plate.
+The drive sprocket sits on the PLE120 output shaft.
+The shaft is Ø25 h7 by 55 mm, with key DIN 6885-A-8×7×40.
+The taper bush 1210 is finished to that bore.
+There is no separate drive shaft and no coupling in this pose.
+The chain radial load goes into the gearbox output bearing.
+Check that load against the Neugart catalogue. It is an open point.
 
 | Parameter              | Value                              |
 |------------------------|------------------------------------|
-| Shaft diameter         | 25–30 mm                           |
-| Coupling               | R+W EKH / KTR ROTEX 28            |
-| Bearings               | UCP 205/206 pillow blocks          |
-| Sprocket mount         | Taper-lock bush                    |
-
-**Rationale:** The chain sprocket applies radial loads that would damage the
-gearbox output bearings if directly mounted. The separate shaft absorbs these loads.
+| Shaft                  | Gearbox output, Ø25 h7 × 55 mm     |
+| Key                    | DIN 6885-A-8×7×40                  |
+| Sprocket mount         | Taper bush 1210, bored to Ø25 mm   |
+| Coupling               | Not placed                         |
 
 ## 4. Force Analysis
 

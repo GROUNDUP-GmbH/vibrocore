@@ -873,21 +873,62 @@ parts:
   - Final cut length follows the profile pitch. The 300 mm pitch is TBD. Not in BOM.md v1.
   notes: Draft. Cut this bar to length. Do not change the purchased 1500 mm uprights to hide the height deficit.
 - part_number: VC-FR-4182
-  name: Gearbox flange
+  name: Gearbox mount plate
   revision_index: 0
   revision_letter: A
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: Draft horizontal S355 plate. Sits on the bottom plate on the drive side and runs out under the
-    gearbox. It does not cross the mast centre. The gearbox housing rests on it.
+  spec: S355 plate, 12 mm. The PLE120 output flange bolts to it. Pilot bore Ø84 mm. Four holes Ø6.6 mm
+    on PCD 90 mm, on the measured output pattern. The output shaft and the sprocket pass the bore.
+    Welded and bolted to the side frame VC-FR-4183.
   legacy_ref: draft-fr-4182
   supplier_id: custom_eu
   material: S355
   plm_material: s355
+  mass_kg: 1.12
+  mass_note: Solid volume at 7850 kg/m3. Holes are already cut.
   unknowns:
-  - Thickness, outline and the bolt pattern. Not in BOM.md v1.
-  notes: Draft. Made part. Do not manufacture from this revision.
+  - M6 property class. The study uses 8.8. Not in BOM.md v1.
+  notes: Draft. Made part. Fit the gearbox bolts before the sprocket. The sprocket covers the bolt heads.
+- part_number: VC-FR-4183
+  name: Gearbox side frame
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: S355 side frame on the drive side. A pad with four Ø9 mm holes bolts to the drive-side mk 2004.
+    Two rails are welded to the mount plate VC-FR-4182 and to that pad. The lower rail also sits on
+    the bottom plate.
+  legacy_ref: draft-fr-4183
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  mass_kg: 0.68
+  mass_note: Solid volume at 7850 kg/m3.
+  unknowns:
+  - Bolt grade and the T-slot nuts in the mk 2004. Not in BOM.md v1.
+  notes: Draft. Made part. Welded and bolted to VC-FR-4182. Do not manufacture from this revision.
+- part_number: VC-FR-4184
+  name: Gearbox rear anchor
+  revision_index: 0
+  revision_letter: A
+  supply: subcontract
+  subsystem: frame
+  category: Frame
+  spec: S355 anchor at the gearbox input end. A cheek and a beam meet the mount plate on the gearbox
+    side of the output flange. A strap clears the housing top. A link runs around the plate onto the
+    bottom plate. The input face stays clear for the motor.
+  legacy_ref: draft-fr-4184
+  supplier_id: custom_eu
+  material: S355
+  plm_material: s355
+  mass_kg: 3.14
+  mass_note: Solid volume at 7850 kg/m3.
+  unknowns:
+  - Weld size where the anchor meets VC-FR-4182. Not in BOM.md v1.
+  notes: Draft. Made part. Fit this anchor before the motor. Do not manufacture from this revision.
 - part_number: VC-FR-4185
   name: Lower front stiffener
   revision_index: 0
@@ -1232,16 +1273,14 @@ parts:
   supply: subcontract
   subsystem: hub
   category: Hub
-  spec: Draft steel shelf. Holds the Siemens servo above the bottom plate. The motor axis is parallel
-    to the sprocket shaft. The gear teeth that drop the drive onto the chain shaft are not selected.
-    Nothing enters the reserved volume behind the rear faces.
+  spec: Not placed. The gearbox mount plate VC-FR-4182 carries the train. The motor bolts to the gearbox input.
   legacy_ref: draft-hb-2110
   supplier_id: custom_eu
   material: S355
   plm_material: s355
   unknowns:
-  - Plate thickness, bolt size and weld sizes. Not in BOM.md v1.
-  notes: Draft. Made part. Do not manufacture from this revision.
+  - Not placed. VC-FR-4182 carries the gearbox. The motor bolts to the input.
+  notes: Not in this pose. Do not manufacture from this revision.
 - part_number: VC-HB-2200
   name: Planetary gearbox PLE120-040
   revision_index: 0
@@ -1265,6 +1304,7 @@ parts:
   unknowns:
   - Input adapter of article 100460948 was configured for 1FL2104-4AG10. Re-check it for the current
     oil seal and for successor 1FL2104-4BG. The STEP recess is 4.4 mm deep and has no keyway.
+  - The chain sprocket sits on the output shaft. Check the radial load against the Neugart catalogue.
 - part_number: VC-HB-2300
   name: SINAMICS S200 servo drive
   revision_index: 0
@@ -1289,14 +1329,12 @@ parts:
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: KTR ROTEX 28, torque only, between gearbox and drive shaft.
+  spec: KTR ROTEX 28. Not placed. The drive sprocket sits on the gearbox output shaft.
   legacy_ref: '2.20'
   estimate_eur_low: 60
   estimate_eur_high: 100
-  notes: 'The STEP set is a 32H7 hub with keyway, an unbored hub and a 92 Sh-A spider. See
-    cad/vendor/VC-HB-2400/SOURCE.md.'
-  unknowns:
-  - Gearbox output is Ø25 mm. The STEP hub is 32H7, so the bore is not a fit. The hub is seated on the journal. The chain-side hub is unbored.
+  notes: 'Not in this pose. The STEP set is a 32H7 hub with keyway, an unbored hub and a 92 Sh-A spider.
+    See cad/vendor/VC-HB-2400/SOURCE.md.'
 - part_number: VC-HB-2500
   name: Hub drive shaft
   revision_index: 0
@@ -1304,13 +1342,14 @@ parts:
   supply: subcontract
   subsystem: hub
   category: Hub
-  spec: Keyed shaft, diameter 25-30 mm, separately bearing-mounted.
+  spec: Not placed. The drive sprocket sits on the gearbox output shaft, Ø25 h7 by 55 mm.
   legacy_ref: '2.21'
   estimate_eur_low: 30
   estimate_eur_high: 50
   supplier_id: custom_eu
   unknowns:
-  - Diameter inside the 25-30 mm range, length, key size and sprocket seat.
+  - Not placed. The sprocket sits on the gearbox output shaft.
+  notes: Not in this pose. Do not manufacture from this revision.
 - part_number: VC-HB-2600
   name: Pillow block UCP 206
   revision_index: 0
@@ -1318,13 +1357,13 @@ parts:
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: Self-aligning pillow block, 30 mm bore. Two on the drive shaft.
+  spec: Not placed. The drive sprocket sits on the gearbox output. There is no separate drive shaft.
   legacy_ref: '2.22'
   estimate_eur_low: 15
   estimate_eur_high: 25
-  notes: SKF or Schaeffler. Bore is 30 mm, which only matches the top of the shaft range.
   unknowns:
-  - Confirm 30 mm bore against the final shaft diameter. HUB_SYSTEM.md also mentions UCP 205/206.
+  - Not placed. The idler uses VC-HB-2830.
+  notes: Not in this pose. SKF or Schaeffler. The idler uses VC-HB-2830, not this pillow block.
 - part_number: VC-HB-2700
   name: Duplex chain 10B-2
   revision_index: 0
@@ -1350,12 +1389,16 @@ parts:
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: 10B-2, 15 teeth, taper-lock, drive sprocket.
+  spec: G&G 501-302-0515, 10B-2, 15 teeth. Sits on the gearbox output shaft, Ø25 h7 by 55 mm, key 8x7x40.
+    Taper bush 1210.
   legacy_ref: '2.24'
   estimate_eur_low: 25
   estimate_eur_high: 40
-  notes: 'G&G 501-302-0515, 10B-2 15 teeth, taper bush 1210. The STEP is in cad/vendor/VC-HB-2800.
-    Pitch radius used in the force calculation is 37.9 mm. The idler VC-HB-2810 reuses this solid.'
+  notes: 'G&G 501-302-0515. The STEP is in cad/vendor/VC-HB-2800. The bore in that file is larger than
+    Ø25 mm. Finish the 1210 bush to Ø25 h7. Pitch radius used in the force calculation is 37.9 mm.
+    The idler VC-HB-2810 reuses this solid.'
+  unknowns:
+  - Finish taper bush 1210 to Ø25 h7 for the output shaft and the 8x7x40 key. Not in BOM.md v1.
 - part_number: VC-HB-2810
   name: Sprocket 10B-2 15T idle
   revision_index: 0
@@ -1375,7 +1418,8 @@ parts:
   supply: subcontract
   subsystem: hub
   category: Hub
-  spec: Draft keyed shaft, diameter 30 mm. It sits on top of the profile ends, on the mast mid-plane.
+  spec: Draft shaft, diameter 30 mm. It carries the idler sprocket on the gearbox axis, above the
+    drive-side profile.
   legacy_ref: draft-hb-2820
   supplier_id: custom_eu
   material: S355
@@ -1390,8 +1434,8 @@ parts:
   supply: subcontract
   subsystem: hub
   category: Hub
-  spec: Draft bracket, two pieces. Slotted bearing seat and a tension screw land. Bolts to the top of
-    each profile end. Seat sized for a 30 mm bore.
+  spec: Draft bracket, one piece. Bolts to the top of the drive-side profile and holds the idler shaft
+    beside the sprocket. Seat sized for a 30 mm bore.
   legacy_ref: draft-hb-2830
   supplier_id: custom_eu
   material: S355
@@ -2222,17 +2266,13 @@ boms:
   mrp_type: normal
   lines:
   - {part_number: VC-HB-2100, qty: 1}
-  - {part_number: VC-HB-2110, qty: 1}
   - {part_number: VC-HB-2200, qty: 1}
   - {part_number: VC-HB-2300, qty: 1}
-  - {part_number: VC-HB-2400, qty: 1}
-  - {part_number: VC-HB-2500, qty: 1}
-  - {part_number: VC-HB-2600, qty: 2}
   - {part_number: VC-HB-2700, qty: 1}
   - {part_number: VC-HB-2800, qty: 1}
   - {part_number: VC-HB-2810, qty: 1}
   - {part_number: VC-HB-2820, qty: 1}
-  - {part_number: VC-HB-2830, qty: 2}
+  - {part_number: VC-HB-2830, qty: 1}
   - {part_number: VC-HB-2900, qty: 1}
   - {part_number: VC-HB-3100, qty: 2}
   - {part_number: VC-HB-3110, qty: 4}
@@ -2250,6 +2290,8 @@ boms:
   - {part_number: VC-FR-4170, qty: 1}
   - {part_number: VC-FR-4180, qty: 1}
   - {part_number: VC-FR-4182, qty: 1}
+  - {part_number: VC-FR-4183, qty: 1}
+  - {part_number: VC-FR-4184, qty: 1}
   - {part_number: VC-FR-4185, qty: 1}
   - {part_number: VC-FR-4186, qty: 1}
   - {part_number: VC-FR-4190, qty: 1}

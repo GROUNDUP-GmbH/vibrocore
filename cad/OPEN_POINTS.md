@@ -90,7 +90,9 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-FR-4160` Top frame gusset: Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4170` Mid frame gusset: Bend radius, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4180` Drive crossbar mk 2004: Final cut length follows the profile pitch. The 300 mm pitch is TBD. Not in BOM.md v1.
-- `VC-FR-4182` Gearbox flange: Thickness, outline and the bolt pattern. Not in BOM.md v1.
+- `VC-FR-4182` Gearbox mount plate: M6 property class. The study uses 8.8. Not in BOM.md v1.
+- `VC-FR-4183` Gearbox side frame: Bolt grade and the T-slot nuts in the mk 2004. Not in BOM.md v1.
+- `VC-FR-4184` Gearbox rear anchor: Weld size where the anchor meets VC-FR-4182. Not in BOM.md v1.
 - `VC-FR-4185` Lower front stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4186` Lower rear stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
 - `VC-FR-4190` Front top stiffener: Sheet outline, hole pitch and T-slot nut size. Not in BOM.md v1.
@@ -113,14 +115,15 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-GP-7310` DT325 drive head: no solid. Dimensions were not complete enough to model.
 - `VC-GP-7400` Core liner 3.25 inch: no solid. Dimensions were not complete enough to model.
 - `VC-GP-7410` DT325 liner retainer HD: no solid. Dimensions were not complete enough to model.
-- `VC-HB-2110` Lift motor bracket: Plate thickness, bolt size and weld sizes. Not in BOM.md v1.
+- `VC-HB-2110` Lift motor bracket: Not placed. VC-FR-4182 carries the gearbox. The motor bolts to the input.
 - `VC-HB-2200` Planetary gearbox PLE120-040: Input adapter of article 100460948 was configured for 1FL2104-4AG10. Re-check it for the current oil seal and for successor 1FL2104-4BG. The STEP recess is 4.4 mm deep and has no keyway.
+- `VC-HB-2200` Planetary gearbox PLE120-040: The chain sprocket sits on the output shaft. Check the radial load against the Neugart catalogue.
 - `VC-HB-2300` SINAMICS S200 servo drive: PROFINET order 6SL5510-1BB11-0AF0 if the PLC does not use pulse and direction. The price is not a quote.
-- `VC-HB-2400` Elastomer coupling: Gearbox output is Ø25 mm. The STEP hub is 32H7, so the bore is not a fit. The hub is seated on the journal. The chain-side hub is unbored.
-- `VC-HB-2500` Hub drive shaft: Diameter inside the 25-30 mm range, length, key size and sprocket seat.
-- `VC-HB-2600` Pillow block UCP 206: Confirm 30 mm bore against the final shaft diameter. HUB_SYSTEM.md also mentions UCP 205/206.
+- `VC-HB-2500` Hub drive shaft: Not placed. The sprocket sits on the gearbox output shaft.
+- `VC-HB-2600` Pillow block UCP 206: Not placed. The idler uses VC-HB-2830.
 - `VC-HB-2700` Duplex chain 10B-2: Purchase length 3.2 m stays a placeholder until the lift height is decided.
 - `VC-HB-2700` Duplex chain 10B-2: Breaking load is not stated by G&G. Do not assign a value.
+- `VC-HB-2800` Sprocket 10B-2 15T drive: Finish taper bush 1210 to Ø25 h7 for the output shaft and the 8x7x40 key. Not in BOM.md v1.
 - `VC-HB-2810` Sprocket 10B-2 15T idle: no solid. Dimensions were not complete enough to model.
 - `VC-HB-2820` Idler shaft: Key size and the bearing catalogue number. Not in BOM.md v1.
 - `VC-HB-2830` Idler bearing bracket: Bearing catalogue number, slot length and bolt size. Not in BOM.md v1.

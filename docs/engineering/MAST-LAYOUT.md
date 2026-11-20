@@ -288,26 +288,27 @@ The lift motor and the gearbox sit above it.
 The separate brake is not in this pose.
 
 The chain lift is VC-ASM-2000, not the VC-ASM-8100 actuators.
-Both chain strands, the drive sprocket and the idler sprocket sit in the profile gap.
-The shaft axis is the mast mid-plane, X = 0.
-The axis runs along Y and stops before the inner faces.
-The rear strand stays at X = −43.0 mm, 7.0 mm in front of the rear face.
-The placed sprocket spans about X = −41.9 mm to 41.9 mm.
+The drive sprocket sits on the gearbox output shaft.
+The chain and the idler share that axis.
+The axis is at X = 7.5 mm and Z = 79.5 mm.
+The rear strand stays at X = −35.5 mm, 14.5 mm in front of the rear face.
 The chain is an ISO 606 section on the pitch radius.
 The wrap is a shell outside the tooth tip. It is not a meshed link.
 The Siemens servo is the SiePortal STEP. The PLE120 gearbox is the Neugart STEP.
 They sit above the bottom plate.
 The head plate sweeps Y = ±210 mm down to the rail, so this train stands outside that sweep, on the drive side.
-The axis is at X = 7.5 mm and Z = 79.5 mm.
 The 115 mm gearbox is flush with X = −50 mm.
 The motor flange is 81 mm square, so the motor body starts at X = −33 mm.
-The coupling hub is seated on the output shaft. Its inboard face is at Y = −249 mm.
-The motor bolts to the gearbox input, further outboard.
-A horizontal flange, VC-FR-4182, sits on the plate and runs out under the gearbox.
-Its neck stays inside the profile depth and meets both stiffeners on a face.
-A pad under the gearbox reaches X = 65 mm. That pad is clear of the stiffeners.
-The flange does not cross the mast centre.
-The gearbox housing rests on that flange.
+VC-FR-4182 is a 12 mm plate on the output flange.
+The flange bolts to it with four M6 screws on PCD 90 mm.
+The plate bore is Ø84 mm and clears the Ø80 pilot.
+The sprocket sits on the shaft just outside that plate.
+VC-FR-4183 is the side frame.
+It is welded to the plate and bolted to the drive-side profile.
+Its lower rail also sits on the bottom plate.
+VC-FR-4184 anchors the input end of the gearbox.
+It meets the plate, clears the housing, and lands on the bottom plate.
+The input face stays clear. The motor bolts on after that anchor.
 The drive-side upright is cut short.
 It starts above the gearbox, at Z = 139 mm, and still reaches the same top as the other upright.
 The idle-side upright stays 1500 mm.
@@ -315,20 +316,19 @@ The purchased length of VC-FR-4100 stays 1500 mm.
 VC-FR-4185 is a 4 mm sheet on the front face of the lower bay.
 It stops under the carriage, because at stroke 0 the carriage web is at Z = 105 mm.
 VC-FR-4186 is the matching rear sheet.
-VC-HB-2110 is a draft shelf under the motor.
-The gear teeth that drop the drive onto the chain shaft are not selected.
+The carriage arm stays in front of the rail and meets the chain outboard of the profile.
 A cut mk 2004 bar, VC-FR-4180, spans the clear gap between the inner faces.
 It sits between the chain strands at mid height.
 At the 300 mm pitch that cut length is 250 mm.
-The idle sprocket sits on a shaft above the profile ends.
-Two bearing blocks, VC-HB-2830, bolt to those ends.
+The idle sprocket shares the gearbox axis.
+One bearing block, VC-HB-2830, bolts to the drive-side profile end.
 Each block has a slotted seat and a tension screw.
 The top steel plate VC-FR-4400 is not fitted in this pose.
 The blank stays on the BOM.
 Two 4 mm sheets, VC-FR-4190 on the front face and VC-FR-4195 on the rear face, bolt to both profiles above the rails.
 They replace the stiffness the top plate gave.
 Bent 4 mm gussets still tie the profiles at the bottom, at mid height and at the top.
-The gusset webs sit between the chain strands.
+The gusset webs stay between the profiles. The chain is outboard of them.
 The chain path still uses the published 83 mm tip diameter.
 The placed G&G sprocket tip is about 82.7 mm and its width is 25.5 mm.
 The pitch radius is the documented 37.9 mm.
@@ -340,13 +340,9 @@ That pair is the open adapter check. Every other pair stays under 1 mm³.
 
 VC-HB-2100 is the Siemens STEP.
 VC-HB-2200 is the Neugart STEP.
-VC-HB-2400 is a KTR ROTEX 28 coupling.
-The set is a 32H7 hub, an unbored hub and a 92 Sh-A spider.
-The placed length is 87.5 mm.
-The 50 mm envelope is only the fallback.
-The 32H7 hub faces the gearbox. The bore is 32H7 and the shaft is Ø25 mm.
-The hub is seated on the journal.
+VC-HB-2400 is not placed. The sprocket uses the output shaft.
 VC-HB-2800 is the G&G 501-302-0515 sprocket.
+It sits on the Ø25 h7 output shaft.
 VC-HB-2810 reuses that solid.
 It has no second file.
 VC-HB-3100 is the HIWIN HGR20R1300H rail.
@@ -357,10 +353,8 @@ VC-HB-3000 is obsolete and is not placed.
 `load_vendor_shape` recenters one STEP file and does not rotate it, unless SOURCE.md says otherwise.
 The HIWIN files keep the mounting face, so they are not recentered.
 The gearbox file keeps the motor face, so it is not recentered.
-The coupling is three files.
-They keep the manufacturer origin because the jaw face is not the box centre.
-The shaft tip meets the jaw face.
 The motor flange meets the gearbox input on a face.
+The drive sprocket sits on the output shaft.
 A missing file keeps the catalogue envelope.
 The mk 2004 uprights and the drive crossbar use the 3Dfindit extrusion.
 The 10B-2 chain is an ISO 606 section. G&G publishes no chain CAD.
@@ -400,8 +394,8 @@ The head clears the rails, the profiles and the gussets at stroke 0, at mid trav
 | Motor to nearest rail | 32.5 mm | No collision. |
 | Vibrating plate to nearest profile | 50.0 mm | The plate rear is flush with the motors. |
 | Vibrating plate to nearest rail | 32.5 mm | The plate shares the guide-block height. |
-| Carriage to chain strand | 0.0 mm | The lug meets the front strand on a face. |
-| Rear chain strand to the rear face | 7.0 mm | The strand stays in the gap, at X = −43.0 mm. |
+| Carriage to chain strand | 0.0 mm | The arm meets the front strand on a face. |
+| Rear chain strand to the rear face | 14.5 mm | The strand is at X = −35.5 mm, on the gearbox axis. |
 | Lift-motor body to the rear face | 17.0 mm | The 81 mm flange starts at X = −33 mm. |
 | Gearbox body to the rear face | 0.0 mm | The 115 mm body is flush at X = −50 mm. |
 
@@ -413,6 +407,8 @@ The views are:
 - `cad/export/renders/VC-ASM-0000-layout-iso.png`
 - `cad/export/renders/VC-ASM-0000-layout-side.png`
 - `cad/export/renders/VC-ASM-0000-layout-top.png`
+- `cad/export/renders/VC-ASM-0000-layout-drive-iso.png`
+- `cad/export/renders/VC-ASM-0000-layout-drive-front.png`
 
 ## Values Stefan must get
 

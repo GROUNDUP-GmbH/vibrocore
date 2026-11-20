@@ -7,8 +7,8 @@ is not in the axial chain.
 The head is yawed 90 degrees about Z. The motor shafts point at the mast.
 The vibrating plate shares the guide-block height. The rod sits close to the rails.
 The bottom plate has an 83 mm bore on that axis. The bore guides the casing.
-The chain runs in the gap between the uprights. The volume behind the profile
-rear faces is reserved for the tilt mechanism.
+The drive sprocket sits on the gearbox output. The chain follows that axis.
+The volume behind the profile rear faces is reserved for the tilt mechanism.
 
 The start pose puts the carriage at the top of the guided stroke. The four
 HGH20 blocks stay on the rails. The shoe tip is then below the ground line.
@@ -46,19 +46,16 @@ from cad.models.mast_layout import (
     CASING_LENGTH_MM,
     CASING_OD_MM,
     CHAIN_ROLLER_DIAMETER_MM,
-    CHAIN_SECTION_X_MM,
     CHAIN_INNER_WIDTH_MM,
     CHAIN_TRANSVERSE_PITCH_MM,
     COLUMN_DIAMETER_MM,
     COLUMN_FLANGE_DIAMETER_MM,
     COLUMN_FLANGE_THICKNESS_MM,
     COLUMN_SHAFT_LENGTH_MM,
-    COUPLING_DIAMETER_MM,
-    COUPLING_LENGTH_MM,
-    CHAIN_AXIS_X_MM,
     GEARBOX_FLANGE_MM,
     GEARBOX_LENGTH_MM,
     OUTPUT_SHAFT_LENGTH_MM,
+    MOUNT_PLATE_THICKNESS_MM,
     GROUND_CLEARANCE_MM,
     GUSSET_HEIGHT_MM,
     GUSSET_SHEET_THICKNESS_MM,
@@ -79,9 +76,6 @@ from cad.models.mast_layout import (
     SERVO_BODY_LENGTH_MM,
     SERVO_FLANGE_MM,
     SERVO_SHAFT_LENGTH_MM,
-    PILLOW_HEIGHT_MM,
-    PILLOW_LENGTH_MM,
-    PILLOW_WIDTH_MM,
     PROFILE_SPACING_MM,
     PROFILE_YAW_DEG,
     RAIL_BOTTOM_OFFSET_MM,
@@ -194,8 +188,8 @@ def rear_face_x_mm() -> float:
 
 
 def chain_axis_x_mm() -> float:
-    """Chain, drive sprocket and idler sit on the mast mid-plane, between the uprights."""
-    return CHAIN_AXIS_X_MM
+    """Drive sprocket, chain and idler share the gearbox output axis."""
+    return lift_motor_axis_x_mm()
 
 
 def lift_motor_axis_x_mm() -> float:
@@ -206,70 +200,43 @@ def lift_motor_axis_x_mm() -> float:
 def _drive_bay() -> dict:
     """Lift train above the bottom plate, outside the head sweep.
 
-    The motor bolts to the gearbox input. The coupling hub sits on the output
-    shaft, and the shaft tip meets the jaw face. The hub stays outside the head.
-    The gearbox rests on a horizontal flange. The drive-side upright starts
-    above the gearbox. Nothing enters the tilt volume behind the rear faces.
+    The output flange bolts to the mount plate. The sprocket sits on the
+    shaft just outside that plate. The shaft tip stays outside the head.
+    The motor bolts to the input face. The drive-side upright starts above
+    the gearbox. Nothing enters the tilt volume behind the rear faces.
     """
-    from cad.models.vendor_parts import oriented_coupling, oriented_gearbox
+    from cad.models.vendor_parts import oriented_gearbox
 
-    coupling = oriented_coupling()
     gear = oriented_gearbox()
     plate_top = BOTTOM_PLATE_THICKNESS_MM
     gap = 2.0
-    flange_thickness = 7.0
     half = GEARBOX_FLANGE_MM / 2.0
     motor_x = lift_motor_axis_x_mm()
-    gear_bottom = plate_top + flange_thickness
-    z_lift = gear_bottom + half
-    # The head plate spans Y = ±210 mm. The inboard face of this train stops short of it.
+    # 7 mm keeps the round housing off the bottom plate.
+    z_lift = plate_top + 7.0 + half
     head_limit = -(VIBRATING_PLATE_LENGTH_MM / 2.0) - gap
-    if coupling is not None:
-        coupling_box = coupling.bounding_box()
-        coupling_y = head_limit - float(coupling_box.max.Y)
-        coupling_y0 = coupling_y + float(coupling_box.min.Y)
-        coupling_y1 = coupling_y + float(coupling_box.max.Y)
-    else:
-        coupling_box = None
-        coupling_y1 = head_limit
-        coupling_y0 = coupling_y1 - COUPLING_LENGTH_MM
-        coupling_y = (coupling_y0 + coupling_y1) / 2.0
-    # Output faces the coupling. The motor is on the far side and shares the input face.
-    gear_y1 = coupling_y0 - gap
-    gear_y0 = gear_y1 - GEARBOX_LENGTH_MM
-    # The vendor shaft is the last 55 mm. Seat the hub on that journal.
-    # Local Y = 0 of the coupling is the jaw face. The shaft tip stops there.
-    if gear is not None and coupling is not None and coupling_box is not None:
-        tip = float(gear.bounding_box().max.Y)
-        coupling_y = gear_y0 + tip
-        coupling_y0 = coupling_y + float(coupling_box.min.Y)
-        coupling_y1 = coupling_y + float(coupling_box.max.Y)
-        if coupling_y1 > head_limit + 0.05:
-            raise ValueError("seated coupling enters the head sweep")
+    tip_local = GEARBOX_LENGTH_MM if gear is None else float(gear.bounding_box().max.Y)
+    tip_y = head_limit - gap
+    gear_y0 = tip_y - tip_local
+    face_y = gear_y0 + tip_local - OUTPUT_SHAFT_LENGTH_MM
     motor_y1 = gear_y0
     motor_y0 = motor_y1 - SERVO_BODY_LENGTH_MM
-    motor_y = (motor_y0 + motor_y1) / 2.0
     return {
-        "coupling": coupling,
-        "coupling_box": coupling_box,
         "gear": gear,
         "motor_x": motor_x,
         "z_lift": z_lift,
         "gear_y0": gear_y0,
-        "gear_y1": gear_y1,
-        "gear_bottom": gear_bottom,
+        "gear_y1": gear_y0 + GEARBOX_LENGTH_MM,
+        "tip_y": tip_y,
+        "face_y": face_y,
+        "plate_outer_y": face_y + MOUNT_PLATE_THICKNESS_MM,
+        "gear_bottom": z_lift - half,
         "gear_top": z_lift + half,
-        "coupling_y": coupling_y,
-        "coupling_y0": coupling_y0,
-        "coupling_y1": coupling_y1,
-        "motor_y": motor_y,
+        "motor_y": (motor_y0 + motor_y1) / 2.0,
         "motor_y0": motor_y0,
         "motor_y1": motor_y1,
-        "motor_low_z": z_lift - SERVO_FLANGE_MM / 2.0,
         "short_z0": z_lift + half + gap,
         "plate_top": plate_top,
-        "flange_y1": -(PROFILE_SPACING_MM / 2.0 - MAST_PROFILE_WIDTH_MM / 2.0),
-        "gear_max_x": motor_x + half,
     }
 
 
@@ -506,10 +473,19 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     if runner_index - 1 != RUNNER_COUNT:
         raise ValueError("runner count does not match the BOM quantity")
 
-    # Chain axis is Y, on the mast mid-plane, inside the gap. Nothing sits behind the rear faces.
-    drive_x = chain_axis_x_mm()
+    # The drive sprocket sits on the gearbox output. The chain follows that axis.
+    from cad.models.vendor_parts import oriented_sprocket
+
+    sprocket_solid = oriented_sprocket()
+    if sprocket_solid is None:
+        sprocket_width = SPROCKET_WIDTH_MM
+    else:
+        sprocket_box = sprocket_solid.bounding_box()
+        sprocket_width = float(sprocket_box.max.Y - sprocket_box.min.Y)
+    drive_x = bay["motor_x"]
+    z_drive = bay["z_lift"]
+    chain_y = bay["plate_outer_y"] + _MODEL_GAP_MM + sprocket_width / 2.0
     sprocket_r = SPROCKET_TIP_DIAMETER_MM / 2.0
-    z_drive = BOTTOM_PLATE_THICKNESS_MM + sprocket_r + 5.0
     z_idler = station["profile_top"] + 36.0
     front_strand_x = drive_x + SPROCKET_PITCH_RADIUS_MM
 
@@ -517,7 +493,8 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     web_z1 = station["upper_top"]
     web_y = PROFILE_SPACING_MM + RUNNER_WIDTH_MM
     lug_z = station["lower_bottom"] + RUNNER_LENGTH_MM / 2.0
-    lug_x0 = front_strand_x + CHAIN_ROLLER_DIAMETER_MM / 2.0
+    strand_face_x = front_strand_x + CHAIN_ROLLER_DIAMETER_MM / 2.0
+    # The arm stays in front of the profiles and above the mount plate.
     carriage = Compound(
         children=[
             span(
@@ -528,13 +505,22 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
                 web_z0,
                 web_z1,
             ),
+            # Stay in front of the rail, then reach the strand outboard of the profile.
             span(
-                lug_x0,
                 station["web_inner"],
-                -CHAIN_SECTION_X_MM / 2.0,
-                CHAIN_SECTION_X_MM / 2.0,
-                lug_z - 10.0,
-                lug_z + 10.0,
+                station["web_outer"],
+                chain_y + 16.0,
+                -web_y / 2.0,
+                lug_z - 8.0,
+                lug_z + 8.0,
+            ),
+            span(
+                strand_face_x,
+                station["web_outer"],
+                chain_y - 16.0,
+                chain_y + 16.0,
+                lug_z - 8.0,
+                lug_z + 8.0,
             ),
         ]
     )
@@ -704,21 +690,18 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         hole = along_y(SHAFT_DIAMETER_MM / 2.0 + _MODEL_GAP_MM, SPROCKET_WIDTH_MM + 2.0)
         return disk - hole
 
-    from cad.models.vendor_parts import oriented_sprocket
-
-    sprocket_solid = oriented_sprocket()
     add(
         "VC-HB-2800",
         bored_sprocket() if sprocket_solid is None else sprocket_solid,
         drive_x,
-        0.0,
+        chain_y,
         z_drive,
     )
     add(
         "VC-HB-2810",
         bored_sprocket() if sprocket_solid is None else sprocket_solid,
         drive_x,
-        0.0,
+        chain_y,
         z_idler,
     )
 
@@ -746,46 +729,17 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
                 tip_r,
                 drive_x,
                 _MODEL_GAP_MM,
+                chain_y,
             ),
             0.0,
             0.0,
             0.0,
         )
 
-    # Shaft stays inside the gap. It ends before the profile inner faces.
-    shaft_length = 240.0
-    add(
-        "VC-HB-2500",
-        along_y(SHAFT_DIAMETER_MM / 2.0, shaft_length),
-        drive_x,
-        0.0,
-        z_drive,
-    )
-    pillow = Rot(0, 0, 90) * Box(PILLOW_LENGTH_MM, PILLOW_WIDTH_MM, PILLOW_HEIGHT_MM)
-    pillow = pillow - along_y(SHAFT_DIAMETER_MM / 2.0 + _MODEL_GAP_MM, PILLOW_LENGTH_MM + 2.0)
-    for index, sign in enumerate((-1.0, 1.0), start=1):
-        add(
-            f"VC-HB-2600-{index}",
-            bought("VC-HB-2600", pillow),
-            drive_x,
-            sign * 100.0,
-            z_drive,
-        )
-
-    # Servo and gearbox sit above the plate. The axis is parallel to the chain shaft.
-    # The 115 mm gearbox is flush with the rear face. The motor bolts to its input.
+    # Gearbox first. The mount bolts to the output flange. The motor is added
+    # after the rear anchor, on the input face.
     motor_x = bay["motor_x"]
     z_lift = bay["z_lift"]
-    if bay["coupling"] is not None:
-        add("VC-HB-2400", bay["coupling"], motor_x, bay["coupling_y"], z_lift)
-    else:
-        add(
-            "VC-HB-2400",
-            along_y(COUPLING_DIAMETER_MM / 2.0, COUPLING_LENGTH_MM),
-            motor_x,
-            bay["coupling_y"],
-            z_lift,
-        )
     if bay["gear"] is not None:
         # Input face is local Y = 0, so the placement Y is the motor face.
         add("VC-HB-2200", bay["gear"], motor_x, bay["gear_y0"], z_lift)
@@ -797,6 +751,60 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
             (bay["gear_y0"] + bay["gear_y1"]) / 2.0,
             z_lift,
         )
+    # Output flange plate. Four M6 holes on the measured PCD 90. The bore clears
+    # the Ø80 pilot. The sprocket sits on the shaft outside this plate.
+    face_y = bay["face_y"]
+    outer_y = bay["plate_outer_y"]
+    mount_mid_y = (face_y + outer_y) / 2.0
+    mount = span(rear_face_x_mm(), 82.0, face_y, outer_y, bay["plate_top"], 148.0)
+    mount = mount - Pos(drive_x, mount_mid_y, z_lift) * along_y(42.0, 30.0)
+    import math
+
+    for deg in (0.0, 90.0, 180.0, 270.0):
+        angle = math.radians(deg)
+        mount = mount - Pos(
+            drive_x + 45.0 * math.cos(angle),
+            mount_mid_y,
+            z_lift + 45.0 * math.sin(angle),
+        ) * along_y(3.3, 30.0)
+    add("VC-FR-4182", mount, 0.0, 0.0, 0.0)
+
+    # Side frame. The rails meet the plate on a face. The pad bolts to the profile.
+    pad_y0 = -(profile_outer_y + 9.0)
+    pad_y1 = -profile_outer_y
+    pad = span(-48.0, 20.0, pad_y0, pad_y1, bay["short_z0"], 210.0)
+    for bolt_x in (-30.0, 0.0):
+        for bolt_z in (165.0, 195.0):
+            pad = pad - Pos(bolt_x, (pad_y0 + pad_y1) / 2.0, bolt_z) * along_y(4.5, 20.0)
+    side = fuse(
+        [
+            pad,
+            span(-50.0, -40.0, outer_y, pad_y0, 136.0, 162.0),
+            span(-50.0, -40.0, outer_y, -125.0, bay["plate_top"], bay["plate_top"] + 16.0),
+            span(20.0, 82.0, pad_y0, pad_y1, bay["short_z0"], bay["short_z0"] + 9.0),
+        ]
+    )
+    add("VC-FR-4183", side, 0.0, 0.0, 0.0)
+
+    # Rear anchor. It stays clear of the housing and leaves the input face free.
+    rear_anchor = fuse(
+        [
+            span(67.0, 82.0, bay["gear_y0"] + 8.0, face_y, bay["plate_top"] + 1.0, 148.0),
+            span(-30.0, 82.0, bay["gear_y0"] + 20.0, face_y, bay["plate_top"], bay["gear_bottom"] - 1.0),
+            # Around the mount plate, down onto the bottom plate.
+            span(82.0, 94.0, face_y, -130.0, bay["plate_top"], bay["plate_top"] + 16.0),
+            span(
+                rear_face_x_mm(),
+                79.0,
+                bay["gear_y0"] + 6.0,
+                bay["gear_y0"] + 18.0,
+                bay["gear_top"] + 3.0,
+                bay["gear_top"] + 15.0,
+            ),
+        ]
+    )
+    add("VC-FR-4184", rear_anchor, 0.0, 0.0, 0.0)
+
     from cad.models.vendor_parts import oriented_motor
 
     motor = oriented_motor()
@@ -812,43 +820,6 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
         # Local Y = 0 is the flange face. The shaft enters the gearbox.
         add("VC-HB-2100", motor, motor_x, bay["gear_y0"], z_lift)
 
-    # Horizontal flange. The neck stays inside the profile depth and meets both
-    # stiffeners on a face. The pad under the gearbox is wider and misses the stiffeners.
-    neck = span(
-        rear_face_x_mm(),
-        front,
-        bay["gear_y0"],
-        bay["flange_y1"],
-        bay["plate_top"],
-        bay["gear_bottom"],
-    )
-    pad = span(
-        front,
-        bay["gear_max_x"],
-        bay["gear_y0"],
-        bay["gear_y1"],
-        bay["plate_top"],
-        bay["gear_bottom"],
-    )
-    add("VC-FR-4182", neck + pad, 0.0, 0.0, 0.0)
-    # Draft shelf under the motor. Tooth counts for the drop to the chain shaft are not selected.
-    shelf_top = bay["motor_low_z"] - 2.0
-    shelf_bottom = max(bay["plate_top"] + 2.0, shelf_top - 8.0)
-    add(
-        "VC-HB-2110",
-        span(
-            max(rear_face_x_mm() + 2.0, motor_x - SERVO_FLANGE_MM / 2.0 + 4.0),
-            motor_x + SERVO_FLANGE_MM / 2.0 - 4.0,
-            bay["motor_y0"] + 4.0,
-            bay["motor_y1"] - 4.0,
-            shelf_bottom,
-            shelf_top,
-        ),
-        0.0,
-        0.0,
-        0.0,
-    )
-
     # Same mk 2004 section as the uprights. Scale the extrusion axis to the clear span.
     bar_length = profile_inner_y * 2.0
     bar = oriented_mk2004(bar_length) if mk_profile is not None else None
@@ -860,50 +831,29 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
     add("VC-FR-4180", bar_solid, 0.0, 0.0, 450.0)
 
     profile_top = station["profile_top"]
-    idler_length = 340.0
+    # Short shaft through the idler. The cheek sits beside the sprocket, toward the mast.
     add(
         "VC-HB-2820",
-        along_y(SHAFT_DIAMETER_MM / 2.0, idler_length),
+        along_y(SHAFT_DIAMETER_MM / 2.0, 70.0),
         drive_x,
-        0.0,
+        chain_y + 8.0,
         z_idler,
     )
-
-    def idler_bracket(sign: float):
-        y_mid = sign * 150.0
-        foot = span(-42.0, 42.0, sign * 128.0, sign * 172.0, profile_top, profile_top + 6.0)
-        cheek = span(-22.0, 22.0, y_mid - sign * 4.0, y_mid + sign * 4.0, profile_top, z_idler + 34.0)
-        slot = span(
-            -18.0,
-            18.0,
-            y_mid - sign * 8.0,
-            y_mid + sign * 8.0,
-            z_idler - 22.0,
-            z_idler + 26.0,
-        )
-        bearing = span(
-            -34.0,
-            34.0,
-            y_mid - sign * 4.0,
-            y_mid + sign * 4.0,
-            z_idler - 16.0,
-            z_idler + 16.0,
-        )
-        hole = Pos(drive_x, 0.0, z_idler) * along_y(
-            SHAFT_DIAMETER_MM / 2.0 + _MODEL_GAP_MM, idler_length + 20.0
-        )
-        return foot + cheek - slot + bearing - hole
-
-    for index, sign in enumerate((-1.0, 1.0), start=1):
-        add(f"VC-HB-2830-{index}", idler_bracket(sign), 0.0, 0.0, 0.0)
+    foot = span(-30.0, drive_x + 62.0, -profile_outer_y, -profile_inner_y, profile_top, profile_top + 8.0)
+    arm = span(drive_x + 46.0, drive_x + 62.0, -profile_outer_y, chain_y + 32.0, profile_top, profile_top + 14.0)
+    cheek = span(drive_x - 22.0, drive_x + 62.0, chain_y + 18.0, chain_y + 32.0, z_idler - 24.0, z_idler + 24.0)
+    hole = Pos(drive_x, chain_y + 25.0, z_idler) * along_y(
+        SHAFT_DIAMETER_MM / 2.0 + _MODEL_GAP_MM, 80.0
+    )
+    add("VC-HB-2830-1", foot + arm + cheek - hole, 0.0, 0.0, 0.0)
     # G&G 681-302-1504 envelope. One piece. Not a measured housing.
     # The disc is the 15-tooth size. The 57 mm block is the catalogue maximum of the 36-57 mm range.
-    # It sits above the front stiffener and clear of the idler sprocket. It does not mesh the chain.
+    # It sits beside the idler, clear of the teeth. It does not mesh the chain.
     tension_width = CHAIN_TRANSVERSE_PITCH_MM + CHAIN_INNER_WIDTH_MM
     tension_disc = along_y(SPROCKET_TIP_DIAMETER_MM / 2.0, tension_width)
     tension_slide = Box(40.0, 30.0, 57.0)
     tension_z = station["profile_top"] + SPROCKET_TIP_DIAMETER_MM / 2.0 + _MODEL_GAP_MM
-    add("VC-HB-2900", tension_disc + tension_slide, drive_x + 60.0, 50.0, tension_z)
+    add("VC-HB-2900", tension_disc + tension_slide, drive_x + 90.0, chain_y, tension_z)
 
     def frame_gusset(flange_x0: float, flange_x1: float, web_x: float):
         thickness = GUSSET_SHEET_THICKNESS_MM
@@ -1105,10 +1055,21 @@ def _check_pose(parts: list[Placed], station: dict[str, float]) -> None:
             raise ValueError("motor flange does not meet the gearbox input")
         if abs(float(gear.min.X) - rear_face_x_mm()) > 0.05:
             raise ValueError("gearbox flange is not flush with the rear face")
-        hub = by_name["VC-HB-2400"].bounding_box()
         shaft_root = float(gear.max.Y) - OUTPUT_SHAFT_LENGTH_MM
-        if not shaft_root < float(hub.min.Y) < float(gear.max.Y):
-            raise ValueError("coupling hub is not seated on the output shaft")
+        sprocket = by_name["VC-HB-2800"].bounding_box()
+        if not shaft_root < float(sprocket.min.Y) < float(gear.max.Y):
+            raise ValueError("drive sprocket is not seated on the output shaft")
+        if float(sprocket.max.Y) > float(gear.max.Y) + 0.05:
+            raise ValueError("drive sprocket passes the output shaft tip")
+        if abs(float(sprocket.center().X) - float(gear.center().X)) > 0.5:
+            raise ValueError("drive sprocket is not on the gearbox axis")
+        if abs(float(sprocket.center().Z) - float(gear.center().Z)) > 0.5:
+            raise ValueError("drive sprocket is not on the gearbox axis")
+        plate = by_name["VC-FR-4182"].bounding_box()
+        if abs(float(plate.min.Y) - shaft_root) > 0.05:
+            raise ValueError("mount plate does not meet the output flange")
+        if abs(float(plate.max.Y - plate.min.Y) - MOUNT_PLATE_THICKNESS_MM) > 0.05:
+            raise ValueError("mount plate thickness is not 12 mm")
     if "VC-HB-3000" in by_name:
         raise ValueError("the separate brake is obsolete and must not be placed")
     if vendor_step_path("VC-HB-2800") is None:
@@ -1118,7 +1079,7 @@ def _check_pose(parts: list[Placed], station: dict[str, float]) -> None:
         if float(sprocket.min.X) < rear_face_x_mm() - 0.05:
             raise ValueError("drive sprocket enters the reserved rear volume")
         if abs(float(sprocket.center().X) - chain_axis_x_mm()) > 0.05:
-            raise ValueError("drive sprocket is not on the mast mid-plane")
+            raise ValueError("drive sprocket is not on the gearbox axis")
     rear = rear_face_x_mm()
     for item in parts:
         if item.name == "GROUND-DATUM":
@@ -1272,7 +1233,7 @@ def assembly_bbox_mm(shape=None, bom=None) -> tuple[float, float, float]:
 
 
 def export_machine_assembly(bom, step_dir: Path, render_dir: Path) -> list[Path]:
-    """Write the assembly STEP and the three PNG views. Both directories are created."""
+    """Write the assembly STEP, the three PNG views and two drive close-ups."""
     from build123d import Compound, export_step
 
     from cad.tools.geometry import _freeze_step_header
@@ -1290,6 +1251,12 @@ def export_machine_assembly(bom, step_dir: Path, render_dir: Path) -> list[Path]
     for view in RENDER_VIEWS:
         path = render_dir / f"{ASSEMBLY_ID}-{view}.png"
         _render_png(parts, view, path)
+        written.append(path)
+    # Close-ups of the gearbox, the sprocket and the mount. X, Y, Z limits in mm.
+    drive_clip = (-70.0, 160.0, -700.0, -140.0, 0.0, 280.0)
+    for view in ("drive-iso", "drive-front"):
+        path = render_dir / f"{ASSEMBLY_ID}-{view}.png"
+        _render_png(parts, view, path, clip=drive_clip)
         written.append(path)
     return written
 
@@ -1316,7 +1283,7 @@ def _write_z_up_step(path: Path) -> None:
     path.write_text(cleaned, encoding="utf-8")
 
 
-def _render_png(parts: list[Placed], view: str, path: Path) -> None:
+def _render_png(parts: list[Placed], view: str, path: Path, clip: tuple[float, ...] | None = None) -> None:
     import numpy as np
     from PIL import Image
 
@@ -1324,6 +1291,8 @@ def _render_png(parts: list[Placed], view: str, path: Path) -> None:
         "iso": (np.array([1.0, -1.0, 0.72]), np.array([0.0, 0.0, 1.0])),
         "side": (np.array([1.0, 0.0, 0.0]), np.array([0.0, 0.0, 1.0])),
         "top": (np.array([0.0, 0.0, 1.0]), np.array([0.0, 1.0, 0.0])),
+        "drive-iso": (np.array([0.85, 0.95, 0.5]), np.array([0.0, 0.0, 1.0])),
+        "drive-front": (np.array([1.0, -0.25, 0.12]), np.array([0.0, 0.0, 1.0])),
     }
     eye, up = eyes[view]
     forward = -eye / np.linalg.norm(eye)
@@ -1353,6 +1322,14 @@ def _render_png(parts: list[Placed], view: str, path: Path) -> None:
                 norm = np.linalg.norm(normal)
                 if norm < 1e-9:
                     continue
+                if clip is not None:
+                    center = tri.mean(axis=0)
+                    if not (
+                        clip[0] <= float(center[0]) <= clip[1]
+                        and clip[2] <= float(center[1]) <= clip[3]
+                        and clip[4] <= float(center[2]) <= clip[5]
+                    ):
+                        continue
                 shade = 0.38 + 0.62 * abs(float(np.dot(normal / norm, light)))
                 # The third column grows toward the camera so a nearer face wins the depth test.
                 cam = np.column_stack(
@@ -1431,6 +1408,8 @@ def _color_for(name: str) -> tuple[int, int, int]:
         ("VC-FR-4190", (100, 116, 139)),
         ("VC-FR-4186", (100, 116, 139)),
         ("VC-FR-4185", (100, 116, 139)),
+        ("VC-FR-4184", (30, 41, 59)),
+        ("VC-FR-4183", (51, 65, 85)),
         ("VC-FR-4182", (71, 85, 105)),
         ("VC-FR-4180", (148, 163, 184)),
         ("VC-FR-4150", (203, 213, 225)),
