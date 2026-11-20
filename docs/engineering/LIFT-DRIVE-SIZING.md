@@ -23,13 +23,18 @@ The centering diameter is 70 mm. The pitch circle is 90 mm.
 The holding brake is 3.3 Nm. The encoder is a multiturn absolute encoder.
 The mass is about 4.1 kg. The overall length is 186.6 mm.
 
-The gearbox data are from the Neugart PLE catalogue, 2026-10.
+The gearbox torques are from the Neugart PLE catalogue, 2026-10.
+The sizes and the mass are from the vendor solid of article 100460948.
 At i = 40 and two stages the continuous torque T2D is 195 Nm.
 The cyclic torque T2Z is 230 Nm. The maximum torque T2max is 365 Nm.
 The emergency-stop torque T2Stop is 500 Nm.
-The housing diameter and the motor-flange edge are both 115 mm.
-The catalogue minimum total length is 204 mm.
-The output shaft is Ø25 mm.
+The housing is 115 mm square.
+The total length is 204 mm.
+That length is the input adapter 47.5 mm, the housing 101.5 mm and the output shaft 55 mm.
+The output shaft is Ø25 h7 by 55 mm, with key DIN 6885-A-8x7x40.
+The output pilot is Ø80 h7.
+The motor pilot is Ø70. The motor pitch circle is Ø90. The motor holes are M6 by 15 mm.
+The nameplate mass is 7.65 kg.
 
 ## 2. Design case
 
@@ -86,3 +91,6 @@ That is above T2Stop. Do not use it.
    https://cdn.neugart.com/fileadmin/user_upload/Downloads/Product_Catalogs/10_2026/Complete_Gearbox_Catalog_2026_10_EN.pdf
 3. The calculation workbook that Stefan approved is not stored as a second copy of the vendor PDFs.
    Those PDFs stay out of this repository.
+4. Neugart CAD for article 100460948, generated 2026-11-20.
+   The PDF and the DXF from that mail are not stored here.
+   See cad/vendor/VC-HB-2200/SOURCE.md.

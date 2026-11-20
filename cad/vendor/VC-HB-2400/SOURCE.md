@@ -30,8 +30,8 @@ The unbored hub faces +Y. The separate brake is not in the train.
 
 The oriented coupling is 65 × 87.5 × 65 mm.
 The 50 mm envelope is only the fallback.
-A 2 mm gap stays between the 32H7 face and the gearbox output face.
-The placed coupling is inboard of the gearbox and still outside the head sweep.
+The 32H7 face sits on the output journal. The shaft tip meets the jaw face.
+The placed coupling is still outside the head sweep.
 The jaws and the spider share about 39 mm³ inside this one part.
 That is the elastomer fit.
 A boolean fuse of the three solids is rejected, so they stay one compound.

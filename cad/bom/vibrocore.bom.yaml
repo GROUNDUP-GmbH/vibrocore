@@ -1247,17 +1247,18 @@ parts:
   subsystem: hub
   category: Hub
   spec: Neugart PLE120, ratio 40, type PLE120-040-SSSA3AF-Z19/40/70/90/B5/M6, article 100460948.
-    Motor flange edge 115 mm. Output shaft 25 mm. Catalogue minimum total length 204 mm.
+    Square 115 mm. Length 204 mm (adapter 47.5, housing 101.5, shaft 55). Output shaft 25 h7 x 55 mm,
+    key DIN 6885-A-8x7x40. Pilot 80 h7. Mass 7.65 kg.
   legacy_ref: '2.18'
   manufacturer_pn: PLE120-040-SSSA3AF-Z19/40/70/90/B5/M6
   supplier_id: neugart
+  mass_kg: 7.65
+  mass_note: Nameplate mass of article 100460948, from the Neugart CAD data sheet received 2026-11-20.
   estimate_eur_low: 600
   estimate_eur_high: 900
-  notes: 'Approved 2026-11-20. Envelope from the public PLE catalogue (2026-10) until the emailed STEP
-    arrives. The Neugart PDFs are not in the repository. The 600-900 EUR band is the previous placeholder.
-    It is not a Neugart quote. See docs/engineering/LIFT-DRIVE-SIZING.md.'
-  unknowns:
-  - Exact input-flange length of article 100460948. The envelope uses the catalogue minimum of 204 mm.
+  notes: 'Approved 2026-11-20. The vendor STEP is in cad/vendor/VC-HB-2200. The 2D PDF and the DXF are
+    not in the repository. The 600-900 EUR band is the previous placeholder. It is not a Neugart quote.
+    See docs/engineering/LIFT-DRIVE-SIZING.md.'
 - part_number: VC-HB-2300
   name: SINAMICS S200 servo drive
   revision_index: 0
@@ -1289,7 +1290,7 @@ parts:
   notes: 'The STEP set is a 32H7 hub with keyway, an unbored hub and a 92 Sh-A spider. See
     cad/vendor/VC-HB-2400/SOURCE.md.'
   unknowns:
-  - Gearbox output is Ø25 mm. The STEP hub is 32H7, so the two are not mated. The chain-side hub is unbored.
+  - Gearbox output is Ø25 mm. The STEP hub is 32H7, so the bore is not a fit. The hub is seated on the journal. The chain-side hub is unbored.
 - part_number: VC-HB-2500
   name: Hub drive shaft
   revision_index: 0

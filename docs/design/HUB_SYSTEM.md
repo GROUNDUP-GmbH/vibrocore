@@ -76,8 +76,11 @@ The sizing and the torque limit are in [LIFT-DRIVE-SIZING.md](../engineering/LIF
 | Cyclic torque T2Z      | 230 Nm                             |
 | Maximum torque T2max   | 365 Nm                             |
 | Emergency stop T2Stop  | 500 Nm                             |
-| Output shaft           | 25 mm                              |
-| Housing / flange edge  | 115 mm                             |
+| Output shaft           | Ø25 h7 × 55 mm, key 8×7×40         |
+| Output pilot           | Ø80 h7                             |
+| Housing / flange edge  | 115 mm square                      |
+| Total length           | 204 mm (47.5 + 101.5 + 55)         |
+| Mass                   | 7.65 kg                            |
 
 ### 3.3 Chain Drive
 

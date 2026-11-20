@@ -56,6 +56,7 @@ from cad.models.mast_layout import (
     CHAIN_AXIS_X_MM,
     GEARBOX_FLANGE_MM,
     GEARBOX_LENGTH_MM,
+    OUTPUT_SHAFT_LENGTH_MM,
     GROUND_CLEARANCE_MM,
     GUSSET_HEIGHT_MM,
     GUSSET_SHEET_THICKNESS_MM,
@@ -198,14 +199,15 @@ def lift_motor_axis_x_mm() -> float:
 def _drive_bay() -> dict:
     """Lift train above the bottom plate, outside the head sweep.
 
-    The motor bolts to the gearbox input. The coupling sits on the gearbox output,
-    toward the mast, and still stays outside the head. The gearbox rests on a
-    horizontal flange. The drive-side upright starts above the gearbox.
-    Nothing enters the tilt volume behind the rear faces.
+    The motor bolts to the gearbox input. The coupling hub sits on the output
+    shaft, and the shaft tip meets the jaw face. The hub stays outside the head.
+    The gearbox rests on a horizontal flange. The drive-side upright starts
+    above the gearbox. Nothing enters the tilt volume behind the rear faces.
     """
-    from cad.models.vendor_parts import oriented_coupling
+    from cad.models.vendor_parts import oriented_coupling, oriented_gearbox
 
     coupling = oriented_coupling()
+    gear = oriented_gearbox()
     plate_top = BOTTOM_PLATE_THICKNESS_MM
     gap = 2.0
     flange_thickness = 7.0
@@ -228,12 +230,22 @@ def _drive_bay() -> dict:
     # Output faces the coupling. The motor is on the far side and shares the input face.
     gear_y1 = coupling_y0 - gap
     gear_y0 = gear_y1 - GEARBOX_LENGTH_MM
+    # The vendor shaft is the last 55 mm. Seat the hub on that journal.
+    # Local Y = 0 of the coupling is the jaw face. The shaft tip stops there.
+    if gear is not None and coupling is not None and coupling_box is not None:
+        tip = float(gear.bounding_box().max.Y)
+        coupling_y = gear_y0 + tip
+        coupling_y0 = coupling_y + float(coupling_box.min.Y)
+        coupling_y1 = coupling_y + float(coupling_box.max.Y)
+        if coupling_y1 > head_limit + 0.05:
+            raise ValueError("seated coupling enters the head sweep")
     motor_y1 = gear_y0
     motor_y0 = motor_y1 - SERVO_BODY_LENGTH_MM
     motor_y = (motor_y0 + motor_y1) / 2.0
     return {
         "coupling": coupling,
         "coupling_box": coupling_box,
+        "gear": gear,
         "motor_x": motor_x,
         "z_lift": z_lift,
         "gear_y0": gear_y0,
@@ -734,13 +746,17 @@ def assembly_parts(bom=None, stroke_mm: float | None = None) -> list[Placed]:
             bay["coupling_y"],
             z_lift,
         )
-    add(
-        "VC-HB-2200",
-        Box(GEARBOX_FLANGE_MM, GEARBOX_LENGTH_MM, GEARBOX_FLANGE_MM),
-        motor_x,
-        (bay["gear_y0"] + bay["gear_y1"]) / 2.0,
-        z_lift,
-    )
+    if bay["gear"] is not None:
+        # Input face is local Y = 0, so the placement Y is the motor face.
+        add("VC-HB-2200", bay["gear"], motor_x, bay["gear_y0"], z_lift)
+    else:
+        add(
+            "VC-HB-2200",
+            Box(GEARBOX_FLANGE_MM, GEARBOX_LENGTH_MM, GEARBOX_FLANGE_MM),
+            motor_x,
+            (bay["gear_y0"] + bay["gear_y1"]) / 2.0,
+            z_lift,
+        )
     add(
         "VC-HB-2100",
         Box(SERVO_FLANGE_MM, SERVO_BODY_LENGTH_MM, SERVO_FLANGE_MM),
@@ -1027,6 +1043,18 @@ def _check_pose(parts: list[Placed], station: dict[str, float]) -> None:
         raise ValueError("lift motor flange is not the datasheet square")
     if float(lift.min.X) < rear_face_x_mm() - 0.05:
         raise ValueError("lift motor enters the reserved rear volume")
+    gear = by_name["VC-HB-2200"].bounding_box()
+    if vendor_step_path("VC-HB-2200") is not None:
+        if abs(float(gear.max.Y - gear.min.Y) - GEARBOX_LENGTH_MM) > 0.05:
+            raise ValueError("gearbox length is not 204 mm")
+        if abs(float(gear.min.Y) - float(lift.max.Y)) > 0.05:
+            raise ValueError("motor flange does not meet the gearbox input")
+        if abs(float(gear.min.X) - rear_face_x_mm()) > 0.05:
+            raise ValueError("gearbox flange is not flush with the rear face")
+        hub = by_name["VC-HB-2400"].bounding_box()
+        shaft_root = float(gear.max.Y) - OUTPUT_SHAFT_LENGTH_MM
+        if not shaft_root < float(hub.min.Y) < float(gear.max.Y):
+            raise ValueError("coupling hub is not seated on the output shaft")
     if "VC-HB-3000" in by_name:
         raise ValueError("the separate brake is obsolete and must not be placed")
     if vendor_step_path("VC-HB-2800") is None:

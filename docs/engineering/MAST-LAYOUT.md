@@ -296,7 +296,7 @@ The head plate sweeps Y = ±210 mm down to the rail, so this train stands outsid
 The axis is at X = 7.5 mm and Z = 79.5 mm.
 The 115 mm gearbox is flush with X = −50 mm.
 The motor flange is 81 mm square, so the motor body starts at X = −33 mm.
-The coupling is inboard of the gearbox and stops at Y = −212 mm.
+The coupling hub is seated on the output shaft. Its inboard face is at Y = −249 mm.
 The motor bolts to the gearbox input, further outboard.
 A horizontal flange, VC-FR-4182, sits on the plate and runs out under the gearbox.
 Its neck stays inside the profile depth and meets both stiffeners on a face.
@@ -327,16 +327,18 @@ The gusset webs sit between the chain strands.
 The chain path still uses the published 83 mm tip diameter.
 The placed G&G sprocket tip is about 82.7 mm and its width is 25.5 mm.
 The pitch radius is the documented 37.9 mm.
-The gearbox envelope is the published PLE120 two-stage minimum, 115 mm by 204 mm.
+The gearbox solid is Neugart article 100460948. It is 115 mm square and 204 mm long.
 The servo envelope is the datasheet flange, 81 mm by 186.6 mm.
-No STEP is in the repository for either part.
+No motor STEP is in the repository.
 
-VC-HB-2100 and VC-HB-2200 are envelopes.
+VC-HB-2100 is an envelope.
+VC-HB-2200 is the Neugart STEP.
 VC-HB-2400 is a KTR ROTEX 28 coupling.
 The set is a 32H7 hub, an unbored hub and a 92 Sh-A spider.
 The placed length is 87.5 mm.
 The 50 mm envelope is only the fallback.
-The 32H7 hub faces the gearbox. The gearbox shaft is Ø25 mm, so the two are not mated.
+The 32H7 hub faces the gearbox. The bore is 32H7 and the shaft is Ø25 mm.
+The hub is seated on the journal.
 VC-HB-2800 is the G&G 501-302-0515 sprocket.
 VC-HB-2810 reuses that solid.
 It has no second file.
@@ -347,9 +349,10 @@ The block top is 30 mm from that face. The block length is 90.4 mm.
 VC-HB-3000 is obsolete and is not placed.
 `load_vendor_shape` recenters one STEP file and does not rotate it, unless SOURCE.md says otherwise.
 The HIWIN files keep the mounting face, so they are not recentered.
+The gearbox file keeps the motor face, so it is not recentered.
 The coupling is three files.
 They keep the manufacturer origin because the jaw face is not the box centre.
-A 2 mm gap stays between the gearbox output and the coupling.
+The shaft tip meets the jaw face.
 The motor flange meets the gearbox input on a face.
 A missing file keeps the catalogue envelope.
 The mk 2004 profile, the 10B-2 chain, the UCP 206 blocks and the OLI MVE motors stay envelopes.
@@ -415,8 +418,8 @@ The views are:
 9. Usable stroke. The model travel is 1009.6 mm because two 90.4 mm blocks sit 200 mm apart on the 1300 mm rail. The 200 mm pitch is TBD.
 10. Centre distance of the two mast profiles. The rod is in front of the rails. The 300 mm pitch is TBD.
 11. Front gap from the carriage plate to the motor rear face. The model uses a draft gap of 10 mm. The plate rear is flush with that face.
-12. Siemens 1FL2104 and Neugart PLE120 STEP files. The model uses the datasheet and catalogue envelopes until those files arrive.
-13. Coupling bore against the Ø25 mm gearbox shaft. The STEP hub is 32H7. Pillow-block outline and chain-link section are still open.
+12. Siemens 1FL2104 STEP file. The motor is still the datasheet envelope. The PLE120 STEP is loaded.
+13. Coupling bore against the Ø25 mm gearbox shaft. The STEP hub is 32H7 and is seated on the journal. Pillow-block outline and chain-link section are still open.
 14. Weld position of the two ribs VC-SH-1302.
 
 ## Options

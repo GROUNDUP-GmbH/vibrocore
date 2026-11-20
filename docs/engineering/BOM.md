@@ -27,7 +27,7 @@ complexity reduction vs. V1 custom design.*
 | # | Component               | Spec                              | Qty | Est. €   | Supplier / Source          |
 |---|-------------------------|-----------------------------------|-----|----------|----------------------------|
 |17 | Servo motor 1FL2104     | 3.2 Nm, 1 kW, brake, encoder |   1 |  250–400 | Siemens. Band is not a quote. |
-|18 | Planetary gearbox       | PLE120-040, article 100460948    |   1 |  600–900 | Neugart. Band is not a quote. |
+|18 | Planetary gearbox       | PLE120-040, 7.65 kg, article 100460948 |   1 |  600–900 | Neugart. Band is not a quote. |
 |19 | SINAMICS S200           | 6SL5510-1BB11-0AA0, cabinet      |   1 |   80–150 | Siemens. Band is not a quote. |
 |20 | Elastomer coupling      | R+W EKH or KTR ROTEX 28          |   1 |   60–100 | R+W (DE) / KTR (DE)       |
 |21 | Drive shaft             | Ø25–30 mm, keyed                  |   1 |   30–50  | Custom / standard (EU)     |

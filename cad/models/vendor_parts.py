@@ -47,6 +47,19 @@ def oriented_block():
     return Pos(0.0, 0.0, -mid_z) * solid
 
 
+def oriented_gearbox():
+    """PLE120 article 100460948. Motor face at local Y = 0. Output points +Y.
+
+    File X = 0 is the motor flange face. File X = 204 mm is the shaft tip.
+    The 115 mm square is centred on the axis. The file is not recentered.
+    Rot(0, 0, 90) maps the shaft onto +Y. The key then points toward +X.
+    """
+    loaded = load_vendor_shape("VC-HB-2200", recenter=False)
+    if loaded is None:
+        return None
+    return Rot(0, 0, 90) * loaded
+
+
 def oriented_sprocket():
     """G&G 10B-2 sprocket. The file axis is Z. The chain shaft is Y.
 

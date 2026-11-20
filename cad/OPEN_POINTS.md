@@ -117,9 +117,8 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-GP-7410` DT325 liner retainer HD: no solid. Dimensions were not complete enough to model.
 - `VC-HB-2100` Servo motor 1FL2104: Vendor STEP is not in the repository. The shaft is inside the gearbox envelope and is not a second solid.
 - `VC-HB-2110` Lift motor bracket: Plate thickness, bolt size and weld sizes. Not in BOM.md v1.
-- `VC-HB-2200` Planetary gearbox PLE120-040: Exact input-flange length of article 100460948. The envelope uses the catalogue minimum of 204 mm.
 - `VC-HB-2300` SINAMICS S200 servo drive: PROFINET order 6SL5510-1BB11-0AF0 if the PLC does not use pulse and direction. The price is not a quote.
-- `VC-HB-2400` Elastomer coupling: Gearbox output is Ø25 mm. The STEP hub is 32H7, so the two are not mated. The chain-side hub is unbored.
+- `VC-HB-2400` Elastomer coupling: Gearbox output is Ø25 mm. The STEP hub is 32H7, so the bore is not a fit. The hub is seated on the journal. The chain-side hub is unbored.
 - `VC-HB-2500` Hub drive shaft: Diameter inside the 25-30 mm range, length, key size and sprocket seat.
 - `VC-HB-2600` Pillow block UCP 206: Confirm 30 mm bore against the final shaft diameter. HUB_SYSTEM.md also mentions UCP 205/206.
 - `VC-HB-2700` Duplex chain 10B-2: no solid. Dimensions were not complete enough to model.

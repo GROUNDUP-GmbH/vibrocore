@@ -158,11 +158,12 @@ SPROCKET_PITCH_RADIUS_MM = 37.9
 # iwis 10B-2, 15 teeth. Tip diameter and overall length from the published product page.
 SPROCKET_TIP_DIAMETER_MM = 83.0
 SPROCKET_WIDTH_MM = 40.0
-# Neugart PLE120, ratio 40, two stages. Catalogue 2026-10.
-# D6 and the motor-flange edge are both 115 mm. L1 is the minimum total length.
-# Article 100460948 can be longer. The emailed STEP is not here yet.
+# Neugart PLE120-040, article 100460948. The vendor solid matches these sizes.
+# 204 mm is the input adapter 47.5 mm, the housing 101.5 mm and the output shaft 55 mm.
 GEARBOX_FLANGE_MM = 115.0
 GEARBOX_LENGTH_MM = 204.0
+# Output shaft, from the output flange face to the tip. It is inside the 204 mm.
+OUTPUT_SHAFT_LENGTH_MM = 55.0
 # Siemens 1FL2104-4AG11-1MC0. Datasheet flange AB and overall length LB.
 # The Ø19 x 40 mm shaft enters the gearbox and is not a second solid.
 SERVO_FLANGE_MM = 81.0

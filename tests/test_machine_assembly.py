@@ -137,6 +137,14 @@ def test_assembly_has_no_overlaps_and_reports_clearances():
     gearbox = next(item for item in parts if item.name == "VC-HB-2200")
     assert float(flange.shape.bounding_box().max.Y) < 0.0
     assert abs(float(flange.shape.bounding_box().max.Z) - float(gearbox.shape.bounding_box().min.Z)) < 0.05
+    assert abs(float(gearbox.shape.bounding_box().size.Y) - 204.0) < 0.05
+    assert abs(float(gearbox.shape.bounding_box().min.X) + 50.0) < 0.05
+    assert abs(float(gearbox.shape.bounding_box().min.Y) - float(lift.shape.bounding_box().max.Y)) < 0.05
+    hub = next(item for item in parts if item.name == "VC-HB-2400")
+    shaft_root = float(gearbox.shape.bounding_box().max.Y) - 55.0
+    assert shaft_root < float(hub.shape.bounding_box().min.Y) < float(gearbox.shape.bounding_box().max.Y)
+    assert float(hub.shape.bounding_box().max.Y) < -210.0
+    assert bom.part("VC-HB-2200").mass_kg == 7.65
     assert report["guided_travel_mm"] == 1009.6
     assert report["stroke_position_mm"] == 1009.6
     assert report["profile_size_x_mm"] == 100.0
