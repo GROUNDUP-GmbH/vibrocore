@@ -124,7 +124,7 @@ IF uTgtFreq.r > 0.0 THEN
     rTargetFreq_Hz := uTgtFreq.r;
 END_IF;
 
-(* --- Start / reset: edge-triggered pulses; PLC auto-clears register --- *)
+(* --- Start / reset: edge-triggered pulses. PLC auto-clears register --- *)
 rTrigCycleStart(CLK := GVL_MODBUS.xHMI_CycleStart <> 0);
 xHMI_CycleStart := rTrigCycleStart.Q;
 IF GVL_MODBUS.xHMI_CycleStart <> 0 THEN
@@ -247,7 +247,7 @@ GVL_IO.xVFD_Reset    := xHMI_FaultReset;
 GVL_IO.xAlarmBeacon  := fbSafety.xSafeState OR fbHub.xFault OR fbSonic.xFault
                      OR fbLift.xFault OR fbTilt.xFault OR fbPenetro.xFault;
 
-(* Lift / tilt — E-stop drops all; FB already enforces direction + limit interlocks *)
+(* Lift / tilt — E-stop drops all. FB already enforces direction + limit interlocks *)
 IF fbSafety.xSafeState THEN
     GVL_IO.xLiftExtend   := FALSE;
     GVL_IO.xLiftRetract  := FALSE;

@@ -9,7 +9,7 @@ odoo/http.py, odoo/addons/base/models/res_users.py).
 The CAD client's file routes do not create products or documents. They write
 bytes onto an ir.attachment that already has is_plm set:
 
-- GET  /plm_document_upload/isalive
+- GET /plm_document_upload/isalive
     auth="none". Body "True".
 - POST /plm_document_upload/login
     form fields login, password, and optional db.
@@ -104,8 +104,8 @@ class PlmConfig:
 
         ODOO_API_KEY is preferred for JSON-RPC. ODOO_PASSWORD is preferred for
         /plm_document_upload/login, because that route is an interactive
-        session and does not accept an API key. One secret may fill both
-        roles when the other variable is empty; the upload then fails with
+        session and does not accept an API key. One secret can fill both
+        roles when the other variable is empty. The upload then fails with
         an explanation if that secret is an API key.
         """
         import os

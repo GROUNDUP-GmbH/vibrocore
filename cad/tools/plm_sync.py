@@ -1310,7 +1310,7 @@ class PlmSync:
             else:
                 self.report.add("unchanged", "ir.attachment", key, f"id={document_id}")
 
-        # Ensure every named part exists in _products (may be outside --part selection).
+        # Ensure every named part exists in _products (can be outside --part selection).
         for part_number in adr.parts:
             if part_number not in self._products:
                 self._sync_product(self.bom.part(part_number))

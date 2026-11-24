@@ -107,13 +107,13 @@ class TestNominalCycle:
 
 class TestStoneDetection:
     def test_stone_stops_sonic_before_retract(self, vc):
-        """Stone detection via overcurrent → safety.xSafeState=TRUE → hub ESTOP_HOLD.
+        """Stone detection through overcurrent → safety.xSafeState=TRUE → hub ESTOP_HOLD.
         Hub can only retract after reset + re-home. Sonic is fast-stopped first."""
         vc.start_cycle()
         vc.run_until(lambda: vc.hub.eState == HubState.DRILL_WAIT, max_ms=10_000)
         vc.run_until(lambda: vc.hub.eState == HubState.DRILLING, max_ms=30_000)
 
-        # Simulate stone detection via overcurrent (goes through FB_Safety)
+        # Simulate stone detection through overcurrent (goes through FB_Safety)
         debounce_cycles = P.STONE_DEBOUNCE_MS // CYCLE_MS
         for _ in range(debounce_cycles + 5):
             vc.hw.rVFD_Current_pct = P.STONE_CURRENT_PCT_THR + 20
@@ -122,7 +122,7 @@ class TestStoneDetection:
         assert vc.safety.xStoneDetected is True
         assert vc.safety.xSafeState is True
 
-        # Stone via safety path goes to ESTOP_HOLD (not STOP_SONIC)
+        # Stone through safety path goes to ESTOP_HOLD (not STOP_SONIC)
         # — safety override has higher priority than drilling state machine
         assert vc.hub.eState == HubState.ESTOP_HOLD, (
             f"Expected ESTOP_HOLD after stone, got state={vc.hub.eState}"
@@ -132,7 +132,7 @@ class TestStoneDetection:
         assert vc.hub.eState != HubState.RETRACT
         assert vc.hub.xBrakeRelease_out is False
 
-        # Sonic receives fast-stop via xSafeState path
+        # Sonic receives fast-stop through xSafeState path
         assert vc.hub.xNeedSonicStop is True
 
         # Sonic must stop (confirmed) before any motion is possible
@@ -153,7 +153,7 @@ class TestStoneDetection:
         # Drill to partial depth
         vc.hub.set_position(600.0)
 
-        # Trigger stone via overcurrent
+        # Trigger stone through overcurrent
         debounce_cycles = P.STONE_DEBOUNCE_MS // CYCLE_MS
         for _ in range(debounce_cycles + 5):
             vc.hw.rVFD_Current_pct = P.STONE_CURRENT_PCT_THR + 20
@@ -237,7 +237,7 @@ class TestSystemHealth:
         vc.hw.xEStop_NC = False
         vc.tick()
         # xAlarmBeacon is set in PRG_Main when xSafeState is TRUE
-        # (simulated here via safety.xSafeState)
+        # (simulated here through safety.xSafeState)
         assert vc.safety.xSafeState is True
 
     def test_no_motion_without_enable(self, vc):

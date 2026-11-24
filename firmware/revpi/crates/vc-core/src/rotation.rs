@@ -1,7 +1,7 @@
 //! Rod rotation on top of the vibro head.
 //!
 //! The drive order code is not chosen. The default adapter is step/dir.
-//! A Modbus RTU map may replace it later. Registers stay TODO.
+//! A Modbus RTU map can replace it later. Registers stay TODO.
 //! This interlock is not an ISO 13849 performance level.
 //! Absolute moves need a homed index. The index input is one DIO channel.
 

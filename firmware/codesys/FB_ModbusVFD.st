@@ -76,7 +76,7 @@ IF NOT xEnable THEN
 
 ELSIF xFastStop THEN
     (* OFF3: bit 2 = 0 → VFD uses P1135 ramp + DC brake *)
-    (* Achieves motor stop in ~200–400ms (vs 3+ s for normal ramp) *)
+    (* Achieves motor stop in ~200–400ms (against 3+ s for normal ramp) *)
     wControlWord := GVL_PARAMS.wVFD_CW_STOP_FAST;
 
 ELSIF xResetEdge.Q THEN
@@ -86,7 +86,7 @@ ELSIF xStart THEN
     wControlWord := GVL_PARAMS.wVFD_CW_START;
 
 ELSE
-    (* Normal stop: OFF1, ramps down via P1121 *)
+    (* Normal stop: OFF1, ramps down through P1121 *)
     wControlWord := GVL_PARAMS.wVFD_CW_STOP_NORMAL;
 END_IF;
 

@@ -4,16 +4,16 @@ Field names were taken from OmniaGit/odooplm 19.0 commit b9db892
 (plm 19.0.1.0.50) and from Odoo 19 product.template / mrp.bom:
 
 - engineering_code, engineering_revision (Integer), engineering_revision_letter,
-  engineering_state live on product.template via revision.plm.mixin.
+  engineering_state live on product.template through revision.plm.mixin.
 - product.product reaches them through _inherits.
 - plm_engineering adds mrp.bom.type 'ebom' and mrp.bom.ebom_source_id (Integer,
   a raw database id — left empty because it does not exist before import).
 - mrp.bom.line.itemnum / itemlbl are the CAD position fields on the PLM line.
 - ir.attachment is the engineering document. (engineering_code, engineering_revision)
-  is unique, so a part has one document. The PDF is the printout file on disk;
+  is unique, so a part has one document. The PDF is the printout file on disk.
   it is not a second attachment with the same code.
 - plm.component.document.rel links product.product to ir.attachment.
-- kit_bom exists on both product.template and product.product; this export sets
+- kit_bom exists on both product.template and product.product. This export sets
   the product.product field.
 - plm_auto_internalref is intentionally not fed. Its default rewrites
   default_code to "{engineering_code}_{engineering_revision}". We keep

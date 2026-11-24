@@ -182,11 +182,11 @@ class FB_Safety:
     Mirrors firmware/codesys/FB_Safety.st
 
     Outputs:
-      xSafeState       — TRUE: all motion must stop
-      xStoneDetected   — TRUE: debounced overcurrent → obstacle
+      xSafeState — TRUE: all motion must stop
+      xStoneDetected — TRUE: debounced overcurrent → obstacle
       xLimitUpTriggered
       xLimitDownTriggered
-      eSafetyReason    — canonical table:
+      eSafetyReason — canonical table:
         0=OK 1=ESTOP 2=LIMIT_UP 3=LIMIT_DOWN
         4=HUB_ALARM 5=STONE_DETECTED 6=VFD_COMM
     """
@@ -434,7 +434,7 @@ class FB_HubControl:
     Mirrors firmware/codesys/FB_HubControl.st
 
     Position is tracked analytically (speed × time) rather than
-    via Modbus registers — sufficient for state-machine testing.
+    through Modbus registers — sufficient for state-machine testing.
     """
 
     def __init__(self) -> None:

@@ -75,7 +75,7 @@ def gearbox_emergency_force_n() -> float:
 
 
 def allowable_pull_n() -> float:
-    """Continuous pull the drive may use.
+    """Continuous pull the drive can use.
 
     The chain working load is below the T2D chain force, so the
     chain sets the allowable pull force.

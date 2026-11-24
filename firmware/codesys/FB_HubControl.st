@@ -73,7 +73,7 @@ VAR
     lActualPos          : LINT;
     iPosPrev            : INT;
 
-    (* E-stop reset: arm only after safe state clears; then need fresh rising edge *)
+    (* E-stop reset: arm only after safe state clears. Then need fresh rising edge *)
     xEStopCleared       : BOOL;
     rTrigReset          : R_TRIG;
 END_VAR

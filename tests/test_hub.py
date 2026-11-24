@@ -41,7 +41,7 @@ class TestHoming:
 
     def test_homing_reaches_home(self, hub):
         safe_tick(hub, xCmdCycleStart=True)
-        # Carriage is already at home (position 0) — homing should complete fast
+        # Carriage is already at home (position 0) — homing must complete fast
         for _ in range(200):
             safe_tick(hub)
             if hub.eState == HubState.DRILL_WAIT:

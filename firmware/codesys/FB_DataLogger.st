@@ -35,7 +35,7 @@ VAR_OUTPUT
 END_VAR
 
 VAR
-    (* GPS data received from ESP32-C3 — updated via UART parse task *)
+    (* GPS data received from ESP32-C3 — updated through UART parse task *)
     rGPS_Lat            : REAL := 0.0;
     rGPS_Lon            : REAL := 0.0;
     sGPS_Fix            : STRING[10] := 'NONE';

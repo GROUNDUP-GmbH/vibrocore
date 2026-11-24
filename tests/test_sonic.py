@@ -1,7 +1,7 @@
 """
 Tests for FB_SonicHead — OLI motor state machine.
 
-Covers: startup ramp, resonance band skip, fast stop (OFF3) vs normal stop (OFF1),
+Covers: startup ramp, resonance band skip, fast stop (OFF3) against normal stop (OFF1),
 xConfirmedStopped timing, adaptive frequency, fault handling.
 """
 import pytest
@@ -79,7 +79,7 @@ class TestNormalStop:
         assert sonic.eState == SonicState.IDLE
 
     def test_normal_stop_takes_time(self, sonic):
-        """Normal OFF1 stop should take multiple seconds (not instant)."""
+        """Normal OFF1 stop must take multiple seconds (not instant)."""
         run(sonic, 5000)
         cycles_to_stop = 0
         for _ in range(100000):
@@ -141,7 +141,7 @@ class TestFastStop:
         assert fast_ms < normal_ms, (
             f"Fast stop ({fast_ms}ms) was not faster than normal stop ({normal_ms}ms)"
         )
-        # Fast stop should be well under 2s
+        # Fast stop must be well under 2s
         assert fast_ms < 2000, f"Fast stop took {fast_ms}ms, expected < 2000ms"
 
     def test_confirmed_stopped_only_after_standstill_confirmed(self, sonic):
@@ -153,14 +153,14 @@ class TestFastStop:
         assert sonic.xConfirmedStopped is False
 
     def test_safe_state_triggers_fast_stop(self, sonic):
-        """xSafeState should have same effect as xFastStop."""
+        """xSafeState must have same effect as xFastStop."""
         self._reach_running(sonic)
         sonic.tick(xEnable=True, xSafeState=True, xFastStop=False,
                    rTargetFreq_Hz=100.0)
         assert sonic.eState == SonicState.FAST_STOP
 
     def test_stop_timeout_causes_fault(self, sonic):
-        """If motor doesn't stop within SONIC_STOP_TIMEOUT_MS → FAULT."""
+        """If motor does not stop within SONIC_STOP_TIMEOUT_MS → FAULT."""
         self._reach_running(sonic)
         # Prevent VFD from ever stopping
         sonic._vfd.xRunning = True
