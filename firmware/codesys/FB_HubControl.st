@@ -1,8 +1,9 @@
 (*
  * FB_HubControl — Hub Lift/Lower State Machine
  *
- * Controls NEMA 42 stepper via Nanotec C5-E (Modbus RTU, CiA 402).
- * Drive train: NEMA42 → Neugart PLPE120-040 (40:1) → 10B-2 chain → carriage.
+ * Controls the hub through the Nanotec C5-E map (Modbus RTU, CiA 402).
+ * That map is not the live SINAMICS S200 interface.
+ * Drive train: 1FL2104 → Neugart PLE120-040 (40:1) → ROTEX 28 → 10B-2 chain → carriage.
  *
  * CRITICAL INTERLOCK:
  *   Hub may ONLY move upward (retract) when xSonicConfirmedStopped = TRUE.

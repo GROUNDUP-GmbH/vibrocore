@@ -280,7 +280,8 @@ Do not use 14.3 kN.
 ### 7.1 Allowable pull force
 
 The chain working load sets the allowable pull force at 4.5 kN.
-The gearbox nominal tension is 5.80 kN and is not the limit.
+The pull at the drive torque limit is about 5.83 kN and is not the limit.
+See PULL_FORCE.md and LIFT-DRIVE-SIZING.md.
 
 ### 7.2 Required Forces
 
@@ -333,16 +334,17 @@ V2 eliminates this concern entirely.*
 | Center column               | 42CrMo4, Ø50×200 mm               | Custom/EU       |
 | Casing adapter              | Steel, custom threaded             | Custom/EU       |
 | Rubber isolators (4×)       | M12, 55–65 Shore A, f₀ ~10 Hz     | EU              |
-| Hub motor                   | NEMA 42 CL stepper, 20 Nm         | Nanotec/EU      |
-| Hub gearbox                 | Neugart PLPE120, 40:1              | DE              |
+| Hub motor                   | Siemens 1FL2104-4AG11-1MC0, 3.2 / 10.8 Nm, torque limit 6.7 Nm | DE |
+| Hub gearbox                 | Neugart PLE120-040, article 100460948, 40:1 | DE |
+| Hub coupling                | KTR ROTEX 28, 1:1, to the chain shaft | DE |
 | Hub chain                   | 10B-2 duplex roller                | EU              |
 | Hub sprockets (2×)          | 10B-2, 15T, taper-lock             | EU              |
-| Hub driver                  | CL86T-V4.1 or Nanotec C5-E        | EU              |
-| Brake                       | 24V power-off EM, 15 Nm           | EU              |
+| Hub drive                   | SINAMICS S200, 6SL5510-1BB11-0AA0 | DE |
+| Brake                       | 3.3 Nm brake in the motor         | DE |
 | Frame profiles (2×)         | mk 2004, 50×100×1500 mm           | DE              |
 | Linear guides (2×)          | Hiwin HGR20, 1300 mm               | TW/EU           |
 | PLC                         | WAGO PFC200 XTR (Option A)         | DE              |
 
 ---
 
-*Last updated: 2026-03-15*
+*Last updated: 2026-11-24*

@@ -29,7 +29,7 @@ complexity reduction vs. V1 custom design.*
 |17 | Servo motor 1FL2104     | 3.2 Nm, 1 kW, brake, encoder |   1 |  250–400 | Siemens. Band is not a quote. |
 |18 | Planetary gearbox       | PLE120-040, 7.65 kg, article 100460948 |   1 |  600–900 | Neugart. Band is not a quote. |
 |19 | SINAMICS S200           | 6SL5510-1BB11-0AA0, cabinet      |   1 |   80–150 | Siemens. Band is not a quote. |
-|20 | Elastomer coupling      | R+W EKH or KTR ROTEX 28          |   1 |   60–100 | R+W (DE) / KTR (DE)       |
+|20 | Elastomer coupling      | KTR ROTEX 28, 1:1, gearbox to chain shaft |   1 |   60–100 | KTR (DE)       |
 |21 | Drive shaft             | Ø25–30 mm, keyed                  |   1 |   30–50  | Custom / standard (EU)     |
 |22 | Pillow block UCP 206    | Self-aligning, Ø30 bore           |   2 |   30–50  | SKF / Schaeffler (EU)      |
 |23 | Chain 10B-2 duplex      | 3.2 m, pre-greased                |   1 |   30–50  | iwis / Wippermann (DE)     |
@@ -125,7 +125,7 @@ Recommended for V1 prototype / cost-sensitive builds.*
 |---|-----------|------|-----|--------|----------|
 |47b| RevPi Connect 4 | CM4 Quad-Core A72 1.5 GHz, 4 GB RAM, 32 GB eMMC, 2× GbE, RS-485 built-in, Docker-native, −25..+55 °C, DIN rail | 1 | 450–520 | [revolutionpi.com](https://revolutionpi.com/shop/en/revpi-connect4) (DE) |
 |48b| RevPi DIO module | 14× DI 24V + 14× DO 24V. Replaces the DI and DO modules. The chain encoder is obsolete. | 1 | 196 | revolutionpi.com (DE) |
-|49b| *(RS-485 built-in)* | Modbus RTU to Siemens V20 + Nanotec C5-E — no separate module needed | — | 0 | — |
+|49b| *(RS-485 built-in)* | Modbus RTU to Siemens V20 + SINAMICS S200 — no separate module needed | — | 0 | — |
 |50b–64b| Shared Option A lines, without the WAGO rack and without the obsolete SE050 and 9 V lines | | | inside the total below | same as §5 |
 
 **Control Subtotal Option B:** EUR 1,224–1,599.
@@ -512,7 +512,7 @@ Do not invent an order code.
 | 108 | Probe rod O-ring pack | PN 201325, 25 rings. Seals the 3.25 in casing joints. | 1 | 24.75 | Offer 26100096 |
 | 110 | DT325 drive head | PN 201385, 1.25 in pin. Obsolete. Not on the kit. | 0 | 171.34 | History only |
 | 111 | DT325 liner retainer HD | PN 208472. Obsolete. Not on the kit. | 0 | 161.93 | History only |
-| 109 | Load-cell overload bypass | Closes before 5 kN. Must carry 9499 N. | 1 | unknown | Custom (EU) |
+| 109 | Load-cell overload bypass | Closes before 5 kN. Must carry 9.37 kN. | 1 | unknown | Custom (EU) |
 
 ## Supplier Directory (EU Priority)
 
@@ -521,7 +521,7 @@ Do not invent an order code.
 | Vibration motors  | OLI Vibrators           | IT      | olivibra.com                 |
 | Motors (async)    | ABB                     | CH/EU   | new.abb.com                  |
 | Motors (async)    | Siemens                 | DE      | siemens.com                  |
-| Motors (stepper)  | Nanotec                 | DE      | nanotec.com                  |
+| Hub servo         | Siemens 1FL2104 / S200  | DE      | siemens.com                  |
 | VFDs              | Siemens (SINAMICS V20)  | DE      | siemens.com                  |
 | VFDs              | ABB (ACS150)            | CH/EU   | new.abb.com                  |
 | Gearboxes         | Neugart                 | DE      | neugart.com                  |

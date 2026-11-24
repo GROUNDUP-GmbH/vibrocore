@@ -1,7 +1,8 @@
-"""Allowable hub pull force from the drive data in the design notes.
+"""Allowable hub pull force from the approved lift-drive data.
 
-The chain working load is the limit. The motor-times-ratio tension is not
-an allowable pull force. See docs/engineering/PULL_FORCE.md.
+The chain working load is the limit. Do not use the motor peak torque
+as an allowable pull force. See docs/engineering/PULL_FORCE.md and
+docs/engineering/LIFT-DRIVE-SIZING.md.
 """
 
 from __future__ import annotations
@@ -11,16 +12,21 @@ import math
 # docs/design/HUB_SYSTEM.md section 3. Pitch of a 10B chain, DIN 8187.
 CHAIN_PITCH_MM = 15.875
 SPROCKET_TEETH = 15
-# HUB_SYSTEM.md uses 90 percent. This is the figure in the design note.
-GEARBOX_EFFICIENCY = 0.90
+# docs/engineering/LIFT-DRIVE-SIZING.md. Exact pitch-circle is 38.177 mm.
+PITCH_RADIUS_MM = 38.18
 GEAR_RATIO = 40
-# HUB_SYSTEM.md section 3.2. Output torque, so do not apply efficiency again.
-GEARBOX_NOMINAL_NM = 220.0
-GEARBOX_EMERGENCY_NM = 360.0
-# HUB_SYSTEM.md section 4.1 calls 15 Nm the nominal motor torque.
-# The BOM line says about 20 Nm. The motor catalogue number is not selected.
-MOTOR_TORQUE_NOMINAL_NM = 15.0
-MOTOR_TORQUE_BOM_NM = 20.0
+GEARBOX_EFFICIENCY = 0.97
+CHAIN_BEARING_EFFICIENCY = 0.98
+GEARBOX_IDLE_MOTOR_NM = 0.85
+# Neugart PLE120-040, article 100460948, i = 40. No extra gear stage.
+GEARBOX_T2D_NM = 195.0
+GEARBOX_T2Z_NM = 230.0
+GEARBOX_T2MAX_NM = 365.0
+GEARBOX_T2STOP_NM = 500.0
+# Siemens 1FL2104-4AG11-1MC0. The drive torque limit is the mechanical fuse.
+MOTOR_TORQUE_RATED_NM = 3.2
+MOTOR_TORQUE_MAX_NM = 10.8
+MOTOR_TORQUE_LIMIT_NM = 6.7
 # HUB_SYSTEM.md: breaking load about 44.5 kN, working load about 4.5 kN (10:1).
 CHAIN_BREAK_N = 44500.0
 CHAIN_WORKING_N = 4500.0
@@ -31,7 +37,7 @@ def pitch_radius_mm(
     pitch_mm: float = CHAIN_PITCH_MM,
     teeth: int = SPROCKET_TEETH,
 ) -> float:
-    """Radius used in HUB_SYSTEM.md: R = (pitch x teeth) / (2 pi)."""
+    """Older radius R = (pitch x teeth) / (2 pi). Do not use it for chain force."""
     return (pitch_mm * teeth) / (2.0 * math.pi)
 
 
@@ -44,31 +50,43 @@ def exact_pitch_radius_mm(
 
 
 def chain_force_n(torque_nm: float, radius_mm: float | None = None) -> float:
-    radius = pitch_radius_mm() if radius_mm is None else radius_mm
-    return torque_nm / (radius / 1000.0)
+    """Chain tension from gearbox output torque. F = T2 x 0.98 / R."""
+    radius = PITCH_RADIUS_MM if radius_mm is None else radius_mm
+    return torque_nm * CHAIN_BEARING_EFFICIENCY / (radius / 1000.0)
 
 
-def motor_path_torque_nm(motor_nm: float = MOTOR_TORQUE_NOMINAL_NM) -> float:
-    return motor_nm * GEAR_RATIO * GEARBOX_EFFICIENCY
+def gearbox_output_from_motor_nm(motor_nm: float = MOTOR_TORQUE_LIMIT_NM) -> float:
+    """Gearbox output torque from motor torque, with idle torque removed.
+
+    T2 = (T_mot - 0.85 Nm) x 40 x 0.97.
+    Do not pass the motor peak of 10.8 Nm. That result is above T2max.
+    """
+    return (motor_nm - GEARBOX_IDLE_MOTOR_NM) * GEAR_RATIO * GEARBOX_EFFICIENCY
 
 
 def gearbox_nominal_force_n() -> float:
-    return chain_force_n(GEARBOX_NOMINAL_NM)
+    """Chain force at continuous torque T2D."""
+    return chain_force_n(GEARBOX_T2D_NM)
 
 
 def gearbox_emergency_force_n() -> float:
-    return chain_force_n(GEARBOX_EMERGENCY_NM)
+    """Chain force at T2max. The load-cell bypass must carry this load."""
+    return chain_force_n(GEARBOX_T2MAX_NM)
 
 
 def allowable_pull_n() -> float:
     """Continuous pull the drive may use.
 
-    The chain working load is below the gearbox nominal tension, so the
+    The chain working load is below the T2D chain force, so the
     chain sets the allowable pull force.
     """
     return min(CHAIN_WORKING_N, gearbox_nominal_force_n())
 
 
 def load_cell_needs_bypass() -> bool:
-    """True when the pull path can load the cell above its rating."""
+    """True when the pull path can load the cell above its rating.
+
+    T2D chain force is already above 5 kN. The bypass load is the
+    T2max chain force from gearbox_emergency_force_n.
+    """
     return gearbox_nominal_force_n() > LOAD_CELL_RATED_N

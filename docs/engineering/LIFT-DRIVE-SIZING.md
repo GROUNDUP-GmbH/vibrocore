@@ -65,6 +65,10 @@ The previous PLPE120 at i = 40 has a cyclic torque of 172 Nm.
 A hard extraction is about 187 Nm. That gearbox is above its cyclic torque.
 PLE120 at i = 40 stays below T2Z for the same case.
 The chain load goes into the separate shaft, not into the gearbox.
+The path from the PLE120 output to the sprocket is 1:1.
+The KTR ROTEX 28 joins the gearbox output to the chain shaft.
+There is no gear stage.
+Stefan confirmed that path on 2026-11-24.
 
 ## 4. Power loss during pull-out
 

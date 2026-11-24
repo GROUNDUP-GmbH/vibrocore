@@ -104,12 +104,13 @@ two self-aligning ball bearings in pillow blocks bolted to the base plate.
 | Parameter              | Value                              |
 |------------------------|------------------------------------|
 | Shaft diameter         | 25–30 mm                           |
-| Coupling               | R+W EKH / KTR ROTEX 28            |
+| Coupling               | KTR ROTEX 28, 1:1, on the chain shaft |
 | Bearings               | UCP 205/206 pillow blocks          |
 | Sprocket mount         | Taper-lock bush                    |
 
 **Rationale:** The chain sprocket applies radial loads that would damage the
 gearbox output bearings if directly mounted. The separate shaft absorbs these loads.
+The coupling is 1:1. There is no gear stage between the PLE120 output and the chain shaft.
 
 ## 4. Force Analysis
 
@@ -120,7 +121,8 @@ Do not use 14.3 kN. That figure is the motor-times-ratio tension. The gearbox ca
 ### 4.1 Allowable pull force
 
 The chain working load is about 4.5 kN.
-The gearbox nominal tension is 5.80 kN.
+The pull at the drive torque limit is about 5.83 kN.
+See LIFT-DRIVE-SIZING.md and PULL_FORCE.md.
 The allowable pull force is the lower value, 4.5 kN.
 
 ### 4.2 Required Forces
@@ -141,8 +143,8 @@ That margin is small. See the note.
 Motor max speed:                   600 rpm (practical for closed-loop)
 Gearbox ratio:                     40:1
 → Output shaft speed:              600 / 40 = 15 rpm
-→ Sprocket circumference:          2π × 37.9 mm = 238 mm
-→ Chain linear speed:              15 × 238 = 3,570 mm/min ≈ 59.5 mm/s
+→ Sprocket circumference:          2π × 38.18 mm = 239.89 mm
+→ Chain linear speed:              15 × 239.89 = 3,598 mm/min ≈ 60.0 mm/s
 ```
 
 ~60 mm/s is adequate for both penetration (typically 10–30 mm/s with vibration)
@@ -214,11 +216,17 @@ IF motor_current > threshold_current (e.g. 120% rated):
         → ALERT operator
 ```
 
-The closed-loop stepper driver (CL86T-V4.1 or Nanotec C5-E) provides current
-feedback. Combined with VFD current monitoring on the sonic motor, this gives
+The SINAMICS S200 provides the lift-motor current.
+Combined with VFD current monitoring on the sonic motor, this gives
 redundant obstacle detection.
+The CL86T and the Nanotec C5-E are not the hub drive.
 
 ## 8. Controller Integration
+
+The selected hub drive is the SINAMICS S200, order 6SL5510-1BB11-0AA0.
+The diagram below still names the CL86T and the Nanotec C5-E.
+Those names are the previous stepper driver.
+The pin table is not a released S200 wiring list.
 
 ```
                     ┌────────────────┐

@@ -79,11 +79,11 @@
 
 ## Component Datasheets (to be collected)
 
-- [ ] Neugart PLPE120-040 datasheet
+- [ ] Neugart PLE120-040, article 100460948, catalogue 2026-10
 - [ ] SKF NJ 206 ECP bearing datasheet
 - [ ] Gates HTD 8M belt design manual
-- [ ] Nanotec ST11018 stepper motor datasheet
-- [ ] CL86T-V4.1 driver manual
+- [ ] Siemens 1FL2104-4AG11-1MC0 datasheet, generated 2026-11-20
+- [ ] SINAMICS S200 manual, order 6SL5510-1BB11-0AA0
 - [ ] Siemens V20 VFD quick start guide
 
 ---
