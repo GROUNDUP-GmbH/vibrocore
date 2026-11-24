@@ -1,7 +1,7 @@
 # Cable list
 
 The energy chain is VC-HB-3430.
-A slip ring is not used.
+The design does not use a slip ring.
 
 | Cable | Part | From | To | Spec | In the chain | Note |
 | --- | --- | --- | --- | --- | --- | --- |
