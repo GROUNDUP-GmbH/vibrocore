@@ -1,8 +1,8 @@
 # Bill of Materials (BOM)
 
-Preliminary BOM for Vibrocore V1 prototype.
-All prices are estimates.
-Verify with suppliers before ordering.
+This list is the preliminary BOM for the Vibrocore V1 prototype.
+Every price is an estimate.
+Verify each price with the supplier before you order.
 
 ## 1. Sonic Head (V2: 2× OLI MVE 400/6-HF)
 
@@ -17,10 +17,11 @@ Verify with suppliers before ordering.
 | 7 | Motor cable (shielded)  | 3×1.5 mm², < 5 m                 |   2 |   15–30  | Lapp (DE)                  |
 | 8 | Fasteners (head)        | M12×40 (motors), M10 (column)    |   1 |   20–40  | Würth / Bossard (EU)       |
 
-**Sonic Head Subtotal: ~1,005–1,600 €.** The old EUR 180–300 inverter band left the rollup. The ATV320 price is not sourced.
+**Sonic Head Subtotal: ~1,005–1,600 €.** The old EUR 180–300 inverter band left the rollup. No supplier quote gives the ATV320 price.
 
-*Note: V2 eliminates custom eccentric shafts, discs, timing belts, and external bearings — all handled internally by the OLI motors.
-Significant cost and complexity reduction against V1 custom design.*
+*The OLI motors hold the eccentric shafts, the discs, the timing belts, and the bearings.
+V2 does not use those parts as separate items.
+The cost and the complexity are lower than the V1 custom design.*
 
 ## 2. Hub System
 
@@ -153,7 +154,7 @@ The PiBridge plug and the CODESYS licence are not in this total.
 > For EU field use (March–November) this is acceptable.
 > Add enclosure heater strip (~€15) for cold-storage overnight.
 > - Vibration: WAGO is explicitly 5g rated.
-> The drill enclosure isolates the controller from drilling vibrations through rubber mounts — in practice both are adequate.
+> The drill enclosure isolates the controller from drilling vibrations through rubber mounts. In practice both meet this duty.
 > - CODESYS real-time: RevPi uses PREEMPT_RT Linux (soft PLC). For Vibrocore's
 > 500ms Modbus polling cycles this is more than sufficient.
 > - Position comes from the 1FL2 absolute encoder through the S200.
@@ -181,8 +182,8 @@ The sampling string is the 3.25 in outer casing and the cutting shoe at the bott
 Open lab tubes sit inside the casing.
 The split carrier holds those tubes.
 Sample tubes and push-on caps are lab consumables.
-They are not lines in this table.
-See `docs/engineering/SAMPLING.md`.
+This table does not list them.
+Read `docs/engineering/SAMPLING.md`.
 
 | # | Component               | Spec                              | Qty | Est. €   | Supplier / Source          |
 |---|-------------------------|-----------------------------------|-----|----------|----------------------------|
@@ -193,12 +194,12 @@ See `docs/engineering/SAMPLING.md`.
 
 The kit lines are two outer rods, one O-ring pack, four cutting shoes and the two half-shells with their fasteners.
 The O-ring pack stays.
-It seals the 3.25 in casing joints.
+The pack seals the 3.25 in casing joints.
 The kit rollup is EUR 2,007.85.
 That sum is two rods, four shoes and one O-ring pack.
 The half-shells have no price yet.
 Drive head 201385 and retainer HD 208472 are obsolete history.
-They are not kit lines.
+Those two parts are not kit lines.
 
 ## 7. Positioning System
 
@@ -207,28 +208,28 @@ They are not kit lines.
 |60 | viDoc RTK Light         | RTK rover, AR-capable             |   1 | ~2,000   | pix4d.com (existing)       |
 |63 | WLAN bridge             | For head GPS to the tablet        |   1 |   20–40  | ESP32 module               |
 
-The GPS antenna and the ZED-F9P are on the control BOM only.
+The control BOM is the only place for the GPS antenna and the ZED-F9P.
 Do not buy them again here.
 
-**Positioning kit rollup: EUR 2,020–2,040.** If the viDoc is already owned, the added purchase is the WLAN bridge, EUR 20–40.
+**Positioning kit rollup: EUR 2,020–2,040.** If Ground UP already owns the viDoc, the added purchase is the WLAN bridge, EUR 20–40.
 
 ## 8. Deployment, Penetrometry & Core Imaging
 
-*Optional subsystems for V1.1 / field-ready version.
-Can be added incrementally without hardware changes to the base controller I/O.*
+*These subsystems are optional for the V1.1 field-ready version.
+You can add them in steps. The base controller I/O hardware stays the same.*
 
 ---
 
 ### 8a. Lift Actuator System (~40 cm deployment travel)
 
-**Function:** Raises and lowers the drill mast about 400 mm.
-The transport position is the mast raised. It clears ground obstacles.
-The drilling position is the mast deployed. The weight rests on the stabiliser feet.
-Two parallel actuators ensure stable, torsion-free deployment.
+**Function:** The actuators raise and lower the drill mast about 400 mm.
+In transport the mast is raised. The mast clears ground obstacles.
+In drilling the mast is deployed. The weight rests on the stabiliser feet.
+Two parallel actuators keep the deployment stable and free of torsion.
 
-**Design:** 2× electric linear actuator (one per frame side) + shared H-bridge relay direction control.
-Each actuator includes mechanical end stops.
-CODESYS reads the 4 limit switches and controls extend/retract through 2 DO channels (shared for both actuators in parallel).
+**Design:** Use 2× electric linear actuators, one on each side of the frame, and one shared H-bridge relay for direction.
+Each actuator has mechanical end stops.
+CODESYS reads the 4 limit switches and commands extend and retract on 2 DO channels. Both actuators share those channels.
 
 | # | Component | Spec | Qty | Est. € | Supplier |
 |---|-----------|------|-----|--------|----------|
@@ -246,13 +247,13 @@ CODESYS reads the 4 limit switches and controls extend/retract through 2 DO chan
 
 ### 8b. Tilt Actuator (0°–90° mast fold)
 
-**Function:** Folds the drill mast from vertical (drilling) to horizontal (road transport), and back.
+**Function:** The actuator folds the drill mast from vertical drilling to horizontal road transport, and back.
 The pivot is at the base of the mast.
-In vertical position, the tilt actuator is locked by motor-hold and a mechanical detent pin.
+In the vertical position, motor-hold and a mechanical detent pin lock the tilt actuator.
 
-**Design:** Single electric linear actuator on a pivot bracket, 600 mm from mast pivot.
+**Design:** Use one electric linear actuator on a pivot bracket, 600 mm from the mast pivot.
 Stroke needed for 90°: ≈ 600 mm × sin(45°) × 2 ≈ 200 mm stroke is sufficient for a carefully positioned pivot-to-attachment geometry.
-Verify with final mechanical design.
+Verify the geometry with the final mechanical design.
 
 | # | Component | Spec | Qty | Est. € | Supplier |
 |---|-----------|------|-----|--------|----------|
@@ -268,7 +269,7 @@ Verify with final mechanical design.
 > RevPi: still within single DIO module capacity (10/14 DI, 8/14 DO).
 
 > **PSU upgrade required:** The lift and tilt actuators can draw up to 4× 2A = 8A at 24V together.
-> All four do not run at the same time. Specify the supply for the peak.
+> All four seldom run at the same time. Specify the supply for the peak.
 > Upgrade 24V PSU from
 > Mean Well DDR-60D-24 (60W/2.5A) → **Mean Well SDR-120-24 (120W/5A)** (~€40–70).
 > See §4.
@@ -277,13 +278,13 @@ Verify with final mechanical design.
 
 ### 8c. Integrated Penetrometer (Force-Displacement Measurement)
 
-**Function:** Measures drilling resistance (push force) as a function of depth throughout the entire penetration cycle.
-Combined with the existing position encoder this produces a **drilling penetrogram** (force against depth curve).
-Functionally equivalent to a lightweight Cone Penetration Test (CPT) at the sample point.
+**Function:** The cell measures drilling resistance, the push force, against depth through the whole penetration cycle.
+Together with the position encoder, the record is a **drilling penetrogram** (force against depth curve).
+The record matches a lightweight Cone Penetration Test (CPT) at the sample point.
 
-**Design:** S-type load cell mounted in-line between the hub carriage adapter plate and the casing adapter.
-Output: 4–20 mA through signal conditioner to RS-485 Modbus RTU converter (Slave address 3 on the existing bus).
-No additional PLC I/O module needed.
+**Design:** Mount an S-type load cell in line between the hub carriage adapter plate and the casing adapter.
+The output is 4–20 mA through a signal conditioner to an RS-485 Modbus RTU converter. The converter is Slave address 3 on the existing bus.
+This path does not need another PLC I/O module.
 
 ```
 Hub carriage plate
@@ -328,17 +329,17 @@ Hub carriage plate
 
 ### 8d. Core Scanner
 
-The old through-liner procedure is withdrawn.
+The team withdrew the old through-liner procedure.
 Do not scan a polycarbonate liner.
-The machine does not use that liner.
-The cradle must fit one sample tube.
+This machine does not use that liner.
+The cradle has to fit one sample tube.
 The tube outside diameter is TBD.
 The tube is a lab consumable and is not a BOM line.
 Do not assume the tube wall is clear.
 See `docs/engineering/SAMPLING.md`.
 
-The sled hardware below is unchanged.
-The cradle opening is not.
+The sled hardware below stays as it is.
+The cradle opening does not.
 
 The sled still uses the Raspberry Pi 4, the HQ camera and the rail.
 Do not apply a polycarbonate colour correction.
@@ -576,11 +577,11 @@ Do not invent an order code.
 ## 10. Cabinet parts added on 2026-11-20
 
 Stefan approved these rows on 2026-11-20.
-Prices below are unknown.
+The prices below are unknown.
 Do not invent a price.
 The rotation drive is a proposal.
-It is not on the live BOM.
-VC-CT-6100, the PFC200, is unchanged.
+The live BOM does not include it.
+VC-CT-6100, the PFC200, stays as it is.
 
 | # | Component | Spec | Qty | Est. € | Supplier |
 |---|-----------|------|-----|--------|----------|

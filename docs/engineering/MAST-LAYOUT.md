@@ -1,23 +1,23 @@
 # Mast stack layout
 
-Document status: preliminary.
-This document is a study.
-It is not a manufacturing instruction.
+The status of this document is preliminary.
+This file records a study.
+This file is not a manufacturing instruction.
 The profile length stays 1500 mm.
-Do not change VC-FR-4100 from this study.
+Do not change VC-FR-4100 because of this study.
 
 ## Question
 
-The open item is `mast-height-deficit`.
+The open item name is `mast-height-deficit`.
 One casing is 1219.2 mm long.
 The mast profile is 1500 mm long.
-The casing, the sonic head, the cutting shoe and the adapter must stand on that mast.
+The casing, the sonic head, the cutting shoe and the adapter have to stand on that mast.
 This study adds those lengths.
-It compares the sum with the mast stroke.
+The study compares the sum with the mast stroke.
 
 ## Height chain
 
-The required height is the sum of seven lengths.
+Seven lengths add up to the required height.
 
 1. Ground clearance.
 2. Cutting shoe.
@@ -29,21 +29,21 @@ The required height is the sum of seven lengths.
 
 Required height = ground clearance + shoe + casing + adapter + head + carriage + top margin.
 
-The available mast stroke is 1300 mm.
+The mast stroke that is available is 1300 mm.
 `firmware/codesys/GVL_PARAMS.st` stores that value as `rMAX_STROKE_MM`.
-The comment in that file calls it the physical mast stroke.
+The comment in that file calls the value the physical mast stroke.
 The rails VC-HB-3100 are also 1300 mm long.
-The margin is the stroke minus the required height.
+The margin equals the stroke minus the required height.
 A negative margin is a deficit.
 
 The 1500 mm profile is a second comparison.
 The study does not treat the profile length as the stroke.
-The study does not change the profile length.
+The study leaves the profile length unchanged.
 
 ## Result with the current parameters
 
-The motors sit left and right of the rod.
-Their 175 mm height is not in the sum.
+The motors sit on the left of the rod and on the right of the rod.
+The sum does not include their 175 mm height.
 
 Required height: 1761.2 mm.
 Mast stroke: 1300 mm.
@@ -53,11 +53,11 @@ Mast profile: 1500 mm.
 Deficit against the profile: 261.2 mm.
 
 These numbers use the placeholders in `cad/models/mast_layout.py`.
-A new measured length changes the deficit.
+A newly measured length changes the deficit.
 Run `python -m cad.tools.cli export` after that change.
 The sheet `cad/export/layout/mast-stack.svg` prints the same deficit.
 
-Documented lengths alone, with every TBD length set to 0:
+Documented lengths alone, with every TBD length set to 0, are:
 
 - Casing: 1219.2 mm.
 - Column shaft: 200 mm.
@@ -65,50 +65,50 @@ Documented lengths alone, with every TBD length set to 0:
 - Sum: 1439.2 mm.
 
 1439.2 mm is 60.8 mm shorter than the 1500 mm profile.
-That is a margin against the profile.
+That difference is a margin against the profile.
 1439.2 mm is 139.2 mm longer than the 1300 mm stroke.
-The stroke deficit is already present in the documented lengths.
+The documented lengths already contain the stroke deficit.
 The TBD lengths make that deficit larger.
 The TBD lengths also turn the profile margin into the 261.2 mm deficit.
 
 ## Motor placement
 
 SONIC_HEAD.md gives the motor envelope as 255 mm x 154 mm x 175 mm.
-That drawing calls 175 mm the height.
+That drawing names 175 mm as the height.
 The shafts stay perpendicular to the rod axis.
-The assembly puts both motors on the vibrating plate.
-One motor is on the left of the rod.
-One motor is on the right of the rod.
+The assembly places both motors on the vibrating plate.
+One motor sits on the left of the rod.
+One motor sits on the right of the rod.
 The head is yawed 90 degrees about the vertical axis.
 The 255 mm shaft axis then points at the mast.
 The 154 mm width lies along the plate length.
 The 175 mm side stays vertical.
-It does not add a serial term to the head.
+That side does not add a serial term to the head.
 
 The documented minimum centre distance is 170 mm.
 The layout pitch is 266 mm.
 That pitch is TBD.
-It keeps both 154 mm widths on the 420 mm plate.
+The pitch keeps both 154 mm widths on the 420 mm plate.
 The column flange sits between the motors.
 The flange diameter is 80 mm.
 The gap between the motor envelopes is 112 mm.
 
 The motor bodies still rise 175 mm above the plate.
-They are not stacked on the column.
+The motors are not stacked on the column.
 The rear face of each motor is flush with the rear face of the plate.
 That rear face is 10 mm in front of the carriage plate.
 The 10 mm gap is a draft value.
 The isolators sit in the gap between the motors.
-They do not stand under the motor bodies.
+The isolators do not stand under the motor bodies.
 The free height is unknown.
-It is not in the sum.
+The sum does not include the free height.
 The bracket VC-SH-1350 takes the pull-out load.
-The sizing is in `docs/engineering/CARRIAGE-BRACKET.md`.
+`docs/engineering/CARRIAGE-BRACKET.md` holds the sizing.
 
 ## Head term
 
 The head term is one length in the chain.
-It is the sum of three lengths.
+Three lengths add up to that term.
 
 | Piece | Length | Status |
 |---|---|---|
@@ -117,10 +117,10 @@ It is the sum of three lengths.
 | Vibrating plate VC-SH-1301 | 20 mm | Documented. |
 | Head total | 232 mm | The flange part of this total is TBD. |
 
-The motor height is not in this total.
+This total does not include the motor height.
 Isolator free height is unknown.
 VC-SH-1600 does not give a free height.
-This study does not add the isolator height.
+This study leaves out the isolator height.
 The assembly shows a 40 mm placeholder between the motors.
 That placeholder is not a catalogue height.
 Add the real free height if the isolators lift the carriage.
@@ -149,7 +149,7 @@ Do not use the 10 mm carriage-plate thickness as the carriage height.
 
 ## TBD values
 
-Each placeholder is named in `cad/models/mast_layout.py`.
+`cad/models/mast_layout.py` names each placeholder.
 The value lets the layout draw.
 The value is not a measurement.
 The drawing marks each chain placeholder TBD.
@@ -195,8 +195,8 @@ These visual stand-ins are not in the height sum.
 | string_axis_y_mm | 0 mm | Rod axis on the plates. Zero is the plate centre. |
 
 The drawing puts the stroke and the profile on the same ground baseline.
-That comparison is a length comparison.
-It is not a located zone on the mast.
+That comparison compares lengths.
+That comparison is not a located zone on the mast.
 
 ## Other assumptions
 
@@ -208,29 +208,29 @@ The profile bar stays 1500 mm long.
 The layout places the mast bottom on the ground line.
 Stabiliser feet can raise the plate.
 Foot height is unknown.
-Foot height is not in the sum.
+The sum does not include the foot height.
 
 The split carrier sits inside the casing.
 The study solid uses the VC-SP-7620 placeholders.
 That length is 6 x 100 mm = 600 mm.
 Tube length is TBD.
-The carrier length is not in the height sum.
+The height sum does not include the carrier length.
 
 The ground body in the STEP file is a datum.
-It is not a part.
+The datum is not a part.
 Its thickness is 0.5 mm.
-That thickness is not in the height sum.
+The height sum does not include that thickness.
 
-The bottom plate is drawn.
-The bottom plate is not a term in the seven-length sum.
+The drawing includes the bottom plate.
+The seven-length sum does not include the bottom plate.
 The schematic study puts the string through the plate centre.
 The machine pose does not.
 The 400 mm blank is shifted forward.
-Its rear face is flush with the profile rear faces.
-It still covers both profiles.
+The rear face of the blank is flush with the profile rear faces.
+The blank still covers both profiles.
 An 83 mm bore is cut on the rod axis.
 That bore is the closed guide from VC-FR-4500.
-It guides the 82.55 mm casing VC-GP-7100.
+The bore guides the 82.55 mm casing VC-GP-7100.
 The radial clearance is (83 − 82.55) / 2 = 0.225 mm.
 The cutting shoe is 87.63 mm outside.
 A closed 83 mm bore blocks the shoe.
@@ -240,9 +240,9 @@ The bore diameter stays 83 mm.
 
 ## Assembly pose
 
-The study solid is `cad/export/step/VC-ASM-0000-layout.step`.
-It is not a BOM part.
-Do not manufacture from it.
+The study solid file is `cad/export/step/VC-ASM-0000-layout.step`.
+That file is not a BOM part.
+Do not build a part from it.
 Each solid keeps its part number in the STEP name.
 FreeCAD 1.1 reads those names.
 The mast axis in the file is +Z.
@@ -252,7 +252,7 @@ Each profile is yawed 90 degrees about its own vertical axis.
 The 100 mm side then lies along X.
 The 50 mm side lies along Y.
 The rail sits on the +X face.
-That face points at the rod.
+That face points toward the rod.
 The rod axis is at X = 227.5 mm.
 The motor rear face is flush with the plate rear face.
 The draft gap from the carriage plate to that face is 10 mm.
@@ -260,7 +260,7 @@ The rail face ends at X = 67.5 mm.
 The overhang from that face to the rod axis is 160.0 mm.
 
 Four Hiwin HGH20CA blocks engage the two rails.
-The selected block is HGH20CA.
+The block in this layout is HGH20CA.
 H is 30 mm from the rail mounting face.
 W is 44 mm.
 The STEP solid is 90.4 mm long.
@@ -273,9 +273,9 @@ That is the top of the travel.
 The upper block then ends on the rail top at 1415 mm.
 The same solids at stroke 0, at mid travel 511.2 mm and at the top do not overlap.
 
-The volume behind the profile rear faces is reserved for the machine tilt mechanism.
+The machine tilt mechanism keeps the volume behind the profile rear faces.
 Those faces are the plane X = −50 mm.
-No chain strand, sprocket, shaft, gearbox, brake or motor enters X < −50 mm.
+No chain strand, sprocket, shaft, gearbox, brake or motor goes into X < −50 mm.
 The rear sheets VC-FR-4195 and VC-FR-4186 are the exceptions.
 Each is a 4 mm sheet on the rear face, from X = −54 mm to X = −50 mm.
 VC-FR-4195 covers the band above the rails, from Z = 1430 mm to the profile top.
@@ -285,7 +285,7 @@ The bottom plate is the base.
 The lift motor and the gearbox sit above it.
 The separate brake is not in this pose.
 
-The chain lift is VC-ASM-2000, not the VC-ASM-8100 actuators.
+The chain lift is VC-ASM-2000. It is not the VC-ASM-8100 actuators.
 Both chain strands, the drive sprocket and the idler sprocket sit in the profile gap.
 The shaft axis is the mast mid-plane, X = 0.
 The axis runs along Y and stops before the inner faces.
@@ -298,12 +298,12 @@ The ratio from the gearbox output to the sprocket is 1:1.
 There is no gear stage between them.
 The chain shaft stays on the mast mid-plane, X = 0.
 The gearbox output, the coupling and the chain shaft share that axis.
-Do not use an offset lift axis and do not add drop gears.
-The study solid on this revision still places the lift axis off the chain shaft.
+Do not use an offset lift axis. Do not add drop gears.
+This revision of the study solid still places the lift axis off the chain shaft.
 The placed axis is at X = 7.5 mm and Z = 79.5 mm.
 The offset is 22.9 mm from the chain shaft at Z = 57.9 mm.
 That offset is a pose error.
-It is not the approved layout.
+The approved layout does not use that offset.
 Correct the pose in cad/models/machine_assembly.py.
 Those study-solid positions follow the offset axis.
 The 115 mm gearbox in that solid is flush with X = −50 mm.
@@ -321,7 +321,7 @@ The gearbox housing rests on that flange.
 The drive-side upright is cut short.
 It starts above the gearbox, at Z = 139 mm, and still reaches the same top as the other upright.
 The idle-side upright stays 1500 mm.
-The purchased length of VC-FR-4100 stays 1500 mm.
+VC-FR-4100 stays 1500 mm as the purchased length.
 VC-FR-4185 is a 4 mm sheet on the front face of the lower bay.
 It stops under the carriage, because at stroke 0 the carriage web is at Z = 105 mm.
 VC-FR-4186 is the matching rear sheet.
@@ -463,43 +463,43 @@ Pillow-block outline and chain-link section are still open.
 ## Options
 
 Do not order a new profile from this study.
-Three options stay open.
-This study does not select an option.
+Three options remain open.
+This study does not choose an option.
 
 1. Longer profile.
-   The length must exceed the required height.
-   The required height is not final until the TBD lengths are measured.
+   The length has to exceed the required height.
+   The required height stays open until the team measures the TBD lengths.
    VC-FR-4100 stays 1500 mm until that decision.
 
 2. Telescopic mast.
    One stage carries the head.
    A second stage adds travel.
-   No telescopic part is on the BOM.
+   The BOM lists no telescopic part.
 
 3. Two-stage push.
    Drive part of the casing section.
    Then add the next casing length.
    The mast then does not hold the full 1219.2 mm above the ground at one time.
-   The joint and the clamp for that sequence are not designed.
+   The team has not designed the joint and the clamp for that sequence.
 
 ## Earlier remainder
 
 SAMPLING.md shows a remainder of 33.8 mm.
 That remainder is 1473 mm minus 200 mm minus 20 mm minus 1219.2 mm.
-It does not include the motor height.
-It does not include the carriage, the shoe, the adapter or the margins.
+The remainder leaves out the motor height.
+The remainder leaves out the carriage, the shoe, the adapter and the margins.
 33.8 mm is not a demonstrated fit.
 Use the deficit in this document for `mast-height-deficit`.
 
 ## Files
 
-The parameters are in `cad/models/mast_layout.py`.
+`cad/models/mast_layout.py` holds the parameters.
 The sheet is `cad/export/layout/mast-stack.svg`.
-The same numbers are in `cad/export/layout/mast-stack.pdf`.
+`cad/export/layout/mast-stack.pdf` holds the same numbers.
 The study solid is `cad/export/layout/mast-stack.step`.
 The machine pose is `cad/export/step/VC-ASM-0000-layout.step`.
 The bracket check is `docs/engineering/CARRIAGE-BRACKET.md`.
-The views are in `cad/export/renders/`.
-Do not manufacture from the STEP files.
+`cad/export/renders/` holds the views.
+Do not build a part from the STEP files.
 `MAST-LAYOUT` is a document name.
-It is not a part number.
+That name is not a part number.
