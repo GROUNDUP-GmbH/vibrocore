@@ -103,16 +103,12 @@ Do not use it.
 
 ## 5. Sources
 
-1.
-Siemens datasheet 1FL2104-4AG11-1MC0, generated 2026-11-20.
+1. Siemens datasheet 1FL2104-4AG11-1MC0, generated 2026-11-20.
    https://mall.industry.siemens.com/spice/docuservice/rest/document.spring?articleNumber=1FL21044AG111MC0&documentGroup=TED&documentId=DCS_DATASHEET_CLEANED&language=en&region=ww
-2.
-Neugart Complete Gearbox Catalog 2026-10, PLE chapter.
+2. Neugart Complete Gearbox Catalog 2026-10, PLE chapter.
    https://cdn.neugart.com/fileadmin/user_upload/Downloads/Product_Catalogs/10_2026/Complete_Gearbox_Catalog_2026_10_EN.pdf
-3.
-The calculation workbook that Stefan approved is not stored as a second copy of the vendor PDFs.
+3. The calculation workbook that Stefan approved is not stored as a second copy of the vendor PDFs.
    Those PDFs stay out of this repository.
-4.
-Neugart CAD for article 100460948, generated 2026-11-20.
+4. Neugart CAD for article 100460948, generated 2026-11-20.
    The PDF and the DXF from that mail are not stored here.
    See cad/vendor/VC-HB-2200/SOURCE.md.
