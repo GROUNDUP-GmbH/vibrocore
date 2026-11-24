@@ -11,7 +11,7 @@ Do not change VC-FR-4100 because of this study.
 The open item name is `mast-height-deficit`.
 One casing is 1219.2 mm long.
 The mast profile is 1500 mm long.
-The casing, the sonic head, the cutting shoe and the adapter have to stand on that mast.
+The casing, the sonic head, the cutting shoe and the adapter must stand on that mast.
 This study adds those lengths.
 The study compares the sum with the mast stroke.
 
@@ -467,7 +467,7 @@ Three options remain open.
 This study does not choose an option.
 
 1. Longer profile.
-   The length has to exceed the required height.
+   The length must exceed the required height.
    The required height stays open until the team measures the TBD lengths.
    VC-FR-4100 stays 1500 mm until that decision.
 
