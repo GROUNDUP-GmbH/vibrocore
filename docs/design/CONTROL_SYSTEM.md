@@ -454,7 +454,7 @@ It is not the operator dashboard.
 
 ### Running on Mac (no Windows required)
 
-Option A is a UTM virtual machine. It is recommended for full comfort in the IDE.
+Option A is a UTM virtual machine. We recommend it for full comfort in the IDE.
 ```bash
 # Install UTM from https://mac.getutm.app
 # Create Windows 11 ARM VM (free via Azure Dev) or Windows 10 x86 via Rosetta
