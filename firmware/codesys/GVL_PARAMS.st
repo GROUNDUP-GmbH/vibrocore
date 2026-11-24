@@ -9,7 +9,7 @@ VAR_GLOBAL CONSTANT
 
     (* =========================================================
        Hub Kinematics
-       NEMA 42 + Neugart PLPE120-040 (40:1) + 10B-2 chain + 15T sprocket
+       Siemens 1FL2104 + Neugart PLE120-040 (40:1) + ROTEX 28 + 10B-2 chain + 15T sprocket
        ========================================================= *)
 
     (* Encoder pulses per mm of carriage travel.
@@ -36,6 +36,7 @@ VAR_GLOBAL CONSTANT
 
     (* =========================================================
        Hub Modbus (Nanotec C5-E — CiA 402 via Modbus RTU)
+       The live drive is the SINAMICS S200. This map is the previous C5-E interface.
        ========================================================= *)
 
     iHUB_SLAVE_ADDR         : INT  := 2;

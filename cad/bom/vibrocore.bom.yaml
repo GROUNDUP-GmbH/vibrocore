@@ -239,7 +239,8 @@ parts:
   supply: assemble
   subsystem: hub
   category: Assemblies
-  spec: NEMA 42, Neugart PLPE120-040 and 10B-2 chain lift for the sonic-head carriage.
+  spec: Siemens 1FL2104, Neugart PLE120-040 and 10B-2 chain lift for the sonic-head carriage.
+    The PLE120 output is coupled 1:1 to the chain shaft by KTR ROTEX 28.
   legacy_ref: '2'
   unknowns:
   - Carriage plate length and width are not given, only the 10 mm thickness.
@@ -1450,9 +1451,9 @@ parts:
   supply: subcontract
   subsystem: hub
   category: Hub
-  spec: Draft steel shelf. Holds the Siemens servo above the bottom plate. The motor axis is parallel
-    to the sprocket shaft. The gear teeth that drop the drive onto the chain shaft are not selected.
-    Nothing enters the reserved volume behind the rear faces.
+  spec: Draft steel shelf. Holds the Siemens servo above the bottom plate.
+    The PLE120 output is coupled 1:1 to the chain shaft by KTR ROTEX 28.
+    There is no gear stage. Nothing enters the reserved volume behind the rear faces.
   legacy_ref: draft-hb-2110
   supplier_id: custom_eu
   material: S355
@@ -1503,7 +1504,8 @@ parts:
   supply: purchase
   subsystem: hub
   category: Hub
-  spec: KTR ROTEX 28, torque only, between gearbox and drive shaft.
+  spec: KTR ROTEX 28, torque only, 1:1, between the gearbox output and the chain shaft.
+    There is no gear stage.
   legacy_ref: '2.20'
   estimate_eur_low: 60
   estimate_eur_high: 100
@@ -1563,7 +1565,8 @@ parts:
   estimate_eur_low: 25
   estimate_eur_high: 40
   notes: 'G&G 501-302-0515, 10B-2 15 teeth, taper bush 1210. The STEP is in cad/vendor/VC-HB-2800.
-    Pitch radius used in the force calculation is 37.9 mm. The idler VC-HB-2810 reuses this solid.'
+    The placed model uses a pitch radius of 37.9 mm. The force calculation uses 38.18 mm (PULL_FORCE.md).
+    The idler VC-HB-2810 reuses this solid.'
 - part_number: VC-HB-2810
   name: Sprocket 10B-2 15T idle
   revision_index: 0
@@ -1847,10 +1850,10 @@ parts:
   legacy_ref: '8.76'
   estimate_eur_low: 100
   estimate_eur_high: 200
-  notes: 'HBK S9M, Burster 8417, Bosche S2 or equivalent. The cell sits in the pull path. Gearbox nominal
-    tension is 5805 N and emergency tension is 9499 N. Both exceed 5 kN. Keep this cell for the soil-force
-    range and fit VC-PN-9340 so the cell is not the structural fuse. No higher-rated catalogue cell is
-    selected.'
+  notes: 'HBK S9M, Burster 8417, Bosche S2 or equivalent. The cell sits in the pull path. The pull at
+    the drive torque limit is about 5.83 kN. The chain force at T2max is 9.37 kN. Both exceed 5 kN.
+    Keep this cell for the soil-force range and fit VC-PN-9340 so the cell is not the structural fuse.
+    No higher-rated catalogue cell is selected.'
   lifecycle: active
 - part_number: VC-PN-9310
   name: 4-20 mA transmitter
@@ -1900,7 +1903,7 @@ parts:
   subsystem: penetrometer
   category: Penetrometer
   spec: Mechanical bypass in parallel with the 5 kN load cell. The bypass must close before 5 kN. It
-    must carry the gearbox emergency tension of 9499 N. The 5 kN cell measures soil force. It must not
+    must carry the chain force at T2max, 9.37 kN. The 5 kN cell measures soil force. It must not
     carry a stall.
   legacy_ref: '8.109'
   supplier_id: custom_eu

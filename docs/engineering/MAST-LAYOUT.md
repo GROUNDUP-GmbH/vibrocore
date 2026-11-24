@@ -290,13 +290,21 @@ The axis runs along Y and stops before the inner faces.
 The rear strand stays at X = −45.9 mm, 4.1 mm in front of the rear face.
 The placed sprocket spans about X = −41.4 mm to 41.4 mm.
 The chain strands still stop outside the 83 mm envelope, so they stay clear of the teeth.
-The Siemens servo and the PLE120 gearbox are parallel to that shaft.
-They sit above the bottom plate.
-The head plate sweeps Y = ±210 mm down to the rail, so this train stands outside that sweep, on the drive side.
-The axis is at X = 7.5 mm and Z = 79.5 mm.
-The 115 mm gearbox is flush with X = −50 mm.
+The Siemens servo and the PLE120 gearbox sit above the bottom plate, on the drive side, outside the head-plate sweep of Y = ±210 mm.
+The PLE120 output is directly coupled to the chain shaft by the KTR ROTEX 28.
+The ratio from the gearbox output to the sprocket is 1:1.
+There is no gear stage between them.
+The chain shaft stays on the mast mid-plane, X = 0.
+The gearbox output, the coupling and the chain shaft share that axis.
+Do not use an offset lift axis and do not add drop gears.
+The study solid on this revision still places the lift axis at X = 7.5 mm and Z = 79.5 mm, 22.9 mm from the chain shaft at Z = 57.9 mm.
+That offset is a pose error. It is not the approved layout.
+Correct the pose in cad/models/machine_assembly.py.
+Those study-solid positions follow the offset axis.
+The 115 mm gearbox in that solid is flush with X = −50 mm.
 The motor flange is 81 mm square, so the motor body starts at X = −33 mm.
-The coupling hub is seated on the output shaft. Its inboard face is at Y = −249 mm.
+In that study solid the coupling hub is seated on the gearbox journal. Its inboard face is at Y = −249 mm.
+No solid in that pose joins the hub to the chain shaft.
 The motor bolts to the gearbox input, further outboard.
 A horizontal flange, VC-FR-4182, sits on the plate and runs out under the gearbox.
 Its neck stays inside the profile depth and meets both stiffeners on a face.
@@ -311,7 +319,6 @@ VC-FR-4185 is a 4 mm sheet on the front face of the lower bay.
 It stops under the carriage, because at stroke 0 the carriage web is at Z = 105 mm.
 VC-FR-4186 is the matching rear sheet.
 VC-HB-2110 is a draft shelf under the motor.
-The gear teeth that drop the drive onto the chain shaft are not selected.
 A cut mk 2004 bar, VC-FR-4180, spans the clear gap between the inner faces.
 It sits between the chain strands at mid height.
 At the 300 mm pitch that cut length is 250 mm.
@@ -326,7 +333,8 @@ Bent 4 mm gussets still tie the profiles at the bottom, at mid height and at the
 The gusset webs sit between the chain strands.
 The chain path still uses the published 83 mm tip diameter.
 The placed G&G sprocket tip is about 82.7 mm and its width is 25.5 mm.
-The pitch radius is the documented 37.9 mm.
+The placed model uses a pitch radius of 37.9 mm.
+PULL_FORCE.md uses 38.18 mm.
 The gearbox solid is Neugart article 100460948. It is 115 mm square and 204 mm long.
 The servo envelope is the datasheet flange, 81 mm by 186.6 mm.
 No motor STEP is in the repository.
@@ -334,11 +342,15 @@ No motor STEP is in the repository.
 VC-HB-2100 is an envelope.
 VC-HB-2200 is the Neugart STEP.
 VC-HB-2400 is a KTR ROTEX 28 coupling.
+The coupling joins the gearbox output to the chain shaft, 1:1.
+There is no gear stage.
 The set is a 32H7 hub, an unbored hub and a 92 Sh-A spider.
 The placed length is 87.5 mm.
 The 50 mm envelope is only the fallback.
-The 32H7 hub faces the gearbox. The bore is 32H7 and the shaft is Ø25 mm.
+The 32H7 hub faces the gearbox. The gearbox shaft is Ø25 mm.
+The placed STEP hub is 32H7, so the bore is not a finished fit.
 The hub is seated on the journal.
+The chain-side hub is unbored.
 VC-HB-2800 is the G&G 501-302-0515 sprocket.
 VC-HB-2810 reuses that solid.
 It has no second file.
@@ -377,6 +389,9 @@ The machine pose does not mount that plate.
 
 Clearances below use that TBD pitch and the draft 10 mm front gap.
 Do not treat them as a measured fit.
+The clearances below are measured on the study solid.
+That solid still uses the offset axis named above.
+Those clearances are not the approved coaxial layout.
 The shoe tip is below the profiles, so the shoe distance includes that vertical gap.
 The head clears the rails, the profiles and the gussets at stroke 0, at mid travel and at the top.
 

@@ -13,6 +13,8 @@
  * See: firmware/codesys/PRG_Main.st for the active control logic.
  *
  * Kept for reference only. Do not deploy.
+ * The live drive on main is Siemens 1FL2104 + Neugart PLE120-040 +
+ * KTR ROTEX 28, not the NEMA 42 + PLPE120 train described below.
  *
  * =========================================================================
  * Original file below (reference only):
