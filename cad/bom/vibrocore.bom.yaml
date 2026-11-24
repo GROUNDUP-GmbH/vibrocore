@@ -2,7 +2,7 @@
 # Vibrocore V1.1 engineering BOM. Single source for part numbers, revisions,
 # quantities and the estimates copied from docs/engineering/BOM.md.
 # Estimates are unit costs. A published line total is unit cost times BOM qty.
-# Unknown dimensions are omitted; they are listed under unknowns, not invented.
+# Unknown dimensions are omitted. They are listed under unknowns, not invented.
 # Obsolete/superseded/alternative parts stay for history and are not on live BOMs.
 schema_version: 1
 meta:
@@ -68,7 +68,7 @@ suppliers:
   name: Pix4D
   country_xml: base.ch
   website: https://www.pix4d.com
-  comment: viDoc supplier named in BOM.md. The instrument may already be owned.
+  comment: viDoc supplier named in BOM.md. Ground UP possibly owns it already.
 - id: instagrid
   name: instagrid
   country_xml: base.de
@@ -240,7 +240,7 @@ parts:
   subsystem: hub
   category: Assemblies
   spec: Siemens 1FL2104, Neugart PLE120-040 and 10B-2 chain lift for the sonic-head carriage.
-    The PLE120 output is coupled 1:1 to the chain shaft by KTR ROTEX 28.
+    KTR ROTEX 28 couples the PLE120 output 1:1 to the chain shaft.
   legacy_ref: '2'
   unknowns:
   - Carriage plate length and width are not given, only the 10 mm thickness.
@@ -266,7 +266,7 @@ parts:
   subsystem: power
   category: Assemblies
   spec: Instagrid ONE max feeds 230 V AC to the S200, the 1FL2 and the sonic inverter. Two 24 V DIN
-    supplies. VC-PW-5310 is dedicated to S200 control and the brake. VC-PW-5320 is the machine 24 V slot.
+    supplies. VC-PW-5310 supplies only the S200 control and the brake. VC-PW-5320 is the machine 24 V slot.
     There is no 48 V rail.
   legacy_ref: '4'
 - part_number: VC-ASM-5000
@@ -318,7 +318,7 @@ parts:
   supply: assemble
   subsystem: penetrometer
   category: Assemblies
-  spec: Inline S-type load cell path to Modbus RTU Slave 3 for force vs depth.
+  spec: Inline S-type load cell path to Modbus RTU Slave 3 for force against depth.
   legacy_ref: 8c
   lifecycle: active
 - part_number: VC-ASM-8400
@@ -328,7 +328,7 @@ parts:
   supply: assemble
   subsystem: core_scanner
   category: Assemblies
-  spec: Camera sled for one sample tube. Tube wall clarity is not confirmed. Host is Raspberry Pi 4; not
+  spec: Camera sled for one sample tube. Tube wall clarity is not confirmed. Host is Raspberry Pi 4. Not
     a Raspberry Pi Zero 2W.
   legacy_ref: 8d
   lifecycle: active
@@ -462,7 +462,7 @@ parts:
   legacy_ref: '8.89'
   estimate_eur_low: 20
   estimate_eur_high: 40
-  notes: Unit cost; BOM qty 2.
+  notes: Unit cost. BOM qty 2.
   lifecycle: active
 - part_number: VC-CS-9500
   name: LED driver PWM
@@ -514,7 +514,7 @@ parts:
   legacy_ref: '8.93'
   estimate_eur_low: 6
   estimate_eur_high: 15
-  notes: Unit cost; BOM qty 2.
+  notes: Unit cost. BOM qty 2.
   lifecycle: active
 - part_number: VC-CS-9540
   name: Scanner 5 V and 12 V PSU
@@ -664,7 +664,7 @@ parts:
   subsystem: control
   category: Control
   spec: Pilz PNOZ s4, article 750104, 24 V DC, 22.5 x 98 x 120 mm, 3 NO and 1 NC. Two NO contacts are
-    the STO channels. The NC contact is the monitor. The safety assessment is open. Do not state a
+    the STO channels. The NC contact is the monitor. The safety assessment is not complete. Do not state a
     performance level.
   legacy_ref: '5.55'
   manufacturer_pn: '750104'
@@ -673,7 +673,7 @@ parts:
   estimate_eur_low: 80
   estimate_eur_high: 130
   unknowns:
-  - The safety assessment is open. Do not state a performance level.
+  - The safety assessment is not complete. Do not state a performance level.
   - The 80-130 EUR band is not a quote for article 750104.
   notes: 'Operating manual https://www.pilz.com/download/open/OM_PNOZ_s4_21396-EN-24.pdf. DC supply is
     2.5 W. PNOZ m B0 article 772100 is not this relay. The schematic uses contacts 13-14 and 23-24 for STO.'
@@ -684,8 +684,8 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: 24 V DC beacon. Firmware output xAlarmBeacon at %QX0.3 drives it. The 750-537/040-000 channel is
-    rated 0.5 A. Beacon current must be 0.5 A or less.
+  spec: 24 V DC beacon. Firmware output xAlarmBeacon at %QX0.3 drives it. The 750-537/040-000 channel has
+    a rating of 0.5 A. Beacon current must be 0.5 A or less.
   legacy_ref: '5.103'
   unknowns:
   - Order code is unknown.
@@ -706,7 +706,7 @@ parts:
   - Ingress protection is unknown.
   - Order code is unknown.
   - Price is unknown.
-  notes: ARCHITECTURE.md names a tablet or HMI via WLAN. No catalogue tablet is selected.
+  notes: ARCHITECTURE.md names a tablet or HMI through WLAN. The team did not select a catalogue tablet yet.
 - part_number: VC-CT-6300
   name: Control enclosure
   revision_index: 0
@@ -715,7 +715,7 @@ parts:
   subsystem: control
   category: Control
   spec: Rittal AX 1181.000, sheet steel, IP66, 800 x 1000 x 400 mm, RAL 7035. The size 200 x 150 x 80 mm
-    is withdrawn. The mounting plate is included. Installation depth T3 is 287.5 mm. Price is unknown.
+    is withdrawn. The set includes the mounting plate. Installation depth T3 is 287.5 mm. Price is unknown.
     The PSU set is not frozen. Do not order the box as a closed design.
   legacy_ref: '5.56'
   manufacturer_pn: 1181.000
@@ -843,7 +843,7 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: Lapp SKINTOP MS-SC-M. 1x M25 53112640, 9x M20 53112630, 7x M16 53112620. The M20 count is
+  spec: Lapp SKINTOP MS-SC-M. 1x M25 53112640, 9x M20 53112630, 7x M16 53112620. The M20 count equals
     seven circuits plus two spares. The M16 count is five circuits plus two spares. There is no
     chain-encoder gland.
   legacy_ref: '5.6310'
@@ -877,8 +877,8 @@ parts:
   supply: purchase
   subsystem: control
   category: Control
-  spec: Four mk consoles 16/40, article 31.40.0016, four mk T-slot nuts Lasche 1 M8, article 34.01.0001,
-    and four rubber-metal buffers 40 x 40 mm with M8 studs. The buffers sit between the box and the
+  spec: Four mk consoles 16/40, article 31.40.0016. Four mk T-slot nuts Lasche 1 M8, article 34.01.0001.
+    Four rubber-metal buffers 40 x 40 mm with M8 studs. The buffers sit between the box and the
     idle-side mk 51.04 upright.
   legacy_ref: '5.6330'
   supplier_id: mk
@@ -901,7 +901,7 @@ parts:
   unknowns:
   - Terminal count and duct length are not frozen.
   - Price is unknown.
-  notes: The AX door already has a PE conductor connection. An M8 stud is modelled on the gland face.
+  notes: The AX door already has a PE conductor connection. The model shows an M8 stud on the gland face.
     A separate stud article is not frozen.
 - part_number: VC-CT-6350
   name: Bulkhead and vent set
@@ -1190,7 +1190,7 @@ parts:
   supply: subcontract
   subsystem: frame
   category: Frame
-  spec: S355 blank 400 x 300 x 15 mm. The assembly cuts an 83 mm bore at the rod axis. The blank size is unchanged.
+  spec: S355 blank 400 x 300 x 15 mm. The assembly cuts an 83 mm bore at the rod axis. Keep the blank size.
   legacy_ref: '3.34'
   estimate_eur_low: 80
   estimate_eur_high: 120
@@ -1282,7 +1282,7 @@ parts:
   - Strut force, hinge pin and lock.
   lifecycle: obsolete
   notes: 'OBSOLETE for V1.1. Gas-spring / hinge tilt from BOM.md §3 #38. V1.1 uses the electric tilt actuator
-    assembly VC-ASM-8200 (#73-75). Kept for history; not on the live frame BOM.'
+    assembly VC-ASM-8200 (#73-75). Kept for history. Not on the live frame BOM.'
 - part_number: VC-FR-4800
   name: Stabiliser foot
   revision_index: 0
@@ -1452,7 +1452,7 @@ parts:
   subsystem: hub
   category: Hub
   spec: Draft steel shelf. Holds the Siemens servo above the bottom plate.
-    The PLE120 output is coupled 1:1 to the chain shaft by KTR ROTEX 28.
+    KTR ROTEX 28 couples the PLE120 output 1:1 to the chain shaft.
     There is no gear stage. Nothing enters the reserved volume behind the rear faces.
   legacy_ref: draft-hb-2110
   supplier_id: custom_eu
@@ -1636,7 +1636,7 @@ parts:
   estimate_eur_high: 180
   lifecycle: obsolete
   notes: 'Obsolete 2026-11-20. 16 Nm times the ratio 40 is 640 Nm at the gearbox output. PLE120 T2Stop
-    at i=40 is 500 Nm. The brake can exceed that stop torque. The Siemens motor holding brake is used
+    at i=40 is 500 Nm. The brake can exceed that stop torque. Use the Siemens motor holding brake
     instead. The STEP is not loaded. The price is history and is not in the rollup.
     See docs/engineering/LIFT-DRIVE-SIZING.md and cad/vendor/VC-HB-3000/SOURCE.md.'
   unknowns:
@@ -1773,7 +1773,7 @@ parts:
   legacy_ref: '8.70'
   estimate_eur_low: 150
   estimate_eur_high: 280
-  notes: Thomson PA, Ewellix CASM, Linak LA23 or equivalent. Unit cost; BOM qty 2.
+  notes: Thomson PA, Ewellix CASM, Linak LA23 or equivalent. Unit cost. BOM qty 2.
   lifecycle: active
 - part_number: VC-LT-9110
   name: H-bridge relay module
@@ -1812,7 +1812,7 @@ parts:
   legacy_ref: '8.73'
   estimate_eur_low: 150
   estimate_eur_high: 250
-  notes: Thomson PA, Linak LA36 or equivalent. V1.1 active tilt; not the gas strut.
+  notes: Thomson PA, Linak LA36 or equivalent. V1.1 active tilt. Not the gas strut.
   lifecycle: active
 - part_number: VC-LT-9210
   name: Tilt pivot bracket
@@ -1853,7 +1853,7 @@ parts:
   notes: 'HBK S9M, Burster 8417, Bosche S2 or equivalent. The cell sits in the pull path. The pull at
     the drive torque limit is about 5.83 kN. The chain force at T2max is 9.37 kN. Both exceed 5 kN.
     Keep this cell for the soil-force range and fit VC-PN-9340 so the cell is not the structural fuse.
-    No higher-rated catalogue cell is selected.'
+    The team did not select a higher-rated catalogue cell yet.'
   lifecycle: active
 - part_number: VC-PN-9310
   name: 4-20 mA transmitter
@@ -1911,7 +1911,7 @@ parts:
   - Set point, spring and hard-stop dimensions are unknown.
   - Price is unknown.
   lifecycle: active
-  notes: See docs/engineering/PULL_FORCE.md. No catalogue load cell above 5 kN is selected.
+  notes: See docs/engineering/PULL_FORCE.md. The team did not select a catalogue load cell above 5 kN yet.
 - part_number: VC-PS-8100
   name: viDoc RTK Light
   revision_index: 0
@@ -1919,7 +1919,7 @@ parts:
   supply: purchase
   subsystem: positioning
   category: Positioning
-  spec: RTK rover with AR navigation. May already be owned.
+  spec: RTK rover with AR navigation. Ground UP possibly owns it already.
   legacy_ref: '7.60'
   supplier_id: pix4d
   estimate_eur_low: 2000
@@ -1976,7 +1976,7 @@ parts:
   legacy_ref: '4.43'
   estimate_eur_low: 20
   estimate_eur_high: 40
-  notes: Superseded by VC-PW-5310 (SDR-120-24). Kept for history; not on the live power BOM.
+  notes: Superseded by VC-PW-5310 (SDR-120-24). Kept for history. Not on the live power BOM.
   manufacturer_pn: DDR-60D-24
   supplier_id: meanwell
   lifecycle: superseded
@@ -2072,7 +2072,7 @@ parts:
   unknowns:
   - Order code is unknown.
   - Price is unknown.
-  notes: Directive 2006/42/EC expects a supply disconnect. No catalogue switch is selected.
+  notes: Directive 2006/42/EC expects a supply disconnect. The team did not select a catalogue switch yet.
 - part_number: VC-PW-5710
   name: Line circuit breaker
   revision_index: 0
@@ -2367,7 +2367,7 @@ parts:
   notes: 'Draft. The tubes and the push-on caps are lab consumables and are not BOM lines. A photo shows
     orange plastic tubes, a ribbed outside and a label recess, stacked end to end. The photo suggests
     length is about 2.2 to 2.5 times the diameter. That ratio is not a measurement and this model does
-    not use it. Caps go on only after extraction. The pocket has no cap clearance. Placeholder tube OD
+    not use it. Put the caps on only after extraction. The pocket has no cap clearance. Placeholder tube OD
     30 mm and placeholder tube length 100 mm let the study STEP export. They are not tube data.'
 - part_number: VC-SP-7621
   name: Split carrier half B
@@ -2489,7 +2489,7 @@ parts:
   - The Siemens cable order code is not selected.
   - The length is not set.
   - The price is not sourced.
-  notes: Do not substitute a loose multi-core until the connector is confirmed.
+  notes: Do not substitute a loose multi-core until you confirm the connector.
   lifecycle: active
 - part_number: VC-PW-5730
   name: Branch MCB sonic inverter
@@ -2558,7 +2558,7 @@ parts:
   supply: purchase
   subsystem: sonic_head
   category: Sonic Head
-  spec: One protection device per OLI motor, set near 1.6 A. The device must be suitable for a VFD PWM
+  spec: One protection device per OLI motor, set near 1.6 A. Use a device that accepts a VFD PWM
     output. Two devices. The ATV320 sees the sum and does not protect one stalled motor.
   legacy_ref: '9.127'
   unknowns:
@@ -2632,7 +2632,7 @@ parts:
   subsystem: control
   category: Control
   spec: 24 V sensor for DIO input 12. It sets the rod angle to zero. An encoder index on the rotation
-    drive may replace this sensor.
+    drive can replace this sensor.
   legacy_ref: '9.132'
   unknowns:
   - The order code is not chosen.
@@ -2724,7 +2724,7 @@ parts:
   - The order code is not selected.
   - The cross-section is 4 mm2 for the motors and 6 mm2 for the mains. Confirm both.
   - The price is not sourced.
-  notes: PE terminals are green-yellow. The 0V terminal on X1 is grey or blue. The colour is a convention.
+  notes: Use green-yellow PE terminals. The 0V terminal on X1 is grey or blue. The colour is a convention.
   lifecycle: active
 - part_number: VC-CT-6730
   name: STO and safety cable
@@ -2804,7 +2804,7 @@ parts:
   unknowns:
   - The cable follows VC-CT-6280. That drive is not released.
   - The price is not sourced.
-  notes: Not on a live BOM. Do not buy it until the drive order code is frozen.
+  notes: Not on a live BOM. Do not buy it until the team freezes the drive order code.
   lifecycle: alternative
 - part_number: VC-CT-6780
   name: Coil diode 1N4007

@@ -11,7 +11,7 @@ pub const TARGET_UM: i32 = 1_200_000;
 /// Position is "at home" at or below this value.
 pub const HOME_UM: i32 = 2_000;
 
-/// Sonic may run only below this carriage position.
+/// Sonic can run only below this carriage position.
 pub const LOWERED_UM: i32 = 50_000;
 
 pub const HOMING_UM_S: i32 = 40_000;

@@ -1,9 +1,9 @@
 # Allowable pull force
 
-This note replaces the two hub-force figures in the older text.
+This note takes the place of the two older hub-force figures.
 The allowable pull force is **4.5 kN**.
-Use this value in every document.
-The inputs are the approved drive data in LIFT-DRIVE-SIZING.md.
+Use that value in every document.
+The inputs come from the approved drive data in LIFT-DRIVE-SIZING.md.
 
 ## Inputs
 
@@ -28,22 +28,22 @@ The inputs are the approved drive data in LIFT-DRIVE-SIZING.md.
 | Load cell rating | 5 kN | VC-PN-9300 |
 
 44.5 kN / 10 = 4.45 kN.
-The design note rounds that working load to 4.5 kN.
+The design note rounds the working load to 4.5 kN.
 This note keeps 4.5 kN.
 
 ## Formulas
 
-Pitch radius, from LIFT-DRIVE-SIZING.md:
+The pitch radius comes from LIFT-DRIVE-SIZING.md:
 
     R = 38.18 mm
 
 The exact pitch-circle radius is `pitch / (2 x sin(pi / teeth))` = 38.177 mm.
 
-Chain tension from gearbox output torque:
+Chain tension comes from the gearbox output torque:
 
     F = T2 x 0.98 / R
 
-Motor torque, same formula as LIFT-DRIVE-SIZING.md:
+Motor torque uses the same formula as LIFT-DRIVE-SIZING.md:
 
     T_mot = T2 / (40 x 0.97) + 0.85 Nm
 
@@ -66,35 +66,35 @@ Use metres for R when T2 is in newton-metres.
 Do not allow the motor peak of 10.8 Nm.
 419 Nm is above T2max (365 Nm).
 The motor-peak row uses 10.8 Nm × 40 × 0.97.
-It does not subtract the 0.85 Nm idle torque.
-That is the same product as in LIFT-DRIVE-SIZING.md.
-The result stays on the safe side.
+That row leaves out the 0.85 Nm idle torque.
+The product matches LIFT-DRIVE-SIZING.md.
+The result remains conservative.
 
 The chain working load is 4.5 kN.
 The pull at the drive torque limit is about 5.83 kN.
-The allowable continuous pull force is the lower value.
+The allowable continuous pull force is the lower of those two values.
 
 **Allowable pull force = 4.5 kN.**
 
 ## Withdrawn figures
 
 The old 14.3 kN figure used 15 Nm x 40 x 0.90 at the sprocket.
-That path used the previous PLPE120 and a motor that is not on the BOM.
+That path used the previous PLPE120 and a motor that the BOM does not list.
 Do not use it.
 
 The README line "2.0-2.6 kN at 90 Nm" used 90 Nm at the sprocket and no 40:1 ratio.
 Do not use that line.
 
-The 5.80 kN "gearbox nominal tension" came from the previous 220 Nm PLPE120 rating
-and the older 37.899 mm radius. Do not use that derivation.
-The 5.8 kN figure in LIFT-DRIVE-SIZING.md is the design chain pull
-(5 kN load cell plus 0.8 kN weight). Keep that meaning.
+The 5.80 kN "gearbox nominal tension" came from the previous 220 Nm PLPE120 rating and the older 37.899 mm radius.
+Do not use that derivation.
+The 5.8 kN figure in LIFT-DRIVE-SIZING.md is the design chain pull (5 kN load cell plus 0.8 kN weight).
+Keep that meaning.
 
 ## Required pull and margin
 
 HUB_SYSTEM.md still lists a required pull of 2.0-4.0 kN with vibration off.
 That figure is a process need.
-It is not the drive capacity.
+That figure is not the drive capacity.
 
 Margin of the allowable pull force on the upper required pull:
 

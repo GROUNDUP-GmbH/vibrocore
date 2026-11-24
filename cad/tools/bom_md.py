@@ -45,8 +45,8 @@ ANCHORS = {
 }
 
 # BOM.md reuses 56-63 across Control, Geoprobe and Positioning. The Markdown
-# parser keeps the first table occurrence (Control). YAML keeps all three via
-# section.row legacy_ref; only the Control-side part is qty-checked here.
+# parser keeps the first table occurrence (Control). YAML keeps all three through
+# section.row legacy_ref. Only the Control-side part is qty-checked here.
 PREFERRED_SECTION_FOR_REUSED = {
     "56": "5",
     "57": "5",
@@ -89,7 +89,7 @@ def parse_bom_md(path: Path | None = None) -> list[MdRow]:
             continue
         if not re.fullmatch(r"\d+[a-z]?", pos):
             continue
-        # First occurrence wins for reused numbers (Control vs Geoprobe).
+        # First occurrence wins for reused numbers (Control against Geoprobe).
         if pos in seen:
             continue
         seen.add(pos)

@@ -1,31 +1,31 @@
 # Vibrocore V1 — Docker Compose
-# Target: WAGO PFC200 XTR (750-8212)        ← Option A (recommended)
-#   CPU: 1 GHz ARM Cortex-A8 (armv7l)
-#   RAM: 512 MB  |  Flash: 4 GB
-#   OS:  Linux 3.18 (WAGO Firmware ≥ 23)
+# Target: WAGO PFC200 XTR (750-8212) ← Option A (recommended)
+# CPU: 1 GHz ARM Cortex-A8 (armv7l)
+# RAM: 512 MB | Flash: 4 GB
+# OS: Linux 3.18 (WAGO Firmware ≥ 23)
 #
-# OR: Revolution Pi Connect 4               ← Option B (prototype / cost)
-#   CPU: 1.5 GHz Quad-Core Cortex-A72 (armv8l / arm64)
-#   RAM: 4 GB  |  Flash: 32 GB
-#   OS:  Raspberry Pi OS (Debian)
-#   → Change platform below: linux/arm/v7 → linux/arm/v8
+# OR: Revolution Pi Connect 4 ← Option B (prototype / cost)
+# CPU: 1.5 GHz Quad-Core Cortex-A72 (armv8l / arm64)
+# RAM: 4 GB | Flash: 32 GB
+# OS: Raspberry Pi OS (Debian)
+# → Change platform below: linux/arm/v7 → linux/arm/v8
 #
 # Secrets (required — never commit real values):
-#   Create firmware/docker/.env from .env.example and set:
-#     NODE_RED_CREDENTIAL_SECRET
-#     NODE_RED_PASSWORD_HASH
-#     NODE_RED_USERNAME (optional)
-#   Create mosquitto/passwd and mosquitto/acl from the *.example files.
+# Create firmware/docker/.env from .env.example and set:
+# NODE_RED_CREDENTIAL_SECRET
+# NODE_RED_PASSWORD_HASH
+# NODE_RED_USERNAME (optional)
+# Create mosquitto/passwd and mosquitto/acl from the *.example files.
 #
 # Deploy:
-#   ssh admin@192.168.1.10
-#   cd /home/admin/vibrocore
-#   docker compose up -d
+# ssh admin@192.168.1.10
+# cd /home/admin/vibrocore
+# docker compose up -d
 #
 # Architecture note:
-#   CODESYS Runtime occupies one core (real-time tasks via PREEMPT_RT).
-#   Node-RED + Mosquitto share the remaining resources.
-#   Combined idle load: ~35-50 MB RAM, <5% CPU on PFC200 G2.
+# CODESYS Runtime occupies one core (real-time tasks through PREEMPT_RT).
+# Node-RED + Mosquitto share the remaining resources.
+# Combined idle load: ~35-50 MB RAM, <5% CPU on PFC200 G2.
 
 version: "3.8"
 
@@ -33,9 +33,9 @@ services:
 
   # ─────────────────────────────────────────────────────────────────
   # MOSQUITTO — local MQTT broker (internal Docker network only)
-  #   - Node-RED connects via service name "mosquitto"
-  #   - Port 1883 is NOT published to the host / 0.0.0.0
-  #   - WebSocket 9001 stays on the internal network; auth required
+  # - Node-RED connects through service name "mosquitto"
+  # - Port 1883 is NOT published to the host / 0.0.0.0
+  # - WebSocket 9001 stays on the internal network. Auth required
   # ─────────────────────────────────────────────────────────────────
   mosquitto:
     image: eclipse-mosquitto:2
@@ -44,7 +44,7 @@ services:
     restart: unless-stopped
     # No host ports: bind MQTT to the internal Docker network only.
     # To reach MQTT from the HMI LAN host process, publish a specific IP:
-    #   ports: ["192.168.1.10:1883:1883"]
+    # ports: ["192.168.1.10:1883:1883"]
     expose:
       - "1883"
       - "9001"
@@ -59,16 +59,16 @@ services:
 
   # ─────────────────────────────────────────────────────────────────
   # NODE-RED — operator HMI dashboard
-  #   - polls CODESYS variables via Modbus TCP (WAGO Modbus Slave TCP)
-  #   - provides web dashboard on port 1880 (loopback / HMI LAN only)
-  #   - publishes cycle records to Mosquitto → RDDL
+  # - polls CODESYS variables through Modbus TCP (WAGO Modbus Slave TCP)
+  # - provides web dashboard on port 1880 (loopback / HMI LAN only)
+  # - publishes cycle records to Mosquitto → RDDL
   #
   # Official WAGO image: armv7-compatible, includes
-  #   node-red-contrib-modbus, node-red-dashboard pre-installed.
+  # node-red-contrib-modbus, node-red-dashboard pre-installed.
   # ─────────────────────────────────────────────────────────────────
   nodered:
     # WAGO: wagoautomation/node-red-iot:latest (arm/v7, includes Modbus + dashboard)
-    # RevPi: nodered/node-red:latest          (arm/v8 — install node-red-contrib-modbus + node-red-dashboard separately)
+    # RevPi: nodered/node-red:latest (arm/v8 — install node-red-contrib-modbus + node-red-dashboard separately)
     image: wagoautomation/node-red-iot:latest
     platform: linux/arm/v7    # change to linux/arm/v8 + image above for RevPi Connect 4
     container_name: vibrocore-hmi

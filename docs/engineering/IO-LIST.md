@@ -1,12 +1,12 @@
 # I/O list
 
-This file maps every control signal to one channel.
+This file assigns one channel to every control signal.
 One RevPi DIO, part VC-CT-6810, has 14 inputs and 14 outputs.
 This machine uses 13 inputs and 7 outputs on that module.
 One input stays spare.
 Seven outputs stay spare.
-A second I/O module is not required.
-There is no analogue input module.
+This machine does not need a second I/O module.
+This machine has no analogue input module.
 Byte offsets come from PiCtory.
 The numbers below are channel indexes, not byte offsets.
 The cabinet schematic is VC-SCH-5000.
@@ -17,36 +17,36 @@ This channel table is the source for that drawing.
 
 The Pilz PNOZ s4 and the drive STO inputs are hard-wired.
 The RevPi only reads feedback.
-Do not credit this software in any ISO 13849 performance level.
+Do not credit this software for a performance level in ISO 13849.
 A crash of this software must not be the only path that removes torque.
 
 ## SF3 hub hold
 
-Stefan decided on 2026-11-20 that there is no second holding means.
+Stefan decided on 2026-11-20 that this machine has no second holding means.
 The S200 motor holding brake is the only hold.
 The brake coil stays on S200 terminal X108.
 The RevPi does not drive that coil.
 Nobody works under the raised head.
 The chain drive is sized for the load.
-The chain drive is inspected regularly.
-This is a deliberate risk decision.
+The team inspects the chain drive on a regular schedule.
+This choice is a deliberate risk decision.
 The brake test is optional.
 The test only watches slip after the carriage is parked.
 The test is not a safety function.
-There is no bolt sensor and no bolt output.
-There is no catch output and no second brake output.
+This layout has no bolt sensor and no bolt output.
+This layout has no catch output and no second brake output.
 
 ## SF4 jog
 
-Jog runs only while the enabling switch is held.
-The speed is lower than the drill speed.
+Jog runs only while the operator holds the enabling switch.
+The jog speed is lower than the drill speed.
 Release of the switch stops the jog command.
 This gate is software.
-It is not a performance level.
+The gate is not a performance level.
 
 ## SF5 sonic head
 
-The sonic inverter STO input is hard-wired from the PNOZ.
+The PNOZ hard-wires the sonic inverter STO input.
 The RevPi only reads the STO feedback.
 Loss of that feedback commands the head off.
 That monitor is not a performance level.
@@ -55,11 +55,11 @@ That monitor is not a performance level.
 
 Stefan removed the tilt angle limit on 2026-11-20.
 The machine works on hilly farmland.
-A five degree lock is not used.
+This layout does not use a five degree lock.
 Tilt keeps two direction outputs.
 Both outputs are never on together.
 The actuators stop on their own end switches.
-There is no tilt sensor.
+This layout has no tilt sensor.
 Lift motion does not read a tilt angle.
 This code is not a performance level.
 
@@ -69,7 +69,7 @@ The carriage drives the sampler in with the sonic head.
 Sonic and lift then stop.
 The rod then turns one revolution to cut the core.
 The carriage stops at each depth stage.
-One to four stages are allowed.
+The sequence allows one to four stages.
 At each stage the rod turns to that container angle.
 Rotation stays blocked while the sonic head runs.
 Rotation stays blocked while the lift moves.
