@@ -2,14 +2,14 @@
 
 ## 1. Operating Principle
 
-The sonic head generates **axial pressure waves** along the drill rod by using two
-**counter-rotating OLI MVE 400/6-HF vibration motors** mounted on a common rigid
-vibrating plate (Schwingplatte). The motors' eccentric shafts are oriented
-**perpendicular to the rod axis**.
-
-Horizontal force components cancel out. Vertical (axial) components add constructively.
-This produces a sinusoidal pushing/pulling force on the rod, driving it into the soil
-by cyclically liquefying the thin boundary layer (compare Šporin & Vukelić, 2017).
+The head sends waves of axial pressure along the rod for the drill.
+It uses two OLI motors of type MVE 400/6-HF.
+The motors turn in opposite directions on one rigid plate for vibration (Schwingplatte).
+The eccentric shafts of the motors sit square to the axis of the rod.
+The horizontal parts of the force cancel.
+The vertical parts on the axis add and the sum is constructive.
+- The force on the rod is a sine wave and it drives the rod into the soil.
+- In each cycle the thin layer at the boundary becomes fluid, as Šporin and Vukelić show in 2017.
 
 ### Why OLI Vibration Motors?
 
@@ -25,10 +25,10 @@ by cyclically liquefying the thin boundary layer (compare Šporin & Vukelić, 20
 
 ### Why Perpendicular Shafts?
 
-If the motor shafts were **parallel** to the rod axis, the centrifugal force would
-sweep in a plane perpendicular to the rod — generating a *lateral whipping* motion
-rather than axial vibration. With horizontal shafts (⊥ to rod axis), the vertical
-force components add up for maximum axial amplitude.
+If the motor shafts are parallel to the axis of the rod, the centrifugal force sweeps in a plane square to the rod.
+That motion is a lateral whip and it is not axial vibration.
+With horizontal shafts, square to the rod axis, the vertical parts of the force add.
+The sum gives the maximum amplitude on the axis.
 
 ```
   ROD AXIS (vertical)
@@ -80,9 +80,10 @@ force components add up for maximum axial amplitude.
 
 ### 3.1 Counter-Rotating Pair — Concept
 
-OLI recommends mounting two identical motors **mirror-image** on a common rigid
-structure for **linear (directional) vibration**. By swapping two phase wires on
-one motor, it rotates in the opposite direction. The result:
+OLI tells you to bolt two identical motors as a mirror pair on one rigid structure.
+The structure is for linear vibration in one direction.
+- If you exchange two phase wires on one motor, that motor turns the other way.
+The result is in the figure below.
 
 ```
                     Motor A (CW)         Motor B (CCW)
@@ -104,7 +105,7 @@ one motor, it rotates in the opposite direction. The result:
                            DT325 Rod
 ```
 
-**Force vector decomposition:**
+The figure below shows the split of the force vectors.
 
 ```
 At any instant t:
@@ -195,8 +196,8 @@ At any instant t:
 
 ### 4.1 Combined Axial Force
 
-Each OLI MVE 400/6-HF produces **4.0 kN** centrifugal force at 6,000 rpm.
-In counter-rotating pair, horizontal cancels and vertical doubles:
+Each motor makes 4.0 kN of centrifugal force at 6,000 rpm and the type is OLI MVE 400/6-HF.
+In a pair with opposite rotation, the horizontal part cancels and the vertical part doubles.
 
 ```
 F_peak_axial = 2 × 4,002 N = 8,004 N ≈ 8.0 kN
@@ -206,7 +207,8 @@ F_peak_axial = 2 × 4,002 N = 8,004 N ≈ 8.0 kN
 
 ### 4.2 Force vs. Frequency (VFD-Controlled)
 
-Centrifugal force scales with ω² (that is , f²). Using the OLI rated force as baseline:
+Centrifugal force scales with ω² and thus with f².
+The baseline is the rated force from OLI.
 
 ```
 F(f) = F_rated × (f / f_rated)²
@@ -222,21 +224,21 @@ where  F_rated = 8.0 kN at f_rated corresponding to 6,000 rpm
 |          6,000  | (6/6)² = 1.00   |           4.0  |             8.0  | Heavy soil / clay    |
 |          6,600  | (6.6/6)² = 1.21 |           4.8  |             9.7  | Very hard (max VFD)  |
 
-**The VFD frequency control alone gives a 1:5 force range — no mechanical
-adjustment of eccentric weights required for most field conditions.**
+- The VFD control of frequency alone gives the force range of 1 to 5.
+- You need no mechanical change of the eccentric weights for most field conditions.
 
 ### 4.3 OLI Internal Eccentric Adjustment
 
-OLI MVE motors have **adjustable eccentric weights** at both shaft ends.
-The rated force (408 kgf) is the **maximum setting**. By repositioning the
-weight segments, the force can be reduced to approximately 0–100% of rated.
-
-This gives a **secondary tuning axis** on top of VFD frequency control —
-useful for permanently reducing force for soft-soil-only operations.
+These motors from OLI have an eccentric weight.
+You can adjust the weights at both ends of the shaft.
+The rated force of 408 kgf is the maximum.
+If you move the weight segments, you can lower the force to any point from 0 to 100 percent of rated.
+This is a second axis of tune on top of the VFD control of frequency.
+You can use it to lower the force for good when the work is only in soft soil.
 
 ### 4.4 Resonance Consideration
 
-From Šporin & Vukelić (2017), Eq. 1:
+- The source is Šporin and Vukelić, 2017, equation 1.
 
 ```
 f_rod_resonance = c / (2 · l) = 5,100 / (2 × 1.22) ≈ 2,090 Hz
@@ -246,11 +248,12 @@ Operating range: motor speed / (poles/2)
   Mechanical rotation: 6,000 rpm = 100 rps = 100 Hz vibration frequency
 ```
 
-The **vibration frequency is 100 Hz** at 6,000 rpm (one eccentric revolution =
-one force cycle). Rod resonance at 2,090 Hz is far above.
-
-The **soil-rod system** resonance (50–200 Hz) can be targeted by sweeping the
-VFD frequency, finding the optimal penetration speed in real time.
+The vibration frequency is 100 Hz at 6,000 rpm.
+One turn of the eccentric mass is one force cycle.
+Rod resonance at 2,090 Hz is far above that cycle.
+The resonance of the soil and the rod is 50 to 200 Hz.
+You can aim at that band if you change the VFD frequency.
+You then get the best speed of penetration at the moment of the work.
 
 ### 4.5 Power Consumption
 
@@ -270,7 +273,7 @@ Compare to custom design (3.0 kW for equivalent force):
 
 ### 5.1 Electrical Self-Synchronisation (Primary Method)
 
-Both motors are powered from the **same VFD output**. Wiring:
+- The two motors take power from one output of the VFD.
 
 ```
 VFD Output:  U  V  W
@@ -279,23 +282,24 @@ Motor A:     U → U    V → V    W → W       (CW rotation)
 Motor B:     U → U    V → W    W → V       (CCW rotation — V/W swapped)
 ```
 
-At startup, both motors accelerate identically (same voltage, same frequency).
-Because they are mounted on the same rigid mass, mechanical coupling forces
-them into anti-phase lock within 1–2 seconds. This is the **standard OLI
-recommended method** for linear vibration applications.
+At startup, the two motors speed up in the same way.
+The voltage is the same and the frequency is the same.
+They sit on one rigid mass.
+The mechanical link then forces an anti-phase lock in 1 to 2 seconds.
+This is the standard method from OLI for linear vibration.
 
 ### 5.2 Why No Timing Belt or Gears Needed
 
-In the custom eccentric design, timing belts were required because:
-- Two separate shafts needed mechanical phase coupling
-- Any phase drift would create lateral forces
+In the custom design with an eccentric, timing belts are required.
+- Two separate shafts need the mechanical phase link.
+- If the phase drifts, the force becomes lateral.
 
-With OLI motors:
-- Each motor is a self-contained unit (motor + eccentric + bearings)
-- Shared VFD frequency guarantees identical speed
-- Shared mass provides natural self-synchronisation
-- Phase lock is maintained by inertial coupling through the vibrating plate
-- OLI guarantees this for counter-rotating pairs in their application guides
+The OLI motors work as follows.
+- Each motor is one unit and it holds the motor, the eccentric, and the ball races.
+- The shared frequency of the VFD gives the same speed.
+- The shared mass gives the natural self-sync.
+- The lock of phase comes from inertial link through the vibration plate.
+- OLI guarantees this for pairs that turn in opposite ways in the application guides.
 
 ### 5.3 Startup Sequence
 
@@ -309,10 +313,11 @@ With OLI motors:
 
 ## 6. Vibrating Plate Design (Schwingplatte)
 
-The vibrating plate is the central structural element. It must:
-1. Be **rigid enough** to transmit motor forces without flexing (≥ 1st mode > 500 Hz)
-2. Carry both motors and the center column
-3. Survive millions of load cycles at ~8 kN alternating
+The vibration plate is the central element of the structure.
+It must meet the three rules below.
+1. Be rigid enough to pass the motor force with no flex and mode 1 must be above 500 Hz.
+2. Carry the two motors and the center column.
+3. Survive millions of load cycles at about 8 kN that reverses.
 
 ### 6.1 Plate Design
 
@@ -369,8 +374,8 @@ Adding 2 longitudinal ribs (underneath) can push f₁ above 500 Hz.
 
 ## 7. Vibration Isolation
 
-The vibrating plate assembly must be **mechanically isolated** from the carriage
-and frame to prevent vibration transmission.
+You must isolate the vibration plate assembly from the carriage and from the frame.
+This block stops the pass of vibration.
 
 | Parameter                | Value                              |
 |--------------------------|------------------------------------|
@@ -397,11 +402,11 @@ T = 1 / (100 − 1) = 0.0101 = ~1% transmitted
 
 ### Isolator Selection
 
-- **Schwingmetall / Paulstra** cylindrical buffers (DE/FR)
-- **Trelleborg** anti-vibration mounts
-- Alternatively: 4× conical rubber mounts (for example , AMC MECANOCAUCHO)
-- M12 thread top and bottom for easy assembly
-- Operating temperature: −20°C to +80°C
+- Use cylindrical buffers from Schwingmetall or from Paulstra in DE or FR.
+- Trelleborg also makes mounts that block vibration.
+- Or use 4 conical mounts of rubber, for example from AMC MECANOCAUCHO.
+- The thread is M12 at the top and at the bottom for easy assembly.
+- The temperature range in service is −20°C to +80°C.
 
 ## 8. Center Column and Casing Connection
 
@@ -434,12 +439,10 @@ T = 1 / (100 − 1) = 0.0101 = ~1% transmitted
        └─────────────┘
 ```
 
-The center column is a **solid 42CrMo4 shaft** flanged to the vibrating plate.
-It transmits the full 8 kN alternating axial force to the casing.
-
-Bearing option: If rotation is needed (for auger mode), the column can be
-mounted with thrust/radial bearings in the plate. For casing sampling
-(no rotation), a rigid flange connection is simpler and stronger.
+The center column is a solid shaft of 42CrMo4 and a flange ties it to the vibration plate.
+It passes the full axial force of 8 kN to the casing and the force reverses.
+If you need rotation for auger mode, the column can sit on thrust races and on radial races in the plate.
+For casing sampling with no rotation, the rigid flange link is simpler and stronger.
 
 ## 9. Assembly Mass Budget
 
@@ -473,7 +476,7 @@ mounted with thrust/radial bearings in the plate. For casing sampling
 | Estimated cost (head)     | ~1,930–3,110 €              | ~1,100–1,800 €            |
 | Time to build             | 4–8 weeks (custom fab)      | 1–2 weeks                  |
 
-**V2 (OLI) is the clear winner for production and rapid prototyping.**
+V2 from OLI is the clear winner for production and for a fast first build.
 
 ## 11. VFD Requirements
 
@@ -491,9 +494,10 @@ mounted with thrust/radial bearings in the plate. For casing sampling
 | Protection             | IP20 min (in control enclosure)    |
 | **Candidates**         | Siemens V20, ABB ACS150, Lenze i510, Invertek Optidrive |
 
-**Important: The VFD must be rated for the elevated output frequency needed
-to drive the motors at 6,000 rpm. Standard VFDs go to 400 Hz max, which is
-sufficient (6,000 rpm on 6-pole = 300 Hz electrical).**
+Important: you must rate the VFD for the high output frequency.
+- The motors must run at 6,000 rpm.
+Standard VFDs go to 400 Hz maximum and that limit is enough.
+At 6,000 rpm on a 6-pole motor, the electrical frequency is 300 Hz.
 
 ## 12. Electrical Wiring
 
@@ -515,23 +519,23 @@ sufficient (6,000 rpm on 6-pole = 300 Hz electrical).**
   └────────┘ └─────────┘
 ```
 
-Cable sizing for 2 × 1.45 A = 2.9 A total:
-- VFD to motors: 3 × 1.5 mm² shielded motor cable
-- Cable length: < 5 m (short runs within machine)
-- Shielding: grounded at VFD end (EMC)
+The cable size for 2 times 1.45 A is 2.9 A in total.
+- The run from the VFD to the motors is cable of 3 by 1.5 mm² with a shield.
+- The cable length is under 5 m and the runs in the machine are short.
+- Ground the shield at the VFD end for EMC.
 
 ## 13. Open Questions
 
-- [ ] Verify OLI MVE 400/6-HF availability and lead time in EU
-- [ ] Confirm exact VFD frequency needed for 6,000 rpm (pole count verification)
-- [ ] Vibrating plate FEA (natural frequencies, stress under cyclic 8 kN)
-- [ ] Optimal plate rib pattern for maximum stiffness against weight
-- [ ] Casing adapter thread specification (verify with Geoprobe)
-- [ ] Field test: optimal VFD frequency ramp for different soil types
-- [ ] Temperature monitoring: motor surface temp during extended operation
-- [ ] Eccentric weight adjustment procedure (OLI manual)
+- [ ] Verify the lead time in the EU for the OLI MVE 400/6-HF.
+- [ ] Confirm the exact VFD frequency for 6,000 rpm and verify the pole count.
+- [ ] Run FEA on the vibration plate for natural frequency and for stress at cyclic 8 kN.
+- [ ] Find the best rib pattern of the plate for maximum stiffness and for low weight.
+- [ ] Specify the thread of the casing adapter and verify it with Geoprobe.
+- [ ] Test in the field for the best ramp of VFD frequency on each soil type.
+- [ ] Monitor the surface temperature of the motor during the long run.
+- [ ] Write the procedure for eccentric weight adjustment from the OLI manual.
 
----
 
-*References: Šporin & Vukelić (2017), Wang et al. (2015), OLI CIV Catalogue,
-OLI Application Guide for Linear Vibration*
+
+The references are Šporin and Vukelić (2017) and Wang and others (2015).
+Also see the OLI CIV catalogue and the OLI guide for linear vibration.

@@ -2,12 +2,12 @@
 
 ## Overview
 
-The Vibrocore V1 control system is built around the **WAGO PFC200 XTR (750-8212)** industrial controller with a Modbus RTU backbone.
-The XTR variant is chosen for its extreme-environment certification.
-The temperature range is −40 °C to +70 °C.
-The vibration rating is 5g continuous.
-The housing is IP20 and uses a DIN rail.
-The terminals are CAGE CLAMP and are rated for the field.
+The control system of the Vibrocore V1 uses the WAGO PFC200 XTR (750-8212).
+This controller is industrial and the backbone is Modbus RTU.
+The design uses the XTR variant for the extreme-environment certificate.
+The range is −40 °C to +70 °C with 5g of continuous vibration.
+The case is IP20 on a DIN-rail and the terminals are CAGE CLAMP.
+- These terminals are the CAGE CLAMP type and the rating is for the field.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -50,7 +50,7 @@ The terminals are CAGE CLAMP and are rated for the field.
                                   └─────────────┘
 ```
 
----
+
 
 ## WAGO I/O Module Assignment
 
@@ -63,7 +63,10 @@ The terminals are CAGE CLAMP and are rated for the field.
 | DI 2    | `xEStop_NC`     | NC     | Emergency stop (mushroom button)    |
 | DI 3    | `xHubAlarm`     | NO     | SINAMICS S200 alarm output          |
 
-> **NC wiring convention:** a broken wire is detected as a fault (FALSE = triggered OR wire break). This is mandatory for safety-relevant inputs.
+The rule for an NC wire is as follows.
+A broken wire shows as a fault.
+FALSE means a trigger or a break of the wire.
+- You must apply this rule to each safety input.
 
 ### Slot 2 — 750-530 XTR: 4× Digital Output 24V DC
 
@@ -77,12 +80,12 @@ The terminals are CAGE CLAMP and are rated for the field.
 ### Position — 1FL2 absolute encoder through the S200
 
 VC-HB-3410 is obsolete.
-Do not fit a 1000 ppr chain-shaft encoder.
+Do not fit a chain-shaft encoder of 1000 ppr.
 WAGO 750-637 is obsolete.
 There is no encoder slot and no `%IW4` / `%IW5` mapping.
-Position comes from the 1FL2 absolute encoder through the S200.
-`rENCODER_PULSES_PER_MM` stays 671.9.
-Do not change that constant in this revision.
+Position comes from the absolute encoder of the 1FL2 through the S200.
+The constant `rENCODER_PULSES_PER_MM` stays at 671.9.
+- Do not change that constant in this revision.
 
 ### Slot 3 — 750-652 candidate: RS-485 Modbus RTU
 
@@ -94,18 +97,18 @@ Do not change that constant in this revision.
 | Stop bits    | 1                |
 | Termination  | 120 Ω (enable on last device in chain) |
 
-**Bus topology (V1.1 — with penetrometer ADC):**
+The bus topology for V1.1 includes the penetrometer ADC.
 
 ```
 WAGO 750-652 candidate ── sonic inverter (addr 1) ── S200 (addr 2) ── Force ADC (addr 3)
                                                                    [120Ω term. here]
 ```
 
----
+
 
 ## V1.1 I/O Expansion: Lift, Tilt, Penetrometer
 
-When subsystems §8a–8c from the BOM are added, the following I/O slots are required.
+When you add subsystems §8a–8c from the BOM, the following I/O slots are required.
 
 ### WAGO V1.1 — Additional Slots
 
@@ -127,43 +130,45 @@ When subsystems §8a–8c from the BOM are added, the following I/O slots are re
 | DO 2 | `xTiltVertical` | HIGH | Drive tilt actuator to vertical/drilling position |
 | DO 3 | `xTiltFold` | HIGH | Drive tilt actuator to fold/transport position |
 
-> **Wiring note:** `xLiftExtend` and `xLiftRetract` must never be TRUE simultaneously
-> (mutual interlock in CODESYS). Same applies to `xTiltVertical` / `xTiltFold`.
-> Both pairs drive an H-bridge relay module (one per actuator group).
+`xLiftExtend` and `xLiftRetract` must never be TRUE at the same time.
+The same rule applies to `xTiltVertical` and to `xTiltFold`.
+Each pair drives one relay module of the H-bridge type for that group of actuators.
 
 #### Slot 8 (existing 750-600 moves here): End module
 
 #### Penetrometer — RS-485 Slave 3 (no new WAGO slot needed)
 
-The force ADC (Datexel DAT8017-A or equivalent) connects to the existing RS-485 bus
-as Slave address 3. Holding Register 0 = force in raw counts (0–65535 → 0–5 kN).
+The force ADC is the Datexel DAT8017-A or an equal unit.
+- This ADC connects to the RS-485 bus as slave address 3.
+Register 0 holds the force in raw counts from 0 to 65535, which maps to 0 to 5 kN.
 
 ```
 rForce_raw := ModbusRead(uSlaveAddr := 3, uRegAddr := 0);
 rForce_N   := REAL_TO_INT(rForce_raw) / 13.107;  // 0..65535 → 0..5000 N
 ```
 
----
+
 
 ### RevPi V1.1 — No Additional I/O Modules Required
 
-The RevPi DIO module has 14 DI and 14 DO. After base system and V1.1 additions:
+The DIO module of the RevPi has 14 DI and 14 DO.
+The count below is after the base system and after the V1.1 additions.
 
 | Signals | Base (V1) | +V1.1 | Total used | DIO capacity |
 |---------|-----------|--------|------------|--------------|
 | DI (digital in) | 4 (limits, E-stop, alarm) | +4 (actuator limits) | **8** | 14 ✓ |
 | DO (digital out) | 4 | +4 (actuator control) | **8** | 14 ✓ |
 
-RevPi only needs the **PSU upgrade** (SDR-120-24) for actuator current.
-The penetrometer ADC connects as RS-485 Slave 3 on the built-in RS-485 port.
+The RevPi needs only the upgrade of the PSU to the SDR-120-24 for actuator current.
+The penetrometer ADC connects as RS-485 slave 3 on the built-in RS-485 port.
 
----
+
 
 ## Modbus Register Maps
 
 ### Siemens V20 VFD — Slave Address 1
 
-Standard Modbus PKW + PZD interface (enable through P0700=5, P1000=5).
+The interface is standard Modbus PKW and PZD and you enable it with P0700=5 and with P1000=5.
 
 | Register (0-based) | Name            | R/W | Scale       | Description                    |
 |--------------------|-----------------|-----|-------------|--------------------------------|
@@ -173,7 +178,7 @@ Standard Modbus PKW + PZD interface (enable through P0700=5, P1000=5).
 | 111                | HIW             | R   | ×100 Hz     | Actual output frequency        |
 | 112                | Current actual  | R   | ×10 A       | Output current                 |
 
-**STW1 Control Words:**
+- See the STW1 control words in the table below.
 
 | Value    | Meaning                                              |
 |----------|------------------------------------------------------|
@@ -182,7 +187,7 @@ Standard Modbus PKW + PZD interface (enable through P0700=5, P1000=5).
 | `0x047B` | **OFF3 — fast stop, ramp via P1135 (0.3s) + DC brake** |
 | `0x04FE` | Fault reset                                          |
 
-**V20 Parameter Settings for Fast Stop:**
+The table below lists the V20 parameters for a fast stop.
 
 | Parameter | Value | Meaning                            |
 |-----------|-------|------------------------------------|
@@ -192,13 +197,13 @@ Standard Modbus PKW + PZD interface (enable through P0700=5, P1000=5).
 | P1121     | 3.0 s | OFF1 normal ramp-down              |
 | P1120     | 5.0 s | Ramp-up time                       |
 
-Expected stop time from 100 Hz: **200–400 ms** with OFF3 + DC braking.
+The expected stop time from 100 Hz is 200 to 400 ms with OFF3 and with the DC brake.
 
 ### Nanotec C5-E Hub Driver — Slave Address 2 (CiA 402 via Modbus)
 
-The live hub drive is the SINAMICS S200, order 6SL5510-1BB11-0AA0.
-The register table below is the previous Nanotec C5-E map.
-It is not the S200 parameter list.
+The live hub drive is the SINAMICS S200 and the order is 6SL5510-1BB11-0AA0.
+The register table below is the previous map for the Nanotec C5-E.
+It is not the parameter list for the S200.
 
 | Register (hex) | Name                  | R/W | Description                          |
 |----------------|-----------------------|-----|--------------------------------------|
@@ -208,7 +213,7 @@ It is not the S200 parameter list.
 | 6064h          | Position actual value | R   | 32-bit signed, encoder counts        |
 | 6060h          | Modes of operation    | W   | 3 = velocity mode                    |
 
-**CiA 402 Control Words:**
+The table below lists the CiA 402 control words.
 
 | Value    | Meaning              |
 |----------|----------------------|
@@ -217,28 +222,33 @@ It is not the S200 parameter list.
 | `0x000B` | Quick stop           |
 | `0x0080` | Fault reset          |
 
----
+
 
 ## Stopping Logic: Sonic Head
 
-The two stopping modes are fundamentally different and must never be confused:
+- The two stop modes are not the same and you must not mix them.
 
 | Mode         | Trigger                    | VFD Command | Ramp   | Stop Time |
 |--------------|----------------------------|-------------|--------|-----------|
 | Normal stop  | End of cycle (target depth) | OFF1 `0x047E` | P1121 3s | ~3–5 s |
 | **Fast stop** | Stone / E-Stop / Safety    | **OFF3 `0x047B`** | P1135 0.3s + DC brake | **~200–400 ms** |
 
-**Hub retract interlock:** `FB_HubControl` state 4 (`STOP_SONIC`) holds the hub with brake engaged until `FB_SonicHead.xConfirmedStopped = TRUE`. This flag is set only after:
-1. VFD reports `xRunning = FALSE` (ZSW1 bit 2 = 0), **AND**
-2. Standstill confirmed for 200 ms continuous.
+The interlock for hub retract works as follows.
+In `FB_HubControl` state 4 (`STOP_SONIC`) the hub stays in place and the brake stays on until `FB_SonicHead.xConfirmedStopped = TRUE`.
+This flag is set only after the two checks below.
+1. The VFD reports `xRunning = FALSE` and ZSW1 bit 2 is 0.
+2. You confirm standstill for a continuous 200 ms.
 
-Bypassing this interlock is not possible by design — the hub retract state (5) is only reachable from state 4, which requires `xConfirmedStopped`.
+A bypass of this interlock is not possible by design.
+The hub can enter retract state 5 only from state 4.
+That state requires `xConfirmedStopped`.
 
----
+
 
 ## SE050 / RDDL Trust Wallet Integration
 
-For VM0042-compliant data provenance, each sampling cycle is cryptographically signed using the **NXP SE050** secure element.
+Each sampling cycle gets the cryptographic signature for VM0042 data provenance.
+The signature uses the secure element from NXP SE050.
 
 ```
 WAGO PFC200 (COM1 / onboard UART)
@@ -256,32 +266,33 @@ WAGO PFC200 (COM1 / onboard UART)
   (VM0042 data notarization)
 ```
 
-**Data flow:**
+The data flow is as follows.
+1. `FB_DataLogger` assembles the JSON payload with `"sign_pending": true` at the end of the cycle.
+2. The payload goes on WAGO COM1 to the ESP32-C3 as one JSON line with LF at the end.
+3. The ESP32-C3 extracts the payload and the SE050 signs it with the private key secp256k1.
+4. The ESP32-C3 adds the `"signature"` field and the `"pubkey"` field and sends them to RDDL on MQTT over WiFi.
+5. RDDL records the data on Planetmint for the VM0042 audit trail and the record is immutable.
 
-1. `FB_DataLogger` assembles JSON payload with `"sign_pending": true` at cycle completion.
-2. Payload sent over WAGO COM1 to ESP32-C3 (JSON line, LF-terminated).
-3. ESP32-C3 extracts the payload, calls SE050 to sign with secp256k1 private key.
-4. ESP32-C3 appends `"signature"` and `"pubkey"` fields and publishes to RDDL through MQTT over WiFi.
-5. RDDL records data on Planetmint for immutable VM0042 audit trail.
+The ESP32-C3 also receives NMEA from the GPS antenna on the drill head.
+The antenna unit is the u-blox ZED-F9P and the mode is RTK.
+It pushes `{"lat": …, "lon": …, "fix": "RTK"}` to the WAGO every 1 s on the same COM1 UART.
+`FB_DataLogger` reads these values and puts them in each cycle record.
 
-**GPS data source:** ESP32-C3 also receives NMEA from the drill-head GPS antenna (u-blox ZED-F9P in RTK mode).
-The module sends `{"lat": …, "lon": …, "fix": "RTK"}` to WAGO every 1 s.
-The path is the same COM1 UART.
-`FB_DataLogger` reads these variables and includes them in each cycle record.
 
----
 
 ## Mobile Connectivity — Teltonika RUT241
 
-For field use the WAGO PFC200 needs LTE connectivity for:
-- Remote CODESYS debugging (CODESYS Gateway over VPN)
-- OTA firmware updates (CODESYS Online Change)
-- MQTT data upload to RDDL/cloud (backup path if WiFi unavailable)
+In the field, LTE is required for the WAGO PFC200 for the tasks below.
+- Remote debug of CODESYS through the CODESYS Gateway on VPN.
+- You update the firmware by OTA with CODESYS Online Change.
+- Upload of MQTT data to the RDDL cloud as a backup if WiFi is down.
 
-**Selected router: Teltonika RUT241** (DIN-rail mountable, IP30, −40 °C to +75 °C, Cat4 LTE).
-
-The RUT241 input is 9–30 V DC and the draw is below 6.5 W.
-Power it from the 24 V rail. Do not fit a 24 V to 9 V converter.
+The selected router is the Teltonika RUT241.
+It mounts on a DIN-rail and the rating is IP30.
+The temperature range is −40 °C to +75 °C and the radio is Cat4 LTE.
+The RUT241 input is 9 to 30 V DC and the draw is below 6.5 W.
+Power it from the 24 V rail.
+- Do not fit a converter from 24 V to 9 V.
 
 ```
 Instagrid ONE max
@@ -297,23 +308,25 @@ Instagrid ONE max
   WAGO PFC200 XTR (ETH1)
 ```
 
-**RUT241 configuration:**
-- WAN: SIM card (data-only SIM, for example Teltonika Mobile, 1 GB/month sufficient)
-- LAN: static IP 192.168.1.1 gateway, WAGO on 192.168.1.10
-- VPN: WireGuard tunnel to developer workstation for remote access
-- Firewall: only outbound MQTT (port 1883/8883) and WireGuard (UDP 51820) open
+The RUT241 configuration is as follows.
+- The WAN is a data-only SIM, for example Teltonika Mobile, and 1 GB each month is enough.
+- The LAN gateway is static IP 192.168.1.1 and the WAGO is on 192.168.1.10.
+- The VPN is a WireGuard tunnel to the developer workstation for remote access.
+- The firewall opens only outbound MQTT on port 1883 or 8883 and WireGuard on UDP 51820.
 
-**Power:** 9–30V DC input — powered from 24V rail through step-down, draws ~3W.
+The power input is 9 to 30 V DC.
+The 24 V rail feeds it through the step-down and the draw is about 3 W.
+For better coverage of the cellular net, use the Teltonika TRB140.
+The unit has an mPCIe form and it fits in the Rittal enclosure of rating IP65.
+Or use the RUT956 if you need redundancy of two SIM cards.
 
-Alternative for better cellular coverage: **Teltonika TRB140** (mPCIe form factor, fits
-inside the Rittal IP65 enclosure) or **RUT956** if dual-SIM redundancy is needed.
 
----
 
 ## Braking Energy Analysis — Why No External Resistor is Needed
 
-During OFF3 fast stop, the kinetic energy of the two OLI MVE 400/6-HF rotors
-must be dissipated. The question is whether an external braking resistor is needed.
+You must dissipate the kinetic energy in the fast OFF3 stop.
+- The energy is in the two rotors of the OLI MVE 400/6-HF.
+The open point is if an external brake resistor is necessary.
 
 ### Energy calculation
 
@@ -328,21 +341,22 @@ Both motors: E_total ≈ 80 J
 
 ### Dissipation path: DC injection braking (P1232 = 100%)
 
-After the 0.3s ramp-down (P1135), the V20 applies 100% rated current as DC to
-the stator. The energy is converted to heat **in the motor windings**:
+After the ramp-down of 0.3 s (P1135), the V20 applies 100 percent of rated current as DC to the stator.
+The stator turns that energy into heat in the motor windings.
 
 ```
 Motor thermal mass: m = 7.2 kg, c ≈ 450 J/(kg·°C)
 ΔT per stop = E / (m × c) = 39 / (7200 × 0.45) = 0.012 °C per motor
 ```
 
-At 100 stops/day: **1.2 °C cumulative temperature rise**. This is negligible
-relative to the motor's thermal rating and continuous self-cooling.
+At 100 stops in a day, the cumulative temperature rise is 1.2 °C.
+This rise is small next to the thermal rating of the motor and next to the continuous self-cool flow.
 
 ### DC bus overvoltage risk during the ramp phase
 
-During the 0.3s ramp from 100 Hz to 0, the motor briefly regenerates energy
-back into the V20's DC bus. The V20 handles this through:
+During the 0.3 s ramp from 100 Hz to 0, the motor sends the short burst of energy back.
+- That energy goes back to the DC bus in the V20.
+The V20 handles this as follows.
 
 | V20 Parameter | Value | Effect |
 |---------------|-------|--------|
@@ -351,9 +365,10 @@ back into the V20's DC bus. The V20 handles this through:
 | P1232 | 100 % | DC braking current after ramp |
 | P1233 | 0.5 s | DC braking duration |
 
-**With P1240 = 1 active:** if the DC bus voltage approaches the trip threshold
-during the ramp, the V20 automatically extends the deceleration ramp. The motor
-still stops much faster than OFF1 (3s), but avoids a "DC link overvoltage" fault.
+With P1240 set to 1, the control is active.
+If the voltage of the DC bus nears the trip level in the ramp, the V20 extends the ramp.
+The motor still stops, and the stop is much faster than OFF1 at 3 s.
+This avoids the fault DC-link overvoltage.
 
 ### Decision: no external braking resistor in V1
 
@@ -363,16 +378,16 @@ still stops much faster than OFF1 (3s), but avoids a "DC link overvoltage" fault
 | Increase P1135 to 0.5s if trips | €0 | None | If needed |
 | V20 external braking resistor module | ~€80 | Wiring | Only if P1240 doesn't help |
 
-**Recommendation for commissioning:** start with P1135 = 0.3s and P1240 = 1.
-If DC bus overvoltage trips occur during fast stops in the field, increase P1135
-to 0.5s. An external braking resistor is not expected to be necessary.
+At the first start, use P1135 = 0.3 s and use P1240 = 1.
+- If the DC bus trips on overvoltage in a fast stop in the field, increase P1135 to 0.5 s.
+Do not expect a need for an external brake resistor.
 
----
+
 
 ## Operator HMI — Docker Stack on PFC200 XTR
 
-The PFC200 XTR (Firmware ≥ 23) has Docker built-in.
-Two containers run alongside the CODESYS Runtime:
+The PFC200 XTR with firmware at or above 23 has Docker in the unit.
+Two containers run beside the CODESYS runtime.
 
 ```
 WAGO PFC200 XTR (192.168.1.10)
@@ -382,7 +397,8 @@ WAGO PFC200 XTR (192.168.1.10)
     └── vibrocore-mqtt  (Mosquitto MQTT broker  → port 1883)
 ```
 
-**Resource budget:** ~45 MB RAM + < 5% CPU idle — well within 512 MB / 1 GHz headroom.
+The resource budget is about 45 MB of RAM, with under 5 percent of CPU at idle.
+This load is well inside the headroom of 512 MB and 1 GHz.
 
 ### Dashboard screens
 
@@ -392,39 +408,42 @@ WAGO PFC200 XTR (192.168.1.10)
 | Status | State machine text (System / Hub / Sonic), safety reason, trend charts |
 | Protokoll | Per-cycle log table (depth, freq, GPS, signed flag) |
 
-Node-RED polls CODESYS every **500 ms** through Modbus TCP (FC3 read, registers 0–21).
-HMI write commands (buttons, sliders) use FC6/FC16 on the same registers.
+On each span of 500 ms, Node-RED polls the CODESYS unit on Modbus TCP.
+- The read is FC3 on registers 0 to 21.
+HMI write commands from buttons and from sliders use FC6 and FC16 on the same registers.
 
-See `firmware/docker/` for the full stack and `firmware/docker/README.md` for setup.
+See `firmware/docker/` for the full stack and see `firmware/docker/README.md` for the setup.
 
 ### Modbus TCP Slave configuration in CODESYS
 
-1. Device Tree → Add Device → `Modbus TCP Slave` (WagoAppModbusSlaveTcp)
-2. Port: 502, Unit ID: 1
-3. Map `%MW0..%MW21` per `firmware/codesys/GVL_MODBUS.st`
+In CODESYS, set the Modbus TCP slave as follows.
+1. In the device tree, add the device of type `Modbus TCP Slave` (WagoAppModbusSlaveTcp).
+2. Set the port to 502 and set the unit ID to 1.
+3. Map `%MW0..%MW21` as in `firmware/codesys/GVL_MODBUS.st`.
 
----
+
 
 ## Development Environment
 
 ### CODESYS V3.5 (WAGO PFC200 target)
 
-- Download: [CODESYS Store](https://store.codesys.com) — free runtime for WAGO PFC
-- WAGO Extension: **WAGO-I/O-PRO** or **CODESYS for WAGO** package
+- Download the free runtime for the WAGO PFC from the [CODESYS Store](https://store.codesys.com)
+- The WAGO extension is **WAGO-I/O-PRO** or the package CODESYS for WAGO.
 - Required libraries:
   - `WagoAppModbusMasterRtu` ≥ 1.1.0.0
-  - `WagoAppModbusSlaveTcp` (HMI Modbus TCP Slave interface)
+  - `WagoAppModbusSlaveTcp` is the slave interface for HMI on Modbus TCP.
   - `WagoSysTimeRtc` (timestamp in DataLogger)
-- Target: WAGO PFC200 XTR (Arm Linux)
-- Programming: Structured Text (ST), IEC 61131-3
+- The target is the WAGO PFC200 XTR on Arm Linux.
+- You write in Structured Text (ST) and the norm is IEC 61131-3.
 
-**Note on CODESYS Go:** CODESYS Go is a browser-based IDE (edit + deploy), not an
-HMI app. It is used to write and deploy ST code to the PFC from any browser —
-useful when a Windows VM is not available. It is **not** the operator dashboard.
+CODESYS Go is an IDE in the browser for edit and for deploy, and it is not an HMI app.
+You use it to write ST code and to deploy that code to the PFC from any browser.
+This path helps when a Windows VM is not on hand.
+It is not the operator dashboard.
 
 ### Running on Mac (no Windows required)
 
-Option A — UTM virtual machine (recommended for full IDE comfort):
+Option A is a UTM virtual machine and it gives full comfort in the IDE.
 ```bash
 # Install UTM from https://mac.getutm.app
 # Create Windows 11 ARM VM (free via Azure Dev) or Windows 10 x86 via Rosetta
@@ -432,23 +451,23 @@ Option A — UTM virtual machine (recommended for full IDE comfort):
 # Connect to WAGO PFC via WAGO USB-Service-Cable or Ethernet/VPN
 ```
 
-Option B — CODESYS Go (browser-based, no VM needed):
+Option B is CODESYS Go in the browser and it needs no VM.
 ```
 # Open: https://go.codesys.com
 # Target: WAGO PFC200 (IP: 192.168.1.10, port 1740)
 # Full ST editor + online debugging in any Chromium browser
 ```
 
-Option C — Cloud VM:
-- AWS EC2 t3.small (Windows Server) — ~$15/month
-- Install CODESYS V3.5, connect to WAGO through WireGuard VPN
-- OTA updates through CODESYS Online Change
+- Option C is a cloud VM.
+- AWS EC2 t3.small on Windows Server is about $15 each month.
+- Install CODESYS V3.5 and connect it to the WAGO on the WireGuard VPN.
+- You do OTA updates with CODESYS Online Change.
 
----
+
 
 ## Remote Access and OTA Updates
 
-The WAGO PFC200 provides built-in remote access:
+The WAGO PFC200 gives you remote access from the unit.
 
 | Feature | Method | URL / Config |
 |---------|--------|--------------|
@@ -460,17 +479,17 @@ The WAGO PFC200 provides built-in remote access:
 | MQTT broker | Mosquitto | Docker container (port 1883) |
 | Node-RED | HTTP | `http://192.168.1.10:1880` |
 
-For field use on mobile LTE: the **Teltonika RUT241** provides the LTE uplink and
-WireGuard VPN — the WAGO PFC connects as LAN client, developer connects from anywhere.
-See the [Mobile Connectivity section](#mobile-connectivity--teltonika-rut241) above.
+For field use on mobile LTE, the Teltonika RUT241 gives the LTE uplink and the WireGuard VPN.
+The WAGO PFC connects as a LAN client and the developer connects from any place.
+See the [section on mobile connectivity](#mobile-connectivity--teltonika-rut241) above.
 
----
+
 
 ## Controller Comparison: WAGO PFC200 XTR vs. Revolution Pi Connect 4
 
-Two viable controller options exist for Vibrocore V1. The WAGO is the primary
-recommendation for production. The RevPi Connect 4 is a lower-cost alternative
-well-suited for prototyping or cost-sensitive builds.
+Two controller options are viable for the Vibrocore V1.
+The WAGO is the primary choice for production.
+- The RevPi Connect 4 is a low-cost alternative for a first build or for a low-cost build.
 
 ### Hardware comparison
 
@@ -502,8 +521,8 @@ well-suited for prototyping or cost-sensitive builds.
 | End module | 750-600 (€10–20) | Not required |
 | **I/O total** | **€210–320** (DI, DO, serial, end) | **€196** (1× RevPi DIO) |
 
-The RevPi DIO replaces the digital input and output modules.
-It does not replace an encoder module.
+The RevPi DIO replaces the modules for digital input and for digital output.
+It does not replace a module for an encoder.
 The chain encoder is obsolete.
 Do not use the DIO encoder mode for a chain encoder.
 
@@ -518,29 +537,30 @@ Do not use the DIO encoder mode for a chain encoder.
 
 ### Decision guidance
 
-Use **WAGO PFC200 XTR** when:
-- Ambient temperature can drop below −25 °C (for example , Eastern European winter storage)
-- Maximum vibration resistance is required (drilling in rocky, high-vibration terrain)
-- Dedicated CODESYS Runtime timing guarantees are needed
-- Long-term industrial support contracts are required
+Use the WAGO PFC200 XTR when the conditions below are true.
+- The ambient temperature can drop below −25 °C, as in winter storage in Eastern Europe.
+- The maximum resistance to vibration is required for rocky ground with high vibration.
+- You need a time guarantee from the dedicated CODESYS runtime.
+- A long-term contract for industrial support is required.
 
-Use **RevPi Connect 4** when:
-- Cost is a primary constraint (saves ~€300–500 on controller alone)
-- More RAM/CPU for edge computing or data logging is beneficial
-- The control enclosure can be kept above −25 °C (standard field conditions)
-- Full Linux flexibility (Python, Node-RED, Docker) without any Windows dependency
-- V1 prototype / proof-of-concept phase
+Use the RevPi Connect 4 when the conditions below are true.
+- Cost is the main limit and the saving is about 300 to 500 euro on the controller alone.
+- More RAM or CPU for edge tasks or for data logging is a benefit.
+- You can keep the control enclosure above −25 °C in standard field conditions.
+- You get full flexibility of Linux with Python, Node-RED, Docker, and with no Windows tie.
+- The phase is the V1 prototype or a proof of the concept.
 
-> **Temperature note:** Hungarian/Austrian field conditions rarely drop below −25 °C
-> during active drilling season (March–November). However, equipment stored outdoors
-> overnight in January can reach −20 °C. If the enclosure is insulated or heated
-> (self-adhesive heater strip, €15), the RevPi remains in spec. The WAGO's −40 °C
-> rating provides comfort margin without any mitigation.
+In Hungary or in Austria, the temperature in the field rarely drops to a point below −25 °C.
+That is the active bore season from March to November.
+Gear that stays outdoors overnight in January can reach −20 °C.
+If you insulate the enclosure or if you heat it, the RevPi stays in spec.
+A self-adhesive heater strip at 15 euro does that heat task.
+The WAGO rating of −40 °C gives a comfort margin and you need no extra mitigation.
+- The RevPi ships with Raspberry Pi OS and the base is Debian.
 
 ### RevPi-specific software notes
 
-The RevPi ships with **Raspberry Pi OS** (Debian-based). No Windows toolchain
-is needed at any stage:
+You need no Windows toolchain at any stage.
 
 ```bash
 # Node-RED (native, no Docker needed — but Docker works too):
@@ -557,8 +577,8 @@ pip install pymodbus asyncio
 # → full Vibrocore logic in Python on RevPi Linux
 ```
 
-The Docker Compose stack in `firmware/docker/` runs identically on RevPi (also arm/v8).
-Change the platform tag in `docker-compose.yml`:
+The Docker Compose stack in `firmware/docker/` runs in the same way on the RevPi, also on arm/v8.
+Change the platform tag in `docker-compose.yml`.
 
 ```yaml
 platform: linux/arm/v8   # RevPi Connect 4 (CM4 = armv8)
