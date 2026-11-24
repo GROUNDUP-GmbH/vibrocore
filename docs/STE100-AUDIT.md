@@ -154,15 +154,19 @@ The rewrite of those documents starts from PR 19.
 | Area | Before | After |
 | --- | --- | --- |
 | README.md and REFERENCES.md | 4 errors, 130 warnings | 0 errors, 42 warnings |
-| docs/design, four files | 17 errors, 233 warnings | 0 errors, 14 warnings |
-| docs/engineering, ten files, not SAMPLING.md | 11 errors, 384 warnings | 0 errors, 374 warnings |
+| docs/design, four files | 17 errors, 233 warnings | 0 errors, 13 warnings |
+| docs/engineering, ten files, not SAMPLING.md | 11 errors, 384 warnings | 0 errors, 364 warnings |
 | firmware/docker/README.md and firmware/revpi/README.md | 3 errors, 29 warnings | 0 errors, 0 warnings |
 | The 13 other Markdown files | 1 error, 168 warnings | 0 errors, 5 warnings |
-| BOM YAML free text | 1 error, 256 warnings | 0 errors, 239 warnings |
+| BOM YAML free text | 1 error, 256 warnings | 0 errors, 248 warnings |
 
 - The BOM checker does not read YAML.
 - The BOM row uses the same sentence rules on `spec`, `notes`, `comment`, and `description`.
-- The warnings that remain are noun clusters and technical -ing names.
+- Noun clusters remain.
+- Technical names that end in ing remain.
+- Passive verbs remain.
+- Long paragraphs remain.
+- Vague words remain.
 - `SAMPLING.md` stays with PR 13.
 - The audit file is not in PR 21.
 - This file is the audit.
