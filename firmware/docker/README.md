@@ -102,7 +102,7 @@ http://127.0.0.1:1880         # Editor (login required)
 ```
 
 You can serve the HMI on the machine LAN.
-Change the compose port bind from `127.0.0.1:1880:1880` to the HMI address `192.168.1.10:1880:1880`.
+Change the compose port bind from `127.0.0.1:1880:1880` to the HMI address, for example `192.168.1.10:1880:1880`.
 Do not bind `0.0.0.0:1880` on the field unit.
 
 ## CODESYS Side: Modbus TCP Slave Setup
