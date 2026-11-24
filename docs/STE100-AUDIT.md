@@ -155,7 +155,7 @@ The rewrite of those documents starts from PR 19.
 | --- | --- | --- |
 | README.md and REFERENCES.md | 4 errors, 130 warnings | 0 errors, 42 warnings |
 | docs/design, four files | 17 errors, 233 warnings | 0 errors, 14 warnings |
-| docs/engineering, ten files, not SAMPLING.md | 11 errors, 384 warnings | 0 errors, 372 warnings |
+| docs/engineering, ten files, not SAMPLING.md | 11 errors, 384 warnings | 0 errors, 374 warnings |
 | firmware/docker/README.md and firmware/revpi/README.md | 3 errors, 29 warnings | 0 errors, 0 warnings |
 | The 13 other Markdown files | 1 error, 168 warnings | 0 errors, 5 warnings |
 | BOM YAML free text | 1 error, 256 warnings | 0 errors, 239 warnings |
