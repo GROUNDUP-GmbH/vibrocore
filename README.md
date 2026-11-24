@@ -24,7 +24,7 @@
 - The frequency of that vibration is high.
 - This principle is sonic drill.
 - The vibration drives the core tubes into the ground.
-- The sample stays undisturbed.
+- Disturbance of the sample stays minimal.
 - The percussion system hits the tube.
 - The hammer system also hits the tube.
 - The sonic method is different.
