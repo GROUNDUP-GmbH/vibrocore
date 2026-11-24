@@ -66,7 +66,7 @@ The Odoo-side work is in `docs/cad/ODOOPLM.md`.
 - `VC-CT-6150` WAGO 750-600: no solid. Dimensions were not complete enough to model.
 - `VC-CT-6200` Inductive limit switch: The order is not frozen. ifm IFS248 is a candidate. SICK is not ruled out.
 - `VC-CT-6210` Emergency stop: The catalogue contact block is not selected. Do not buy a single-contact operator.
-- `VC-CT-6220` Safety relay: The safety assessment is open. Do not state a performance level.
+- `VC-CT-6220` Safety relay: The safety assessment is not complete. Do not state a performance level.
 - `VC-CT-6220` Safety relay: The 80-130 EUR band is not a quote for article 750104.
 - `VC-CT-6230` Warning beacon: Order code is unknown.
 - `VC-CT-6230` Warning beacon: Price is unknown.
