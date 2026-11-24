@@ -184,7 +184,7 @@ vs. 4–8 weeks for custom fabrication. **~1,000 € cheaper.**
 ### Phase 1 — PoC / Development
 - **Instagrid ONE max** (230V AC, 3.6 kW cont., 18 kW peak, 2.1 kWh)
 - VFD for sonic motors (230V 1ph → 3ph variable frequency)
-- DC PSU (230V AC → 48–60V DC) for hub stepper
+- SINAMICS S200 (230 V AC) for the 1FL2104 lift servo
 - DC/DC converters for 24V (brake, relays) and 5V/12V (control)
 
 ### Phase 2 — Series / Field

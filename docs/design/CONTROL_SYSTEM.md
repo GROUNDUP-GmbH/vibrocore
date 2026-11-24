@@ -56,7 +56,7 @@ The Vibrocore V1 control system is built around the **WAGO PFC200 XTR (750-8212)
 | DI 0    | `xLimitUp`      | NC     | Upper carriage limit switch         |
 | DI 1    | `xLimitDown`    | NC     | Lower carriage limit switch         |
 | DI 2    | `xEStop_NC`     | NC     | Emergency stop (mushroom button)    |
-| DI 3    | `xHubAlarm`     | NO     | Nanotec C5-E alarm output (ALM pin) |
+| DI 3    | `xHubAlarm`     | NO     | SINAMICS S200 alarm output          |
 
 > **NC wiring convention:** a broken wire is detected as a fault (FALSE = triggered OR wire break). This is mandatory for safety-relevant inputs.
 
@@ -65,7 +65,7 @@ The Vibrocore V1 control system is built around the **WAGO PFC200 XTR (750-8212)
 | Channel | Signal           | Active | Description                          |
 |---------|------------------|--------|--------------------------------------|
 | DO 0    | `xBrakeRelease`  | HIGH   | Spring brake: 24V = released         |
-| DO 1    | `xHubEnable`     | HIGH   | Nanotec C5-E ENA pin                 |
+| DO 1    | `xHubEnable`     | HIGH   | SINAMICS S200 enable                 |
 | DO 2    | `xVFD_Reset`     | HIGH   | VFD fault reset pulse (200ms)        |
 | DO 3    | `xAlarmBeacon`   | HIGH   | VC-CT-6230, 24 V, current at or below 0.5 A |
 

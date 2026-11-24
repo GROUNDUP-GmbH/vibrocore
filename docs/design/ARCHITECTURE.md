@@ -16,7 +16,7 @@ core imaging. See `docs/engineering/BOM.md §8` for BOM and cost details.
 │  │                  │  │     SYSTEM   │  │                        │ │
 │  │  2× OLI MVE      │  │  Linear      │  │  WAGO PFC200 XTR       │ │
 │  │  400/6-HF        │  │  push/pull   │  │  OR RevPi Connect 4    │ │
-│  │  @100 Hz, 8 kN   │  │  via chain   │  │  + V20 VFD + C5-E drv  │ │
+│  │  @100 Hz, 8 kN   │  │  via chain   │  │  + V20 VFD + S200 drv  │ │
 │  └──────────────────┘  └──────────────┘  └────────────────────────┘ │
 │                                                                      │
 │  ┌──────────────────────────────────────────────────────────────┐   │
@@ -169,7 +169,7 @@ WAGO / RevPi (CODESYS / Python)
         │
         ├── RS-485 bus ────────────────────────────────────────────────
         │     Slave 1: Siemens V20 (VFD → OLI motors)
-        │     Slave 2: Nanotec C5-E (Hub stepper driver)
+        │     Slave 2: SINAMICS S200 (hub servo drive)
         │     Slave 3: Force ADC (penetrometer, 50ms updates)  [V1.1]
         │
         ├── 4× DI (Slot 1) ─── Limit switches: hub up/down, E-Stop, alarm

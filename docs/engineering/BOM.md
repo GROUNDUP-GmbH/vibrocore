@@ -125,7 +125,7 @@ Recommended for V1 prototype / cost-sensitive builds.*
 |---|-----------|------|-----|--------|----------|
 |47b| RevPi Connect 4 | CM4 Quad-Core A72 1.5 GHz, 4 GB RAM, 32 GB eMMC, 2× GbE, RS-485 built-in, Docker-native, −25..+55 °C, DIN rail | 1 | 450–520 | [revolutionpi.com](https://revolutionpi.com/shop/en/revpi-connect4) (DE) |
 |48b| RevPi DIO module | 14× DI 24V + 14× DO 24V. Replaces the DI and DO modules. The chain encoder is obsolete. | 1 | 196 | revolutionpi.com (DE) |
-|49b| *(RS-485 built-in)* | Modbus RTU to Siemens V20 + Nanotec C5-E — no separate module needed | — | 0 | — |
+|49b| *(RS-485 built-in)* | Modbus RTU to Siemens V20 + SINAMICS S200 — no separate module needed | — | 0 | — |
 |50b–64b| Shared Option A lines, without the WAGO rack and without the obsolete SE050 and 9 V lines | | | inside the total below | same as §5 |
 
 **Control Subtotal Option B:** EUR 1,224–1,599.
@@ -521,7 +521,7 @@ Do not invent an order code.
 | Vibration motors  | OLI Vibrators           | IT      | olivibra.com                 |
 | Motors (async)    | ABB                     | CH/EU   | new.abb.com                  |
 | Motors (async)    | Siemens                 | DE      | siemens.com                  |
-| Motors (stepper)  | Nanotec                 | DE      | nanotec.com                  |
+| Hub servo         | Siemens 1FL2104 / S200  | DE      | siemens.com                  |
 | VFDs              | Siemens (SINAMICS V20)  | DE      | siemens.com                  |
 | VFDs              | ABB (ACS150)            | CH/EU   | new.abb.com                  |
 | Gearboxes         | Neugart                 | DE      | neugart.com                  |

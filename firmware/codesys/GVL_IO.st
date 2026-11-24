@@ -38,7 +38,7 @@ VAR_GLOBAL
        This PLC bit is not the only stop path. *)
     xEStop_NC       AT %IX0.2 : BOOL;
 
-    (* Hub driver alarm output (Nanotec C5-E ALM pin, active HIGH) *)
+    (* Hub driver alarm output (SINAMICS S200, active HIGH) *)
     xHubAlarm       AT %IX0.3 : BOOL;
 
     (* =========================================================
@@ -48,7 +48,7 @@ VAR_GLOBAL
     (* Spring-applied brake: HIGH = 24V energised = brake RELEASED *)
     xBrakeRelease   AT %QX0.0 : BOOL;
 
-    (* Hub driver enable (Nanotec C5-E ENA pin, active HIGH) *)
+    (* Hub driver enable (SINAMICS S200, active HIGH) *)
     xHubEnable      AT %QX0.1 : BOOL;
 
     (* VFD fault reset pulse (momentary, 200ms) *)

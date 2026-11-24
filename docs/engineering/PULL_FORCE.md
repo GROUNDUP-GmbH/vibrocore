@@ -65,6 +65,10 @@ Use metres for R when T2 is in newton-metres.
 
 Do not allow the motor peak of 10.8 Nm.
 419 Nm is above T2max (365 Nm).
+The motor-peak row uses 10.8 Nm × 40 × 0.97.
+It does not subtract the 0.85 Nm idle torque.
+That is the same product as in LIFT-DRIVE-SIZING.md.
+The result stays on the safe side.
 
 The chain working load is 4.5 kN.
 The pull at the drive torque limit is about 5.83 kN.

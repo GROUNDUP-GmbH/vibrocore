@@ -143,8 +143,8 @@ That margin is small. See the note.
 Motor max speed:                   600 rpm (practical for closed-loop)
 Gearbox ratio:                     40:1
 → Output shaft speed:              600 / 40 = 15 rpm
-→ Sprocket circumference:          2π × 37.9 mm = 238 mm
-→ Chain linear speed:              15 × 238 = 3,570 mm/min ≈ 59.5 mm/s
+→ Sprocket circumference:          2π × 38.18 mm = 239.89 mm
+→ Chain linear speed:              15 × 239.89 = 3,598 mm/min ≈ 60.0 mm/s
 ```
 
 ~60 mm/s is adequate for both penetration (typically 10–30 mm/s with vibration)

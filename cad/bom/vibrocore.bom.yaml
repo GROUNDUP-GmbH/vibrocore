@@ -1565,7 +1565,8 @@ parts:
   estimate_eur_low: 25
   estimate_eur_high: 40
   notes: 'G&G 501-302-0515, 10B-2 15 teeth, taper bush 1210. The STEP is in cad/vendor/VC-HB-2800.
-    Pitch radius used in the force calculation is 37.9 mm. The idler VC-HB-2810 reuses this solid.'
+    The placed model uses a pitch radius of 37.9 mm. The force calculation uses 38.18 mm (PULL_FORCE.md).
+    The idler VC-HB-2810 reuses this solid.'
 - part_number: VC-HB-2810
   name: Sprocket 10B-2 15T idle
   revision_index: 0
