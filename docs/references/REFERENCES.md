@@ -67,7 +67,7 @@
    https://ndeaa.jpl.nasa.gov/nasa-nde/usdc/usdc.htm
    - Piezoelectric ultrasonic actuation (> 20 kHz)
    - Planetary exploration focus
-   - Different principle (ultrasonic vs. mechanical eccentric)
+   - Different principle (ultrasonic against. mechanical eccentric)
 
 ## Standards & Norms
 
