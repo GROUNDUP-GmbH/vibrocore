@@ -6,7 +6,8 @@ on:
 
 jobs:
   erc:
-    runs-on: ubuntu-latest
+    # ubuntu-latest is Ubuntu 26.04. The KiCad 8.0 PPA has no release for that series.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Install KiCad 8
