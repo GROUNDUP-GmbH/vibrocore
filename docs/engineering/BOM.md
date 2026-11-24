@@ -1,7 +1,7 @@
 # Bill of Materials (BOM)
 
 Preliminary BOM for Vibrocore V1 prototype.
-All prices are estimates; verify with suppliers before ordering.
+All prices are estimates. Verify with suppliers before ordering.
 
 ## 1. Sonic Head (V2: 2× OLI MVE 400/6-HF)
 
@@ -20,7 +20,7 @@ All prices are estimates; verify with suppliers before ordering.
 
 *Note: V2 eliminates custom eccentric shafts, discs, timing belts, and external
 bearings — all handled internally by the OLI motors. Significant cost and
-complexity reduction vs. V1 custom design.*
+complexity reduction against V1 custom design.*
 
 ## 2. Hub System
 
@@ -60,7 +60,7 @@ complexity reduction vs. V1 custom design.*
 
 **Frame Subtotal (V1.1 live lines, without #38): ~440–730 €**
 
-> **#38 vs §8b:** V1.1 firmware drives the electric tilt actuator (`FB_TiltControl`).
+> **#38 against §8b:** V1.1 firmware drives the electric tilt actuator (`FB_TiltControl`).
 > The gas-spring / hinge line #38 is retained as an obsolete alternative only and is
 > **not** on the live manufacturing BOM (`VC-FR-4700` lifecycle `obsolete`).
 
@@ -141,36 +141,36 @@ Arithmetic: Option A rollup EUR 1,465–2,310, minus the WAGO rack EUR 930–1,4
 | CODESYS SL for Raspberry Pi | Soft PLC from CODESYS Store (runtime license required) |
 | Python / pymodbus | Full alternative to CODESYS — no Windows ever |
 
-**Control Subtotal Option B (RevPi): ~1,521–2,430 € (hardware only; software €0)**
+**Control Subtotal Option B (RevPi): ~1,521–2,430 € (hardware only. Software €0)**
 
-> **Option B savings vs. Option A:** use the subtotals above, EUR 1,224–1,599 against EUR 1,465–2,310.
+> **Option B savings against Option A:** use the subtotals above, EUR 1,224–1,599 against EUR 1,465–2,310.
 > The old WAGO band of EUR 910–1,370 included the obsolete 750-637 and is withdrawn.
 
 > **Key tradeoffs:**
-> - Temperature: RevPi −25 °C vs. WAGO −40 °C. For EU field use (March–November) this
->   is acceptable; add enclosure heater strip (~€15) for cold-storage overnight.
+> - Temperature: RevPi −25 °C against WAGO −40 °C. For EU field use (March–November) this
+> is acceptable. Add enclosure heater strip (~€15) for cold-storage overnight.
 > - Vibration: WAGO is explicitly 5g rated. The drill enclosure isolates the controller
->   from drilling vibrations via rubber mounts — in practice both are adequate.
+> from drilling vibrations through rubber mounts — in practice both are adequate.
 > - CODESYS real-time: RevPi uses PREEMPT_RT Linux (soft PLC). For Vibrocore's
->   500ms Modbus polling cycles this is more than sufficient.
+> 500ms Modbus polling cycles this is more than sufficient.
 > - Position comes from the 1FL2 absolute encoder through the S200.
->   VC-HB-3410 and WAGO 750-637 are obsolete.
->   Do not use the RevPi DIO encoder mode for a chain encoder.
+> VC-HB-3410 and WAGO 750-637 are obsolete.
+> Do not use the RevPi DIO encoder mode for a chain encoder.
 > - I/O advantage: 1 RevPi DIO replaces the DI and DO modules.
 >
 > See `docs/design/CONTROL_SYSTEM.md#controller-comparison` for full analysis.
 
 > **Notes (Option A — WAGO):**
 > - WAGO PFC200 XTR specs: **1 GHz ARM Cortex-A8, 512 MB RAM, 4 GB Flash** (G2).
->   Docker built-in from Firmware 23. Setup guide: `firmware/docker/README.md`.
+> Docker built-in from Firmware 23. Setup guide: `firmware/docker/README.md`.
 > - CONTROLLINO / Arduino Opta removed — WAGO PFC200 XTR is the V1 production controller.
 > - Teltonika RUT241: LTE for remote CODESYS debugging, OTA updates, MQTT to RDDL.
 > - **No external braking resistor required.** The 80 J fast-stop energy is dissipated
->   as heat in the OLI motor windings via DC injection braking (P1232=100%).
->   Temperature rise: 0.012 °C per stop — negligible at 7.2 kg motor thermal mass.
->   V20 Vdc-max controller (P1240=1) prevents DC bus overvoltage during ramp.
->   If bus overvoltage fault occurs in field: increase P1135 from 0.3s → 0.5s.
->   See `docs/design/CONTROL_SYSTEM.md#braking-energy-analysis` for full calculation.
+> as heat in the OLI motor windings through DC injection braking (P1232=100%).
+> Temperature rise: 0.012 °C per stop — negligible at 7.2 kg motor thermal mass.
+> V20 Vdc-max controller (P1240=1) prevents DC bus overvoltage during ramp.
+> If bus overvoltage fault occurs in field: increase P1135 from 0.3s → 0.5s.
+> See `docs/design/CONTROL_SYSTEM.md#braking-energy-analysis` for full calculation.
 
 ## 6. Casing and split carrier
 
@@ -220,8 +220,8 @@ Can be added incrementally without hardware changes to the base controller I/O.*
 resting on stabiliser feet). Two parallel actuators ensure stable, torsion-free deployment.
 
 **Design:** 2× electric linear actuator (one per frame side) + shared H-bridge relay direction control.
-Each actuator has integrated mechanical end stops. CODESYS reads the 4 limit switches and
-controls extend/retract via 2 DO channels (shared for both actuators in parallel).
+Each actuator includes mechanical end stops. CODESYS reads the 4 limit switches and
+controls extend/retract through 2 DO channels (shared for both actuators in parallel).
 
 | # | Component | Spec | Qty | Est. € | Supplier |
 |---|-----------|------|-----|--------|----------|
@@ -270,11 +270,11 @@ a carefully positioned pivot-to-attachment geometry. Verify with final mechanica
 
 **Function:** Measures drilling resistance (push force) as a function of depth throughout
 the entire penetration cycle. Combined with the existing position encoder this produces
-a **drilling penetrogram** (force vs. depth curve) — functionally equivalent to a
+a **drilling penetrogram** (force against depth curve) — functionally equivalent to a
 lightweight Cone Penetration Test (CPT) at the sample point.
 
 **Design:** S-type load cell mounted in-line between the hub carriage adapter plate and
-the casing adapter. Output: 4–20 mA via signal conditioner to RS-485 Modbus RTU
+the casing adapter. Output: 4–20 mA through signal conditioner to RS-485 Modbus RTU
 converter (Slave address 3 on the existing bus). No additional PLC I/O module needed.
 
 ```

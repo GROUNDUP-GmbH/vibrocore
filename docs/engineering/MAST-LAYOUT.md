@@ -297,7 +297,9 @@ There is no gear stage between them.
 The chain shaft stays on the mast mid-plane, X = 0.
 The gearbox output, the coupling and the chain shaft share that axis.
 Do not use an offset lift axis and do not add drop gears.
-The study solid on this revision still places the lift axis at X = 7.5 mm and Z = 79.5 mm, 22.9 mm from the chain shaft at Z = 57.9 mm.
+The study solid on this revision still places the lift axis off the chain shaft.
+The placed axis is at X = 7.5 mm and Z = 79.5 mm.
+The offset is 22.9 mm from the chain shaft at Z = 57.9 mm.
 That offset is a pose error. It is not the approved layout.
 Correct the pose in cad/models/machine_assembly.py.
 Those study-solid positions follow the offset axis.

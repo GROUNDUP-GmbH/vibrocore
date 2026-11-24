@@ -79,7 +79,7 @@ A Modbus RTU order code in the same family is TODO.
 Do not treat this row as a released selection.
 The axis needs one index input on DIO input 12.
 The index sensor order code is not chosen.
-An encoder index on the drive may replace that sensor.
+An encoder index on the drive can replace that sensor.
 Manual: https://www.nanotec.com/fileadmin/files/Handbuecher/Handbuecher_Archiv/Plug_Drive/PD2-C/fir-v2139/PD2C_USB_Technical-Manual_V3.2.0.pdf
 Product page: https://www.nanotec.com/eu/en/products/1892-pd2-c4118l1804-e-01
 

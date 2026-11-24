@@ -166,6 +166,6 @@ Do not release the SDR-480-24 order until the actuator currents are known.
 The energy-chain length for a 1300 mm stroke is TODO.
 There is no slip ring.
 The rotation cable is not released.
-The feeder and the Instagrid may trip on the combined inrush.
+The feeder and the Instagrid can trip on the combined inrush.
 No new EUR price is sourced.
 Do not copy the old EUR 180-300 band onto the ATV320.
