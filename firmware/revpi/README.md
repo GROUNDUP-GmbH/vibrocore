@@ -20,49 +20,46 @@ firmware/revpi/
   crates/vc-runtime/         loop, watchdogs, MQTT bridge, vibrocore-ctl
 ```
 
-- `vc-core` contains the safety monitor and the machine plant.
-- The plant covers the hub and the sonic and the tilt.
-- The plant also covers the jog and the rod rotation and soil sampling.
-- Hub motion is a logical pulse train for the S200 PTI.
-- Modbus setpoints are not the motion path.
-- Modbus registers that we did not verify stay TODO.
-- SF3 uses only the S200 hold brake.
-- Stefan decided on 2026-11-20 that there is no second hold means.
-- Nobody works under the raised head.
-- The team sizes the chain drive for the load.
-- The team inspects the chain drive on a regular schedule.
-- The brake test is optional.
-- That decision is a risk acceptance, not a performance level.
-- Jog runs only while you hold the enable switch.
-- The sonic head runs only when you lower the tool and engage it.
-- Tilt has two direction outputs and the actuator end stops.
-- There is no tilt angle limit and no tilt sensor.
-- The sample sequence drives in.
-- The sequence then cuts one revolution.
-- The sequence then dumps at each stage.
-- One to four depth stages are parameters.
-- A stall aborts to a fault state.
-- The control blocks the rotation when the sonic head runs.
-- The control also blocks rotation when the lift moves.
-- None of these monitors is an ISO 13849 performance level.
-- `vc-io` names `/dev/piControl0` and the piControl ioctl numbers.
-- Byte offsets come from PiCtory.
-- Those offsets are not in this tree.
-- The output-watchdog argument layout is TODO.
-- `vc-modbus` types the S200 map and the sonic map and the rotation map.
-- Register 40100 and register 40101 come from the public S7-1200 example.
-- The team did not verify them on the drive.
-- The proposed sonic inverter is ATV320U15M2C.
-- Every sonic register is still TODO.
-- The slave address for rotation stays empty.
-- It stays empty until the team freezes the drive.
-- `vc-runtime` plans the 10 ms cycle, one isolated core, `SCHED_FIFO` and `mlockall`.
-- It does not call those kernel functions yet.
-- The bridge for MQTT keeps the messages in memory.
-- It does not open a socket.
-- The topic names are the same as ADR-0001.
-- New topics for live data use the reserved prefix `vibrocore/status/`.
-- The names are `hub`, `sonic`, `tilt`, `rotation`, `jog`, `sample`, `stage` and `container`.
+`vc-core` contains the safety monitor and the machine plant.
+The plant covers hub, sonic, tilt, jog, rod rotation and soil sampling.
+Hub motion is a logical pulse train for the S200 PTI.
+Modbus setpoints are not the motion path.
+Unverified Modbus registers stay TODO.
+SF3 uses only the S200 holding brake.
+Stefan decided on 2026-11-20 that there is no second holding means.
+Nobody works under the raised head.
+The chain drive is sized for the load and is inspected regularly.
+The brake test is optional.
+That decision is a risk acceptance, not a performance level.
+Jog runs only while the enabling switch is held.
+The sonic head runs only when the tool is lowered and engaged.
+Tilt has two direction outputs and the actuator end stops.
+There is no tilt angle limit and no tilt sensor.
+The sample sequence drives in, cuts one revolution, then dumps at each stage.
+One to four depth stages are parameters.
+A stall aborts to a fault state.
+Rotation stays blocked while the sonic head runs or the lift moves.
+None of these monitors is an ISO 13849 performance level.
+
+`vc-io` names `/dev/piControl0` and the piControl ioctl numbers.
+Byte offsets come from PiCtory.
+Those offsets are not in this tree.
+The output-watchdog argument layout is TODO.
+
+`vc-modbus` types the S200 map, the sonic map and the rotation map.
+Register 40100 and register 40101 come from the public S7-1200 example.
+They are not verified on the drive.
+The proposed sonic inverter is ATV320U15M2C.
+Every sonic register is still TODO.
+The rotation slave address is empty until the drive is frozen.
+
+`vc-runtime` plans a 10 ms cycle, one isolated core, `SCHED_FIFO` and `mlockall`.
+It does not call those kernel functions yet.
+The MQTT bridge stores messages in memory.
+It does not open a socket.
+Topic names match ADR-0001.
+New live topics use the reserved `vibrocore/status/` prefix.
+The names are `hub`, `sonic`, `tilt`, `rotation`, `jog`, `sample`, `stage` and `container`.
 
 ## Tests on the host
 
@@ -74,21 +71,20 @@ cargo clippy --all-targets -- -D warnings
 cargo test
 ```
 
-- The parity tests in Rust read `golden/safety-vectors.json`.
-- The tests also read `golden/plant-vectors.json`.
-- The parity test in Python plays the same files.
-
+The Rust parity tests read `golden/safety-vectors.json` and `golden/plant-vectors.json`.
+The Python parity test plays the same files.
 Run it from the repository root:
 
 ```bash
 python -m pytest tests/test_revpi_golden.py -q
 ```
 
-- The Python files `test_safety.py`, `test_hub.py`, `test_sonic.py` and `test_integration.py` stay the reference specification.
-- The plant vectors cover the new states.
-- They do not replace those 60 tests.
-- The channel list is `docs/engineering/IO-LIST.md`.
-- The proposed parts are `docs/engineering/CABINET-ADDITIONS.md`.
+The Python files `test_safety.py`, `test_hub.py`, `test_sonic.py` and `test_integration.py` stay the reference specification.
+The plant vectors cover the new states.
+They do not replace those 60 tests.
+
+The channel list is `docs/engineering/IO-LIST.md`.
+The proposed parts are `docs/engineering/CABINET-ADDITIONS.md`.
 
 ## Build for aarch64
 
@@ -101,8 +97,7 @@ cross build --target aarch64-unknown-linux-gnu --release
 ```
 
 You can also use a system linker.
-Install the linker.
-Then build.
+Install the linker, then build:
 
 ```bash
 sudo apt-get install gcc-aarch64-linux-gnu
@@ -110,7 +105,6 @@ rustup target add aarch64-unknown-linux-gnu
 cargo build --target aarch64-unknown-linux-gnu --release
 ```
 
-- `.cargo/config.toml` selects `aarch64-linux-gnu-gcc` for that target.
-- The CI job builds the host target.
-- The CI job tests the host target.
-- The CI job does not cross-compile.
+`.cargo/config.toml` selects `aarch64-linux-gnu-gcc` for that target.
+The CI job builds and tests the host target.
+The CI job does not cross-compile.
