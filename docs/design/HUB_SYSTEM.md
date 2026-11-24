@@ -2,10 +2,11 @@
 
 ## 1. Purpose
 
-The hub system provides controlled **vertical linear motion** for:
-- Pushing the sonic head + DT325 probe rod into the ground (assisted by vibration)
-- Pulling the probe rod out of the ground after sampling (vibration OFF)
-- Parking the head at the top of the mast for transport
+The hub system gives you controlled motion that is vertical and linear for the tasks below.
+
+- The hub pushes the sonic head and the DT325 rod into the ground and vibration helps.
+- The hub pulls the probe rod out of the ground after sampling and vibration is OFF.
+- The hub parks the head at the top of the mast for transport.
 
 ## 2. Architecture
 
@@ -39,12 +40,13 @@ The hub system provides controlled **vertical linear motion** for:
 
 ### Key Design Decisions
 
-1. **Endless chain loop** — the carriage is attached to one point on the chain.
-   Motor CW → carriage down, Motor CCW → carriage up.
-2. **Motor at bottom** — keeps center of gravity low. Steel base plate carries motor + gearbox weight.
-3. **Drive sprocket at bottom** — directly coupled through chain shaft to gearbox output.
-4. **Idle sprocket at top** — spring-loaded tensioner for chain slack compensation.
-5. **Linear guides on front** — the carriage slides on two profiled rails mounted to the aluminum mast.
+1. The chain is an endless loop and the carriage attaches at one point.
+Motor CW moves the carriage down and motor CCW moves the carriage up.
+2. The motor at the bottom keeps the center of gravity low.
+The plate of steel carries the motor and the weight of the gearbox.
+3. The drive sprocket at the bottom joins the chain shaft to the gearbox output.
+4. The idle sprocket at the top uses the spring-loaded tensioner for slack in the chain.
+5. The linear guides on the front let the carriage slide on two rails of the aluminum mast.
 
 ## 3. Motor & Drive Train
 
@@ -97,9 +99,10 @@ The sizing and the torque limit are in [LIFT-DRIVE-SIZING.md](../engineering/LIF
 
 ### 3.4 Drive Shaft (Separate from Gearbox Output)
 
-The gearbox output connects to a **separately mounted drive shaft** through an
-elastomer coupling. This shaft carries the drive sprocket and is supported by
-two self-aligning ball bearings in pillow blocks bolted to the base plate.
+The gearbox output connects to a drive shaft and the shaft has its own mounts.
+The connection is an elastomer coupler.
+This shaft carries the drive sprocket.
+Two self-aligning ball bearings support the shaft in pillow blocks on the base plate.
 
 | Parameter              | Value                              |
 |------------------------|------------------------------------|
@@ -108,21 +111,26 @@ two self-aligning ball bearings in pillow blocks bolted to the base plate.
 | Bearings               | UCP 205/206 pillow blocks          |
 | Sprocket mount         | Taper-lock bush                    |
 
-**Rationale:** The chain sprocket applies radial loads that would damage the
-gearbox output bearings if directly mounted. The separate shaft absorbs these loads.
-The coupling is 1:1. There is no gear stage between the PLE120 output and the chain shaft.
+The sprocket of the chain applies the radial load.
+
+That load would damage the output bearings of the gearbox if the sprocket sits on the gearbox.
+The separate shaft takes these loads.
+The coupler is 1 to 1.
+There is no gear stage between the output of the PLE120 and the chain shaft.
 
 ## 4. Force Analysis
 
-The allowable pull force is **4.5 kN**.
+The allowable pull force is 4.5 kN.
 The calculation is in [PULL_FORCE.md](../engineering/PULL_FORCE.md).
-Do not use 14.3 kN. That figure is the motor-times-ratio tension. The gearbox cannot deliver it.
+Do not use 14.3 kN.
+
+That figure is the tension from the motor times the ratio and the gearbox cannot deliver it.
 
 ### 4.1 Allowable pull force
 
-The chain working load is about 4.5 kN.
-The pull at the drive torque limit is about 5.83 kN.
-See LIFT-DRIVE-SIZING.md and PULL_FORCE.md.
+The service load of the chain is about 4.5 kN.
+The pull at the limit of drive torque is about 5.83 kN.
+See the note in LIFT-DRIVE-SIZING.md and in the PULL_FORCE.md.
 The allowable pull force is the lower value, 4.5 kN.
 
 ### 4.2 Required Forces
@@ -134,8 +142,10 @@ The allowable pull force is the lower value, 4.5 kN.
 | Head weight hold     | ~0.3 kN     | Static, when parked                |
 | Emergency stop       | —           | Brake engages, motor de-energised  |
 
-Margin on the upper required pull: 4.5 / 4.0 = 1.13.
-That margin is small. See the note.
+The margin on the upper required pull is 4.5 / 4.0 = 1.13.
+That margin is small and the note explains it.
+
+A speed of about 60 mm/s meets the need.
 
 ### 4.3 Speed
 
@@ -147,8 +157,8 @@ Gearbox ratio:                     40:1
 → Chain linear speed:              15 × 239.89 = 3,598 mm/min ≈ 60.0 mm/s
 ```
 
-~60 mm/s is adequate for both penetration (typically 10–30 mm/s with vibration)
-and retraction (full speed acceptable).
+Penetration is typically 10 to 30 mm/s with vibration.
+Retraction can use full speed.
 
 ## 5. Carriage & Linear Guides
 
@@ -164,16 +174,16 @@ and retraction (full speed acceptable).
 
 ### 5.2 Carriage Plate
 
-- 10 mm steel plate, machined
-- 4× slider blocks (2 per rail)
-- Chain attachment point (bolted, with hardened pin)
-- 4× M12 rubber isolator mounts for sonic head
-- Through-hole for center column / DT325 rod passage
+- Use a steel plate of 10 mm and machine that plate.
+- Use 4 slider blocks and put 2 blocks on each rail.
+- Bolt the chain at one point with a hardened pin.
+- Fit mounts of rubber for the sonic head and the count is 4 of size M12.
+- Leave a through hole for the center column and for the rod DT325.
 
 ## 6. Brake System
 
-The holding brake is the brake built into the Siemens motor.
-VC-HB-3000 is obsolete and is not in the machine.
+The motor brake is the brake inside the Siemens motor.
+VC-HB-3000 is obsolete and it is not in the machine.
 
 | Parameter          | Value                              |
 |--------------------|------------------------------------|
@@ -183,16 +193,16 @@ VC-HB-3000 is obsolete and is not in the machine.
 | Chain force        | about 3.5 kN                       |
 | Control            | SINAMICS S200 brake output         |
 
-A separate 16 Nm brake would put 640 Nm on the gearbox output.
-PLE120 T2Stop at this ratio is 500 Nm.
-That brake can exceed the gearbox stop torque.
+A separate brake of 16 Nm would put the torque of 640 Nm on the gearbox output.
+The stop torque T2Stop of the PLE120 at this ratio is 500 Nm.
+That brake can go above the stop torque of the gearbox.
 Do not fit it.
 
-The 3.3 Nm brake holds the weight with margin.
-It does not hold the full pull-out force.
-If power fails during pull-out, the carriage can slide down onto the casing.
+The brake of 3.3 Nm holds the weight with margin.
+It does not hold the full force of pull-out.
+If power fails in the pull-out, the carriage can slide down onto the casing.
 The load then moves toward the ground.
-That case is a risk-assessment item. See LIFT-DRIVE-SIZING.md.
+That case is an item for risk assessment and the file is LIFT-DRIVE-SIZING.md.
 
 ## 7. Sensors & Safety
 
@@ -216,17 +226,17 @@ IF motor_current > threshold_current (e.g. 120% rated):
         → ALERT operator
 ```
 
-The SINAMICS S200 provides the lift-motor current.
-Combined with VFD current monitoring on the sonic motor, this gives
-redundant obstacle detection.
+The SINAMICS S200 provides the current of the lift motor.
+The VFD also monitors current on the sonic motor and the two signals together give the second path for obstacle detection.
+
 The CL86T and the Nanotec C5-E are not the hub drive.
 
 ## 8. Controller Integration
 
-The selected hub drive is the SINAMICS S200, order 6SL5510-1BB11-0AA0.
-The diagram below still names the CL86T and the Nanotec C5-E.
-Those names are the previous stepper driver.
-The pin table is not a released S200 wiring list.
+The selected hub drive is the SINAMICS S200 and the order is 6SL5510-1BB11-0AA0.
+In the diagram below, the names CL86T and Nanotec C5-E still appear.
+Those names are the previous driver for the stepper.
+The pin table is not a released wire list for the S200.
 
 ```
                     ┌────────────────┐
@@ -277,6 +287,6 @@ The pin table is not a released S200 wiring list.
 8. LOG       — GPS + depth + time + soil resistance → SD card / WLAN
 ```
 
----
 
-*References: docs/engineering/LIFT-DRIVE-SIZING.md, Neugart PLE catalogue 2026-10, Siemens 1FL2104 datasheet, DIN 8187 (10B chains)*
+
+References: the file LIFT-DRIVE-SIZING.md, the Neugart PLE catalogue of 2026-10, the datasheet for the Siemens 1FL2104, and DIN 8187 for 10B chains.

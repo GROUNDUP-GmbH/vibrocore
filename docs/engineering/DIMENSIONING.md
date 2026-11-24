@@ -1,7 +1,7 @@
 # Dimensioning Calculations (V2: OLI MVE 400/6-HF)
 
-All calculations reference Šporin & Vukelić (2017), Wang et al. (2015),
-and OLI MVE 400/6-HF rated data.
+All calculations reference Šporin & Vukelić (2017), Wang et al.
+(2015), and OLI MVE 400/6-HF rated data.
 
 ## 1. Target Parameters
 
@@ -207,9 +207,8 @@ Hub drive shaft bearings — same as V1:
 | Hub drive shaft (2)  | Self-align  | UCP 206        | Pillow block, 30mm bore  |
 | Hub idle sprocket    | Deep groove | 6205-2RS       | 25×52×15 mm              |
 
-*Note: Sonic head bearings are now INTERNAL to OLI motors — no external
-bearing selection needed. OLI's heavy-duty bearings are rated for continuous
-high-frequency operation.*
+*Note: Sonic head bearings are now INTERNAL to OLI motors — no external bearing selection needed.
+OLI's heavy-duty bearings are rated for continuous high-frequency operation.*
 
 ## 6. Power & Energy Analysis
 
@@ -291,7 +290,8 @@ See PULL_FORCE.md and LIFT-DRIVE-SIZING.md.
 | Pull-out (required)  | 2.0–4.0 kN  | Process need. Not the drive capacity. |
 | Head weight hold     | ~0.4 kN     | Static (42 kg head assembly)       |
 
-Margin: 4.5 / 4.0 = 1.13. See PULL_FORCE.md.
+Margin: 4.5 / 4.0 = 1.13.
+See PULL_FORCE.md.
 
 ### 7.3 Hub Speed
 

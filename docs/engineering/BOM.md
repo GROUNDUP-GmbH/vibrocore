@@ -1,7 +1,8 @@
 # Bill of Materials (BOM)
 
 Preliminary BOM for Vibrocore V1 prototype.
-All prices are estimates. Verify with suppliers before ordering.
+All prices are estimates.
+Verify with suppliers before ordering.
 
 ## 1. Sonic Head (V2: 2× OLI MVE 400/6-HF)
 
@@ -18,9 +19,8 @@ All prices are estimates. Verify with suppliers before ordering.
 
 **Sonic Head Subtotal: ~1,005–1,600 €.** The old EUR 180–300 inverter band left the rollup. The ATV320 price is not sourced.
 
-*Note: V2 eliminates custom eccentric shafts, discs, timing belts, and external
-bearings — all handled internally by the OLI motors. Significant cost and
-complexity reduction against V1 custom design.*
+*Note: V2 eliminates custom eccentric shafts, discs, timing belts, and external bearings — all handled internally by the OLI motors.
+Significant cost and complexity reduction against V1 custom design.*
 
 ## 2. Hub System
 
@@ -129,7 +129,9 @@ Recommended for V1 prototype / cost-sensitive builds.*
 |50b–64b| Shared Option A lines, without the WAGO rack and without the obsolete SE050 and 9 V lines | | | inside the total below | same as §5 |
 
 **Control Subtotal Option B:** EUR 1,224–1,599.
-Arithmetic: Option A rollup EUR 1,465–2,310, minus the WAGO rack EUR 930–1,400, plus RevPi Connect 4 EUR 493 and RevPi DIO EUR 196. The chain encoder is obsolete, so the DIO does not replace a 750-637. The PiBridge plug and the CODESYS licence are not in this total.
+Arithmetic: Option A rollup EUR 1,465–2,310, minus the WAGO rack EUR 930–1,400, plus RevPi Connect 4 EUR 493 and RevPi DIO EUR 196.
+The chain encoder is obsolete, so the DIO does not replace a 750-637.
+The PiBridge plug and the CODESYS licence are not in this total.
 
 **Software (RevPi — zero additional cost, full open source):**
 
@@ -147,10 +149,11 @@ Arithmetic: Option A rollup EUR 1,465–2,310, minus the WAGO rack EUR 930–1,4
 > The old WAGO band of EUR 910–1,370 included the obsolete 750-637 and is withdrawn.
 
 > **Key tradeoffs:**
-> - Temperature: RevPi −25 °C against WAGO −40 °C. For EU field use (March–November) this
-> is acceptable. Add enclosure heater strip (~€15) for cold-storage overnight.
-> - Vibration: WAGO is explicitly 5g rated. The drill enclosure isolates the controller
-> from drilling vibrations through rubber mounts — in practice both are adequate.
+> - Temperature: RevPi −25 °C against WAGO −40 °C.
+> For EU field use (March–November) this is acceptable.
+> Add enclosure heater strip (~€15) for cold-storage overnight.
+> - Vibration: WAGO is explicitly 5g rated.
+> The drill enclosure isolates the controller from drilling vibrations through rubber mounts — in practice both are adequate.
 > - CODESYS real-time: RevPi uses PREEMPT_RT Linux (soft PLC). For Vibrocore's
 > 500ms Modbus polling cycles this is more than sufficient.
 > - Position comes from the 1FL2 absolute encoder through the S200.
@@ -162,11 +165,11 @@ Arithmetic: Option A rollup EUR 1,465–2,310, minus the WAGO rack EUR 930–1,4
 
 > **Notes (Option A — WAGO):**
 > - WAGO PFC200 XTR specs: **1 GHz ARM Cortex-A8, 512 MB RAM, 4 GB Flash** (G2).
-> Docker built-in from Firmware 23. Setup guide: `firmware/docker/README.md`.
+> Docker built-in from Firmware 23.
+> Setup guide: `firmware/docker/README.md`.
 > - CONTROLLINO / Arduino Opta removed — WAGO PFC200 XTR is the V1 production controller.
 > - Teltonika RUT241: LTE for remote CODESYS debugging, OTA updates, MQTT to RDDL.
-> - **No external braking resistor required.** The 80 J fast-stop energy is dissipated
-> as heat in the OLI motor windings through DC injection braking (P1232=100%).
+> - **No external braking resistor required.** The 80 J fast-stop energy is dissipated as heat in the OLI motor windings through DC injection braking (P1232=100%).
 > Temperature rise: 0.012 °C per stop — negligible at 7.2 kg motor thermal mass.
 > V20 Vdc-max controller (P1240=1) prevents DC bus overvoltage during ramp.
 > If bus overvoltage fault occurs in field: increase P1135 from 0.3s → 0.5s.
@@ -189,11 +192,13 @@ See `docs/engineering/SAMPLING.md`.
 |59 | Core liner              | Withdrawn. Do not buy.            |   0 | unknown  | Not used                   |
 
 The kit lines are two outer rods, one O-ring pack, four cutting shoes and the two half-shells with their fasteners.
-The O-ring pack stays. It seals the 3.25 in casing joints.
+The O-ring pack stays.
+It seals the 3.25 in casing joints.
 The kit rollup is EUR 2,007.85.
 That sum is two rods, four shoes and one O-ring pack.
 The half-shells have no price yet.
-Drive head 201385 and retainer HD 208472 are obsolete history. They are not kit lines.
+Drive head 201385 and retainer HD 208472 are obsolete history.
+They are not kit lines.
 
 ## 7. Positioning System
 
@@ -202,7 +207,8 @@ Drive head 201385 and retainer HD 208472 are obsolete history. They are not kit 
 |60 | viDoc RTK Light         | RTK rover, AR-capable             |   1 | ~2,000   | pix4d.com (existing)       |
 |63 | WLAN bridge             | For head GPS to the tablet        |   1 |   20–40  | ESP32 module               |
 
-The GPS antenna and the ZED-F9P are on the control BOM only. Do not buy them again here.
+The GPS antenna and the ZED-F9P are on the control BOM only.
+Do not buy them again here.
 
 **Positioning kit rollup: EUR 2,020–2,040.** If the viDoc is already owned, the added purchase is the WLAN bridge, EUR 20–40.
 
@@ -215,13 +221,14 @@ Can be added incrementally without hardware changes to the base controller I/O.*
 
 ### 8a. Lift Actuator System (~40 cm deployment travel)
 
-**Function:** Raises/lowers the entire drill mast ~400 mm between transport position
-(mast raised, clears ground obstacles) and drilling position (mast deployed, weight
-resting on stabiliser feet). Two parallel actuators ensure stable, torsion-free deployment.
+**Function:** Raises and lowers the drill mast about 400 mm.
+The transport position is the mast raised. It clears ground obstacles.
+The drilling position is the mast deployed. The weight rests on the stabiliser feet.
+Two parallel actuators ensure stable, torsion-free deployment.
 
 **Design:** 2× electric linear actuator (one per frame side) + shared H-bridge relay direction control.
-Each actuator includes mechanical end stops. CODESYS reads the 4 limit switches and
-controls extend/retract through 2 DO channels (shared for both actuators in parallel).
+Each actuator includes mechanical end stops.
+CODESYS reads the 4 limit switches and controls extend/retract through 2 DO channels (shared for both actuators in parallel).
 
 | # | Component | Spec | Qty | Est. € | Supplier |
 |---|-----------|------|-----|--------|----------|
@@ -239,13 +246,13 @@ controls extend/retract through 2 DO channels (shared for both actuators in para
 
 ### 8b. Tilt Actuator (0°–90° mast fold)
 
-**Function:** Folds the drill mast from vertical (drilling) to horizontal (road transport),
-and back. The pivot is at the base of the mast. In vertical position, the tilt actuator
-is locked by motor-hold and a mechanical detent pin.
+**Function:** Folds the drill mast from vertical (drilling) to horizontal (road transport), and back.
+The pivot is at the base of the mast.
+In vertical position, the tilt actuator is locked by motor-hold and a mechanical detent pin.
 
 **Design:** Single electric linear actuator on a pivot bracket, 600 mm from mast pivot.
-Stroke needed for 90°: ≈ 600 mm × sin(45°) × 2 ≈ 200 mm stroke is sufficient for
-a carefully positioned pivot-to-attachment geometry. Verify with final mechanical design.
+Stroke needed for 90°: ≈ 600 mm × sin(45°) × 2 ≈ 200 mm stroke is sufficient for a carefully positioned pivot-to-attachment geometry.
+Verify with final mechanical design.
 
 | # | Component | Spec | Qty | Est. € | Supplier |
 |---|-----------|------|-----|--------|----------|
@@ -260,22 +267,23 @@ a carefully positioned pivot-to-attachment geometry. Verify with final mechanica
 > WAGO: 1× additional 750-430 XTR + 1× additional 750-530 XTR handles all 4+4.
 > RevPi: still within single DIO module capacity (10/14 DI, 8/14 DO).
 
-> **PSU upgrade required:** Lift + Tilt actuators simultaneously draw up to 4× 2A = 8A @ 24V
-> (unlikely all running at once, but spec for peak). Upgrade 24V PSU from
-> Mean Well DDR-60D-24 (60W/2.5A) → **Mean Well SDR-120-24 (120W/5A)** (~€40–70). See §4.
+> **PSU upgrade required:** The lift and tilt actuators can draw up to 4× 2A = 8A at 24V together.
+> All four do not run at the same time. Specify the supply for the peak.
+> Upgrade 24V PSU from
+> Mean Well DDR-60D-24 (60W/2.5A) → **Mean Well SDR-120-24 (120W/5A)** (~€40–70).
+> See §4.
 
 ---
 
 ### 8c. Integrated Penetrometer (Force-Displacement Measurement)
 
-**Function:** Measures drilling resistance (push force) as a function of depth throughout
-the entire penetration cycle. Combined with the existing position encoder this produces
-a **drilling penetrogram** (force against depth curve) — functionally equivalent to a
-lightweight Cone Penetration Test (CPT) at the sample point.
+**Function:** Measures drilling resistance (push force) as a function of depth throughout the entire penetration cycle.
+Combined with the existing position encoder this produces a **drilling penetrogram** (force against depth curve).
+Functionally equivalent to a lightweight Cone Penetration Test (CPT) at the sample point.
 
-**Design:** S-type load cell mounted in-line between the hub carriage adapter plate and
-the casing adapter. Output: 4–20 mA through signal conditioner to RS-485 Modbus RTU
-converter (Slave address 3 on the existing bus). No additional PLC I/O module needed.
+**Design:** S-type load cell mounted in-line between the hub carriage adapter plate and the casing adapter.
+Output: 4–20 mA through signal conditioner to RS-485 Modbus RTU converter (Slave address 3 on the existing bus).
+No additional PLC I/O module needed.
 
 ```
 Hub carriage plate
@@ -321,26 +329,37 @@ Hub carriage plate
 ### 8d. Core Scanner
 
 The old through-liner procedure is withdrawn.
-Do not scan a polycarbonate liner. The machine does not use that liner.
-The cradle must fit one sample tube. The tube outside diameter is TBD.
+Do not scan a polycarbonate liner.
+The machine does not use that liner.
+The cradle must fit one sample tube.
+The tube outside diameter is TBD.
 The tube is a lab consumable and is not a BOM line.
-Do not assume the tube wall is clear. See `docs/engineering/SAMPLING.md`.
+Do not assume the tube wall is clear.
+See `docs/engineering/SAMPLING.md`.
 
-The sled hardware below is unchanged. The cradle opening is not.
+The sled hardware below is unchanged.
+The cradle opening is not.
 
 The sled still uses the Raspberry Pi 4, the HQ camera and the rail.
 Do not apply a polycarbonate colour correction.
 Do not crop to 82.6 mm.
-The scan length follows the tube length. That length is TBD.
+The scan length follows the tube length.
+That length is TBD.
 The previous 1300 mm cradle length was the transport length of the old liner.
 Confirm it against the real tube.
 
 **Field sequence after extraction:**
-1. The hub retracts the casing.
-2. The operator removes the open tubes from the half-shells.
-3. The operator fits the push-on caps after the tubes are out of the casing.
-4. One tube goes into the cradle for the scan.
-5. The tubes stay a lab consumable. They are not packed as a Vibrocore part.
+1.
+The hub retracts the casing.
+2.
+The operator removes the open tubes from the half-shells.
+3.
+The operator fits the push-on caps after the tubes are out of the casing.
+4.
+One tube goes into the cradle for the scan.
+5.
+The tubes stay a lab consumable.
+They are not packed as a Vibrocore part.
 
 | # | Component | Spec | Qty | Est. € | Supplier |
 |---|-----------|------|-----|--------|----------|
@@ -422,7 +441,8 @@ New signals introduced by subsystems 8a–8c:
 | **Total §8 (Option B)** | **1,299** | **2,370** |
 
 VC-ASM-8000 is lift + tilt + penetrometer + scanner only: EUR 1,259–2,300.
-Do not add the §8e I/O cost again. Those modules are already inside VC-ASM-5000 and VC-ASM-4000.
+Do not add the §8e I/O cost again.
+Those modules are already inside VC-ASM-5000 and VC-ASM-4000.
 
 ---
 
@@ -486,7 +506,8 @@ The machine total does not include the two kits.
 > **Option B savings (arithmetic, not a third estimate):**
 > - **V1:** EUR 8 968 − EUR 8 438 = **EUR 530** less than Option A.
 > - **V1.1:** EUR 10 718 − EUR 10 038 = **EUR 680** less than Option A.
-> Both figures are correct for their column. Do not mix them.
+> Both figures are correct for their column.
+> Do not mix them.
 
 ---
 
