@@ -166,7 +166,6 @@ The rewrite of those documents starts from PR 19.
 - Technical names that end in ing remain.
 - Passive verbs remain.
 - Long paragraphs remain.
-- Vague words remain.
 - `SAMPLING.md` stays with PR 13.
 - The audit file is not in PR 21.
 - This file is the audit.
