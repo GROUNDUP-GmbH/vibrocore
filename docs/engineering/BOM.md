@@ -349,16 +349,11 @@ The previous 1300 mm cradle length was the transport length of the old liner.
 Confirm it against the real tube.
 
 **Field sequence after extraction:**
-1.
-The hub retracts the casing.
-2.
-The operator removes the open tubes from the half-shells.
-3.
-The operator fits the push-on caps after the tubes are out of the casing.
-4.
-One tube goes into the cradle for the scan.
-5.
-The tubes stay a lab consumable.
+1. The hub retracts the casing.
+2. The operator removes the open tubes from the half-shells.
+3. The operator fits the push-on caps after the tubes are out of the casing.
+4. One tube goes into the cradle for the scan.
+5. The tubes stay a lab consumable.
 They are not packed as a Vibrocore part.
 
 | # | Component | Spec | Qty | Est. € | Supplier |
