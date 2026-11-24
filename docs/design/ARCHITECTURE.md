@@ -70,17 +70,17 @@ core imaging. See `docs/engineering/BOM.md §8` for BOM and cost details.
               │ Modbus RTU         │ Modbus RTU
               │ Slave addr 1       │ Slave addr 2
        ┌──────▼──────┐     ┌──────▼──────┐
-       │ Siemens V20 │     │ Nanotec C5-E│
-       │  VFD 1.5kW  │     │ Stepper drv │
-       │  OFF3 stop  │     │  CiA 402    │
+       │ Siemens V20 │     │ SINAMICS    │
+       │  VFD 1.5kW  │     │ S200        │
+       │  OFF3 stop  │     │ 6SL5510     │
        └──────┬──────┘     └──────┬──────┘
-              │ 3×AC               │ Phase
+              │ 3×AC               │ motor
               ▼                   ▼
        ┌─────────────┐     ┌─────────────────────┐
-       │ 2× OLI MVE  │     │ NEMA 42 stepper      │
-       │ 400/6-HF    │     │ + Neugart PLPE120-040│
-       │ counter-rot.│     │ + 10B-2 chain        │
-       │ 6000 RPM    │     │ + carriage slider    │
+       │ 2× OLI MVE  │     │ Siemens 1FL2104      │
+       │ 400/6-HF    │     │ + Neugart PLE120-040 │
+       │ counter-rot.│     │ + ROTEX 28, 1:1      │
+       │ 6000 RPM    │     │ + 10B-2 chain        │
        │ 8 kN total  │     └──────────┬──────────┘
        └──────┬──────┘                │
               │ vibration             │ linear push/pull
@@ -219,7 +219,7 @@ RPi 4 2GB (Core Scanner, autonomous)  [V1.1]
 ## Detailed Design Documents
 
 - [SONIC_HEAD.md](SONIC_HEAD.md) — 2× OLI MVE 400/6-HF vibration head design
-- [HUB_SYSTEM.md](HUB_SYSTEM.md) — NEMA 42, Neugart PLPE120-040, 10B-2 chain
+- [HUB_SYSTEM.md](HUB_SYSTEM.md) — 1FL2104, Neugart PLE120-040, ROTEX 28, 10B-2 chain
 - [CONTROL_SYSTEM.md](CONTROL_SYSTEM.md) — WAGO/RevPi, I/O mapping, Modbus, SE050, V1.1 expansion
 
 ## Firmware

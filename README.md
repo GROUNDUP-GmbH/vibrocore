@@ -26,7 +26,7 @@ layer around the tube — reducing friction dramatically and preserving soil str
 | Vibration frequency     | ~100 Hz at 6,000 rpm (VFD-tunable) |
 | Axial dynamic force     | ~8 kN peak (2× 4 kN)              |
 | Sonic power draw        | ~1.2 kW (2× 0.58 kW)              |
-| Hub drive               | NEMA 42 closed-loop stepper        |
+| Hub drive               | Siemens 1FL2104 + PLE120-040 + ROTEX 28 |
 | Allowable pull force    | 4.5 kN (10B-2 working load)        |
 | Power                   | Instagrid ONE max (230V AC, 2.1 kWh)|
 | Frame                   | mk 2004 aluminium profile 50×100   |
@@ -50,16 +50,16 @@ layer around the tube — reducing friction dramatically and preserving soil str
 │  └────┬─────┘   └──────┬───────┘   └──────┬───────┘ │
 │       │                │                   │         │
 │       │         ┌──────┴───────┐   ┌──────┴───────┐ │
-│       │         │  2× OLI MVE │   │  NEMA 42     │ │
-│       │         │  400/6-HF   │   │  + Gearbox   │ │
-│       │         │  counter-   │   │  + Chain     │ │
-│       │         │  rotating   │   │  + Carriage  │ │
+│       │         │  2× OLI MVE │   │  1FL2104     │ │
+│       │         │  400/6-HF   │   │  + PLE120    │ │
+│       │         │  counter-   │   │  + ROTEX 28  │ │
+│       │         │  rotating   │   │  + chain     │ │
 │       │         └──────────────┘   └──────────────┘ │
 │       │                                              │
 │  ┌────┴──────────────────────────────────────────┐  │
 │  │              POWER SYSTEM                      │  │
 │  │  48V LiFePO4 / Instagrid ONE (230V AC)        │  │
-│  │  + VFD (sonic) + DC PSU (hub) + DC/DC (ctrl)  │  │
+│  │  + VFD (sonic) + S200 (lift) + DC/DC (ctrl)   │  │
 │  └───────────────────────────────────────────────┘  │
 │                                                       │
 │  ┌───────────────────────────────────────────────┐  │
@@ -146,14 +146,14 @@ vs. 4–8 weeks for custom fabrication. **~1,000 € cheaper.**
 
 | Parameter           | Value                              |
 |---------------------|------------------------------------|
-| Motor               | NEMA 42 closed-loop stepper        |
-| Gearbox             | Neugart PLPE120, i=40              |
-| Drive               | Endless duplex chain 10B-2         |
-| Sprocket            | 10B-2, 15–18 teeth, taper-lock     |
-| Coupling            | R+W EKH elastomer (torque only)    |
+| Motor               | Siemens 1FL2104-4AG11-1MC0         |
+| Gearbox             | Neugart PLE120, i=40, article 100460948 |
+| Chain               | Endless duplex chain 10B-2         |
+| Sprocket            | 10B-2, 15 teeth, taper-lock        |
+| Coupling            | KTR ROTEX 28, 1:1, to the chain shaft |
 | Drive shaft         | 25–30 mm, separately bearing-mounted |
-| Brake               | 24 V power-off electromagnetic     |
-| Controller          | Nanotec C5-E or CL86T-V4.1        |
+| Brake               | 3.3 Nm brake in the motor          |
+| Drive               | SINAMICS S200, 6SL5510-1BB11-0AA0  |
 | Speed (est.)        | ~60 mm/s (at 40:1, 600 rpm motor)  |
 | Allowable pull force | 4.5 kN (chain working load)       |
 
@@ -173,7 +173,7 @@ vs. 4–8 weeks for custom fabrication. **~1,000 € cheaper.**
 - Steel end plates top and bottom (force introduction on tension)
 - Front: linear guide rails for sonic head carriage
 - Rear: tilt mechanism for transport / horizontal storage
-- Bottom steel plate: rod guide hole + NEMA 42 mount + profile base
+- Bottom steel plate: rod guide hole + lift-drive mount + profile base
 - All loads in tension along profile long axis
 - UTV mounting points on bottom plate
 
@@ -198,7 +198,7 @@ vs. 4–8 weeks for custom fabrication. **~1,000 € cheaper.**
 ## Control System
 
 - **PLC/Controller:** WAGO PFC200 XTR (Option A). RevPi Connect 4 is Option B.
-- **Hub driver:** Nanotec C5-E-2-09 or Leadshine CL86T-V4.1
+- **Hub drive:** SINAMICS S200, 6SL5510-1BB11-0AA0
 - **Sonic VFD:** compact frequency inverter (230V class)
 - **Inputs:** limit switches, current sensors, emergency stop, mode selector
 - **Outputs:** motor enable, brake release, VFD start/stop/frequency
@@ -299,8 +299,8 @@ python -m cad.tools.cli plm-sync
 
 - [Geoprobe](https://geoprobe.com/) — 3.25 in probe rods and cutting shoes. Liners are not used.
 - [OLI Vibrators MVE-HF](https://www.olivibra.com/) — high-frequency industrial vibration motors
-- [Neugart PLPE Gearboxes](https://www.neugart.com/) — precision planetary gearboxes
-- [Nanotec NEMA 42 Steppers](https://www.nanotec.com/) — hybrid stepper motors
+- [Neugart PLE Gearboxes](https://www.neugart.com/) — precision planetary gearboxes
+- [Siemens 1FL2 and SINAMICS S200](https://www.siemens.com/) — lift motor and drive
 - [mk Technology Group](https://www.mk-group.com/) — aluminium profile systems
 - [Instagrid ONE](https://instagrid.co/) — portable battery power station
 

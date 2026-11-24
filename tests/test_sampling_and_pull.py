@@ -8,8 +8,8 @@ from cad.tools.pull_force import (
     chain_force_n,
     gearbox_emergency_force_n,
     gearbox_nominal_force_n,
+    gearbox_output_from_motor_nm,
     load_cell_needs_bypass,
-    motor_path_torque_nm,
 )
 
 
@@ -124,9 +124,10 @@ def test_safety_and_power_lines_follow_the_review():
 
 def test_allowable_pull_is_the_chain_working_load():
     assert allowable_pull_n() == 4500
-    assert round(gearbox_nominal_force_n()) == 5805
-    assert round(gearbox_emergency_force_n()) == 9499
-    assert round(chain_force_n(motor_path_torque_nm())) == 14248
+    assert round(gearbox_nominal_force_n()) == 5005
+    assert round(gearbox_emergency_force_n()) == 9369
+    assert round(chain_force_n(gearbox_output_from_motor_nm(6.7))) == 5826
     assert load_cell_needs_bypass()
     bom = load_bom()
+    assert "9.37 kN" in bom.part("VC-PN-9340").spec
     assert "VC-PN-9340" in {line.part_number for line in bom.children("VC-ASM-8300")}

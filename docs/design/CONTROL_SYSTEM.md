@@ -34,14 +34,14 @@ The Vibrocore V1 control system is built around the **WAGO PFC200 XTR (750-8212)
                                          │ RS-485 Modbus RTU
                                ┌─────────┴──────────────┐
                                │  Slave 1: Siemens V20  │
-                               │  Slave 2: Nanotec C5-E │
+                               │  Slave 2: S200 drive   │
                                └────────────────────────┘
                                          │ STEP/DIR or CiA 402
                                          ▼
                                   ┌─────────────┐
-                                  │  NEMA 42    │
-                                  │  Stepper    │
-                                  │  + Encoder  │
+                                  │  1FL2104    │
+                                  │  + PLE120   │
+                                  │  + encoder  │
                                   └─────────────┘
 ```
 
@@ -190,6 +190,10 @@ Standard Modbus PKW + PZD interface (enable via P0700=5, P1000=5).
 Expected stop time from 100 Hz: **200–400 ms** with OFF3 + DC braking.
 
 ### Nanotec C5-E Hub Driver — Slave Address 2 (CiA 402 via Modbus)
+
+The live hub drive is the SINAMICS S200, order 6SL5510-1BB11-0AA0.
+The register table below is the previous Nanotec C5-E map.
+It is not the S200 parameter list.
 
 | Register (hex) | Name                  | R/W | Description                          |
 |----------------|-----------------------|-----|--------------------------------------|
