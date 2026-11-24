@@ -218,9 +218,9 @@ RPi 4 2GB (Core Scanner, autonomous)  [V1.1]
 
 ## Detailed Design Documents
 
-- Open the [SONIC_HEAD.md](SONIC_HEAD.md) for the head design of 2× OLI and the MVE 400/6-HF.
+- Open the [SONIC_HEAD.md](SONIC_HEAD.md) for the vibration head design with 2× OLI MVE 400/6-HF.
 - Open the [HUB_SYSTEM.md](HUB_SYSTEM.md) for the 1FL2104 and the Neugart PLE120-040 and the ROTEX 28 and the 10B-2 chain.
-- See the [CONTROL_SYSTEM.md](CONTROL_SYSTEM.md) for WAGO and for RevPi with the I/O mapping and the Modbus SE050 at V1.1.
+- See the [CONTROL_SYSTEM.md](CONTROL_SYSTEM.md) for WAGO and RevPi, the I/O mapping, Modbus, SE050 and the V1.1 expansion.
 
 ## Firmware
 
@@ -233,5 +233,5 @@ RPi 4 2GB (Core Scanner, autonomous)  [V1.1]
 
 ## Engineering Calculations
 
-- See [DIMENSIONING.md](../engineering/DIMENSIONING.md) for force, frequency, power, and ball-race life.
+- See [DIMENSIONING.md](../engineering/DIMENSIONING.md) for force, frequency, power, and bearing life.
 - See the file [BOM.md](../engineering/BOM.md) for the bill of materials with the EU supply and the price.

@@ -7,7 +7,8 @@ This controller is industrial and the backbone is Modbus RTU.
 The design uses the XTR variant for the extreme-environment certificate.
 The range is −40 °C to +70 °C with 5g of continuous vibration.
 The case is IP20 on a DIN-rail and the terminals are CAGE CLAMP.
-- These terminals are the CAGE CLAMP type and the rating is for the field.
+
+These terminals are the CAGE CLAMP type and the rating is for the field.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -66,7 +67,8 @@ The case is IP20 on a DIN-rail and the terminals are CAGE CLAMP.
 The rule for an NC wire is as follows.
 A broken wire shows as a fault.
 FALSE means a trigger or a break of the wire.
-- You must apply this rule to each safety input.
+
+You must apply this rule to each safety input.
 
 ### Slot 2 — 750-530 XTR: 4× Digital Output 24V DC
 
@@ -85,7 +87,8 @@ WAGO 750-637 is obsolete.
 There is no encoder slot and no `%IW4` / `%IW5` mapping.
 Position comes from the absolute encoder of the 1FL2 through the S200.
 The constant `rENCODER_PULSES_PER_MM` stays at 671.9.
-- Do not change that constant in this revision.
+
+Do not change that constant in this revision.
 
 ### Slot 3 — 750-652 candidate: RS-485 Modbus RTU
 
@@ -139,7 +142,8 @@ Each pair drives one relay module of the H-bridge type for that group of actuato
 #### Penetrometer — RS-485 Slave 3 (no new WAGO slot needed)
 
 The force ADC is the Datexel DAT8017-A or an equal unit.
-- This ADC connects to the RS-485 bus as slave address 3.
+
+This ADC connects to the RS-485 bus as slave address 3.
 Register 0 holds the force in raw counts from 0 to 65535, which maps to 0 to 5 kN.
 
 ```
@@ -237,7 +241,7 @@ The interlock for hub retract works as follows.
 In `FB_HubControl` state 4 (`STOP_SONIC`) the hub stays in place and the brake stays on until `FB_SonicHead.xConfirmedStopped = TRUE`.
 This flag is set only after the two checks below.
 1. The VFD reports `xRunning = FALSE` and ZSW1 bit 2 is 0.
-2. You confirm standstill for a continuous 200 ms.
+2. The PLC confirms standstill for a continuous 200 ms.
 
 A bypass of this interlock is not possible by design.
 The hub can enter retract state 5 only from state 4.
@@ -283,6 +287,7 @@ It pushes `{"lat": …, "lon": …, "fix": "RTK"}` to the WAGO every 1 s on the 
 ## Mobile Connectivity — Teltonika RUT241
 
 In the field, LTE is required for the WAGO PFC200 for the tasks below.
+
 - Remote debug of CODESYS through the CODESYS Gateway on VPN.
 - You update the firmware by OTA with CODESYS Online Change.
 - Upload of MQTT data to the RDDL cloud as a backup if WiFi is down.
@@ -292,7 +297,8 @@ It mounts on a DIN-rail and the rating is IP30.
 The temperature range is −40 °C to +75 °C and the radio is Cat4 LTE.
 The RUT241 input is 9 to 30 V DC and the draw is below 6.5 W.
 Power it from the 24 V rail.
-- Do not fit a converter from 24 V to 9 V.
+
+Do not fit a converter from 24 V to 9 V.
 
 ```
 Instagrid ONE max
@@ -309,6 +315,7 @@ Instagrid ONE max
 ```
 
 The RUT241 configuration is as follows.
+
 - The WAN is a data-only SIM, for example Teltonika Mobile, and 1 GB each month is enough.
 - The LAN gateway is static IP 192.168.1.1 and the WAGO is on 192.168.1.10.
 - The VPN is a WireGuard tunnel to the developer workstation for remote access.
@@ -316,7 +323,7 @@ The RUT241 configuration is as follows.
 
 The power input is 9 to 30 V DC.
 The 24 V rail feeds it through the step-down and the draw is about 3 W.
-For better coverage of the cellular net, use the Teltonika TRB140.
+An alternative for better cellular coverage is the Teltonika TRB140.
 The unit has an mPCIe form and it fits in the Rittal enclosure of rating IP65.
 Or use the RUT956 if you need redundancy of two SIM cards.
 
@@ -325,7 +332,8 @@ Or use the RUT956 if you need redundancy of two SIM cards.
 ## Braking Energy Analysis — Why No External Resistor is Needed
 
 You must dissipate the kinetic energy in the fast OFF3 stop.
-- The energy is in the two rotors of the OLI MVE 400/6-HF.
+
+The energy is in the two rotors of the OLI MVE 400/6-HF.
 The open point is if an external brake resistor is necessary.
 
 ### Energy calculation
@@ -355,7 +363,8 @@ This rise is small next to the thermal rating of the motor and next to the conti
 ### DC bus overvoltage risk during the ramp phase
 
 During the 0.3 s ramp from 100 Hz to 0, the motor sends the short burst of energy back.
-- That energy goes back to the DC bus in the V20.
+
+That energy goes back to the DC bus in the V20.
 The V20 handles this as follows.
 
 | V20 Parameter | Value | Effect |
@@ -379,7 +388,8 @@ This avoids the fault DC-link overvoltage.
 | V20 external braking resistor module | ~€80 | Wiring | Only if P1240 doesn't help |
 
 At the first start, use P1135 = 0.3 s and use P1240 = 1.
-- If the DC bus trips on overvoltage in a fast stop in the field, increase P1135 to 0.5 s.
+
+If the DC bus trips on overvoltage in a fast stop in the field, increase P1135 to 0.5 s.
 Do not expect a need for an external brake resistor.
 
 
@@ -409,7 +419,8 @@ This load is well inside the headroom of 512 MB and 1 GHz.
 | Protokoll | Per-cycle log table (depth, freq, GPS, signed flag) |
 
 On each span of 500 ms, Node-RED polls the CODESYS unit on Modbus TCP.
-- The read is FC3 on registers 0 to 21.
+
+The read is FC3 on registers 0 to 21.
 HMI write commands from buttons and from sliders use FC6 and FC16 on the same registers.
 
 See `firmware/docker/` for the full stack and see `firmware/docker/README.md` for the setup.
@@ -443,7 +454,7 @@ It is not the operator dashboard.
 
 ### Running on Mac (no Windows required)
 
-Option A is a UTM virtual machine and it gives full comfort in the IDE.
+Option A is a UTM virtual machine. It is recommended for full comfort in the IDE.
 ```bash
 # Install UTM from https://mac.getutm.app
 # Create Windows 11 ARM VM (free via Azure Dev) or Windows 10 x86 via Rosetta
@@ -489,7 +500,8 @@ See the [section on mobile connectivity](#mobile-connectivity--teltonika-rut241)
 
 Two controller options are viable for the Vibrocore V1.
 The WAGO is the primary choice for production.
-- The RevPi Connect 4 is a low-cost alternative for a first build or for a low-cost build.
+
+The RevPi Connect 4 is a low-cost alternative for a first build or for a low-cost build.
 
 ### Hardware comparison
 
@@ -538,12 +550,14 @@ Do not use the DIO encoder mode for a chain encoder.
 ### Decision guidance
 
 Use the WAGO PFC200 XTR when the conditions below are true.
+
 - The ambient temperature can drop below −25 °C, as in winter storage in Eastern Europe.
 - The maximum resistance to vibration is required for rocky ground with high vibration.
 - You need a time guarantee from the dedicated CODESYS runtime.
 - A long-term contract for industrial support is required.
 
 Use the RevPi Connect 4 when the conditions below are true.
+
 - Cost is the main limit and the saving is about 300 to 500 euro on the controller alone.
 - More RAM or CPU for edge tasks or for data logging is a benefit.
 - You can keep the control enclosure above −25 °C in standard field conditions.
@@ -556,7 +570,8 @@ Gear that stays outdoors overnight in January can reach −20 °C.
 If you insulate the enclosure or if you heat it, the RevPi stays in spec.
 A self-adhesive heater strip at 15 euro does that heat task.
 The WAGO rating of −40 °C gives a comfort margin and you need no extra mitigation.
-- The RevPi ships with Raspberry Pi OS and the base is Debian.
+
+The RevPi ships with Raspberry Pi OS and the base is Debian.
 
 ### RevPi-specific software notes
 

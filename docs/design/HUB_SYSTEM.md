@@ -3,6 +3,7 @@
 ## 1. Purpose
 
 The hub system gives you controlled motion that is vertical and linear for the tasks below.
+
 - The hub pushes the sonic head and the DT325 rod into the ground and vibration helps.
 - The hub pulls the probe rod out of the ground after sampling and vibration is OFF.
 - The hub parks the head at the top of the mast for transport.
@@ -101,7 +102,7 @@ The sizing and the torque limit are in [LIFT-DRIVE-SIZING.md](../engineering/LIF
 The gearbox output connects to a drive shaft and the shaft has its own mounts.
 The connection is an elastomer coupler.
 This shaft carries the drive sprocket.
-Two ball races support the shaft and the races align by themselves in pillow blocks on the base plate.
+Two self-aligning ball bearings support the shaft in pillow blocks on the base plate.
 
 | Parameter              | Value                              |
 |------------------------|------------------------------------|
@@ -111,7 +112,8 @@ Two ball races support the shaft and the races align by themselves in pillow blo
 | Sprocket mount         | Taper-lock bush                    |
 
 The sprocket of the chain applies the radial load.
-- That load would damage the output races of the gearbox if the sprocket sits on the gearbox.
+
+That load would damage the output bearings of the gearbox if the sprocket sits on the gearbox.
 The separate shaft takes these loads.
 The coupler is 1 to 1.
 There is no gear stage between the output of the PLE120 and the chain shaft.
@@ -121,7 +123,8 @@ There is no gear stage between the output of the PLE120 and the chain shaft.
 The allowable pull force is 4.5 kN.
 The calculation is in [PULL_FORCE.md](../engineering/PULL_FORCE.md).
 Do not use 14.3 kN.
-- That figure is the tension from the motor times the ratio and the gearbox cannot deliver it.
+
+That figure is the tension from the motor times the ratio and the gearbox cannot deliver it.
 
 ### 4.1 Allowable pull force
 
@@ -141,7 +144,8 @@ The allowable pull force is the lower value, 4.5 kN.
 
 The margin on the upper required pull is 4.5 / 4.0 = 1.13.
 That margin is small and the note explains it.
-- A speed of about 60 mm/s meets the need.
+
+A speed of about 60 mm/s meets the need.
 
 ### 4.3 Speed
 
@@ -193,7 +197,8 @@ A separate brake of 16 Nm would put the torque of 640 Nm on the gearbox output.
 The stop torque T2Stop of the PLE120 at this ratio is 500 Nm.
 That brake can go above the stop torque of the gearbox.
 Do not fit it.
-- The brake of 3.3 Nm holds the weight with margin.
+
+The brake of 3.3 Nm holds the weight with margin.
 It does not hold the full force of pull-out.
 If power fails in the pull-out, the carriage can slide down onto the casing.
 The load then moves toward the ground.
@@ -223,7 +228,8 @@ IF motor_current > threshold_current (e.g. 120% rated):
 
 The SINAMICS S200 provides the current of the lift motor.
 The VFD also monitors current on the sonic motor and the two signals together give the second path for obstacle detection.
-- The CL86T and the Nanotec C5-E are not the hub drive.
+
+The CL86T and the Nanotec C5-E are not the hub drive.
 
 ## 8. Controller Integration
 

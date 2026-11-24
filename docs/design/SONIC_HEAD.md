@@ -8,6 +8,7 @@ The motors turn in opposite directions on one rigid plate for vibration (Schwing
 The eccentric shafts of the motors sit square to the axis of the rod.
 The horizontal parts of the force cancel.
 The vertical parts on the axis add and the sum is constructive.
+
 - The force on the rod is a sine wave and it drives the rod into the soil.
 - In each cycle the thin layer at the boundary becomes fluid, as Šporin and Vukelić show in 2017.
 
@@ -82,7 +83,8 @@ The sum gives the maximum amplitude on the axis.
 
 OLI tells you to bolt two identical motors as a mirror pair on one rigid structure.
 The structure is for linear vibration in one direction.
-- If you exchange two phase wires on one motor, that motor turns the other way.
+
+If you exchange two phase wires on one motor, that motor turns the other way.
 The result is in the figure below.
 
 ```
@@ -291,11 +293,13 @@ This is the standard method from OLI for linear vibration.
 ### 5.2 Why No Timing Belt or Gears Needed
 
 In the custom design with an eccentric, timing belts are required.
+
 - Two separate shafts need the mechanical phase link.
 - If the phase drifts, the force becomes lateral.
 
 The OLI motors work as follows.
-- Each motor is one unit and it holds the motor, the eccentric, and the ball races.
+
+- Each motor is one unit and it holds the motor, the eccentric, and the bearings.
 - The shared frequency of the VFD gives the same speed.
 - The shared mass gives the natural self-sync.
 - The lock of phase comes from inertial link through the vibration plate.
@@ -375,7 +379,7 @@ Adding 2 longitudinal ribs (underneath) can push f₁ above 500 Hz.
 ## 7. Vibration Isolation
 
 You must isolate the vibration plate assembly from the carriage and from the frame.
-This block stops the pass of vibration.
+The isolation stops the transmission of vibration.
 
 | Parameter                | Value                              |
 |--------------------------|------------------------------------|
@@ -441,7 +445,7 @@ T = 1 / (100 − 1) = 0.0101 = ~1% transmitted
 
 The center column is a solid shaft of 42CrMo4 and a flange ties it to the vibration plate.
 It passes the full axial force of 8 kN to the casing and the force reverses.
-If you need rotation for auger mode, the column can sit on thrust races and on radial races in the plate.
+If you need rotation for auger mode, the column can sit on thrust bearings and on radial bearings in the plate.
 For casing sampling with no rotation, the rigid flange link is simpler and stronger.
 
 ## 9. Assembly Mass Budget
@@ -494,8 +498,9 @@ V2 from OLI is the clear winner for production and for a fast first build.
 | Protection             | IP20 min (in control enclosure)    |
 | **Candidates**         | Siemens V20, ABB ACS150, Lenze i510, Invertek Optidrive |
 
-Important: you must rate the VFD for the high output frequency.
-- The motors must run at 6,000 rpm.
+Use a VFD with a rating for the high output frequency.
+
+The motors must run at 6,000 rpm.
 Standard VFDs go to 400 Hz maximum and that limit is enough.
 At 6,000 rpm on a 6-pole motor, the electrical frequency is 300 Hz.
 
@@ -520,13 +525,14 @@ At 6,000 rpm on a 6-pole motor, the electrical frequency is 300 Hz.
 ```
 
 The cable size for 2 times 1.45 A is 2.9 A in total.
+
 - The run from the VFD to the motors is cable of 3 by 1.5 mm² with a shield.
 - The cable length is under 5 m and the runs in the machine are short.
 - Ground the shield at the VFD end for EMC.
 
 ## 13. Open Questions
 
-- [ ] Verify the lead time in the EU for the OLI MVE 400/6-HF.
+- [ ] Verify the availability and the lead time in the EU for the OLI MVE 400/6-HF.
 - [ ] Confirm the exact VFD frequency for 6,000 rpm and verify the pole count.
 - [ ] Run FEA on the vibration plate for natural frequency and for stress at cyclic 8 kN.
 - [ ] Find the best rib pattern of the plate for maximum stiffness and for low weight.
