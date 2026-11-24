@@ -1,6 +1,7 @@
 # Electronics enclosure VC-ASM-5000
 
-Study model. Do not manufacture from this note.
+Study model.
+Do not manufacture from this note.
 The solid is `cad/export/step/VC-ASM-5000.step`.
 The box is not in the machine assembly.
 

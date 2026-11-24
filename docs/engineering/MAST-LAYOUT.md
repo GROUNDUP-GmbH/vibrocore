@@ -19,13 +19,20 @@ It compares the sum with the mast stroke.
 
 The required height is the sum of seven lengths.
 
-1. Ground clearance.
-2. Cutting shoe.
-3. One casing section.
-4. Head-to-casing adapter.
-5. Sonic head.
-6. Carriage.
-7. Top margin.
+1.
+Ground clearance.
+2.
+Cutting shoe.
+3.
+One casing section.
+4.
+Head-to-casing adapter.
+5.
+Sonic head.
+6.
+Carriage.
+7.
+Top margin.
 
 Required height = ground clearance + shoe + casing + adapter + head + carriage + top margin.
 
@@ -261,7 +268,9 @@ The overhang from that face to the rod axis is 160.0 mm.
 
 Four Hiwin HGH20CA blocks engage the two rails.
 The selected block is HGH20CA.
-H is 30 mm from the rail mounting face. W is 44 mm. The STEP solid is 90.4 mm long.
+H is 30 mm from the rail mounting face.
+W is 44 mm.
+The STEP solid is 90.4 mm long.
 The block pitch on one rail is 200 mm.
 That pitch is TBD.
 The guided travel is 1009.6 mm.
@@ -300,17 +309,20 @@ Do not use an offset lift axis and do not add drop gears.
 The study solid on this revision still places the lift axis off the chain shaft.
 The placed axis is at X = 7.5 mm and Z = 79.5 mm.
 The offset is 22.9 mm from the chain shaft at Z = 57.9 mm.
-That offset is a pose error. It is not the approved layout.
+That offset is a pose error.
+It is not the approved layout.
 Correct the pose in cad/models/machine_assembly.py.
 Those study-solid positions follow the offset axis.
 The 115 mm gearbox in that solid is flush with X = −50 mm.
 The motor flange is 81 mm square, so the motor body starts at X = −33 mm.
-In that study solid the coupling hub is seated on the gearbox journal. Its inboard face is at Y = −249 mm.
+In that study solid the coupling hub is seated on the gearbox journal.
+Its inboard face is at Y = −249 mm.
 No solid in that pose joins the hub to the chain shaft.
 The motor bolts to the gearbox input, further outboard.
 A horizontal flange, VC-FR-4182, sits on the plate and runs out under the gearbox.
 Its neck stays inside the profile depth and meets both stiffeners on a face.
-A pad under the gearbox reaches X = 65 mm. That pad is clear of the stiffeners.
+A pad under the gearbox reaches X = 65 mm.
+That pad is clear of the stiffeners.
 The flange does not cross the mast centre.
 The gearbox housing rests on that flange.
 The drive-side upright is cut short.
@@ -337,7 +349,8 @@ The chain path still uses the published 83 mm tip diameter.
 The placed G&G sprocket tip is about 82.7 mm and its width is 25.5 mm.
 The placed model uses a pitch radius of 37.9 mm.
 PULL_FORCE.md uses 38.18 mm.
-The gearbox solid is Neugart article 100460948. It is 115 mm square and 204 mm long.
+The gearbox solid is Neugart article 100460948.
+It is 115 mm square and 204 mm long.
 The servo envelope is the datasheet flange, 81 mm by 186.6 mm.
 No motor STEP is in the repository.
 
@@ -349,7 +362,8 @@ There is no gear stage.
 The set is a 32H7 hub, an unbored hub and a 92 Sh-A spider.
 The placed length is 87.5 mm.
 The 50 mm envelope is only the fallback.
-The 32H7 hub faces the gearbox. The gearbox shaft is Ø25 mm.
+The 32H7 hub faces the gearbox.
+The gearbox shaft is Ø25 mm.
 The placed STEP hub is 32H7, so the bore is not a finished fit.
 The hub is seated on the journal.
 The chain-side hub is unbored.
@@ -359,7 +373,8 @@ It has no second file.
 VC-HB-3100 is the HIWIN HGR20R1300H rail.
 VC-HB-3110 is the HIWIN HGH20CAZ0H block.
 The rail mounting face sits on the profile front face.
-The block top is 30 mm from that face. The block length is 90.4 mm.
+The block top is 30 mm from that face.
+The block length is 90.4 mm.
 VC-HB-3000 is obsolete and is not placed.
 `load_vendor_shape` recenters one STEP file and does not rotate it, unless SOURCE.md says otherwise.
 The HIWIN files keep the mounting face, so they are not recentered.
@@ -424,20 +439,47 @@ The views are:
 
 ## Values Stefan must get
 
-1. Length of cutting shoe 205449. Ask Geoprobe.
-2. Axial length of adapter VC-SH-1500, and the thread.
-3. Axial height of the carriage block.
-4. Required ground clearance at the start of the stroke.
-5. Top margin for the sprocket, the chain and the upper limit switch.
-6. Column flange thickness.
-7. Isolator free height and diameter for VC-SH-1600.
-8. Motor centre distance. The minimum is 170 mm. The 266 mm pitch is only a layout placeholder.
-9. Usable stroke. The model travel is 1009.6 mm because two 90.4 mm blocks sit 200 mm apart on the 1300 mm rail. The 200 mm pitch is TBD.
-10. Centre distance of the two mast profiles. The rod is in front of the rails. The 300 mm pitch is TBD.
-11. Front gap from the carriage plate to the motor rear face. The model uses a draft gap of 10 mm. The plate rear is flush with that face.
-12. Siemens 1FL2104 STEP file. The motor is still the datasheet envelope. The PLE120 STEP is loaded.
-13. Coupling bore against the Ø25 mm gearbox shaft. The STEP hub is 32H7 and is seated on the journal. Pillow-block outline and chain-link section are still open.
-14. Weld position of the two ribs VC-SH-1302.
+1.
+Length of cutting shoe 205449.
+Ask Geoprobe.
+2.
+Axial length of adapter VC-SH-1500, and the thread.
+3.
+Axial height of the carriage block.
+4.
+Required ground clearance at the start of the stroke.
+5.
+Top margin for the sprocket, the chain and the upper limit switch.
+6.
+Column flange thickness.
+7.
+Isolator free height and diameter for VC-SH-1600.
+8.
+Motor centre distance.
+The minimum is 170 mm.
+The 266 mm pitch is only a layout placeholder.
+9.
+Usable stroke.
+The model travel is 1009.6 mm because two 90.4 mm blocks sit 200 mm apart on the 1300 mm rail.
+The 200 mm pitch is TBD.
+10.
+Centre distance of the two mast profiles.
+The rod is in front of the rails.
+The 300 mm pitch is TBD.
+11.
+Front gap from the carriage plate to the motor rear face.
+The model uses a draft gap of 10 mm.
+The plate rear is flush with that face.
+12.
+Siemens 1FL2104 STEP file.
+The motor is still the datasheet envelope.
+The PLE120 STEP is loaded.
+13.
+Coupling bore against the Ø25 mm gearbox shaft.
+The STEP hub is 32H7 and is seated on the journal.
+Pillow-block outline and chain-link section are still open.
+14.
+Weld position of the two ribs VC-SH-1302.
 
 ## Options
 
@@ -445,17 +487,20 @@ Do not order a new profile from this study.
 Three options stay open.
 This study does not select an option.
 
-1. Longer profile.
+1.
+Longer profile.
    The length must exceed the required height.
    The required height is not final until the TBD lengths are measured.
    VC-FR-4100 stays 1500 mm until that decision.
 
-2. Telescopic mast.
+2.
+Telescopic mast.
    One stage carries the head.
    A second stage adds travel.
    No telescopic part is on the BOM.
 
-3. Two-stage push.
+3.
+Two-stage push.
    Drive part of the casing section.
    Then add the next casing length.
    The mast then does not hold the full 1219.2 mm above the ground at one time.
