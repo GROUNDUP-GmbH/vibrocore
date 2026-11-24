@@ -1,7 +1,7 @@
 # Terminal list
 
-Pin names are the names on this sheet.
-The team did not choose the block.
+Pin names are the names on this drawing.
+The purchased block is not chosen.
 
 | Strip | Pin | Wire | Function | Note |
 | --- | --- | --- | --- | --- |

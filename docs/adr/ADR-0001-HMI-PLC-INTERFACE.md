@@ -13,18 +13,12 @@ parts:
 
 ## Context
 
-The Vibrocore HMI runs in Node-RED.
-The HMI runs on the controller.
-The controller is a WAGO PFC200 XTR or a RevPi.
-The PLC runs in CODESYS.
-The two sides exchange data on Modbus TCP.
-The sides use the registers that hold values (`GVL_MODBUS`).
+The Vibrocore HMI runs in Node-RED on the controller (WAGO PFC200 XTR or RevPi).
+The PLC runs in CODESYS. The two sides exchange data over Modbus TCP holding
+registers (`GVL_MODBUS`) and publish events on MQTT (`Mosquitto`).
 
-- The sides also publish events on MQTT (`Mosquitto`).
-- This ADR fixes the rules for commands.
-- Motion is hold-to-run.
-- Start and reset are pulses.
-- All sides use one fault-code table.
+This ADR fixes the command semantics so that motion is hold-to-run, start and
+reset are pulses, and all sides use one fault-code table.
 
 ## Decision
 
@@ -44,7 +38,7 @@ MQTT topics:
 | `vibrocore/cycle/{id}` | logger → broker | no | Signed cycle record (JSON) |
 | `vibrocore/status/#` | reserved | yes | Future live status mirror |
 
-The units in a payload use SI with a space (example: `12 mm`, `100 Hz`).
+Units in payloads use SI with a space (example: `12 mm`, `100 Hz`).
 
 ### Command semantics
 
@@ -60,14 +54,16 @@ The units in a payload use SI with a space (example: `12 mm`, `100 Hz`).
 
 ### Jog watchdog
 
-1. While the operator holds the jog control, the HMI writes the direction bit. The HMI adds one to `%MW33` about each 100 ms.
-2. The PLC starts the 300 ms timer when the heartbeat value does not change.
-3. If the timer ends, the PLC clears the jog commands and stops the motion.
-4. Jog must not stay at 1 with no live heartbeat.
+1. While the operator holds a jog control, the HMI writes the direction bit and
+   increments `%MW33` about every 100 ms.
+2. The PLC starts a 300 ms timer when the heartbeat value stops changing.
+3. If the timer ends, the PLC clears jog commands and stops motion.
+4. Jog must never stay at 1 without a live heartbeat.
 
 ### Fault-code table (canonical)
 
-`FB_Safety.eSafetyReason`, `GVL_MODBUS.eStatus_SafetyReason` and the Node-RED `SAFETY_REASON` list use this table.
+Used by `FB_Safety.eSafetyReason`, `GVL_MODBUS.eStatus_SafetyReason`, and the
+Node-RED `SAFETY_REASON` list:
 
 | Code | Name |
 |------|------|
@@ -79,37 +75,37 @@ The units in a payload use SI with a space (example: `12 mm`, `100 Hz`).
 | 5 | STONE_DETECTED |
 | 6 | VFD_COMM |
 
-A loss of Modbus on the penetrometer uses the local fault flag in the FB.
-The loss also uses the status force value.
-It does not add the seventh safety reason to this table.
+Penetrometer Modbus loss uses a local FB fault flag and status force value. It
+does not add a seventh safety reason to this table.
 
 ### Mode switch
 
-`eMode` follows `%MW0` only when all of these are true.
+`eMode` follows `%MW0` only when:
 
-- The hub state is IDLE.
-- The safe state is false.
-- The hub and the sonic have no fault.
+- hub state is IDLE, and
+- safe state is false, and
+- hub and sonic have no fault.
 
-If the HMI writes the new mode while the machine is busy, the PLC restores the previous mode in `%MW0`.
+If the HMI writes a new mode while the machine is busy, the PLC restores the
+previous mode in `%MW0`.
 
 ### NC limit logic
 
-The inputs for a limit are digital NC contacts.
+Digital limit inputs use NC contacts:
 
-- TRUE means the healthy state, and the circuit stays closed.
-- FALSE means the reached limit or an open wire.
+- TRUE = healthy (circuit closed)
+- FALSE = limit reached or wire break
 
 `FB_HubControl` uses `GVL_IO.xLimitUp` / `GVL_IO.xLimitDown` with that meaning.
 
 ## Consequences
 
-- Field units must set Node-RED and Mosquitto secrets when you start the unit.
-- The repository has no default password.
-- MQTT port 1883 stays on the internal Docker network.
-- Node-RED binds to loopback or to a dedicated HMI address, not to `0.0.0.0`.
-- Reviewers must confirm hold-to-run and the E-stop reset on real WAGO hardware or RevPi hardware.
-- The Python suite covers only the logic of the state machine.
+- Field units must set Node-RED and Mosquitto secrets at commissioning. The
+  repository has no default password.
+- MQTT port 1883 stays on the internal Docker network. Node-RED binds to
+  loopback or a dedicated HMI address, not `0.0.0.0`.
+- Reviewers must confirm hold-to-run and E-stop reset on real WAGO or RevPi
+  hardware. The Python suite covers the state-machine logic only.
 
 ## References
 
