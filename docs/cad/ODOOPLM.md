@@ -28,7 +28,7 @@ From [OmniaGit/odooplm](https://github.com/OmniaGit/odooplm) we read the field n
 - A stock Odoo 19 with no such modules can still import `cad/odoo/mrp/`.
 - Do not import the two packages into one database.
 
-Import the two only if you want an EBOM and a shop BOM from the start.
+Import the two only if you want an engineering BOM and a manufacturing BOM from the start.
 If both exist, `plm_automate_normal_bom` will not rebuild the normal BOM.
 The cron creates the normal BOM only when the product has none.
 
@@ -256,8 +256,8 @@ The git STEP files are already the artefacts to store.
 - The command leaves the record as it is, with its files.
 - If you run it again after the YAML change, the command updates the same code and the revision.
 - The command does not insert a second record.
-- If a design BOM line is no longer in the YAML, the command removes it.
-- The command does not create the second design BOM for the same product.
+- If an engineering BOM line is no longer in the YAML, the command removes it.
+- The command does not create the second engineering BOM for the same product.
 - Before an upload, the command reads the attachment.
 - It uses `fields_get` and `read` for `checksum` and `file_size`.
 - `checksum` is the SHA1 value of the stored file.

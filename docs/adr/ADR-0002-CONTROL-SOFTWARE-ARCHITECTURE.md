@@ -43,9 +43,8 @@ The accepted rule is: "the right parts in the right language, clean and structur
 - Keep the state codes from the Structured Text blocks.
 - The fault codes stay as the table in ADR-0001.
 - Do not add a fault code.
-- The controller is the RevPi Connect 4.
-- One part is VC-CT-6800.
-- One more part is the RevPi DIO, VC-CT-6810.
+- The controller is the RevPi Connect 4, part VC-CT-6800.
+- Add one RevPi DIO, part VC-CT-6810.
 - The RevPi is the Modbus RTU master on the RS-485 port.
 - Use the node /dev/piControl0.
 - The calls are ioctl and read and write.

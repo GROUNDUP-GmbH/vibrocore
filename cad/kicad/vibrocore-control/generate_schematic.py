@@ -689,7 +689,7 @@ def write_lists(directory: Path) -> None:
         writer = csv.writer(handle)
         writer.writerow(["strip", "pin", "wire", "function", "note"])
         writer.writerows(TERMINALS)
-    md = ["# Terminal list", "", "Pin names are the names on this sheet.", "The team did not choose the block.", ""]
+    md = ["# Terminal list", "", "Pin names are the names on this sheet.", "The team did not choose the purchased terminal block.", ""]
     md.append("| Strip | Pin | Wire | Function | Note |")
     md.append("| --- | --- | --- | --- | --- |")
     for ref, pin, wire, func, note in TERMINALS:
