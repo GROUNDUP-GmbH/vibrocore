@@ -85,10 +85,10 @@ Do not use it.
 The README line "2.0-2.6 kN at 90 Nm" used 90 Nm at the sprocket and no 40:1 ratio.
 Do not use that line.
 
-The 5.80 kN "gearbox nominal tension" came from the previous 220 Nm PLPE120 rating
-and the older 37.899 mm radius. Do not use that derivation.
-The 5.8 kN figure in LIFT-DRIVE-SIZING.md is the design chain pull
-(5 kN load cell plus 0.8 kN weight). Keep that meaning.
+The 5.80 kN "gearbox nominal tension" came from the previous 220 Nm PLPE120 rating and the older 37.899 mm radius.
+Do not use that derivation.
+The 5.8 kN figure in LIFT-DRIVE-SIZING.md is the design chain pull (5 kN load cell plus 0.8 kN weight).
+Keep that meaning.
 
 ## Required pull and margin
 

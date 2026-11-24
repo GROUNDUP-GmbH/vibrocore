@@ -1,6 +1,7 @@
 # Vibration-motor bracket VC-SH-1350
 
-Draft sizing. Not a released calculation.
+Draft sizing.
+Not a released calculation.
 Do not manufacture from this note.
 The bracket holds the two vibration motors on the carriage.
 Pull-out is the governing case.
