@@ -221,7 +221,9 @@ Can be added incrementally without hardware changes to the base controller I/O.*
 
 ### 8a. Lift Actuator System (~40 cm deployment travel)
 
-**Function:** Raises/lowers the entire drill mast ~400 mm between transport position (mast raised, clears ground obstacles) and drilling position (mast deployed, weight resting on stabiliser feet).
+**Function:** Raises and lowers the drill mast about 400 mm.
+The transport position is the mast raised. It clears ground obstacles.
+The drilling position is the mast deployed. The weight rests on the stabiliser feet.
 Two parallel actuators ensure stable, torsion-free deployment.
 
 **Design:** 2× electric linear actuator (one per frame side) + shared H-bridge relay direction control.
@@ -265,7 +267,8 @@ Verify with final mechanical design.
 > WAGO: 1× additional 750-430 XTR + 1× additional 750-530 XTR handles all 4+4.
 > RevPi: still within single DIO module capacity (10/14 DI, 8/14 DO).
 
-> **PSU upgrade required:** Lift + Tilt actuators simultaneously draw up to 4× 2A = 8A @ 24V (unlikely all running at once, but spec for peak).
+> **PSU upgrade required:** The lift and tilt actuators can draw up to 4× 2A = 8A at 24V together.
+> All four do not run at the same time. Specify the supply for the peak.
 > Upgrade 24V PSU from
 > Mean Well DDR-60D-24 (60W/2.5A) → **Mean Well SDR-120-24 (120W/5A)** (~€40–70).
 > See §4.
