@@ -1,7 +1,7 @@
 # Dimensioning Calculations (V2: OLI MVE 400/6-HF)
 
-All calculations reference Šporin & Vukelić (2017), Wang et al.
-(2015), and OLI MVE 400/6-HF rated data.
+Every calculation cites Šporin and Vukelić (2017) and Wang et al.
+(2015), and the rated data for the OLI MVE 400/6-HF.
 
 ## 1. Target Parameters
 
@@ -55,12 +55,12 @@ F_combined(n) = 2 × F(n)
 |          6,000  | 1.000      |          4.00  |             8.00 | Heavy clay / compact |
 |          6,600  | 1.100      |          4.84  |             9.68 | Max (110% overdrive) |
 
-**VFD frequency control provides continuous 0.9 – 9.7 kN force range.**
+**VFD frequency control gives a continuous force range of 0.9 – 9.7 kN.**
 
 ### 2.4 OLI Internal Eccentric Adjustment
 
-OLI MVE motors have adjustable eccentric weights (0–100% of rated force).
-Combined with VFD speed control:
+The eccentric weights in the OLI MVE motors adjust from 0–100% of the rated force.
+Use that adjustment together with VFD speed control:
 
 | Eccentric Setting | VFD at 6,000 rpm | VFD at 4,000 rpm |
 |-------------------|------------------|------------------|
@@ -69,7 +69,7 @@ Combined with VFD speed control:
 | 50%               | 4.0 kN           | 1.8 kN           |
 | 25%               | 2.0 kN           | 0.9 kN           |
 
-**Total force range: 0.9 – 9.7 kN (~1:11 ratio) — covers all agricultural soils.**
+**The total force range is 0.9 – 9.7 kN (~1:11 ratio). That range covers every agricultural soil.**
 
 ## 3. Vibrating Plate Dimensioning
 
@@ -133,8 +133,8 @@ With ribs (increased stiffness, FEA verification needed):
 Estimated f₁ ≈ 250–350 Hz
 
 Ratio to operating frequency: 250/100 = 2.5× minimum
-Target: > 3× → may need additional ribs or thicker plate (25 mm).
-FEA should verify and optimize.
+Target: > 3×. More ribs or a thicker plate (25 mm) can meet that target.
+Run FEA to verify the plate and to optimize it.
 ```
 
 ## 4. Vibration Isolation
@@ -200,15 +200,15 @@ Total transmitted to frame: 4 × 20 = 80 N (negligible)
 
 ### 5.1 Hub Bearings (Pillow Blocks)
 
-Hub drive shaft bearings — same as V1:
+The hub drive shaft bearings match V1:
 
 | Position             | Type        | Designation    | Notes                    |
 |----------------------|-------------|----------------|--------------------------|
 | Hub drive shaft (2)  | Self-align  | UCP 206        | Pillow block, 30mm bore  |
 | Hub idle sprocket    | Deep groove | 6205-2RS       | 25×52×15 mm              |
 
-*Note: Sonic head bearings are now INTERNAL to OLI motors — no external bearing selection needed.
-OLI's heavy-duty bearings are rated for continuous high-frequency operation.*
+*The OLI motors hold the sonic head bearings inside the motor. Do not select an external bearing.
+The heavy-duty bearings from OLI have a rating for continuous high-frequency operation.*
 
 ## 6. Power & Energy Analysis
 
@@ -249,38 +249,38 @@ Phase 5 — Return to top (0.5 m at 60 mm/s):    8 s × 0.2 kW    =   2 kJ
 Sonic subtotal:  ~86 kJ
 
 Hub power:
-  The 48 V hub budget is withdrawn.
-  There is no 48 V rail.
-  The S200 and the 1FL2 run on 230 V AC from the Instagrid.
+  The note withdraws the 48 V hub budget.
+  This machine has no 48 V rail.
+  The S200 and the 1FL2 take 230 V AC from the Instagrid.
   Do not use 19.5 kJ or the 48 V × 4 A / 6 A / 2 A lines.
 
-Grand total per cycle: the old 106 kJ figure included that withdrawn hub term.
+The old grand total per cycle, 106 kJ, included that withdrawn hub term.
 The sonic subtotal above stays 86 kJ.
-A new hub energy figure is not calculated here.
+This note does not calculate a new hub energy figure.
 ```
 
 ### 6.4 Daily Energy Budget (100 cores)
 
 ```
-The old 2.9 kWh/day figure included the withdrawn 48 V hub term.
+The withdrawn 48 V hub term sat inside the old 2.9 kWh/day figure.
 Instagrid ONE max stores 2.1 kWh.
-A 48 V 50 Ah LiFePO4 battery is not part of this machine.
+This machine does not include a 48 V 50 Ah LiFePO4 battery.
 Do not use the old "~83 cores per charge" line.
 
-V2 (OLI) uses ~48% less sonic energy per cycle vs. V1 (custom 3 kW motor).
+V2 (OLI) uses ~48% less sonic energy per cycle than V1 (custom 3 kW motor).
 ```
 
 ## 7. Hub System Forces
 
 The allowable pull force is **4.5 kN**.
-Use [PULL_FORCE.md](PULL_FORCE.md).
+Read [PULL_FORCE.md](PULL_FORCE.md).
 Do not use 14.3 kN.
 
 ### 7.1 Allowable pull force
 
 The chain working load sets the allowable pull force at 4.5 kN.
-The pull at the drive torque limit is about 5.83 kN and is not the limit.
-See PULL_FORCE.md and LIFT-DRIVE-SIZING.md.
+The pull at the drive torque limit is about 5.83 kN, and that pull is not the limit.
+Read PULL_FORCE.md and LIFT-DRIVE-SIZING.md.
 
 ### 7.2 Required Forces
 
@@ -291,7 +291,7 @@ See PULL_FORCE.md and LIFT-DRIVE-SIZING.md.
 | Head weight hold     | ~0.4 kN     | Static (42 kg head assembly)       |
 
 Margin: 4.5 / 4.0 = 1.13.
-See PULL_FORCE.md.
+Read PULL_FORCE.md.
 
 ### 7.3 Hub Speed
 
@@ -321,8 +321,8 @@ Ramp rate: 50 Hz/s → pass through 0–25 Hz zone in 0.5 s
 Operating zone: 50–110 Hz (3,000–6,600 rpm)
 ```
 
-*Note: No belt resonance to skip (V1 had belt resonance at 40–60 Hz).
-V2 eliminates this concern entirely.*
+*This layout has no belt resonance to skip. V1 had belt resonance at 40–60 Hz.
+V2 removes that item.*
 
 ## 9. Summary: Key Component Specifications (V2)
 

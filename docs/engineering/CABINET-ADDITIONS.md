@@ -3,16 +3,16 @@
 Stefan approved these rows for the BOM on 2026-11-20.
 The cabinet schematic is VC-SCH-5000.
 See docs/engineering/SCHEMATIC.md.
-Prices below are not quotes.
+The prices below are not quotes.
 
 ## Do not buy a second hold
 
-Stefan decided on 2026-11-20 that there is no second holding means.
+Stefan decided on 2026-11-20 that this machine has no second holding means.
 The S200 motor holding brake is the only hold.
 Nobody works under the raised head.
 The chain drive is sized for the load.
-The chain drive is inspected regularly.
-This is a deliberate risk decision.
+The team inspects the chain drive on a regular schedule.
+This choice is a deliberate risk decision.
 Do not buy a locking bolt for this function.
 Do not buy a chain-break catch for this function.
 Do not buy a second brake for this function.
@@ -42,7 +42,7 @@ Product page: https://www.se.com/us/en/product/ATV320U15M2C/variable-speed-drive
 ## Enabling switch
 
 Buy IDEC HE1B-M1.
-It is a 3-position enabling switch.
+The part is a 3-position enabling switch.
 The positions are off, on, off.
 One contact closes only in the middle position.
 The contact is SPST-NO.
@@ -59,7 +59,7 @@ The contact rating is 16 A.
 The coil is 24 V DC.
 Use two contactors for the two tilt directions.
 Never energize both contactors together.
-The tilt actuator current is not on a nameplate here.
+This note has no nameplate for the tilt actuator current.
 The present H-bridge note assumes 10 A.
 A 16 A contact covers that assumption.
 Confirm the current on the chosen actuator before you order.
@@ -67,7 +67,7 @@ Data sheet: https://www.relayspec.com/specs/175/S62EN.pdf
 
 ## Rotation drive
 
-The drive type is not frozen.
+The team has not frozen the drive type.
 The software command is a trait.
 The default adapter is step and direction.
 Buy Nanotec PD2-C4118L1804-E-01 as the proposed unit.
@@ -78,7 +78,7 @@ Clock-direction mode is in the manual.
 A Modbus RTU order code in the same family is TODO.
 Do not treat this row as a released selection.
 The axis needs one index input on DIO input 12.
-The index sensor order code is not chosen.
+The team has not chosen the index sensor order code.
 An encoder index on the drive can replace that sensor.
 Manual: https://www.nanotec.com/fileadmin/files/Handbuecher/Handbuecher_Archiv/Plug_Drive/PD2-C/fir-v2139/PD2C_USB_Technical-Manual_V3.2.0.pdf
 Product page: https://www.nanotec.com/eu/en/products/1892-pd2-c4118l1804-e-01

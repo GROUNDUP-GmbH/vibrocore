@@ -706,7 +706,7 @@ parts:
   - Ingress protection is unknown.
   - Order code is unknown.
   - Price is unknown.
-  notes: ARCHITECTURE.md names a tablet or HMI through WLAN. The BOM has no catalogue tablet.
+  notes: ARCHITECTURE.md names a tablet or HMI through WLAN. The team did not select a catalogue tablet yet.
 - part_number: VC-CT-6300
   name: Control enclosure
   revision_index: 0
@@ -1853,7 +1853,7 @@ parts:
   notes: 'HBK S9M, Burster 8417, Bosche S2 or equivalent. The cell sits in the pull path. The pull at
     the drive torque limit is about 5.83 kN. The chain force at T2max is 9.37 kN. Both exceed 5 kN.
     Keep this cell for the soil-force range and fit VC-PN-9340 so the cell is not the structural fuse.
-    The BOM has no higher-rated catalogue cell.'
+    The team did not select a higher-rated catalogue cell yet.'
   lifecycle: active
 - part_number: VC-PN-9310
   name: 4-20 mA transmitter
@@ -1911,7 +1911,7 @@ parts:
   - Set point, spring and hard-stop dimensions are unknown.
   - Price is unknown.
   lifecycle: active
-  notes: See docs/engineering/PULL_FORCE.md. The BOM has no catalogue load cell above 5 kN.
+  notes: See docs/engineering/PULL_FORCE.md. The team did not select a catalogue load cell above 5 kN yet.
 - part_number: VC-PS-8100
   name: viDoc RTK Light
   revision_index: 0
@@ -2072,7 +2072,7 @@ parts:
   unknowns:
   - Order code is unknown.
   - Price is unknown.
-  notes: Directive 2006/42/EC expects a supply disconnect. The BOM has no catalogue switch.
+  notes: Directive 2006/42/EC expects a supply disconnect. The team did not select a catalogue switch yet.
 - part_number: VC-PW-5710
   name: Line circuit breaker
   revision_index: 0
@@ -2367,7 +2367,7 @@ parts:
   notes: 'Draft. The tubes and the push-on caps are lab consumables and are not BOM lines. A photo shows
     orange plastic tubes, a ribbed outside and a label recess, stacked end to end. The photo suggests
     length is about 2.2 to 2.5 times the diameter. That ratio is not a measurement and this model does
-    not use it. Put the caps on after extraction. The pocket has no cap clearance. Placeholder tube OD
+    not use it. Put the caps on only after extraction. The pocket has no cap clearance. Placeholder tube OD
     30 mm and placeholder tube length 100 mm let the study STEP export. They are not tube data.'
 - part_number: VC-SP-7621
   name: Split carrier half B
