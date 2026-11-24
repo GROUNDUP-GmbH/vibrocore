@@ -2,9 +2,10 @@
 
 ## Overview
 
-The Vibrocore V1 consists of five major subsystems. V1.1 adds three optional
-subsystems for full field-readiness: motorised deployment, penetrometry, and
-core imaging. See `docs/engineering/BOM.md §8` for BOM and cost details.
+The Vibrocore V1 is a system with five subsystems.
+V1.1 adds three optional subsystems for full field use.
+These parts include deployment by motor and also penetrometry and core images.
+See `docs/engineering/BOM.md §8` for the BOM and for the cost.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
@@ -47,7 +48,7 @@ core imaging. See `docs/engineering/BOM.md §8` for BOM and cost details.
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
----
+
 
 ## Subsystem Interactions
 
@@ -103,11 +104,11 @@ core imaging. See `docs/engineering/BOM.md §8` for BOM and cost details.
        └─────────────────────┘
 ```
 
----
+
 
 ## Critical Interlock: Sonic → Hub
 
-The most important safety/quality interlock in the system:
+This interlock has the top rank for safety and for quality in the system.
 
 ```
 DRILLING state:
@@ -127,14 +128,13 @@ RETRACT state:
   Hub moves UP  ←  Sonic CONFIRMED stopped
 ```
 
-**Rule:** The hub carriage CANNOT transition to the RETRACT state without
-`FB_SonicHead.xConfirmedStopped = TRUE`. This is structural in the state
-machine — there is no path from DRILLING directly to RETRACT.
+The hub must not move to the RETRACT state without `FB_SonicHead.xConfirmedStopped = TRUE`.
 
-Reason: OLI motors at 6000 RPM shaking the soil core during extraction would
-cause the sample to fall out, destroying the density measurement.
+- The state machine has no direct path from DRILLING to RETRACT.
+- OLI motors at 6000 RPM can shake the soil core during the pull-out.
+- The sample can then fall out and the loss of the density result follows.
 
----
+
 
 ## Data / Trust Layer
 
@@ -160,7 +160,7 @@ RDDL / Planetmint (via MQTT over WiFi/LTE)
   → VM0042 Section 6.2 data provenance compliance
 ```
 
----
+
 
 ## V1.1 Subsystem Integration
 
@@ -218,20 +218,20 @@ RPi 4 2GB (Core Scanner, autonomous)  [V1.1]
 
 ## Detailed Design Documents
 
-- [SONIC_HEAD.md](SONIC_HEAD.md) — 2× OLI MVE 400/6-HF vibration head design
-- [HUB_SYSTEM.md](HUB_SYSTEM.md) — 1FL2104, Neugart PLE120-040, ROTEX 28, 10B-2 chain
-- [CONTROL_SYSTEM.md](CONTROL_SYSTEM.md) — WAGO/RevPi, I/O mapping, Modbus, SE050, V1.1 expansion
+- Open the [SONIC_HEAD.md](SONIC_HEAD.md) for the vibration head design with 2× OLI MVE 400/6-HF.
+- Open the [HUB_SYSTEM.md](HUB_SYSTEM.md) for the 1FL2104 and the Neugart PLE120-040 and the ROTEX 28 and the 10B-2 chain.
+- See the [CONTROL_SYSTEM.md](CONTROL_SYSTEM.md) for WAGO and RevPi, the I/O mapping, Modbus, SE050 and the V1.1 expansion.
 
 ## Firmware
 
-- [firmware/codesys/PRG_Main.st](../../firmware/codesys/PRG_Main.st) — Main program
-- [firmware/codesys/FB_SonicHead.st](../../firmware/codesys/FB_SonicHead.st) — Sonic state machine
-- [firmware/codesys/FB_HubControl.st](../../firmware/codesys/FB_HubControl.st) — Hub state machine
-- [firmware/codesys/FB_Safety.st](../../firmware/codesys/FB_Safety.st) — Safety monitor
-- [firmware/codesys/FB_ModbusVFD.st](../../firmware/codesys/FB_ModbusVFD.st) — VFD Modbus
-- [firmware/codesys/FB_DataLogger.st](../../firmware/codesys/FB_DataLogger.st) — RDDL data
+- See the [PRG_Main.st](../../firmware/codesys/PRG_Main.st) for the main program.
+- See the [FB_SonicHead.st](../../firmware/codesys/FB_SonicHead.st) for the sonic state machine.
+- See the [FB_HubControl.st](../../firmware/codesys/FB_HubControl.st) for the hub state machine.
+- See the [FB_Safety.st](../../firmware/codesys/FB_Safety.st) for the safety monitor.
+- See the [FB_ModbusVFD.st](../../firmware/codesys/FB_ModbusVFD.st) for the VFD on Modbus.
+- See the [FB_DataLogger.st](../../firmware/codesys/FB_DataLogger.st) for the RDDL data.
 
 ## Engineering Calculations
 
-- [DIMENSIONING.md](../engineering/DIMENSIONING.md) — Force, frequency, power, bearing life
-- [BOM.md](../engineering/BOM.md) — Bill of materials with EU suppliers and prices
+- See [DIMENSIONING.md](../engineering/DIMENSIONING.md) for force, frequency, power, and bearing life.
+- See the file [BOM.md](../engineering/BOM.md) for the bill of materials with the EU supply and the price.

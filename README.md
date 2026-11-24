@@ -4,7 +4,7 @@
 - The machine takes power from the battery.
 - The machine is the compact sonic vibro-corer.
 - The machine takes the soil sample.
-- Disturbance of the sample stays low.
+- The sample stays undisturbed.
 - The sample is for bulk density.
 - The sample is also for the core probe.
 - The machine drives the 3.25 in Geoprobe casing.
@@ -24,7 +24,7 @@
 - The frequency of that vibration is high.
 - This principle is sonic drill.
 - The vibration drives the core tubes into the ground.
-- Disturbance of the sample stays small.
+- The sample stays undisturbed.
 - The percussion system hits the tube.
 - The hammer system also hits the tube.
 - The sonic method is different.
@@ -105,7 +105,7 @@
 - Both motors sit on one rigid plate.
 - The plate is the Schwingplatte.
 - The plate vibrates.
-- The principle is in Sporin and Vukelic, 2017.
+- The principle is in Šporin and Vukelić, 2017.
 - The same principle is in the OLI guide for linear vibration.
 - Each motor shaft is square to the rod axis.
 - The force on the rod is axial.
