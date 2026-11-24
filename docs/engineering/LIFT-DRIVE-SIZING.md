@@ -107,7 +107,7 @@ Do not use it.
    https://mall.industry.siemens.com/spice/docuservice/rest/document.spring?articleNumber=1FL21044AG111MC0&documentGroup=TED&documentId=DCS_DATASHEET_CLEANED&language=en&region=ww
 2. Neugart Complete Gearbox Catalog 2026-10, PLE chapter.
    https://cdn.neugart.com/fileadmin/user_upload/Downloads/Product_Catalogs/10_2026/Complete_Gearbox_Catalog_2026_10_EN.pdf
-3. This repository does not store a second copy of the vendor PDFs from the workbook that Stefan approved.
+3. The calculation workbook that Stefan approved is not stored as a second copy of the vendor PDFs.
    Those PDFs stay out of this repository.
 4. Neugart CAD for article 100460948, generated 2026-11-20.
    This repository does not store the PDF and the DXF from that mail.

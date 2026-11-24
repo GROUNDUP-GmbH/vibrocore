@@ -133,7 +133,7 @@ With ribs (increased stiffness, FEA verification needed):
 Estimated f₁ ≈ 250–350 Hz
 
 Ratio to operating frequency: 250/100 = 2.5× minimum
-Target: > 3×. More ribs or a thicker plate (25 mm) can meet that target.
+Target: > 3×. The plate possibly needs more ribs or a thicker plate (25 mm).
 Run FEA to verify the plate and to optimize it.
 ```
 
