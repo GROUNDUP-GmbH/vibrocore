@@ -7,9 +7,9 @@ The sonic head generates **axial pressure waves** along the drill rod by using t
 vibrating plate (Schwingplatte). The motors' eccentric shafts are oriented
 **perpendicular to the rod axis**.
 
-Horizontal force components cancel out; vertical (axial) components add constructively.
+Horizontal force components cancel out. Vertical (axial) components add constructively.
 This produces a sinusoidal pushing/pulling force on the rod, driving it into the soil
-by cyclically liquefying the thin boundary layer (cf. Šporin & Vukelić, 2017).
+by cyclically liquefying the thin boundary layer (compare Šporin & Vukelić, 2017).
 
 ### Why OLI Vibration Motors?
 
@@ -206,7 +206,7 @@ F_peak_axial = 2 × 4,002 N = 8,004 N ≈ 8.0 kN
 
 ### 4.2 Force vs. Frequency (VFD-Controlled)
 
-Centrifugal force scales with ω² (i.e., f²). Using the OLI rated force as baseline:
+Centrifugal force scales with ω² (that is , f²). Using the OLI rated force as baseline:
 
 ```
 F(f) = F_rated × (f / f_rated)²
@@ -399,7 +399,7 @@ T = 1 / (100 − 1) = 0.0101 = ~1% transmitted
 
 - **Schwingmetall / Paulstra** cylindrical buffers (DE/FR)
 - **Trelleborg** anti-vibration mounts
-- Alternatively: 4× conical rubber mounts (e.g., AMC MECANOCAUCHO)
+- Alternatively: 4× conical rubber mounts (for example , AMC MECANOCAUCHO)
 - M12 thread top and bottom for easy assembly
 - Operating temperature: −20°C to +80°C
 
@@ -525,7 +525,7 @@ Cable sizing for 2 × 1.45 A = 2.9 A total:
 - [ ] Verify OLI MVE 400/6-HF availability and lead time in EU
 - [ ] Confirm exact VFD frequency needed for 6,000 rpm (pole count verification)
 - [ ] Vibrating plate FEA (natural frequencies, stress under cyclic 8 kN)
-- [ ] Optimal plate rib pattern for maximum stiffness vs. weight
+- [ ] Optimal plate rib pattern for maximum stiffness against weight
 - [ ] Casing adapter thread specification (verify with Geoprobe)
 - [ ] Field test: optimal VFD frequency ramp for different soil types
 - [ ] Temperature monitoring: motor surface temp during extended operation

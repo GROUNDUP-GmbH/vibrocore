@@ -2,7 +2,12 @@
 
 ## Overview
 
-The Vibrocore V1 control system is built around the **WAGO PFC200 XTR (750-8212)** industrial controller with a Modbus RTU backbone. The XTR variant is chosen for its extreme-environment certification: −40 °C to +70 °C, 5g continuous vibration, IP20 DIN-rail housing, CAGE CLAMP terminals rated for the field.
+The Vibrocore V1 control system is built around the **WAGO PFC200 XTR (750-8212)** industrial controller with a Modbus RTU backbone.
+The XTR variant is chosen for its extreme-environment certification.
+The temperature range is −40 °C to +70 °C.
+The vibration rating is 5g continuous.
+The housing is IP20 and uses a DIN rail.
+The terminals are CAGE CLAMP and are rated for the field.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -158,7 +163,7 @@ The penetrometer ADC connects as RS-485 Slave 3 on the built-in RS-485 port.
 
 ### Siemens V20 VFD — Slave Address 1
 
-Standard Modbus PKW + PZD interface (enable via P0700=5, P1000=5).
+Standard Modbus PKW + PZD interface (enable through P0700=5, P1000=5).
 
 | Register (0-based) | Name            | R/W | Scale       | Description                    |
 |--------------------|-----------------|-----|-------------|--------------------------------|
@@ -256,10 +261,13 @@ WAGO PFC200 (COM1 / onboard UART)
 1. `FB_DataLogger` assembles JSON payload with `"sign_pending": true` at cycle completion.
 2. Payload sent over WAGO COM1 to ESP32-C3 (JSON line, LF-terminated).
 3. ESP32-C3 extracts the payload, calls SE050 to sign with secp256k1 private key.
-4. ESP32-C3 appends `"signature"` and `"pubkey"` fields and publishes to RDDL via MQTT over WiFi.
+4. ESP32-C3 appends `"signature"` and `"pubkey"` fields and publishes to RDDL through MQTT over WiFi.
 5. RDDL records data on Planetmint for immutable VM0042 audit trail.
 
-**GPS data source:** ESP32-C3 also receives NMEA from the drill-head GPS antenna (u-blox ZED-F9P in RTK mode) and pushes `{"lat": …, "lon": …, "fix": "RTK"}` to WAGO every 1 s over the same COM1 UART. `FB_DataLogger` reads these variables and includes them in each cycle record.
+**GPS data source:** ESP32-C3 also receives NMEA from the drill-head GPS antenna (u-blox ZED-F9P in RTK mode).
+The module sends `{"lat": …, "lon": …, "fix": "RTK"}` to WAGO every 1 s.
+The path is the same COM1 UART.
+`FB_DataLogger` reads these variables and includes them in each cycle record.
 
 ---
 
@@ -290,12 +298,12 @@ Instagrid ONE max
 ```
 
 **RUT241 configuration:**
-- WAN: SIM card (data-only SIM, e.g. Teltonika Mobile, 1 GB/month sufficient)
+- WAN: SIM card (data-only SIM, for example Teltonika Mobile, 1 GB/month sufficient)
 - LAN: static IP 192.168.1.1 gateway, WAGO on 192.168.1.10
 - VPN: WireGuard tunnel to developer workstation for remote access
 - Firewall: only outbound MQTT (port 1883/8883) and WireGuard (UDP 51820) open
 
-**Power:** 9–30V DC input — powered from 24V rail via step-down, draws ~3W.
+**Power:** 9–30V DC input — powered from 24V rail through step-down, draws ~3W.
 
 Alternative for better cellular coverage: **Teltonika TRB140** (mPCIe form factor, fits
 inside the Rittal IP65 enclosure) or **RUT956** if dual-SIM redundancy is needed.
@@ -334,7 +342,7 @@ relative to the motor's thermal rating and continuous self-cooling.
 ### DC bus overvoltage risk during the ramp phase
 
 During the 0.3s ramp from 100 Hz to 0, the motor briefly regenerates energy
-back into the V20's DC bus. The V20 handles this via:
+back into the V20's DC bus. The V20 handles this through:
 
 | V20 Parameter | Value | Effect |
 |---------------|-------|--------|
@@ -384,7 +392,7 @@ WAGO PFC200 XTR (192.168.1.10)
 | Status | State machine text (System / Hub / Sonic), safety reason, trend charts |
 | Protokoll | Per-cycle log table (depth, freq, GPS, signed flag) |
 
-Node-RED polls CODESYS every **500 ms** via Modbus TCP (FC3 read, registers 0–21).
+Node-RED polls CODESYS every **500 ms** through Modbus TCP (FC3 read, registers 0–21).
 HMI write commands (buttons, sliders) use FC6/FC16 on the same registers.
 
 See `firmware/docker/` for the full stack and `firmware/docker/README.md` for setup.
@@ -433,8 +441,8 @@ Option B — CODESYS Go (browser-based, no VM needed):
 
 Option C — Cloud VM:
 - AWS EC2 t3.small (Windows Server) — ~$15/month
-- Install CODESYS V3.5, connect to WAGO via WireGuard VPN
-- OTA updates via CODESYS Online Change
+- Install CODESYS V3.5, connect to WAGO through WireGuard VPN
+- OTA updates through CODESYS Online Change
 
 ---
 
@@ -461,7 +469,7 @@ See the [Mobile Connectivity section](#mobile-connectivity--teltonika-rut241) ab
 ## Controller Comparison: WAGO PFC200 XTR vs. Revolution Pi Connect 4
 
 Two viable controller options exist for Vibrocore V1. The WAGO is the primary
-recommendation for production; the RevPi Connect 4 is a lower-cost alternative
+recommendation for production. The RevPi Connect 4 is a lower-cost alternative
 well-suited for prototyping or cost-sensitive builds.
 
 ### Hardware comparison
@@ -511,7 +519,7 @@ Do not use the DIO encoder mode for a chain encoder.
 ### Decision guidance
 
 Use **WAGO PFC200 XTR** when:
-- Ambient temperature may drop below −25 °C (e.g., Eastern European winter storage)
+- Ambient temperature can drop below −25 °C (for example , Eastern European winter storage)
 - Maximum vibration resistance is required (drilling in rocky, high-vibration terrain)
 - Dedicated CODESYS Runtime timing guarantees are needed
 - Long-term industrial support contracts are required

@@ -41,8 +41,8 @@ The hub system provides controlled **vertical linear motion** for:
 
 1. **Endless chain loop** — the carriage is attached to one point on the chain.
    Motor CW → carriage down, Motor CCW → carriage up.
-2. **Motor at bottom** — keeps center of gravity low; steel base plate carries motor + gearbox weight.
-3. **Drive sprocket at bottom** — directly coupled via chain shaft to gearbox output.
+2. **Motor at bottom** — keeps center of gravity low. Steel base plate carries motor + gearbox weight.
+3. **Drive sprocket at bottom** — directly coupled through chain shaft to gearbox output.
 4. **Idle sprocket at top** — spring-loaded tensioner for chain slack compensation.
 5. **Linear guides on front** — the carriage slides on two profiled rails mounted to the aluminum mast.
 
@@ -97,7 +97,7 @@ The sizing and the torque limit are in [LIFT-DRIVE-SIZING.md](../engineering/LIF
 
 ### 3.4 Drive Shaft (Separate from Gearbox Output)
 
-The gearbox output connects to a **separately mounted drive shaft** via an
+The gearbox output connects to a **separately mounted drive shaft** through an
 elastomer coupling. This shaft carries the drive sprocket and is supported by
 two self-aligning ball bearings in pillow blocks bolted to the base plate.
 
