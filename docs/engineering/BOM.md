@@ -19,8 +19,8 @@ Verify each price with the supplier before you order.
 
 **Sonic Head Subtotal: ~1,005–1,600 €.** The old EUR 180–300 inverter band left the rollup. No supplier quote gives the ATV320 price.
 
-*The OLI motors hold the eccentric shafts, the discs, the timing belts, and the bearings.
-V2 does not use those parts as separate items.
+*V2 does not need custom eccentric shafts, discs, timing belts or external bearings.
+The OLI motors do these functions inside the motor.
 The cost and the complexity are lower than the V1 custom design.*
 
 ## 2. Hub System
@@ -280,7 +280,7 @@ Verify the geometry with the final mechanical design.
 
 **Function:** The cell measures drilling resistance, the push force, against depth through the whole penetration cycle.
 Together with the position encoder, the record is a **drilling penetrogram** (force against depth curve).
-The record matches a lightweight Cone Penetration Test (CPT) at the sample point.
+The record has the same function as a lightweight CPT.
 
 **Design:** Mount an S-type load cell in line between the hub carriage adapter plate and the casing adapter.
 The output is 4–20 mA through a signal conditioner to an RS-485 Modbus RTU converter. The converter is Slave address 3 on the existing bus.
@@ -332,7 +332,7 @@ Hub carriage plate
 The team withdrew the old through-liner procedure.
 Do not scan a polycarbonate liner.
 This machine does not use that liner.
-The cradle has to fit one sample tube.
+The cradle must fit one sample tube.
 The tube outside diameter is TBD.
 The tube is a lab consumable and is not a BOM line.
 Do not assume the tube wall is clear.
