@@ -2,7 +2,7 @@
 # Vibrocore V1.1 engineering BOM. Single source for part numbers, revisions,
 # quantities and the estimates copied from docs/engineering/BOM.md.
 # Estimates are unit costs. A published line total is unit cost times BOM qty.
-# Unknown dimensions are omitted; they are listed under unknowns, not invented.
+# Unknown dimensions are omitted. They are listed under unknowns, not invented.
 # Obsolete/superseded/alternative parts stay for history and are not on live BOMs.
 schema_version: 1
 meta:
@@ -68,7 +68,7 @@ suppliers:
   name: Pix4D
   country_xml: base.ch
   website: https://www.pix4d.com
-  comment: viDoc supplier named in BOM.md. The instrument may already be owned.
+  comment: viDoc supplier named in BOM.md. The instrument can already be owned.
 - id: instagrid
   name: instagrid
   country_xml: base.de
@@ -318,7 +318,7 @@ parts:
   supply: assemble
   subsystem: penetrometer
   category: Assemblies
-  spec: Inline S-type load cell path to Modbus RTU Slave 3 for force vs depth.
+  spec: Inline S-type load cell path to Modbus RTU Slave 3 for force against depth.
   legacy_ref: 8c
   lifecycle: active
 - part_number: VC-ASM-8400
@@ -328,7 +328,7 @@ parts:
   supply: assemble
   subsystem: core_scanner
   category: Assemblies
-  spec: Camera sled for one sample tube. Tube wall clarity is not confirmed. Host is Raspberry Pi 4; not
+  spec: Camera sled for one sample tube. Tube wall clarity is not confirmed. Host is Raspberry Pi 4. Not
     a Raspberry Pi Zero 2W.
   legacy_ref: 8d
   lifecycle: active
@@ -462,7 +462,7 @@ parts:
   legacy_ref: '8.89'
   estimate_eur_low: 20
   estimate_eur_high: 40
-  notes: Unit cost; BOM qty 2.
+  notes: Unit cost. BOM qty 2.
   lifecycle: active
 - part_number: VC-CS-9500
   name: LED driver PWM
@@ -514,7 +514,7 @@ parts:
   legacy_ref: '8.93'
   estimate_eur_low: 6
   estimate_eur_high: 15
-  notes: Unit cost; BOM qty 2.
+  notes: Unit cost. BOM qty 2.
   lifecycle: active
 - part_number: VC-CS-9540
   name: Scanner 5 V and 12 V PSU
@@ -706,7 +706,7 @@ parts:
   - Ingress protection is unknown.
   - Order code is unknown.
   - Price is unknown.
-  notes: ARCHITECTURE.md names a tablet or HMI via WLAN. No catalogue tablet is selected.
+  notes: ARCHITECTURE.md names a tablet or HMI through WLAN. No catalogue tablet is selected.
 - part_number: VC-CT-6300
   name: Control enclosure
   revision_index: 0
@@ -1773,7 +1773,7 @@ parts:
   legacy_ref: '8.70'
   estimate_eur_low: 150
   estimate_eur_high: 280
-  notes: Thomson PA, Ewellix CASM, Linak LA23 or equivalent. Unit cost; BOM qty 2.
+  notes: Thomson PA, Ewellix CASM, Linak LA23 or equivalent. Unit cost. BOM qty 2.
   lifecycle: active
 - part_number: VC-LT-9110
   name: H-bridge relay module
@@ -1812,7 +1812,7 @@ parts:
   legacy_ref: '8.73'
   estimate_eur_low: 150
   estimate_eur_high: 250
-  notes: Thomson PA, Linak LA36 or equivalent. V1.1 active tilt; not the gas strut.
+  notes: Thomson PA, Linak LA36 or equivalent. V1.1 active tilt. Not the gas strut.
   lifecycle: active
 - part_number: VC-LT-9210
   name: Tilt pivot bracket
@@ -1919,7 +1919,7 @@ parts:
   supply: purchase
   subsystem: positioning
   category: Positioning
-  spec: RTK rover with AR navigation. May already be owned.
+  spec: RTK rover with AR navigation. Can already be owned.
   legacy_ref: '7.60'
   supplier_id: pix4d
   estimate_eur_low: 2000
@@ -1976,7 +1976,7 @@ parts:
   legacy_ref: '4.43'
   estimate_eur_low: 20
   estimate_eur_high: 40
-  notes: Superseded by VC-PW-5310 (SDR-120-24). Kept for history; not on the live power BOM.
+  notes: Superseded by VC-PW-5310 (SDR-120-24). Kept for history. Not on the live power BOM.
   manufacturer_pn: DDR-60D-24
   supplier_id: meanwell
   lifecycle: superseded
